@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    background: #e0dbcc;
+    color: #1F3864;
+}
+
+aside {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 270px;
+    height: 100vh;
+
+    padding: 35px 25px 25px;
+
+    background: #f7f5ef;
+
+    border-right: 1px solid rgba(31, 56, 100, 0.08);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#toggle-button {
+    width: 100%;
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+#toggle-button img {
+    width: 115px;
+    height: auto;
+    display: block;
+}
+
+aside ul {
+    width: 100%;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 70px 0 0;
+}
+
+aside li {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.nav-button {
+    width: 100%;
+
+    padding: 12px 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    color: #1F3864;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-button img {
+    width: 30px;
+    height: 30px;
+
+    object-fit: contain;
+}
+
+.nav-button span {
+    color: #2E7D32;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+.nav-button:hover {
+    background: rgba(46, 125, 50, 0.07);
+}
+
+.nav-button:hover span {
+    color: #1F3864;
+}
+
+#logout-button {
+    margin-top: auto;
+
+    padding: 8px;
+
+    border: none;
+    background: transparent;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+#logout-button img {
+    width: 28px;
+    height: 28px;
+
+    display: block;
+}
+
+#logout-button:hover {
+    opacity: 0.65;
+}
