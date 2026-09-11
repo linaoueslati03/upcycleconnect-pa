@@ -6,7 +6,7 @@
 
     <title>Gestion des utilisateurs</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../pages/style.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../js/config.js"></script>
