@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Mon planning</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/config.js"></script>
+
+</head>
+
+<body>
+
+    <aside>
+
+        <button id="toggle-button" aria-label="Toggle Sidebar">
+            <img src="/front/assets/LOGO-pa.png" alt="Logo">
+            <href="planning.html">>
+            
+        </button>
+
+        <ul>
+
+            <li>
+                <button class="nav-button">
+                    <img src="/front/assets/people-svgrepo-com (1).svg" alt="Formations">
+                    <span>Formations</span>
+                </button>
+            </li>
+
+            <li>
+                <button class="nav-button">
+                    <img src="/front/assets/party-horn-svgrepo-com.svg" alt="Événement">
+                    <a href="event.html">Événement</a>
+                </button>
+            </li>
+
+            <li>
+                <button class="nav-button">
+                    <img src="/front/assets/pencil-square-svgrepo-com.svg" alt="Ateliers">
+                    <span>Ateliers</span>
+                </button>
+            </li>
+
+            <li>
+                <button class="nav-button">
+                    <img src="/front/assets/news-svgrepo-com.svg" alt="Articles">
+                    <span>Articles</span>
+                </button>
+            </li>
+
+        </ul>
+
+        <button id="logout-button">
+            <img src="/front/assets/logout-svgrepo-com.svg" alt="Logout">
+        </button>
+
+    </aside>
+
+
+
+
+    <main>
+
+        <div class="planning-header">
+
+            <h1>Mon planning</h1>
+
+            <div class="planning-filtres">
+
+                <div>
+                    <label for="semaine">
+                        Semaine
+                    </label>
+
+                    <select id="semaine">
+                    </select>
+                </div>
+
+                <div>
+                    <label for="annee">
+                        Année
+                    </label>
+
+                    <select id="annee">
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="semaine-titre">
+
+            <button id="semaine-precedente">
+                ←
+            </button>
+
+            <h2 id="titre-semaine">
+                Semaine
+            </h2>
+
+            <button id="semaine-suivante">
+                →
+            </button>
+
+        </div>
+
+
+        <div class="planning">
+
+            <div class="jour">
+                <h3>Lundi</h3>
+                <div id="lundi"></div>
+            </div>
+
+            <div class="jour">
+                <h3>Mardi</h3>
+                <div id="mardi"></div>
+            </div>
+
+            <div class="jour">
+                <h3>Mercredi</h3>
+                <div id="mercredi"></div>
+            </div>
+
+            <div class="jour">
+                <h3>Jeudi</h3>
+                <div id="jeudi"></div>
+            </div>
+
+            <div class="jour">
+                <h3>Vendredi</h3>
+                <div id="vendredi"></div>
+            </div>
+
+            <div class="jour">
+                <h3>Samedi</h3>
+                <div id="samedi"></div>
+            </div>
+
+            <div class="jour">
+                <h3>Dimanche</h3>
+                <div id="dimanche"></div>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="planning.js"></script>
+
+</body>
+
+</html>
