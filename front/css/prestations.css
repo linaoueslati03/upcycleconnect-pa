@@ -1,0 +1,72 @@
+.main-content {
+    margin-left: 270px;
+    padding: 40px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.btn-add {
+    background: #2E7D32;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.btn-add:hover {
+    opacity: 0.8;
+}
+
+.table-container {
+    background: #f7f5ef;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(31, 56, 100, 0.05);
+}
+
+.presta-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.presta-table th, .presta-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid rgba(31, 56, 100, 0.1);
+}
+
+.presta-table th {
+    color: #2E7D32;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.presta-title {
+    font-weight: bold;
+}
+
+.orange-link {
+    color: #2E7D32;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.orange-link:hover {
+    text-decoration: underline;
+}
