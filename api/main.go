@@ -26,6 +26,7 @@ func main() {
 	mux.HandleFunc("GET /api/moi", gererMonCompte)
 	mux.HandleFunc("PUT /api/moi", gererModificationMonCompte)
 	mux.HandleFunc("PUT /api/moi/tutoriel", gererTutorielVu)
+	mux.HandleFunc("GET /api/moi/dashboard", gererDashboard)
 	mux.HandleFunc("GET /api/utilisateurs", gererListeUtilisateurs)
 	mux.HandleFunc("POST /api/utilisateurs", gererCreationUtilisateur)
 	mux.HandleFunc("GET /api/utilisateurs/{id}", gererDetailUtilisateur)
