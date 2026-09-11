@@ -21,6 +21,8 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api/sante", gererSante)
+	mux.HandleFunc("POST /api/login", gererLogin)
+	mux.HandleFunc("POST /api/logout", gererLogout)
 	mux.HandleFunc("GET /api/utilisateurs", gererListeUtilisateurs)
 	mux.HandleFunc("POST /api/utilisateurs", gererCreationUtilisateur)
 	mux.HandleFunc("GET /api/utilisateurs/{id}", gererDetailUtilisateur)
