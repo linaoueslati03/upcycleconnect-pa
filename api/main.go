@@ -27,6 +27,17 @@ func main() {
 	mux.HandleFunc("PUT /api/moi", gererModificationMonCompte)
 	mux.HandleFunc("PUT /api/moi/tutoriel", gererTutorielVu)
 	mux.HandleFunc("GET /api/moi/dashboard", gererDashboard)
+
+	mux.HandleFunc("GET /api/annonces", gererListeAnnonces)
+	mux.HandleFunc("GET /api/annonces/{id}", gererDetailAnnonce)
+	mux.HandleFunc("POST /api/annonces", gererCreationAnnonce)
+	mux.HandleFunc("PUT /api/annonces/{id}", gererModificationAnnonce)
+	mux.HandleFunc("DELETE /api/annonces/{id}", gererSuppressionAnnonce)
+
+	mux.HandleFunc("POST /api/depots", gererCreationDepot)
+	mux.HandleFunc("GET /api/moi/depots", gererMesDepots)
+	mux.HandleFunc("GET /api/depots/{id}", gererDetailDepot)
+	mux.HandleFunc("PUT /api/depots/{id}/statut", gererChangementStatutDepot)
 	mux.HandleFunc("GET /api/utilisateurs", gererListeUtilisateurs)
 	mux.HandleFunc("POST /api/utilisateurs", gererCreationUtilisateur)
 	mux.HandleFunc("GET /api/utilisateurs/{id}", gererDetailUtilisateur)
