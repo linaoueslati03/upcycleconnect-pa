@@ -47,6 +47,20 @@ func main() {
 
 	mux.HandleFunc("GET /api/moi/score", gererMonScore)
 	mux.HandleFunc("GET /api/moi/score/historique", gererMonScoreHistorique)
+	mux.HandleFunc("GET /api/moi/planning", gererMonPlanning)
+
+	mux.HandleFunc("POST /api/projets", gererCreationProjet)
+	mux.HandleFunc("GET /api/moi/projets", gererMesProjets)
+	mux.HandleFunc("GET /api/projets/{id}", gererDetailProjet)
+	mux.HandleFunc("PUT /api/projets/{id}", gererModificationProjet)
+	mux.HandleFunc("DELETE /api/projets/{id}", gererSuppressionProjet)
+	mux.HandleFunc("POST /api/projets/{id}/etapes", gererCreationEtape)
+
+	mux.HandleFunc("GET /api/forums/sujets", gererListeSujetsForum)
+	mux.HandleFunc("POST /api/forums/sujets", gererCreationSujetForum)
+	mux.HandleFunc("GET /api/forums/sujets/{id}/messages", gererMessagesSujet)
+	mux.HandleFunc("POST /api/forums/sujets/{id}/messages", gererReponseSujet)
+	mux.HandleFunc("POST /api/forums/messages/{id}/signalement", gererSignalementMessage)
 	mux.HandleFunc("GET /api/utilisateurs", gererListeUtilisateurs)
 	mux.HandleFunc("POST /api/utilisateurs", gererCreationUtilisateur)
 	mux.HandleFunc("GET /api/utilisateurs/{id}", gererDetailUtilisateur)
