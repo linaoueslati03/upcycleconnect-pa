@@ -38,6 +38,15 @@ func main() {
 	mux.HandleFunc("GET /api/moi/depots", gererMesDepots)
 	mux.HandleFunc("GET /api/depots/{id}", gererDetailDepot)
 	mux.HandleFunc("PUT /api/depots/{id}/statut", gererChangementStatutDepot)
+
+	mux.HandleFunc("GET /api/conseils", gererListeConseils)
+	mux.HandleFunc("GET /api/conseils/{id}", gererDetailConseil)
+
+	mux.HandleFunc("GET /api/catalogue", gererCatalogue)
+	mux.HandleFunc("POST /api/inscriptions", gererCreationInscription)
+
+	mux.HandleFunc("GET /api/moi/score", gererMonScore)
+	mux.HandleFunc("GET /api/moi/score/historique", gererMonScoreHistorique)
 	mux.HandleFunc("GET /api/utilisateurs", gererListeUtilisateurs)
 	mux.HandleFunc("POST /api/utilisateurs", gererCreationUtilisateur)
 	mux.HandleFunc("GET /api/utilisateurs/{id}", gererDetailUtilisateur)

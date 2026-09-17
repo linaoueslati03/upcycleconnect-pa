@@ -263,5 +263,9 @@ func gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if entree.Statut == "recuperee" {
+		ajouterPointsScore(db, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré")
+	}
+
 	envoyerJSON(w, http.StatusOK, d)
 }

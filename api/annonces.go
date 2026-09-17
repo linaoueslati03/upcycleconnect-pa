@@ -178,7 +178,8 @@ func gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var proprietaireID int
-	err = db.QueryRow("SELECT utilisateur_id FROM annonces WHERE id = $1", id).Scan(&proprietaireID)
+	var statutAvant string
+	err = db.QueryRow("SELECT utilisateur_id, statut FROM annonces WHERE id = $1", id).Scan(&proprietaireID, &statutAvant)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "annonce introuvable")
 		return
@@ -215,6 +216,10 @@ func gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
 	if err := scannerAnnonce(ligne, &a); err != nil {
 		gererErreurPostgres(w, err)
 		return
+	}
+
+	if entree.Statut == "cedee" && statutAvant != "cedee" {
+		ajouterPointsScore(db, a.UtilisateurID, pointsAnnonceCedee, "Annonce cédée")
 	}
 
 	envoyerJSON(w, http.StatusOK, a)

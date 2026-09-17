@@ -1,0 +1,92 @@
+package main
+
+import (
+	"database/sql"
+	"net/http"
+	"time"
+)
+
+const (
+	pointsDepotRecupere    = 10
+	pointsAnnonceCedee     = 15
+	pointsInscriptionOffre = 5
+)
+
+// executeur est satisfait à la fois par *sql.DB et *sql.Tx : permet d'appeler
+// ajouterPointsScore aussi bien hors transaction (depots, annonces) que dans une
+// transaction existante (inscriptions).
+type executeur interface {
+	Exec(query string, args ...any) (sql.Result, error)
+}
+
+func ajouterPointsScore(ex executeur, utilisateurID int, delta int, motif string) error {
+	if _, err := ex.Exec(
+		"INSERT INTO score_historique (utilisateur_id, delta, motif) VALUES ($1, $2, $3)",
+		utilisateurID, delta, motif,
+	); err != nil {
+		return err
+	}
+	_, err := ex.Exec(
+		"UPDATE utilisateurs SET upcycling_score = upcycling_score + $1 WHERE id = $2",
+		delta, utilisateurID,
+	)
+	return err
+}
+
+func gererMonScore(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := utilisateurConnecte(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+		return
+	}
+
+	var score int
+	err = db.QueryRow("SELECT upcycling_score FROM utilisateurs WHERE id = $1", utilisateurID).Scan(&score)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
+	envoyerJSON(w, http.StatusOK, map[string]int{"upcycling_score": score})
+}
+
+type LigneScoreHistorique struct {
+	ID     int       `json:"id"`
+	Delta  int       `json:"delta"`
+	Motif  *string   `json:"motif"`
+	Date   time.Time `json:"date"`
+}
+
+func gererMonScoreHistorique(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := utilisateurConnecte(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+		return
+	}
+
+	lignes, err := db.Query(
+		"SELECT id, delta, motif, date FROM score_historique WHERE utilisateur_id = $1 ORDER BY date DESC",
+		utilisateurID,
+	)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer lignes.Close()
+
+	historique := make([]LigneScoreHistorique, 0)
+	for lignes.Next() {
+		var l LigneScoreHistorique
+		var motif sql.NullString
+		if err := lignes.Scan(&l.ID, &l.Delta, &motif, &l.Date); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		if motif.Valid {
+			l.Motif = &motif.String
+		}
+		historique = append(historique, l)
+	}
+
+	envoyerJSON(w, http.StatusOK, historique)
+}
