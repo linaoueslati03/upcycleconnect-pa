@@ -32,6 +32,13 @@ func main() {
 	mux.HandleFunc("PUT /api/prestations/{id}", gererModificationPrestation)
 	mux.HandleFunc("DELETE /api/prestations/{id}", gererSuppressionPrestation)
 
+	mux.HandleFunc("GET /evenements", gererListeEvenements)
+	mux.HandleFunc("GET /evenements/{id}", gererDetailEvenement)
+	mux.HandleFunc("POST /evenements", gererCreationEvenement)
+	mux.HandleFunc("PUT /evenements/{id}", gererModificationEvenement)
+	mux.HandleFunc("DELETE /evenements/{id}", gererSuppressionEvenement)
+	mux.HandleFunc("POST /evenements/{id}/valider", gererValidationEvenement)
+
 	log.Println("API démarrée sur http://localhost:8081")
 	if err := http.ListenAndServe(":8081", autoriserCORS(mux)); err != nil {
 		log.Fatal(err)
