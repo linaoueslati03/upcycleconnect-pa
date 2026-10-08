@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('prestations-list'); 
 
-    fetch('http://localhost:8081/api/prestations')
+    fetch(`${API_BASE_URL}/prestations`)
         .then(response => {
             if (!response.ok) throw new Error("Erreur serveur");
             return response.json();
@@ -34,7 +34,7 @@ document.getElementById('prestation-form').addEventListener('submit', function(e
     e.preventDefault();
     const id = document.getElementById('presta-id').value;
     const method = id ? 'PUT' : 'POST';
-    const url = id ? `http://localhost:8081/api/prestations/${id}` : 'http://localhost:8081/api/prestations';
+    const url = id ? `${API_BASE_URL}/prestations/${id}` : `${API_BASE_URL}/prestations`;
 
     const payload = {
         titre: document.getElementById('presta-titre').value,
@@ -64,7 +64,7 @@ function editer(id, titre, categorie, tarif, statut) {
 
 function supprimer(id) {
     if(confirm("Supprimer cette prestation ?")) {
-        fetch(`http://localhost:8081/api/prestations/${id}`, { method: 'DELETE' })
+        fetch(`${API_BASE_URL}/prestations/${id}`, { method: 'DELETE' })
             .then(() => location.reload());
     }
 }
