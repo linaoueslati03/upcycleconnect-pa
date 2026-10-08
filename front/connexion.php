@@ -33,6 +33,8 @@
 
             <button type="submit" class="button-submit">Se connecter</button>
         </form>
+
+        <p><a href="inscription.php">Créer un compte</a></p>
     </div>
 
     <script src="assets/js/connexion.js"></script>

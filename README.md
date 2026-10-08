@@ -30,6 +30,8 @@ autour du réemploi d'objets et de matériaux.
 ├── front/
 │   ├── admin/           # back-office administrateur
 │   ├── salaries/        # espace salariés
+│   ├── particuliers/    # espace particuliers
+│   ├── inclus/          # en-tête et menu communs aux espaces
 │   └── assets/          # css, js, images partagés
 ├── docker-compose.yml
 └── .env.example

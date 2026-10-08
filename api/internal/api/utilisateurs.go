@@ -320,6 +320,10 @@ func (s *Serveur) gererCreationCompte(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusBadRequest, message)
 		return
 	}
+	if len(entree.MotDePasse) < 8 {
+		envoyerErreur(w, http.StatusBadRequest, "le mot de passe doit faire au moins 8 caractères")
+		return
+	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(entree.MotDePasse), bcrypt.DefaultCost)
 	if err != nil {

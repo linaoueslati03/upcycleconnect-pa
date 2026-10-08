@@ -12,6 +12,22 @@ const (
 	pointsInscriptionOffre = 5
 )
 
+// RegleScore décrit une action qui rapporte des points (affichée sur la page du score).
+type RegleScore struct {
+	Action string `json:"action"`
+	Points int    `json:"points"`
+}
+
+// gererBaremeScore renvoie le barème réellement appliqué par l'API : le front l'affiche
+// sans recopier les valeurs, qui ne sont définies qu'à un seul endroit (les constantes).
+func (s *Serveur) gererBaremeScore(w http.ResponseWriter, r *http.Request) {
+	envoyerJSON(w, http.StatusOK, []RegleScore{
+		{Action: "Inscription à une formation, un atelier ou un événement", Points: pointsInscriptionOffre},
+		{Action: "Dépôt récupéré par un professionnel", Points: pointsDepotRecupere},
+		{Action: "Annonce cédée (don ou vente)", Points: pointsAnnonceCedee},
+	})
+}
+
 // executeur est satisfait à la fois par *sql.DB et *sql.Tx : permet d'appeler
 // ajouterPointsScore aussi bien hors transaction (depots, annonces) que dans une
 // transaction existante (inscriptions).
