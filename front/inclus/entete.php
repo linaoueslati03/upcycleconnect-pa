@@ -9,6 +9,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-titre="<?= htmlspecialchars($titrePage) ?>">UpcycleConnect</title>
+<!-- Polices de la charte graphique (Google Fonts) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@400;700&family=Poppins:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="../assets/css/style.css">
 <?php foreach ($feuillesStyle ?? [] as $feuille): ?>
 <link rel="stylesheet" href="<?= $feuille ?>">
