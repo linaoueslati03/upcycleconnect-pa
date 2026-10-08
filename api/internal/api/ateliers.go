@@ -58,7 +58,12 @@ func scannerAtelier(ligne interface{ Scan(...any) error }, a *Atelier) error {
 }
 
 func (s *Serveur) gererListeAteliers(w http.ResponseWriter, r *http.Request) {
-	lignes, err := s.db.Query(`SELECT ` + colonnesAtelier + ` FROM ateliers ORDER BY date_debut ASC`)
+	// Brouillons et offres en attente ne sont visibles que du personnel
+	requete := `SELECT ` + colonnesAtelier + ` FROM ateliers WHERE statut = 'publie' ORDER BY date_debut ASC`
+	if _, role := s.roleConnecte(r); role == roleSalarie || role == roleAdministrateur {
+		requete = `SELECT ` + colonnesAtelier + ` FROM ateliers ORDER BY date_debut ASC`
+	}
+	lignes, err := s.db.Query(requete)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -137,11 +142,20 @@ func (s *Serveur) gererDetailAtelier(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Un brouillon ou une offre en attente n'est visible que du personnel
+	if a.Statut != "publie" {
+		if _, role := s.roleConnecte(r); role != roleSalarie && role != roleAdministrateur {
+			envoyerErreur(w, http.StatusNotFound, "introuvable")
+			return
+		}
+	}
+
 	envoyerJSON(w, http.StatusOK, a)
 }
 
 func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Request) {
-	if _, _, ok := s.exigerSalarie(w, r); !ok {
+	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	if !ok {
 		return
 	}
 
@@ -161,13 +175,18 @@ func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	statutActuel, autorise := s.verifierDroitOffre(w, "ateliers", id, salarieID, estResponsable)
+	if !autorise {
+		return
+	}
+
 	var a Atelier
 	err = scannerAtelier(s.db.QueryRow(`
 		UPDATE ateliers SET titre = $1, description = $2, date_debut = $3, date_fin = $4, lieu = $5,
-		    statut = COALESCE(NULLIF($6, ''), statut), updated_at = now()
+		    statut = $6, updated_at = now()
 		WHERE id = $7
 		RETURNING `+colonnesAtelier,
-		entree.Titre, entree.Description, entree.DateDebut, entree.DateFin, entree.Lieu, statutModifiable(entree.Statut), id,
+		entree.Titre, entree.Description, entree.DateDebut, entree.DateFin, entree.Lieu, statutApresModificationOffre(statutActuel, entree.Statut, estResponsable), id,
 	), &a)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "atelier introuvable")
@@ -182,13 +201,18 @@ func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *Serveur) gererSuppressionAtelier(w http.ResponseWriter, r *http.Request) {
-	if _, _, ok := s.exigerSalarie(w, r); !ok {
+	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	if !ok {
 		return
 	}
 
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
+		return
+	}
+
+	if _, autorise := s.verifierDroitOffre(w, "ateliers", id, salarieID, estResponsable); !autorise {
 		return
 	}
 

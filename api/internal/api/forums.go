@@ -147,6 +147,9 @@ func (s *Serveur) gererMessagesSujet(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
 		return
 	}
+	if !s.sujetVisible(w, sujetID) {
+		return
+	}
 
 	lignes, err := s.db.Query(`
 		SELECT m.id, m.sujet_id, m.auteur_utilisateur_id, `+nomAuteur+`, m.contenu, m.statut, m.created_at
@@ -191,6 +194,9 @@ func (s *Serveur) gererReponseSujet(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.TrimSpace(entree.Contenu) == "" {
 		envoyerErreur(w, http.StatusBadRequest, "contenu obligatoire")
+		return
+	}
+	if !s.sujetVisible(w, sujetID) {
 		return
 	}
 	if !s.verifierAntiSpam(utilisateurID) {
@@ -242,4 +248,22 @@ func (s *Serveur) gererSignalementMessage(w http.ResponseWriter, r *http.Request
 	}
 
 	envoyerJSON(w, http.StatusCreated, map[string]string{"message": "signalement enregistré"})
+}
+
+// sujetVisible vérifie qu'un sujet existe et n'a pas été rejeté par la modération ;
+// sinon elle répond 404 et renvoie false.
+func (s *Serveur) sujetVisible(w http.ResponseWriter, sujetID int) bool {
+	var existe bool
+	err := s.db.QueryRow(
+		"SELECT EXISTS (SELECT 1 FROM forum_sujets WHERE id = $1 AND statut != 'rejete')", sujetID,
+	).Scan(&existe)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return false
+	}
+	if !existe {
+		envoyerErreur(w, http.StatusNotFound, "sujet introuvable")
+		return false
+	}
+	return true
 }

@@ -42,7 +42,7 @@ $titrePage = "nav.catalogue";
                         <li>{{ formaterDateHeure(o.date_debut) }}</li>
                         <li v-if="o.lieu">{{ o.lieu }}</li>
                         <li>{{ formaterPrix(o.tarif) }}</li>
-                        <li v-if="o.nb_places !== null">{{ t('catalogue.places_restantes', { nombre: o.nb_places }) }}</li>
+                        <li v-if="o.places_restantes !== null">{{ t('catalogue.places_restantes', { nombre: o.places_restantes }) }}</li>
                     </ul>
                     <p v-if="estInscrit(o)" class="succes">{{ t('catalogue.inscrit') }}</p>
                     <button v-else class="button-submit" @click="inscrire(o)">{{ t('catalogue.sinscrire') }}</button>

@@ -109,7 +109,11 @@ function exigerConnexion(...roles) {
 }
 
 async function deconnecter() {
-    await appelerApi("/logout", { method: "POST" });
+    try {
+        await appelerApi("/logout", { method: "POST" });
+    } catch (erreur) {
+        // API injoignable : on déconnecte quand même côté navigateur
+    }
     oublierConnexion();
     window.location.href = PAGE_CONNEXION;
 }

@@ -35,7 +35,7 @@ INSERT INTO evenements (titre, description, date_debut, lieu, site, statut, crea
     FROM salaries LIMIT 1;
 
 INSERT INTO conseils (titre, contenu, categorie, statut, auteur_id)
-    SELECT 'Bien trier son bois', 'Séparer le bois brut du bois traité avant tout dépôt.', 'bois', 'publie', utilisateur_id
+    SELECT 'Bien trier son bois', 'Séparer le bois brut du bois traité avant tout dépôt.', 'conseils', 'publie', utilisateur_id
     FROM salaries LIMIT 1;
 
 INSERT INTO prestations (titre, categorie, tarif, statut) VALUES

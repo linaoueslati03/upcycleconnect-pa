@@ -46,7 +46,7 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	var utilisateurID int
 	var hash, role, langue string
 	err := s.db.QueryRow(`
-		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, 'fr')
+		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, '')
 		FROM utilisateurs u
 		JOIN roles r ON r.id = u.role_id
 		LEFT JOIN langues l ON l.id = u.langue_preferee_id
@@ -85,6 +85,7 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 
 	// Le rôle sert seulement au front à choisir l'espace à afficher : chaque route
 	// protégée revérifie le rôle côté API, le front ne décide jamais des droits.
+	// langue vaut "" si l'utilisateur n'a pas encore choisi : le front garde alors la langue affichée
 	envoyerJSON(w, http.StatusOK, map[string]string{"token": token, "role": role, "langue": langue})
 }
 
@@ -95,7 +96,10 @@ func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.db.Exec("DELETE FROM sessions WHERE token = $1", token)
+	if _, err := s.db.Exec("DELETE FROM sessions WHERE token = $1", token); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "déconnecté"})
 }
 
@@ -156,8 +160,15 @@ func (s *Serveur) exigerSalarie(w http.ResponseWriter, r *http.Request) (id int,
 		return 0, false, false
 	}
 
-	err = s.db.QueryRow(
-		"SELECT est_responsable FROM salaries WHERE utilisateur_id = $1", utilisateurID,
+	// On vérifie aussi le rôle du compte : si un administrateur a retiré le rôle salarié,
+	// l'ancienne ligne de la table salaries ne donne plus aucun droit.
+	err = s.db.QueryRow(`
+		SELECT s.est_responsable
+		FROM salaries s
+		JOIN utilisateurs u ON u.id = s.utilisateur_id
+		JOIN roles r ON r.id = u.role_id
+		WHERE s.utilisateur_id = $1 AND r.code = $2`,
+		utilisateurID, roleSalarie,
 	).Scan(&estResponsable)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusForbidden, "réservé aux salariés")
@@ -169,4 +180,22 @@ func (s *Serveur) exigerSalarie(w http.ResponseWriter, r *http.Request) (id int,
 	}
 
 	return utilisateurID, estResponsable, true
+}
+
+// roleConnecte renvoie l'id et le rôle de l'utilisateur connecté, ou (0, "") pour un
+// visiteur. Contrairement à exigerRole, elle n'écrit pas d'erreur : elle sert aux routes
+// publiques dont la réponse change selon le visiteur (ex. brouillons visibles du personnel).
+func (s *Serveur) roleConnecte(r *http.Request) (int, string) {
+	utilisateurID, err := s.utilisateurConnecte(r)
+	if err != nil {
+		return 0, ""
+	}
+	var role string
+	err = s.db.QueryRow(
+		"SELECT r.code FROM utilisateurs u JOIN roles r ON r.id = u.role_id WHERE u.id = $1", utilisateurID,
+	).Scan(&role)
+	if err != nil {
+		return 0, ""
+	}
+	return utilisateurID, role
 }

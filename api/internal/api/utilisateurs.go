@@ -166,6 +166,12 @@ func (s *Serveur) gererSuppressionUtilisateur(w http.ResponseWriter, r *http.Req
 	}
 
 	resultat, err := s.db.Exec("DELETE FROM utilisateurs WHERE id = $1", id)
+	var erreurPg *pq.Error
+	if errors.As(err, &erreurPg) && erreurPg.Code == "23503" {
+		// 23503 = clé étrangère : le compte est encore référencé (annonces, inscriptions, offres créées…)
+		envoyerErreur(w, http.StatusConflict, "ce compte est lié à des données (annonces, inscriptions, offres…) et ne peut pas être supprimé")
+		return
+	}
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -184,8 +190,8 @@ func validerEntree(entree UtilisateurEntree, motDePasseObligatoire bool) string 
 	if strings.TrimSpace(entree.Nom) == "" || strings.TrimSpace(entree.Prenom) == "" || strings.TrimSpace(entree.Email) == "" {
 		return "champs obligatoires manquants"
 	}
-	if motDePasseObligatoire && strings.TrimSpace(entree.MotDePasse) == "" {
-		return "champs obligatoires manquants"
+	if motDePasseObligatoire && len(entree.MotDePasse) < 8 {
+		return "le mot de passe doit faire au moins 8 caractères"
 	}
 	if !strings.Contains(entree.Email, "@") {
 		return "email invalide"
@@ -204,7 +210,8 @@ func gererErreurPostgres(w http.ResponseWriter, err error) {
 			envoyerErreur(w, http.StatusConflict, "cet email est déjà utilisé")
 			return
 		case "23503":
-			envoyerErreur(w, http.StatusBadRequest, "role_id ou langue_preferee_id invalide")
+			// clé étrangère : un identifiant envoyé (rôle, langue, catégorie, conteneur…) n'existe pas
+			envoyerErreur(w, http.StatusBadRequest, "un identifiant fourni ne correspond à aucun élément existant")
 			return
 		}
 	}
@@ -318,10 +325,6 @@ func (s *Serveur) gererCreationCompte(w http.ResponseWriter, r *http.Request) {
 	}
 	if message := validerEntree(utilisateur, true); message != "" {
 		envoyerErreur(w, http.StatusBadRequest, message)
-		return
-	}
-	if len(entree.MotDePasse) < 8 {
-		envoyerErreur(w, http.StatusBadRequest, "le mot de passe doit faire au moins 8 caractères")
 		return
 	}
 

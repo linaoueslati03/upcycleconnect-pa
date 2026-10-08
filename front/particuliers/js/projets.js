@@ -26,15 +26,19 @@ demarrerApp({
         },
 
         async ouvrirProjet(id) {
+            this.erreur = "";
             const reponse = await appelerApi(`/projets/${id}`);
             if (!reponse.ok) {
                 this.erreur = await messageErreur(reponse);
                 return;
             }
-            this.projet = await reponse.json();
+            const projet = await reponse.json();
+            projet.etapes = projet.etapes || []; // absent de la réponse quand le projet n'a pas d'étape
+            this.projet = projet;
         },
 
         async creerProjet() {
+            this.erreur = "";
             const reponse = await appelerApi("/projets", { method: "POST", body: JSON.stringify(this.formulaire) });
             if (!reponse.ok) {
                 this.erreur = await messageErreur(reponse);
@@ -47,6 +51,7 @@ demarrerApp({
         },
 
         async basculerPartage() {
+            this.erreur = "";
             const reponse = await appelerApi(`/projets/${this.projet.id}`, {
                 method: "PUT",
                 body: JSON.stringify({
@@ -64,6 +69,7 @@ demarrerApp({
         },
 
         async ajouterEtape() {
+            this.erreur = "";
             const reponse = await appelerApi(`/projets/${this.projet.id}/etapes`, {
                 method: "POST",
                 body: JSON.stringify({

@@ -18,19 +18,22 @@ type OffreCatalogue struct {
 	Lieu        *string    `json:"lieu"`
 	Tarif       *float64   `json:"tarif"`
 	NbPlaces    *int       `json:"nb_places"`
+	// Places encore disponibles (capacité moins inscrits) ; null si l'offre n'a pas de limite
+	PlacesRestantes *int `json:"places_restantes"`
 }
 
 func (s *Serveur) gererCatalogue(w http.ResponseWriter, r *http.Request) {
 	typeFiltre := r.URL.Query().Get("type")
 
 	requete := `
-		SELECT 'formation' AS type, id, titre, description, date_debut, date_fin, lieu, tarif, nb_places
-			FROM formations WHERE statut = 'publie'
+		SELECT 'formation' AS type, f.id, f.titre, f.description, f.date_debut, f.date_fin, f.lieu, f.tarif, f.nb_places,
+				f.nb_places - (SELECT COUNT(*) FROM inscriptions i WHERE i.type_offre = 'formation' AND i.offre_id = f.id)
+			FROM formations f WHERE f.statut = 'publie'
 		UNION ALL
-		SELECT 'atelier' AS type, id, titre, description, date_debut, date_fin, lieu, NULL, NULL
+		SELECT 'atelier' AS type, id, titre, description, date_debut, date_fin, lieu, NULL, NULL, NULL
 			FROM ateliers WHERE statut = 'publie'
 		UNION ALL
-		SELECT 'evenement' AS type, id, titre, description, date_debut, date_fin, lieu, NULL, NULL
+		SELECT 'evenement' AS type, id, titre, description, date_debut, date_fin, lieu, NULL, NULL, NULL
 			FROM evenements WHERE statut = 'publie'
 		ORDER BY date_debut ASC`
 
@@ -47,9 +50,9 @@ func (s *Serveur) gererCatalogue(w http.ResponseWriter, r *http.Request) {
 		var description, lieu sql.NullString
 		var dateFin sql.NullTime
 		var tarif sql.NullFloat64
-		var nbPlaces sql.NullInt64
+		var nbPlaces, placesRestantes sql.NullInt64
 
-		if err := lignes.Scan(&o.Type, &o.ID, &o.Titre, &description, &o.DateDebut, &dateFin, &lieu, &tarif, &nbPlaces); err != nil {
+		if err := lignes.Scan(&o.Type, &o.ID, &o.Titre, &description, &o.DateDebut, &dateFin, &lieu, &tarif, &nbPlaces, &placesRestantes); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
@@ -68,6 +71,10 @@ func (s *Serveur) gererCatalogue(w http.ResponseWriter, r *http.Request) {
 		if nbPlaces.Valid {
 			v := int(nbPlaces.Int64)
 			o.NbPlaces = &v
+		}
+		if placesRestantes.Valid {
+			v := int(placesRestantes.Int64)
+			o.PlacesRestantes = &v
 		}
 
 		if typeFiltre == "" || typeFiltre == o.Type {
@@ -127,10 +134,11 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 
 	var statutOffre string
 	var nbPlaces sql.NullInt64
+	var dejaCommencee bool
 	err = tx.QueryRow(
-		"SELECT statut, "+placesColonne(entree.TypeOffre)+" FROM "+table+" WHERE id = $1 FOR UPDATE",
+		"SELECT statut, "+placesColonne(entree.TypeOffre)+", date_debut <= now() FROM "+table+" WHERE id = $1 FOR UPDATE",
 		entree.OffreID,
-	).Scan(&statutOffre, &nbPlaces)
+	).Scan(&statutOffre, &nbPlaces, &dejaCommencee)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "offre introuvable")
 		return
@@ -141,6 +149,26 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 	}
 	if statutOffre != "publie" {
 		envoyerErreur(w, http.StatusBadRequest, "cette offre n'est pas publiée")
+		return
+	}
+	if dejaCommencee {
+		envoyerErreur(w, http.StatusBadRequest, "cette offre a déjà commencé")
+		return
+	}
+
+	// L'offre est verrouillée (FOR UPDATE) : deux requêtes simultanées du même utilisateur
+	// ne peuvent pas passer toutes les deux cette vérification.
+	var dejaInscrit bool
+	err = tx.QueryRow(
+		"SELECT EXISTS (SELECT 1 FROM inscriptions WHERE utilisateur_id = $1 AND type_offre = $2 AND offre_id = $3)",
+		utilisateurID, entree.TypeOffre, entree.OffreID,
+	).Scan(&dejaInscrit)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if dejaInscrit {
+		envoyerErreur(w, http.StatusConflict, "vous êtes déjà inscrit à cette offre")
 		return
 	}
 

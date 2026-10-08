@@ -1,4 +1,4 @@
-const FORMULAIRE_VIDE = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "" };
+const FORMULAIRE_VIDE = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "", langue_preferee_id: null };
 
 demarrerApp({
     data() {
@@ -37,6 +37,7 @@ demarrerApp({
                 email: utilisateur.email,
                 role_id: utilisateur.role_id,
                 mot_de_passe: "",
+                langue_preferee_id: utilisateur.langue_preferee_id,
             };
             this.erreur = "";
         },
@@ -47,6 +48,7 @@ demarrerApp({
                 prenom: this.formulaire.prenom,
                 email: this.formulaire.email,
                 role_id: this.formulaire.role_id,
+                langue_preferee_id: this.formulaire.langue_preferee_id, // sinon l'API l'effacerait
             };
 
             let chemin = "/utilisateurs";

@@ -23,15 +23,23 @@ demarrerApp({
                 body: JSON.stringify({ email: this.compte.email, mot_de_passe: this.compte.mot_de_passe }),
             });
             const resultat = await connexion.json();
-            const espace = ESPACES[resultat.role];
-            if (!connexion.ok || !espace) {
+            if (!connexion.ok) {
                 window.location.href = PAGE_CONNEXION;
+                return;
+            }
+            const espace = ESPACES[resultat.role];
+            if (!espace) {
+                // Compte créé, mais l'espace de ce rôle (professionnel) n'existe pas encore
+                this.erreur = t("inscription.compte_cree_espace_indisponible");
                 return;
             }
 
             localStorage.setItem("token", resultat.token);
             localStorage.setItem("role", resultat.role);
-            localStorage.setItem("langue", resultat.langue);
+            // Langue enregistrée dans le compte ; sinon on garde celle choisie à l'écran
+            if (resultat.langue) {
+                localStorage.setItem("langue", resultat.langue);
+            }
             window.location.href = espace;
         },
     },

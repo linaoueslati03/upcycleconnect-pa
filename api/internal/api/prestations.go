@@ -30,7 +30,11 @@ func validerPrestation(p Prestation) string {
 }
 
 func (s *Serveur) gererListePrestations(w http.ResponseWriter, r *http.Request) {
-	lignes, err := s.db.Query("SELECT id, titre, categorie, tarif, statut FROM prestations ORDER BY id")
+	requete := "SELECT id, titre, categorie, tarif, statut FROM prestations WHERE statut = 'publie' ORDER BY id"
+	if _, role := s.roleConnecte(r); role == roleAdministrateur {
+		requete = "SELECT id, titre, categorie, tarif, statut FROM prestations ORDER BY id"
+	}
+	lignes, err := s.db.Query(requete)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
