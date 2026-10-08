@@ -7,12 +7,21 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"slices"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 const dureeSession = 24 * time.Hour
+
+// Codes des rôles, identiques à la colonne code de la table roles.
+const (
+	roleParticulier    = "particulier"
+	roleProfessionnel  = "professionnel"
+	roleSalarie        = "salarie"
+	roleAdministrateur = "administrateur"
+)
 
 type identifiants struct {
 	Email      string `json:"email"`
@@ -35,11 +44,13 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var utilisateurID int
-	var hash string
-	err := s.db.QueryRow(
-		"SELECT id, mot_de_passe_hash FROM utilisateurs WHERE email = $1",
+	var hash, role string
+	err := s.db.QueryRow(`
+		SELECT u.id, u.mot_de_passe_hash, r.code
+		FROM utilisateurs u JOIN roles r ON r.id = u.role_id
+		WHERE u.email = $1`,
 		creds.Email,
-	).Scan(&utilisateurID, &hash)
+	).Scan(&utilisateurID, &hash, &role)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusUnauthorized, "email ou mot de passe incorrect")
@@ -70,7 +81,9 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	envoyerJSON(w, http.StatusOK, map[string]string{"token": token})
+	// Le rôle sert seulement au front à choisir l'espace à afficher : chaque route
+	// protégée revérifie le rôle côté API, le front ne décide jamais des droits.
+	envoyerJSON(w, http.StatusOK, map[string]string{"token": token, "role": role})
 }
 
 func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
@@ -102,4 +115,56 @@ func (s *Serveur) utilisateurConnecte(r *http.Request) (int, error) {
 	}
 
 	return utilisateurID, nil
+}
+
+// exigerRole vérifie que la requête vient d'un utilisateur connecté qui a l'un des rôles
+// autorisés. Elle renvoie son id, ou écrit l'erreur (401 non connecté, 403 rôle interdit)
+// et renvoie false : le handler doit alors s'arrêter.
+func (s *Serveur) exigerRole(w http.ResponseWriter, r *http.Request, rolesAutorises ...string) (int, bool) {
+	utilisateurID, err := s.utilisateurConnecte(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+		return 0, false
+	}
+
+	var role string
+	err = s.db.QueryRow(
+		"SELECT r.code FROM utilisateurs u JOIN roles r ON r.id = u.role_id WHERE u.id = $1",
+		utilisateurID,
+	).Scan(&role)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return 0, false
+	}
+
+	if !slices.Contains(rolesAutorises, role) {
+		envoyerErreur(w, http.StatusForbidden, "accès refusé")
+		return 0, false
+	}
+
+	return utilisateurID, true
+}
+
+// exigerSalarie vérifie que l'utilisateur connecté a un profil salarié (table salaries)
+// et renvoie son id et s'il est responsable. Même principe d'arrêt que exigerRole.
+func (s *Serveur) exigerSalarie(w http.ResponseWriter, r *http.Request) (id int, estResponsable bool, ok bool) {
+	utilisateurID, err := s.utilisateurConnecte(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+		return 0, false, false
+	}
+
+	err = s.db.QueryRow(
+		"SELECT est_responsable FROM salaries WHERE utilisateur_id = $1", utilisateurID,
+	).Scan(&estResponsable)
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusForbidden, "réservé aux salariés")
+		return 0, false, false
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return 0, false, false
+	}
+
+	return utilisateurID, estResponsable, true
 }

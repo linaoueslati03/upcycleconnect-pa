@@ -11,6 +11,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../assets/js/tailwind.config.js"></script>
     <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script>exigerConnexion("administrateur");</script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -18,7 +20,13 @@
 
     <div id="app">
 
-        <h1 class="text-2xl font-display font-semibold text-brand-navy mb-6">Gestion des utilisateurs</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-display font-semibold text-brand-navy">Gestion des utilisateurs</h1>
+            <div>
+                <a href="prestations.php" class="text-brand-navy underline mr-4">Prestations</a>
+                <button @click="deconnecter" class="text-brand-navy underline">Déconnexion</button>
+            </div>
+        </div>
 
         <button @click="ouvrirFormulaireCreation"
             class="mb-4 px-4 py-2 rounded-lg bg-brand-green text-white font-semibold">

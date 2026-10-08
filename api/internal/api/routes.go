@@ -4,10 +4,18 @@ import "net/http"
 
 // Routes associe chaque route de l'API à son handler, avec le routeur de la
 // bibliothèque standard (méthode HTTP et paramètres {id} gérés depuis Go 1.22).
+//
+// Les droits sont vérifiés au début de chaque handler (exigerRole, exigerSalarie) :
+//   - publiques : santé, création de compte, login, lectures du catalogue, annonces, conseils,
+//     événements, ateliers, prestations et forums ;
+//   - utilisateur connecté : /api/moi/*, annonces, dépôts, inscriptions, projets, forums ;
+//   - salarié : écriture des événements et ateliers (validation : responsable) ;
+//   - administrateur : gestion des utilisateurs et des prestations.
 func (s *Serveur) Routes() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api/sante", s.gererSante)
+	mux.HandleFunc("POST /api/comptes", s.gererCreationCompte)
 	mux.HandleFunc("POST /api/login", s.gererLogin)
 	mux.HandleFunc("POST /api/logout", s.gererLogout)
 	mux.HandleFunc("GET /api/moi", s.gererMonCompte)

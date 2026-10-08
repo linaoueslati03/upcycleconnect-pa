@@ -28,7 +28,7 @@ createApp({
         formaterStatut,
 
         async chargerAteliers() {
-            const reponse = await fetch(`${API_BASE_URL}/ateliers`);
+            const reponse = await appelerApi("/ateliers");
             if (!reponse.ok) {
                 this.erreur = "Erreur lors du chargement des ateliers";
                 return;

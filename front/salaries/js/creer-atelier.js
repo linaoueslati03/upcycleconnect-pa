@@ -26,9 +26,8 @@ createApp({
                 return;
             }
 
-            const reponse = await fetch(`${API_BASE_URL}/ateliers`, {
+            const reponse = await appelerApi("/ateliers", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     titre: this.formulaire.titre,
                     description: this.formulaire.description,
@@ -36,9 +35,6 @@ createApp({
                     date_fin: versDateAPI(this.formulaire.date_fin),
                     lieu: this.formulaire.lieu,
                     statut: statut,
-                    // À remplacer par l'id du salarié connecté quand l'authentification
-                    // salarié sera en place.
-                    createur_id: 1,
                 }),
             });
 

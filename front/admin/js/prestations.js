@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('prestations-list'); 
 
-    fetch(`${API_BASE_URL}/prestations`)
+    appelerApi("/prestations")
         .then(response => {
             if (!response.ok) throw new Error("Erreur serveur");
             return response.json();
@@ -34,7 +34,7 @@ document.getElementById('prestation-form').addEventListener('submit', function(e
     e.preventDefault();
     const id = document.getElementById('presta-id').value;
     const method = id ? 'PUT' : 'POST';
-    const url = id ? `${API_BASE_URL}/prestations/${id}` : `${API_BASE_URL}/prestations`;
+    const chemin = id ? `/prestations/${id}` : "/prestations";
 
     const payload = {
         titre: document.getElementById('presta-titre').value,
@@ -43,11 +43,15 @@ document.getElementById('prestation-form').addEventListener('submit', function(e
         statut: document.getElementById('presta-statut').value
     };
 
-    fetch(url, {
+    appelerApi(chemin, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-    }).then(() => {
+    }).then(async (reponse) => {
+        if (!reponse.ok) {
+            const resultat = await reponse.json();
+            alert(resultat.erreur);
+            return;
+        }
         reinitialiserFormulaire();
         location.reload();
     });
@@ -64,7 +68,7 @@ function editer(id, titre, categorie, tarif, statut) {
 
 function supprimer(id) {
     if(confirm("Supprimer cette prestation ?")) {
-        fetch(`${API_BASE_URL}/prestations/${id}`, { method: 'DELETE' })
+        appelerApi(`/prestations/${id}`, { method: 'DELETE' })
             .then(() => location.reload());
     }
 }

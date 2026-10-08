@@ -1,0 +1,29 @@
+.page-connexion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.carte-connexion {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 32px;
+    background: #f7f5ef;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(31, 56, 100, 0.08);
+    text-align: center;
+}
+
+.carte-connexion img {
+    width: 120px;
+    margin-bottom: 8px;
+}
+
+.carte-connexion form {
+    text-align: left;
+}
+
+.carte-connexion .button-submit {
+    width: 100%;
+}

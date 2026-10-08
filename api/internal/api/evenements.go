@@ -1,9 +1,11 @@
 package api
 
 import (
+	"database/sql"
 	"encoding/json"
-	"log"
+	"errors"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -20,24 +22,36 @@ type Evenement struct {
 	ValideParID *int       `json:"valide_par_id,omitempty"`
 }
 
+const colonnesEvenement = `id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id`
+
+func scannerEvenement(ligne interface{ Scan(...any) error }, e *Evenement) error {
+	return ligne.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
+}
+
+func validerEvenement(e Evenement) string {
+	if strings.TrimSpace(e.Titre) == "" {
+		return "titre obligatoire"
+	}
+	if e.DateDebut.IsZero() {
+		return "date_debut obligatoire"
+	}
+	return ""
+}
+
 func (s *Serveur) gererListeEvenements(w http.ResponseWriter, r *http.Request) {
-	rows, err := s.db.Query(`
-		SELECT id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id
-		FROM evenements
-		ORDER BY date_debut ASC
-	`)
+	lignes, err := s.db.Query(`SELECT ` + colonnesEvenement + ` FROM evenements ORDER BY date_debut ASC`)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, err.Error())
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	defer rows.Close()
+	defer lignes.Close()
 
-	var evenements []Evenement
-	for rows.Next() {
+	evenements := make([]Evenement, 0)
+	for lignes.Next() {
 		var e Evenement
-		if err := rows.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID); err != nil {
-			log.Println("Erreur de scan :", err)
-			continue
+		if err := scannerEvenement(lignes, &e); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
 		}
 		evenements = append(evenements, e)
 	}
@@ -53,12 +67,13 @@ func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var e Evenement
-	err = s.db.QueryRow(`
-		SELECT id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id
-		FROM evenements WHERE id=$1
-	`, id).Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
-	if err != nil {
+	err = scannerEvenement(s.db.QueryRow(`SELECT `+colonnesEvenement+` FROM evenements WHERE id = $1`, id), &e)
+	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "événement introuvable")
+		return
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
 
@@ -66,9 +81,18 @@ func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
+	salarieID, _, ok := s.exigerSalarie(w, r)
+	if !ok {
+		return
+	}
+
 	var e Evenement
 	if err := json.NewDecoder(r.Body).Decode(&e); err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête invalide")
+		return
+	}
+	if message := validerEvenement(e); message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
 		return
 	}
 
@@ -79,13 +103,16 @@ func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request)
 		e.Statut = "brouillon"
 	}
 
-	err := s.db.QueryRow(`
+	// Le créateur est le salarié connecté : on ignore un éventuel createur_id envoyé par
+	// le front, sinon n'importe qui pourrait créer un événement au nom d'un autre.
+	err := scannerEvenement(s.db.QueryRow(`
 		INSERT INTO evenements (titre, description, date_debut, date_fin, lieu, site, statut, createur_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-		RETURNING id
-	`, e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, e.Statut, e.CreateurID).Scan(&e.ID)
+		RETURNING `+colonnesEvenement,
+		e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, e.Statut, salarieID,
+	), &e)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, err.Error())
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
 
@@ -93,6 +120,10 @@ func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
+	if _, _, ok := s.exigerSalarie(w, r); !ok {
+		return
+	}
+
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
@@ -104,62 +135,87 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête invalide")
 		return
 	}
-
-	_, err = s.db.Exec(`
-		UPDATE evenements
-		SET titre=$1, description=$2, date_debut=$3, date_fin=$4, lieu=$5, site=$6
-		WHERE id=$7
-	`, e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, id)
-	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, err.Error())
+	if message := validerEvenement(e); message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
 		return
 	}
 
-	envoyerJSON(w, http.StatusOK, map[string]string{"statut": "modifié"})
+	err = scannerEvenement(s.db.QueryRow(`
+		UPDATE evenements
+		SET titre = $1, description = $2, date_debut = $3, date_fin = $4, lieu = $5, site = $6, updated_at = now()
+		WHERE id = $7
+		RETURNING `+colonnesEvenement,
+		e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, id,
+	), &e)
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusNotFound, "événement introuvable")
+		return
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
+	envoyerJSON(w, http.StatusOK, e)
 }
 
 func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
+	if _, _, ok := s.exigerSalarie(w, r); !ok {
+		return
+	}
+
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
 		return
 	}
 
-	_, err = s.db.Exec("DELETE FROM evenements WHERE id=$1", id)
+	resultat, err := s.db.Exec("DELETE FROM evenements WHERE id = $1", id)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, err.Error())
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if lignes, _ := resultat.RowsAffected(); lignes == 0 {
+		envoyerErreur(w, http.StatusNotFound, "événement introuvable")
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// Validation d'un événement par un responsable : passe le statut à "publie"
-// et enregistre quel salarié a validé (règle de gestion : seul un responsable
-// peut valider, ce contrôle sera fait via le middleware d'authentification)
+// Validation d'un événement par un responsable : passe le statut de "en_attente" à
+// "publie" et enregistre quel salarié a validé (le responsable connecté).
 func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Request) {
+	responsableID, estResponsable, ok := s.exigerSalarie(w, r)
+	if !ok {
+		return
+	}
+	if !estResponsable {
+		envoyerErreur(w, http.StatusForbidden, "seul un responsable peut valider un événement")
+		return
+	}
+
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
 		return
 	}
 
-	var corps struct {
-		ValidateurID int `json:"validateur_id"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&corps); err != nil {
-		envoyerErreur(w, http.StatusBadRequest, "corps de requête invalide")
+	var e Evenement
+	err = scannerEvenement(s.db.QueryRow(`
+		UPDATE evenements SET statut = 'publie', valide_par_id = $1, updated_at = now()
+		WHERE id = $2 AND statut = 'en_attente'
+		RETURNING `+colonnesEvenement,
+		responsableID, id,
+	), &e)
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusConflict, "événement introuvable ou pas en attente de validation")
 		return
 	}
-
-	_, err = s.db.Exec(
-		"UPDATE evenements SET statut='publie', valide_par_id=$1 WHERE id=$2",
-		corps.ValidateurID, id,
-	)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, err.Error())
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
 
-	envoyerJSON(w, http.StatusOK, map[string]string{"statut": "publié"})
+	envoyerJSON(w, http.StatusOK, e)
 }
