@@ -14,20 +14,20 @@
 
             <ul>
                 <li>
-                    <button class="nav-button">
+                    <a class="nav-button" href="utilisateurs.php">
                         <img src="../assets/img/people-svgrepo-com.svg" alt="Utilisateurs">
                         <span>Utilisateurs</span>
-                    </button>
+                    </a>
                 </li>
                 <li>
-                    <button class="nav-button">
+                    <a class="nav-button" href="prestations.php">
                         <img src="../assets/img/book-svgrepo-com.svg" alt="Prestations">
                         <span>Prestations</span>
-                    </button>
+                    </a>
                 </li>
             </ul>
 
-            <button id="logout-button">
+            <button id="logout-button" onclick="deconnecter()">
                 <img src="../assets/img/logout-svgrepo-com.svg" alt="Déconnexion">
             </button>
         </aside>
@@ -89,6 +89,8 @@
         </main>
 
         <script src="../assets/js/config.js"></script>
+        <script src="../assets/js/api.js"></script>
+        <script>exigerConnexion("administrateur");</script>
         <script src="js/prestations.js"></script>
     </body>
 </html>

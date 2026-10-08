@@ -24,7 +24,7 @@ $liens = [
         <?php endforeach; ?>
     </ul>
 
-    <button id="logout-button">
+    <button id="logout-button" onclick="deconnecter()">
         <img src="../assets/img/logout-svgrepo-com.svg" alt="Déconnexion">
     </button>
 

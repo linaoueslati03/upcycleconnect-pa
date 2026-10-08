@@ -28,7 +28,7 @@ createApp({
         formaterStatut,
 
         async chargerEvenements() {
-            const reponse = await fetch(`${API_BASE_URL}/evenements`);
+            const reponse = await appelerApi("/evenements");
             if (!reponse.ok) {
                 this.erreur = "Erreur lors du chargement des événements";
                 return;

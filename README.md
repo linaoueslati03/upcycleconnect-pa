@@ -47,7 +47,7 @@ php -S localhost:8000 -t front
 
 | Service | URL |
 |---|---|
-| Front | http://localhost:8000/admin/utilisateurs.php |
+| Front | http://localhost:8000 (page de connexion) |
 | API | http://localhost:8081/api/sante |
 | Adminer (base de données) | http://localhost:8080 |
 

@@ -23,8 +23,14 @@ createApp({
     },
 
     methods: {
+        deconnecter,
+
         async chargerUtilisateurs() {
-            const reponse = await fetch(`${API_BASE_URL}/utilisateurs`);
+            const reponse = await appelerApi("/utilisateurs");
+            if (!reponse.ok) {
+                this.erreur = "Erreur lors du chargement des utilisateurs";
+                return;
+            }
             this.utilisateurs = await reponse.json();
         },
 
@@ -63,18 +69,17 @@ createApp({
                 role_id: this.formulaire.role_id,
             };
 
-            let url = `${API_BASE_URL}/utilisateurs`;
+            let chemin = "/utilisateurs";
             let methode = "POST";
             if (this.formulaire.id) {
-                url = `${API_BASE_URL}/utilisateurs/${this.formulaire.id}`;
+                chemin = `/utilisateurs/${this.formulaire.id}`;
                 methode = "PUT";
             } else {
                 donnees.mot_de_passe = this.formulaire.mot_de_passe;
             }
 
-            const reponse = await fetch(url, {
+            const reponse = await appelerApi(chemin, {
                 method: methode,
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(donnees),
             });
 
@@ -93,7 +98,7 @@ createApp({
             if (!confirm("Supprimer cet utilisateur ?")) {
                 return;
             }
-            await fetch(`${API_BASE_URL}/utilisateurs/${id}`, { method: "DELETE" });
+            await appelerApi(`/utilisateurs/${id}`, { method: "DELETE" });
             this.chargerUtilisateurs();
         },
     },
