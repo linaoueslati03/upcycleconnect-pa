@@ -596,3 +596,23 @@ main {
 
     font-size: 11px;
 }
+.form-article {
+    max-width: 800px;
+}
+
+.form-article textarea {
+    min-height: 300px;
+    resize: vertical;
+}
+
+/* Menu de l'espace Salarié : liens <a> stylés comme les boutons */
+a.nav-button,
+a#toggle-button,
+a.btn-primary {
+    text-decoration: none;
+    color: inherit;
+}
+
+.erreur {
+    color: #c62828;
+}

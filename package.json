@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite"
-},
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/celiadjeddou31-ux/upcycleconnect.git"
@@ -20,11 +20,6 @@
   "homepage": "https://github.com/celiadjeddou31-ux/upcycleconnect#readme",
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "tailwindcss": "^4.3.3",
-    "vue": "^3.5.42"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.9",
-    "vite": "^8.3.0"
+    "tailwindcss": "^4.3.3"
   }
 }
