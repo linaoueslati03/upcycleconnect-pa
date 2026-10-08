@@ -1,3 +1,4 @@
+-- Comptes de la plateforme : un seul compte par personne, son rôle dit à quel espace il accède.
 
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
