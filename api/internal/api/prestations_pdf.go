@@ -30,6 +30,12 @@ func (s *Serveur) gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusNotFound, "prestation introuvable")
 		return
 	}
+	if prestation.Statut != "publie" {
+		if _, role := s.roleConnecte(r); role != roleAdministrateur {
+			envoyerErreur(w, http.StatusNotFound, "prestation introuvable")
+			return
+		}
+	}
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return

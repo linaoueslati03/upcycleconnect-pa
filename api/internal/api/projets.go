@@ -231,7 +231,10 @@ func (s *Serveur) gererSuppressionProjet(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	s.db.Exec("DELETE FROM projets_upcycling WHERE id = $1", id)
+	if _, err := s.db.Exec("DELETE FROM projets_upcycling WHERE id = $1", id); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "projet supprimé"})
 }
 

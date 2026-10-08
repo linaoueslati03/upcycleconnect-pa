@@ -28,6 +28,45 @@ func scannerEvenement(ligne interface{ Scan(...any) error }, e *Evenement) error
 	return ligne.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
 }
 
+// verifierDroitOffre vérifie qu'un salarié peut modifier ou supprimer une offre : il doit
+// en être le créateur, ou être responsable. Renvoie le statut actuel de l'offre ; en cas
+// de refus, l'erreur HTTP est déjà écrite. table vaut "evenements" ou "ateliers" (valeurs
+// fixées dans le code, jamais venues de la requête).
+func (s *Serveur) verifierDroitOffre(w http.ResponseWriter, table string, id, salarieID int, estResponsable bool) (string, bool) {
+	var createurID int
+	var statut string
+	err := s.db.QueryRow("SELECT createur_id, statut FROM "+table+" WHERE id = $1", id).Scan(&createurID, &statut)
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusNotFound, "introuvable")
+		return "", false
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return "", false
+	}
+	if createurID != salarieID && !estResponsable {
+		envoyerErreur(w, http.StatusForbidden, "seuls le créateur et les responsables peuvent modifier cette offre")
+		return "", false
+	}
+	return statut, true
+}
+
+// statutApresModificationOffre : une offre déjà publiée et modifiée par un salarié non
+// responsable repart en validation ; sinon le salarié choisit brouillon ou en_attente,
+// et un statut absent laisse le statut actuel.
+func statutApresModificationOffre(statutActuel, statutDemande string, estResponsable bool) string {
+	if statutActuel == "publie" {
+		if estResponsable {
+			return "publie"
+		}
+		return "en_attente"
+	}
+	if choisi := statutModifiable(statutDemande); choisi != "" {
+		return choisi
+	}
+	return statutActuel
+}
+
 // statutModifiable garde seulement les statuts qu'un salarié peut choisir lui-même
 // (« publie » est réservé à la validation par un responsable) ; "" = statut inchangé.
 func statutModifiable(statut string) string {
@@ -48,7 +87,12 @@ func validerEvenement(e Evenement) string {
 }
 
 func (s *Serveur) gererListeEvenements(w http.ResponseWriter, r *http.Request) {
-	lignes, err := s.db.Query(`SELECT ` + colonnesEvenement + ` FROM evenements ORDER BY date_debut ASC`)
+	// Brouillons et offres en attente ne sont visibles que du personnel
+	requete := `SELECT ` + colonnesEvenement + ` FROM evenements WHERE statut = 'publie' ORDER BY date_debut ASC`
+	if _, role := s.roleConnecte(r); role == roleSalarie || role == roleAdministrateur {
+		requete = `SELECT ` + colonnesEvenement + ` FROM evenements ORDER BY date_debut ASC`
+	}
+	lignes, err := s.db.Query(requete)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -84,6 +128,14 @@ func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
+	}
+
+	// Un brouillon ou une offre en attente n'est visible que du personnel
+	if e.Statut != "publie" {
+		if _, role := s.roleConnecte(r); role != roleSalarie && role != roleAdministrateur {
+			envoyerErreur(w, http.StatusNotFound, "introuvable")
+			return
+		}
 	}
 
 	envoyerJSON(w, http.StatusOK, e)
@@ -129,7 +181,8 @@ func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
-	if _, _, ok := s.exigerSalarie(w, r); !ok {
+	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	if !ok {
 		return
 	}
 
@@ -149,13 +202,18 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	statutActuel, autorise := s.verifierDroitOffre(w, "evenements", id, salarieID, estResponsable)
+	if !autorise {
+		return
+	}
+
 	err = scannerEvenement(s.db.QueryRow(`
 		UPDATE evenements
 		SET titre = $1, description = $2, date_debut = $3, date_fin = $4, lieu = $5, site = $6,
-		    statut = COALESCE(NULLIF($7, ''), statut), updated_at = now()
+		    statut = $7, updated_at = now()
 		WHERE id = $8
 		RETURNING `+colonnesEvenement,
-		e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, statutModifiable(e.Statut), id,
+		e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, statutApresModificationOffre(statutActuel, e.Statut, estResponsable), id,
 	), &e)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "événement introuvable")
@@ -170,13 +228,18 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 }
 
 func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
-	if _, _, ok := s.exigerSalarie(w, r); !ok {
+	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	if !ok {
 		return
 	}
 
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
+		return
+	}
+
+	if _, autorise := s.verifierDroitOffre(w, "evenements", id, salarieID, estResponsable); !autorise {
 		return
 	}
 

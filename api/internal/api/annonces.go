@@ -131,16 +131,30 @@ func (s *Serveur) gererDetailAnnonce(w http.ResponseWriter, r *http.Request) {
 var statutsAnnonceValidee = []string{"en_ligne", "reservee", "cedee"}
 
 // statutApresModification calcule le statut d'une annonce modifiée par son auteur :
-// une annonce pas encore validée (ou refusée) repart en validation, et l'auteur ne
-// peut jamais se valider lui-même.
-func statutApresModification(statutAvant, statutDemande string) string {
-	if !slices.Contains(statutsAnnonceValidee, statutAvant) {
+//   - une annonce cédée est définitive (sinon on pourrait regagner les points en boucle) ;
+//   - une annonce pas encore validée, refusée, ou dont le contenu change, repart en
+//     validation : l'auteur ne peut jamais publier lui-même un contenu non vérifié ;
+//   - sinon l'auteur peut seulement la passer en ligne, réservée ou cédée.
+func statutApresModification(statutAvant, statutDemande string, contenuModifie bool) string {
+	if statutAvant == "cedee" {
+		return "cedee"
+	}
+	if !slices.Contains(statutsAnnonceValidee, statutAvant) || contenuModifie {
 		return "en_attente"
 	}
 	if slices.Contains(statutsAnnonceValidee, statutDemande) {
 		return statutDemande
 	}
 	return statutAvant
+}
+
+// memeContenu compare le contenu d'une annonce (hors statut) avec les nouvelles valeurs.
+func memeContenu(a Annonce, e AnnonceEntree) bool {
+	memePrix := (a.Prix == nil && e.Prix == nil) || (a.Prix != nil && e.Prix != nil && *a.Prix == *e.Prix)
+	memeCategorie := (a.CategorieID == nil && e.CategorieID == nil) ||
+		(a.CategorieID != nil && e.CategorieID != nil && *a.CategorieID == *e.CategorieID)
+	return a.Titre == e.Titre && a.Description == e.Description && a.Type == e.Type &&
+		a.Localisation == e.Localisation && memePrix && memeCategorie
 }
 
 func validerAnnonce(entree AnnonceEntree) string {
@@ -201,9 +215,9 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var proprietaireID int
-	var statutAvant string
-	err = s.db.QueryRow("SELECT utilisateur_id, statut FROM annonces WHERE id = $1", id).Scan(&proprietaireID, &statutAvant)
+	var avant Annonce
+	err = scannerAnnonce(s.db.QueryRow(`SELECT id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation
+		FROM annonces WHERE id = $1`, id), &avant)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "annonce introuvable")
 		return
@@ -212,7 +226,7 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if proprietaireID != utilisateurID {
+	if avant.UtilisateurID != utilisateurID {
 		envoyerErreur(w, http.StatusForbidden, "vous n'êtes pas propriétaire de cette annonce")
 		return
 	}
@@ -226,10 +240,22 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusBadRequest, message)
 		return
 	}
-	entree.Statut = statutApresModification(statutAvant, entree.Statut)
+	if avant.Statut == "cedee" && !memeContenu(avant, entree) {
+		envoyerErreur(w, http.StatusConflict, "une annonce cédée ne peut plus être modifiée")
+		return
+	}
+	entree.Statut = statutApresModification(avant.Statut, entree.Statut, !memeContenu(avant, entree))
+
+	// La mise à jour et l'éventuel ajout de points se font dans la même transaction
+	tx, err := s.db.Begin()
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer tx.Rollback()
 
 	var a Annonce
-	ligne := s.db.QueryRow(`
+	ligne := tx.QueryRow(`
 		UPDATE annonces SET titre=$1, description=$2, type=$3, prix=$4, categorie_id=$5, localisation=$6, statut=$7
 		WHERE id = $8
 		RETURNING id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation`,
@@ -240,8 +266,16 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	if entree.Statut == "cedee" && statutAvant != "cedee" {
-		ajouterPointsScore(s.db, a.UtilisateurID, pointsAnnonceCedee, "Annonce cédée")
+	if entree.Statut == "cedee" && avant.Statut != "cedee" {
+		if err := ajouterPointsScore(tx, a.UtilisateurID, pointsAnnonceCedee, "Annonce cédée"); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
 	}
 
 	envoyerJSON(w, http.StatusOK, a)
@@ -275,24 +309,17 @@ func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	s.db.Exec("DELETE FROM annonces WHERE id = $1", id)
+	if _, err := s.db.Exec("DELETE FROM annonces WHERE id = $1", id); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "annonce supprimée"})
 }
 
 // peutVoirAnnonceNonValidee : l'auteur de l'annonce ou un administrateur.
 func (s *Serveur) peutVoirAnnonceNonValidee(r *http.Request, auteurID int) bool {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		return false
-	}
-	if utilisateurID == auteurID {
-		return true
-	}
-	var role string
-	err = s.db.QueryRow(
-		"SELECT r.code FROM utilisateurs u JOIN roles r ON r.id = u.role_id WHERE u.id = $1", utilisateurID,
-	).Scan(&role)
-	return err == nil && role == roleAdministrateur
+	utilisateurID, role := s.roleConnecte(r)
+	return utilisateurID != 0 && (utilisateurID == auteurID || role == roleAdministrateur)
 }
 
 // AnnonceModeration est une annonce vue par l'administrateur, avec son auteur.

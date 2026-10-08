@@ -184,11 +184,13 @@ func genererCodeDepot(longueurOctets int) (string, error) {
 }
 
 func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
-	// Le suivi d'un dépôt (validation, dépôt, récupération) est fait par le personnel
-	// ou par le professionnel qui récupère l'objet, jamais par le particulier lui-même.
-	if _, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur, roleProfessionnel); !ok {
+	// Validation et dépôt sont faits par le personnel ; la récupération par le professionnel
+	// qui vient chercher l'objet (ou enregistrée par le personnel). Jamais par le particulier.
+	appelantID, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur, roleProfessionnel)
+	if !ok {
 		return
 	}
+	_, roleAppelant := s.roleConnecte(r)
 
 	id, err := idDepuisChemin(r)
 	if err != nil {
@@ -206,6 +208,23 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 	if !statutConnu {
 		envoyerErreur(w, http.StatusBadRequest, "statut invalide")
 		return
+	}
+
+	if roleAppelant == roleProfessionnel {
+		if entree.Statut != "recuperee" {
+			envoyerErreur(w, http.StatusForbidden, "un professionnel peut seulement enregistrer la récupération")
+			return
+		}
+		// Le professionnel récupère pour lui-même : on ignore l'identifiant envoyé
+		entree.ProfessionnelRecuperateurID = &appelantID
+	} else if entree.Statut == "recuperee" && entree.ProfessionnelRecuperateurID != nil {
+		var roleRecuperateur string
+		err := s.db.QueryRow("SELECT r.code FROM utilisateurs u JOIN roles r ON r.id = u.role_id WHERE u.id = $1",
+			*entree.ProfessionnelRecuperateurID).Scan(&roleRecuperateur)
+		if err != nil || roleRecuperateur != roleProfessionnel {
+			envoyerErreur(w, http.StatusBadRequest, "professionnel_recuperateur_id doit désigner un compte professionnel")
+			return
+		}
 	}
 
 	var statutActuel string
@@ -235,13 +254,13 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		}
 		ligne = s.db.QueryRow(`
 			UPDATE depots SET statut = 'validee', code_ouverture = $1, code_barre = $2, date_validation = now()
-			WHERE id = $3
+			WHERE id = $3 AND statut = 'demande'
 			RETURNING `+colonnesDepot,
 			codeOuverture, codeBarre, id,
 		)
 	case "deposee":
 		ligne = s.db.QueryRow(`
-			UPDATE depots SET statut = 'deposee' WHERE id = $1
+			UPDATE depots SET statut = 'deposee' WHERE id = $1 AND statut = 'validee'
 			RETURNING `+colonnesDepot, id)
 	case "recuperee":
 		if entree.ProfessionnelRecuperateurID == nil {
@@ -250,19 +269,26 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		}
 		ligne = s.db.QueryRow(`
 			UPDATE depots SET statut = 'recuperee', professionnel_recuperateur_id = $1, date_recuperation = now()
-			WHERE id = $2
+			WHERE id = $2 AND statut = 'deposee'
 			RETURNING `+colonnesDepot,
 			entree.ProfessionnelRecuperateurID, id,
 		)
 	}
 
-	if err := scannerDepot(ligne, &d); err != nil {
+	if err := scannerDepot(ligne, &d); errors.Is(err, sql.ErrNoRows) {
+		// le statut a changé entre la lecture et la mise à jour (requête simultanée)
+		envoyerErreur(w, http.StatusConflict, "le dépôt a déjà changé de statut")
+		return
+	} else if err != nil {
 		gererErreurPostgres(w, err)
 		return
 	}
 
 	if entree.Statut == "recuperee" {
-		ajouterPointsScore(s.db, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré")
+		if err := ajouterPointsScore(s.db, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré"); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
 	}
 
 	envoyerJSON(w, http.StatusOK, d)
@@ -270,8 +296,9 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 
 // gererListeDepots liste toutes les demandes de dépôt pour le personnel qui les traite
 // (filtre facultatif ?statut=demande). Le particulier, lui, ne voit que les siennes.
+// Réservée au personnel : la réponse contient les codes d'ouverture des conteneurs.
 func (s *Serveur) gererListeDepots(w http.ResponseWriter, r *http.Request) {
-	if _, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur, roleProfessionnel); !ok {
+	if _, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur); !ok {
 		return
 	}
 
