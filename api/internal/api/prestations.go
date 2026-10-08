@@ -23,8 +23,8 @@ func validerPrestation(p Prestation) string {
 	if p.Tarif < 0 {
 		return "le tarif ne peut pas être négatif"
 	}
-	if p.Statut != "Brouillon" && p.Statut != "Publiée" {
-		return "statut invalide (Brouillon ou Publiée attendu)"
+	if p.Statut != "brouillon" && p.Statut != "publie" {
+		return "statut invalide (brouillon ou publie attendu)"
 	}
 	return ""
 }

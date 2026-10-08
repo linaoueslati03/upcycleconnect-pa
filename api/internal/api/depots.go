@@ -267,3 +267,38 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 
 	envoyerJSON(w, http.StatusOK, d)
 }
+
+// gererListeDepots liste toutes les demandes de dépôt pour le personnel qui les traite
+// (filtre facultatif ?statut=demande). Le particulier, lui, ne voit que les siennes.
+func (s *Serveur) gererListeDepots(w http.ResponseWriter, r *http.Request) {
+	if _, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur, roleProfessionnel); !ok {
+		return
+	}
+
+	requete := `SELECT ` + colonnesDepot + ` FROM depots`
+	args := []any{}
+	if statut := r.URL.Query().Get("statut"); statut != "" {
+		requete += ` WHERE statut = $1`
+		args = append(args, statut)
+	}
+	requete += ` ORDER BY date_demande ASC`
+
+	lignes, err := s.db.Query(requete, args...)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer lignes.Close()
+
+	depots := make([]Depot, 0)
+	for lignes.Next() {
+		var d Depot
+		if err := scannerDepot(lignes, &d); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		depots = append(depots, d)
+	}
+
+	envoyerJSON(w, http.StatusOK, depots)
+}

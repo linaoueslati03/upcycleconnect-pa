@@ -9,7 +9,8 @@ import "net/http"
 //   - publiques : santé, création de compte, login, lectures du catalogue, annonces, conseils,
 //     événements, ateliers, prestations et forums ;
 //   - utilisateur connecté : /api/moi/*, annonces, dépôts, inscriptions, projets, forums ;
-//   - salarié : écriture des événements et ateliers (validation : responsable) ;
+//   - salarié : écriture des événements, ateliers et conseils, planning salarié
+//     (validation : responsable) ; suivi des dépôts (avec admin et professionnel) ;
 //   - administrateur : gestion des utilisateurs et des prestations.
 func (s *Serveur) Routes() http.Handler {
 	mux := http.NewServeMux()
@@ -32,6 +33,7 @@ func (s *Serveur) Routes() http.Handler {
 
 	mux.HandleFunc("POST /api/depots", s.gererCreationDepot)
 	mux.HandleFunc("GET /api/moi/depots", s.gererMesDepots)
+	mux.HandleFunc("GET /api/depots", s.gererListeDepots)
 	mux.HandleFunc("GET /api/depots/{id}", s.gererDetailDepot)
 	mux.HandleFunc("PUT /api/depots/{id}/statut", s.gererChangementStatutDepot)
 
@@ -41,6 +43,8 @@ func (s *Serveur) Routes() http.Handler {
 
 	mux.HandleFunc("GET /api/conseils", s.gererListeConseils)
 	mux.HandleFunc("GET /api/conseils/{id}", s.gererDetailConseil)
+	mux.HandleFunc("POST /api/conseils", s.gererCreationConseil)
+	mux.HandleFunc("PUT /api/conseils/{id}", s.gererModificationConseil)
 
 	mux.HandleFunc("GET /api/catalogue", s.gererCatalogue)
 	mux.HandleFunc("POST /api/inscriptions", s.gererCreationInscription)
@@ -83,7 +87,14 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/evenements/{id}/valider", s.gererValidationEvenement)
 
 	mux.HandleFunc("GET /api/ateliers", s.gererListeAteliers)
+	mux.HandleFunc("GET /api/ateliers/{id}", s.gererDetailAtelier)
 	mux.HandleFunc("POST /api/ateliers", s.gererCreationAtelier)
+	mux.HandleFunc("PUT /api/ateliers/{id}", s.gererModificationAtelier)
+	mux.HandleFunc("DELETE /api/ateliers/{id}", s.gererSuppressionAtelier)
+	mux.HandleFunc("POST /api/ateliers/{id}/valider", s.gererValidationAtelier)
+
+	mux.HandleFunc("GET /api/salaries/planning", s.gererPlanningSalarie)
+	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)
 
 	return mux
 }

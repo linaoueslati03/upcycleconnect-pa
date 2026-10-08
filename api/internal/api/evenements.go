@@ -28,6 +28,15 @@ func scannerEvenement(ligne interface{ Scan(...any) error }, e *Evenement) error
 	return ligne.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
 }
 
+// statutModifiable garde seulement les statuts qu'un salarié peut choisir lui-même
+// (« publie » est réservé à la validation par un responsable) ; "" = statut inchangé.
+func statutModifiable(statut string) string {
+	if statut == "brouillon" || statut == "en_attente" {
+		return statut
+	}
+	return ""
+}
+
 func validerEvenement(e Evenement) string {
 	if strings.TrimSpace(e.Titre) == "" {
 		return "titre obligatoire"
@@ -142,10 +151,11 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 
 	err = scannerEvenement(s.db.QueryRow(`
 		UPDATE evenements
-		SET titre = $1, description = $2, date_debut = $3, date_fin = $4, lieu = $5, site = $6, updated_at = now()
-		WHERE id = $7
+		SET titre = $1, description = $2, date_debut = $3, date_fin = $4, lieu = $5, site = $6,
+		    statut = COALESCE(NULLIF($7, ''), statut), updated_at = now()
+		WHERE id = $8
 		RETURNING `+colonnesEvenement,
-		e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, id,
+		e.Titre, e.Description, e.DateDebut, e.DateFin, e.Lieu, e.Site, statutModifiable(e.Statut), id,
 	), &e)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "événement introuvable")

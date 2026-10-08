@@ -10,6 +10,9 @@ import (
 	"github.com/go-pdf/fpdf"
 )
 
+// libellesStatut traduit le code du statut en texte lisible pour le PDF.
+var libellesStatut = map[string]string{"brouillon": "Brouillon", "publie": "Publiée"}
+
 // gererPDFPrestation renvoie le récapitulatif d'une prestation sous forme de fichier PDF.
 func (s *Serveur) gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
@@ -47,7 +50,7 @@ func (s *Serveur) gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
 	ajouterLigne(pdf, texte("Titre"), texte(prestation.Titre))
 	ajouterLigne(pdf, texte("Catégorie"), texte(prestation.Categorie))
 	ajouterLigne(pdf, texte("Tarif"), texte(fmt.Sprintf("%.2f €", prestation.Tarif)))
-	ajouterLigne(pdf, texte("Statut"), texte(prestation.Statut))
+	ajouterLigne(pdf, texte("Statut"), texte(libellesStatut[prestation.Statut]))
 
 	pdf.Ln(15)
 	pdf.SetFont("Arial", "I", 10)

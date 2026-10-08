@@ -39,6 +39,6 @@ INSERT INTO conseils (titre, contenu, categorie, statut, auteur_id)
     FROM salaries LIMIT 1;
 
 INSERT INTO prestations (titre, categorie, tarif, statut) VALUES
-    ('Audit recyclage', 'Conseil', 450.00, 'Publiée'),
-    ('Collecte de bois', 'Logistique', 250.00, 'Publiée'),
-    ('Formation de tri', 'Formation', 800.00, 'Brouillon');
+    ('Audit recyclage', 'Conseil', 450.00, 'publie'),
+    ('Collecte de bois', 'Logistique', 250.00, 'publie'),
+    ('Formation de tri', 'Formation', 800.00, 'brouillon');
