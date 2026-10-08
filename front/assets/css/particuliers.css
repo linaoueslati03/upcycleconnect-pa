@@ -1,0 +1,189 @@
+/* Espace Particulier */
+
+/* Menu plus compact : 11 rubriques au lieu de 4 */
+aside ul {
+    margin-top: 30px;
+    overflow-y: auto;
+}
+
+aside li {
+    margin-bottom: 4px;
+}
+
+.nav-button {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 8px 12px;
+}
+
+.nav-button img {
+    width: 22px;
+    height: 22px;
+}
+
+/* Cartes et grilles */
+.grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.carte {
+    padding: 22px;
+    border-radius: 10px;
+    background: #f7f5ef;
+    box-shadow: 0 4px 6px rgba(31, 56, 100, 0.05);
+}
+
+.carte h2,
+.carte h3 {
+    margin-top: 0;
+    color: #1F3864;
+    font-family: "Poppins", sans-serif;
+}
+
+.carte-cliquable {
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.carte-cliquable:hover,
+.carte-selectionnee {
+    box-shadow: 0 0 0 2px #2E7D32;
+}
+
+.chiffre-cle {
+    margin: 8px 0 0;
+    color: #2E7D32;
+    font-family: "Poppins", sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.discret {
+    color: #8D6E63;
+    font-size: 13px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(46, 125, 50, 0.12);
+    color: #2E7D32;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-attente {
+    background: rgba(141, 110, 99, 0.15);
+    color: #8D6E63;
+}
+
+.succes {
+    color: #2E7D32;
+    font-weight: 600;
+}
+
+.barre-filtres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 25px;
+}
+
+.barre-filtres .form-group {
+    min-width: 180px;
+}
+
+.deux-colonnes {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.section {
+    margin-bottom: 35px;
+}
+
+.liste-simple {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.liste-simple li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(31, 56, 100, 0.1);
+}
+
+/* Suivi d'un dépôt : une pastille par étape */
+.suivi-etapes {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.suivi-etapes li {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    background: rgba(31, 56, 100, 0.06);
+    color: #8D6E63;
+    font-size: 12px;
+    text-align: center;
+}
+
+.suivi-etapes li.atteinte {
+    background: #2E7D32;
+    color: white;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Tutoriel de première connexion */
+.fond-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(31, 56, 100, 0.55);
+}
+
+.modal {
+    width: 100%;
+    max-width: 520px;
+    padding: 35px;
+    border-radius: 14px;
+    background: #f7f5ef;
+}
+
+.modal h2 {
+    margin-top: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+.points-etapes {
+    margin: 20px 0;
+    color: #8D6E63;
+    font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+    .deux-colonnes {
+        grid-template-columns: 1fr;
+    }
+}
