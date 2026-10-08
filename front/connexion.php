@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="assets/css/connexion.css">
     <script src="assets/js/config.js"></script>
     <script src="assets/js/api.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
 </head>
 
 <body class="page-connexion">

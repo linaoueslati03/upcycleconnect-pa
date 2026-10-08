@@ -1,96 +1,98 @@
+<?php
+require "inclus/espace.php";
+$titrePage = "Prestations";
+?>
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>UpcycleConnect - Prestations</title>
-        <link rel="stylesheet" href="../assets/css/style.css">
-        <link rel="stylesheet" href="../assets/css/prestations.css">
-    </head>
-    <body>
-        <aside>
-            <button id="toggle-button">
-                <img src="../assets/img/LOGO-pa.png" alt="Logo UpcycleConnect">
-            </button>
 
-            <ul>
-                <li>
-                    <a class="nav-button" href="utilisateurs.php">
-                        <img src="../assets/img/people-svgrepo-com.svg" alt="Utilisateurs">
-                        <span>Utilisateurs</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-button" href="prestations.php">
-                        <img src="../assets/img/book-svgrepo-com.svg" alt="Prestations">
-                        <span>Prestations</span>
-                    </a>
-                </li>
-            </ul>
+<head>
+    <?php include "../inclus/entete.php"; ?>
+</head>
 
-            <button id="logout-button" onclick="deconnecter()">
-                <img src="../assets/img/logout-svgrepo-com.svg" alt="Déconnexion">
-            </button>
-        </aside>
+<body>
+    <?php include "../inclus/navigation.php"; ?>
 
-        <main class="main-content">
-            <header class="page-header">
-                <h1>GESTION DES PRESTATIONS</h1>
-            </header>
+    <div id="app">
+        <main>
 
-            <div style="display: flex; gap: 40px; align-items: flex-start;">
-                
-                <section class="content-left" style="flex: 7;">
-                    <div class="table-container">
-                        <table class="presta-table">
-                            <thead>
-                                <tr>
-                                    <th>Titre</th>
-                                    <th>Catégorie</th>
-                                    <th>Tarif</th>
-                                    <th>Statut</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="prestations-list">
-                                <!-- JS -->
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="page-header">
+                <h1>Gestion des prestations</h1>
+                <button class="btn-primary" @click="reinitialiserFormulaire">+ Nouvelle prestation</button>
+            </div>
+
+            <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
+
+            <div class="mise-en-page-admin">
+
+                <section class="carte">
+                    <table class="tableau">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Catégorie</th>
+                                <th>Tarif</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="p in prestations" :key="p.id">
+                                <td><strong>{{ p.titre }}</strong></td>
+                                <td>{{ p.categorie }}</td>
+                                <td>{{ formaterTarif(p.tarif) }}</td>
+                                <td>{{ p.statut }}</td>
+                                <td>
+                                    <button class="lien-action" @click="modifier(p)">Modifier</button>
+                                    <a class="lien-action" :href="lienPDF(p.id)">PDF</a>
+                                    <button class="lien-action lien-supprimer" @click="supprimer(p.id)">Supprimer</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </section>
 
-                <div class="content-right" style="flex: 3;">
-                    <div class="table-container">
-                        <h3 style="color: #2E7D32; margin-top: 0;" id="form-title">NOUVELLE OFFRE</h3>
-                        <form id="prestation-form">
-                            <input type="hidden" id="presta-id">
-                            
-                            <label>Titre</label>
-                            <input type="text" id="presta-titre" required style="width: 100%; margin-bottom: 10px;">
-                            
-                            <label>Catégorie</label>
-                            <input type="text" id="presta-categorie" required style="width: 100%; margin-bottom: 10px;">
-                            
-                            <label>Tarif (€)</label>
-                            <input type="number" id="presta-tarif" required style="width: 100%; margin-bottom: 10px;">
-                            
-                            <label>Statut</label>
-                            <select id="presta-statut" style="width: 100%; margin-bottom: 20px;">
+                <div class="carte carte-formulaire">
+                    <h2>{{ formulaire.id ? "Modifier la prestation" : "Nouvelle prestation" }}</h2>
+
+                    <form @submit.prevent="enregistrer">
+                        <div class="form-group">
+                            <label for="titre">Titre</label>
+                            <input id="titre" type="text" v-model="formulaire.titre" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categorie">Catégorie</label>
+                            <input id="categorie" type="text" v-model="formulaire.categorie" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tarif">Tarif (€)</label>
+                            <input id="tarif" type="number" min="0" step="0.01" v-model.number="formulaire.tarif" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statut">Statut</label>
+                            <select id="statut" v-model="formulaire.statut">
                                 <option value="Brouillon">Brouillon</option>
                                 <option value="Publiée">Publiée</option>
                             </select>
-                            
-                            <button type="submit" class="btn-add" style="width: 100%; margin-bottom: 10px;">Enregistrer</button>
-                            <button type="button" onclick="reinitialiserFormulaire()" style="width: 100%;">Annuler</button>
-                        </form>
-                    </div>
+                        </div>
+
+                        <p v-if="erreur" class="erreur">{{ erreur }}</p>
+
+                        <div class="form-buttons">
+                            <button type="submit" class="button-submit">Enregistrer</button>
+                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">Annuler</button>
+                        </div>
+                    </form>
                 </div>
 
             </div>
-        </main>
 
-        <script src="../assets/js/config.js"></script>
-        <script src="../assets/js/api.js"></script>
-        <script>exigerConnexion("administrateur");</script>
-        <script src="js/prestations.js"></script>
-    </body>
+        </main>
+    </div>
+
+    <script src="js/prestations.js"></script>
+</body>
+
 </html>

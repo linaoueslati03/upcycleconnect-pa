@@ -1,108 +1,102 @@
+<?php
+require "inclus/espace.php";
+$titrePage = "Utilisateurs";
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-    <meta charset="utf-8">
-
-    <title>Gestion des utilisateurs</title>
-
-    <link rel="stylesheet" href="../assets/css/utilisateurs.css">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../assets/js/tailwind.config.js"></script>
-    <script src="../assets/js/config.js"></script>
-    <script src="../assets/js/api.js"></script>
-    <script>exigerConnexion("administrateur");</script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <?php include "../inclus/entete.php"; ?>
 </head>
 
-<body class="p-8">
+<body>
+    <?php include "../inclus/navigation.php"; ?>
 
     <div id="app">
+        <main>
 
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-display font-semibold text-brand-navy">Gestion des utilisateurs</h1>
-            <div>
-                <a href="prestations.php" class="text-brand-navy underline mr-4">Prestations</a>
-                <button @click="deconnecter" class="text-brand-navy underline">Déconnexion</button>
+            <div class="page-header">
+                <h1>Gestion des utilisateurs</h1>
+                <button class="btn-primary" @click="reinitialiserFormulaire">+ Nouvel utilisateur</button>
             </div>
-        </div>
 
-        <button @click="ouvrirFormulaireCreation"
-            class="mb-4 px-4 py-2 rounded-lg bg-brand-green text-white font-semibold">
-            + Nouvel utilisateur
-        </button>
+            <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
 
-        <table class="w-full bg-white rounded-lg overflow-hidden shadow">
-            <thead class="bg-brand-navy text-white text-left">
-                <tr>
-                    <th class="p-3">ID</th>
-                    <th class="p-3">Nom</th>
-                    <th class="p-3">Prénom</th>
-                    <th class="p-3">Email</th>
-                    <th class="p-3">Rôle</th>
-                    <th class="p-3">Statut</th>
-                    <th class="p-3">Score</th>
-                    <th class="p-3">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="u in utilisateurs" :key="u.id" class="border-t">
-                    <td class="p-3">{{ u.id }}</td>
-                    <td class="p-3">{{ u.nom }}</td>
-                    <td class="p-3">{{ u.prenom }}</td>
-                    <td class="p-3">{{ u.email }}</td>
-                    <td class="p-3">{{ nomsRoles[u.role_id] ?? u.role_id }}</td>
-                    <td class="p-3">{{ u.statut }}</td>
-                    <td class="p-3">{{ u.upcycling_score }}</td>
-                    <td class="p-3">
-                        <button @click="ouvrirFormulaireEdition(u)" class="text-brand-navy underline mr-2">Modifier</button>
-                        <button @click="supprimerUtilisateur(u.id)" class="text-red-600 underline">Supprimer</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="mise-en-page-admin">
 
-        <form v-if="formulaireVisible" @submit.prevent="soumettreFormulaire"
-            class="mt-6 max-w-md flex flex-col gap-3 bg-white p-6 rounded-lg shadow">
+                <section class="carte">
+                    <table class="tableau">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th>Score</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="u in utilisateurs" :key="u.id">
+                                <td>{{ u.nom }}</td>
+                                <td>{{ u.prenom }}</td>
+                                <td>{{ u.email }}</td>
+                                <td>{{ nomsRoles[u.role_id] ?? u.role_id }}</td>
+                                <td>{{ u.statut }}</td>
+                                <td>{{ u.upcycling_score }}</td>
+                                <td>
+                                    <button class="lien-action" @click="modifier(u)">Modifier</button>
+                                    <button class="lien-action lien-supprimer" @click="supprimer(u.id)">Supprimer</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
 
-            <h2 class="text-lg font-semibold text-brand-navy">
-                {{ formulaire.id ? "Modifier l'utilisateur" : "Nouvel utilisateur" }}
-            </h2>
+                <div class="carte carte-formulaire">
+                    <h2>{{ formulaire.id ? "Modifier l'utilisateur" : "Nouvel utilisateur" }}</h2>
 
-            <label class="text-sm font-medium">Nom
-                <input type="text" v-model="formulaire.nom" class="w-full border rounded px-3 py-2" required>
-            </label>
+                    <form @submit.prevent="enregistrer">
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            <input id="nom" type="text" v-model="formulaire.nom" required>
+                        </div>
 
-            <label class="text-sm font-medium">Prénom
-                <input type="text" v-model="formulaire.prenom" class="w-full border rounded px-3 py-2" required>
-            </label>
+                        <div class="form-group">
+                            <label for="prenom">Prénom</label>
+                            <input id="prenom" type="text" v-model="formulaire.prenom" required>
+                        </div>
 
-            <label class="text-sm font-medium">Email
-                <input type="email" v-model="formulaire.email" class="w-full border rounded px-3 py-2" required>
-            </label>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input id="email" type="email" v-model="formulaire.email" required>
+                        </div>
 
-            <label class="text-sm font-medium">Rôle
-                <select v-model="formulaire.role_id" class="w-full border rounded px-3 py-2">
-                    <option :value="1">Particulier</option>
-                    <option :value="2">Professionnel</option>
-                    <option :value="3">Salarié</option>
-                    <option :value="4">Administrateur</option>
-                </select>
-            </label>
+                        <div class="form-group">
+                            <label for="role">Rôle</label>
+                            <select id="role" v-model="formulaire.role_id">
+                                <option v-for="(nom, id) in nomsRoles" :key="id" :value="Number(id)">{{ nom }}</option>
+                            </select>
+                        </div>
 
-            <label v-if="!formulaire.id" class="text-sm font-medium">Mot de passe
-                <input type="password" v-model="formulaire.mot_de_passe" class="w-full border rounded px-3 py-2">
-            </label>
+                        <div v-if="!formulaire.id" class="form-group">
+                            <label for="mot-de-passe">Mot de passe</label>
+                            <input id="mot-de-passe" type="password" v-model="formulaire.mot_de_passe" required>
+                        </div>
 
-            <p v-if="erreur" class="text-red-600 text-sm">{{ erreur }}</p>
+                        <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
-            <div class="flex gap-2">
-                <button type="submit" class="px-4 py-2 rounded-lg bg-brand-green text-white font-semibold">Enregistrer</button>
-                <button type="button" @click="fermerFormulaire" class="px-4 py-2 rounded-lg bg-gray-200">Annuler</button>
+                        <div class="form-buttons">
+                            <button type="submit" class="button-submit">Enregistrer</button>
+                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
-        </form>
 
+        </main>
     </div>
 
     <script src="js/utilisateurs.js"></script>

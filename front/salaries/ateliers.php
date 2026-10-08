@@ -1,15 +1,16 @@
 <?php
+require "inclus/espace.php";
 $titrePage = "Mes ateliers";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-    <?php include "inclus/entete.php"; ?>
+    <?php include "../inclus/entete.php"; ?>
 </head>
 
 <body>
-    <?php include "inclus/navigation.php"; ?>
+    <?php include "../inclus/navigation.php"; ?>
 
     <div id="app">
         <main>

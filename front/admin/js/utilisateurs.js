@@ -1,20 +1,15 @@
 const { createApp } = Vue;
 
+const FORMULAIRE_VIDE = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "" };
+
 createApp({
     data() {
         return {
             nomsRoles: { 1: "Particulier", 2: "Professionnel", 3: "Salarié", 4: "Administrateur" },
             utilisateurs: [],
-            formulaireVisible: false,
+            formulaire: { ...FORMULAIRE_VIDE },
             erreur: "",
-            formulaire: {
-                id: null,
-                nom: "",
-                prenom: "",
-                email: "",
-                role_id: 1,
-                mot_de_passe: "",
-            },
+            erreurListe: "",
         };
     },
 
@@ -23,28 +18,21 @@ createApp({
     },
 
     methods: {
-        deconnecter,
-
         async chargerUtilisateurs() {
             const reponse = await appelerApi("/utilisateurs");
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement des utilisateurs";
+                this.erreurListe = "Erreur lors du chargement des utilisateurs";
                 return;
             }
             this.utilisateurs = await reponse.json();
         },
 
         reinitialiserFormulaire() {
-            this.formulaire = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "" };
+            this.formulaire = { ...FORMULAIRE_VIDE };
             this.erreur = "";
         },
 
-        ouvrirFormulaireCreation() {
-            this.reinitialiserFormulaire();
-            this.formulaireVisible = true;
-        },
-
-        ouvrirFormulaireEdition(utilisateur) {
+        modifier(utilisateur) {
             this.formulaire = {
                 id: utilisateur.id,
                 nom: utilisateur.nom,
@@ -54,14 +42,9 @@ createApp({
                 mot_de_passe: "",
             };
             this.erreur = "";
-            this.formulaireVisible = true;
         },
 
-        fermerFormulaire() {
-            this.formulaireVisible = false;
-        },
-
-        async soumettreFormulaire() {
+        async enregistrer() {
             const donnees = {
                 nom: this.formulaire.nom,
                 prenom: this.formulaire.prenom,
@@ -78,27 +61,29 @@ createApp({
                 donnees.mot_de_passe = this.formulaire.mot_de_passe;
             }
 
-            const reponse = await appelerApi(chemin, {
-                method: methode,
-                body: JSON.stringify(donnees),
-            });
-
-            const resultat = await reponse.json();
-
+            const reponse = await appelerApi(chemin, { method: methode, body: JSON.stringify(donnees) });
             if (!reponse.ok) {
+                const resultat = await reponse.json();
                 this.erreur = resultat.erreur;
                 return;
             }
 
-            this.formulaireVisible = false;
+            this.reinitialiserFormulaire();
             this.chargerUtilisateurs();
         },
 
-        async supprimerUtilisateur(id) {
+        async supprimer(id) {
             if (!confirm("Supprimer cet utilisateur ?")) {
                 return;
             }
-            await appelerApi(`/utilisateurs/${id}`, { method: "DELETE" });
+
+            const reponse = await appelerApi(`/utilisateurs/${id}`, { method: "DELETE" });
+            if (!reponse.ok) {
+                const resultat = await reponse.json();
+                this.erreurListe = resultat.erreur;
+                return;
+            }
+
             this.chargerUtilisateurs();
         },
     },
