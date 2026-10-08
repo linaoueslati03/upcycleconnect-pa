@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Créer un atelier";
+$titrePage = "salaries.ateliers.creer";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,32 +15,32 @@ $titrePage = "Créer un atelier";
     <div id="app">
         <main id="main-content">
 
-            <h1>{{ id ? "Modifier" : "Créer" }} un atelier</h1>
+            <h1>{{ id ? t('salaries.ateliers.modifier') : t('salaries.ateliers.creer') }}</h1>
 
             <form @submit.prevent>
 
                 <div class="form-group">
-                    <label for="titre">Titre</label>
+                    <label for="titre">{{ t('commun.titre') }}</label>
                     <input type="text" id="titre" v-model="formulaire.titre" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Description</label>
+                    <label for="description">{{ t('commun.description') }}</label>
                     <textarea id="description" v-model="formulaire.description"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="date-debut">Date de début</label>
+                    <label for="date-debut">{{ t('commun.date_debut') }}</label>
                     <input type="datetime-local" id="date-debut" v-model="formulaire.date_debut" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="date-fin">Date de fin</label>
+                    <label for="date-fin">{{ t('commun.date_fin') }}</label>
                     <input type="datetime-local" id="date-fin" v-model="formulaire.date_fin">
                 </div>
 
                 <div class="form-group">
-                    <label for="lieu">Lieu</label>
+                    <label for="lieu">{{ t('commun.lieu') }}</label>
                     <input type="text" id="lieu" v-model="formulaire.lieu">
                 </div>
 
@@ -48,17 +48,17 @@ $titrePage = "Créer un atelier";
 
                 <div class="form-buttons">
                     <button type="button" class="button-draft" @click="envoyerAtelier('brouillon')">
-                        Enregistrer en brouillon
+                        {{ t('commun.enregistrer_brouillon') }}
                     </button>
                     <button type="button" class="button-submit" @click="envoyerAtelier('en_attente')">
-                        Soumettre à validation
+                        {{ t('commun.soumettre_validation') }}
                     </button>
                 </div>
 
             </form>
 
             <div v-if="confirmation" id="confirmation">
-                Atelier enregistré ! <a href="ateliers.php">Retour à mes ateliers</a>
+                {{ t('salaries.ateliers.enregistre') }} <a href="ateliers.php">{{ t('salaries.ateliers.retour') }}</a>
             </div>
 
         </main>

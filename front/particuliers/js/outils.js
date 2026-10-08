@@ -1,38 +1,34 @@
 // Fonctions et libellés communs aux pages de l'espace Particulier.
 
-const LIBELLES_ANNONCE = { en_ligne: "En ligne", reservee: "Réservée", cedee: "Cédée" };
+// Les libellés affichés sont des clés de traduction : t("annonce." + statut), t("offre." + type)…
+const STATUTS_ANNONCE = ["en_ligne", "reservee", "cedee"];
 
-const LIBELLES_OFFRE = { formation: "Formation", atelier: "Atelier", evenement: "Événement" };
+const TYPES_OFFRE = ["formation", "atelier", "evenement"];
 
-// Étapes d'un dépôt en conteneur, dans l'ordre imposé par l'API.
-const ETAPES_DEPOT = [
-    { statut: "demande", libelle: "Demande envoyée" },
-    { statut: "validee", libelle: "Validée" },
-    { statut: "deposee", libelle: "Objet déposé" },
-    { statut: "recuperee", libelle: "Récupéré par un professionnel" },
-];
+// Étapes d'un dépôt en conteneur, dans l'ordre imposé par l'API (libellé : t("depot." + statut)).
+const ETAPES_DEPOT = ["demande", "validee", "deposee", "recuperee"];
 
 // "2026-10-20T14:00:00Z" → "20 octobre 2026"
 function formaterDate(date) {
-    return new Date(date).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    return new Date(date).toLocaleDateString(langueCourante(), { day: "numeric", month: "long", year: "numeric" });
 }
 
-// "2026-10-20T14:00:00Z" → "mardi 20 octobre 2026 à 16:00" (heure locale du navigateur)
+// "2026-10-20T14:00:00Z" → "mardi 20 octobre 2026 à 16:00" (heure locale, langue de l'utilisateur)
 function formaterDateHeure(date) {
-    return new Date(date).toLocaleString("fr-FR", {
+    return new Date(date).toLocaleString(langueCourante(), {
         weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit",
     });
 }
 
 function formaterPrix(prix) {
     if (!prix) {
-        return "Gratuit";
+        return t("commun.gratuit");
     }
-    return prix.toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+    return prix.toLocaleString(langueCourante(), { style: "currency", currency: "EUR" });
 }
 
 // Lit le message d'erreur renvoyé par l'API ({"erreur": "..."}).
 async function messageErreur(reponse) {
     const resultat = await reponse.json();
-    return resultat.erreur || "Une erreur est survenue";
+    return resultat.erreur || t("commun.erreur");
 }

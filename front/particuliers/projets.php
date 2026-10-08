@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Mes projets";
+$titrePage = "nav.mes_projets";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +16,7 @@ $titrePage = "Mes projets";
         <main>
 
             <div class="page-header">
-                <h1>Mes projets d'upcycling</h1>
+                <h1>{{ t('projets.titre') }}</h1>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
@@ -24,15 +24,15 @@ $titrePage = "Mes projets";
             <div class="deux-colonnes">
 
                 <section>
-                    <p v-if="projets.length === 0" class="discret">Vous n'avez pas encore de projet.</p>
+                    <p v-if="projets.length === 0" class="discret">{{ t('projets.aucun') }}</p>
                     <div class="grille section">
                         <div v-for="p in projets" :key="p.id" class="carte carte-cliquable"
                             :class="{ 'carte-selectionnee': projet && projet.id === p.id }" @click="ouvrirProjet(p.id)">
                             <span class="badge" :class="{ 'badge-attente': !p.partage_public }">
-                                {{ p.partage_public ? "Partagé" : "Privé" }}
+                                {{ p.partage_public ? t('projets.partage') : t('projets.prive') }}
                             </span>
                             <h3>{{ p.titre }}</h3>
-                            <p class="discret">Créé le {{ formaterDate(p.date_creation) }}</p>
+                            <p class="discret">{{ t('projets.cree_le', { date: formaterDate(p.date_creation) }) }}</p>
                         </div>
                     </div>
 
@@ -42,50 +42,50 @@ $titrePage = "Mes projets";
 
                         <div class="form-buttons section">
                             <button class="button-submit" @click="basculerPartage">
-                                {{ projet.partage_public ? "Ne plus partager" : "Partager avec la communauté" }}
+                                {{ projet.partage_public ? t('projets.ne_plus_partager') : t('projets.partager') }}
                             </button>
-                            <button class="button-draft" @click="supprimerProjet">Supprimer le projet</button>
+                            <button class="button-draft" @click="supprimerProjet">{{ t('projets.supprimer') }}</button>
                         </div>
 
-                        <h3>Étapes de transformation</h3>
-                        <p v-if="projet.etapes.length === 0" class="discret">Aucune étape documentée.</p>
+                        <h3>{{ t('projets.etapes') }}</h3>
+                        <p v-if="projet.etapes.length === 0" class="discret">{{ t('projets.aucune_etape') }}</p>
                         <ol>
                             <li v-for="e in projet.etapes" :key="e.id">
                                 {{ e.description }}
                                 <span class="discret"> · {{ formaterDate(e.date) }}</span>
-                                <a v-if="e.photo_url" :href="e.photo_url" target="_blank" rel="noopener"> (photo)</a>
+                                <a v-if="e.photo_url" :href="e.photo_url" target="_blank" rel="noopener"> ({{ t('projets.photo') }})</a>
                             </li>
                         </ol>
 
                         <form @submit.prevent="ajouterEtape">
                             <div class="form-group">
-                                <label for="etape">Nouvelle étape</label>
+                                <label for="etape">{{ t('projets.nouvelle_etape') }}</label>
                                 <textarea id="etape" v-model="nouvelleEtape.description" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="photo">Lien vers une photo (facultatif)</label>
+                                <label for="photo">{{ t('projets.lien_photo') }}</label>
                                 <input id="photo" type="url" v-model="nouvelleEtape.photo_url">
                             </div>
-                            <button type="submit" class="button-submit">Ajouter l'étape</button>
+                            <button type="submit" class="button-submit">{{ t('projets.ajouter_etape') }}</button>
                         </form>
                     </div>
                 </section>
 
                 <div class="carte">
-                    <h2>Nouveau projet</h2>
+                    <h2>{{ t('projets.nouveau') }}</h2>
                     <form @submit.prevent="creerProjet">
                         <div class="form-group">
-                            <label for="titre">Titre</label>
+                            <label for="titre">{{ t('commun.titre') }}</label>
                             <input id="titre" type="text" v-model="formulaire.titre" required>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">{{ t('commun.description') }}</label>
                             <textarea id="description" v-model="formulaire.description"></textarea>
                         </div>
                         <div class="form-group">
-                            <label><input type="checkbox" v-model="formulaire.partage_public"> Partager avec la communauté</label>
+                            <label><input type="checkbox" v-model="formulaire.partage_public"> {{ t('projets.partager') }}</label>
                         </div>
-                        <button type="submit" class="button-submit">Créer le projet</button>
+                        <button type="submit" class="button-submit">{{ t('projets.creer') }}</button>
                     </form>
                 </div>
 

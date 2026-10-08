@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             ateliers: [],
@@ -30,7 +28,7 @@ createApp({
         async chargerAteliers() {
             const reponse = await appelerApi("/ateliers");
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement des ateliers";
+                this.erreur = t("salaries.ateliers.erreur_chargement");
                 return;
             }
             this.ateliers = await reponse.json();
@@ -51,7 +49,7 @@ createApp({
         },
 
         async supprimer(id) {
-            if (!confirm("Supprimer définitivement ?")) {
+            if (!confirm(t("commun.confirmer_suppression"))) {
                 return;
             }
             const reponse = await appelerApi(`/ateliers/${id}`, { method: "DELETE" });
@@ -62,4 +60,4 @@ createApp({
             this.chargerAteliers();
         },
     },
-}).mount("#app");
+});

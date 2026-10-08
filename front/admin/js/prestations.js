@@ -1,8 +1,6 @@
-const { createApp } = Vue;
-
 const FORMULAIRE_VIDE = { id: null, titre: "", categorie: "", tarif: 0, statut: "brouillon" };
 
-createApp({
+demarrerApp({
     data() {
         return {
             prestations: [],
@@ -20,14 +18,14 @@ createApp({
         async chargerPrestations() {
             const reponse = await appelerApi("/prestations");
             if (!reponse.ok) {
-                this.erreurListe = "Erreur lors du chargement des prestations";
+                this.erreurListe = t("admin.prestations.erreur_chargement");
                 return;
             }
             this.prestations = await reponse.json();
         },
 
         formaterTarif(tarif) {
-            return tarif.toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+            return tarif.toLocaleString(langueCourante(), { style: "currency", currency: "EUR" });
         },
 
         // Le récapitulatif PDF est généré par l'API Go (route publique GET /prestations/{id}/pdf)
@@ -62,7 +60,7 @@ createApp({
         },
 
         async supprimer(id) {
-            if (!confirm("Supprimer cette prestation ?")) {
+            if (!confirm(t("admin.prestations.confirmer_suppression"))) {
                 return;
             }
 
@@ -76,4 +74,4 @@ createApp({
             this.chargerPrestations();
         },
     },
-}).mount("#app");
+});

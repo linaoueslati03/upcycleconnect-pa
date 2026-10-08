@@ -1,22 +1,19 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             depots: [],
             statutSelectionne: "demande",
             erreur: "",
             filtres: [
-                { nom: "À valider", valeur: "demande" },
-                { nom: "Validés", valeur: "validee" },
-                { nom: "Déposés", valeur: "deposee" },
-                { nom: "Tous", valeur: "" },
+                { nom: "salaries.depots.a_valider", valeur: "demande" },
+                { nom: "salaries.depots.valides", valeur: "validee" },
+                { nom: "salaries.depots.deposes", valeur: "deposee" },
+                { nom: "commun.tous", valeur: "" },
             ],
-            libellesStatut: { demande: "Demande", validee: "Validée", deposee: "Objet déposé", recuperee: "Récupéré" },
             // Le salarié valide la demande puis confirme le dépôt ; la récupération est
             // enregistrée par le professionnel qui scanne le code-barre (espace Pro).
             statutSuivant: { demande: "validee", validee: "deposee" },
-            libellesAction: { demande: "Valider la demande", validee: "Confirmer le dépôt" },
+            libellesAction: { demande: "salaries.depots.valider_demande", validee: "salaries.depots.confirmer_depot" },
         };
     },
 
@@ -31,7 +28,7 @@ createApp({
             const chemin = this.statutSelectionne ? `/depots?statut=${this.statutSelectionne}` : "/depots";
             const reponse = await appelerApi(chemin);
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement des dépôts";
+                this.erreur = t("salaries.depots.erreur_chargement");
                 return;
             }
             this.erreur = "";
@@ -50,4 +47,4 @@ createApp({
             this.chargerDepots();
         },
     },
-}).mount("#app");
+});

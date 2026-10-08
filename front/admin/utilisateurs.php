@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Utilisateurs";
+$titrePage = "nav.utilisateurs";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,8 +16,8 @@ $titrePage = "Utilisateurs";
         <main>
 
             <div class="page-header">
-                <h1>Gestion des utilisateurs</h1>
-                <button class="btn-primary" @click="reinitialiserFormulaire">+ Nouvel utilisateur</button>
+                <h1>{{ t('admin.utilisateurs.titre') }}</h1>
+                <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ t('admin.utilisateurs.nouveau') }}</button>
             </div>
 
             <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
@@ -28,13 +28,13 @@ $titrePage = "Utilisateurs";
                     <table class="tableau">
                         <thead>
                             <tr>
-                                <th>Nom</th>
-                                <th>Prénom</th>
-                                <th>Email</th>
-                                <th>Rôle</th>
-                                <th>Statut</th>
-                                <th>Score</th>
-                                <th>Actions</th>
+                                <th>{{ t('commun.nom') }}</th>
+                                <th>{{ t('commun.prenom') }}</th>
+                                <th>{{ t('commun.email') }}</th>
+                                <th>{{ t('commun.role') }}</th>
+                                <th>{{ t('commun.statut') }}</th>
+                                <th>{{ t('commun.score') }}</th>
+                                <th>{{ t('commun.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,12 +42,12 @@ $titrePage = "Utilisateurs";
                                 <td>{{ u.nom }}</td>
                                 <td>{{ u.prenom }}</td>
                                 <td>{{ u.email }}</td>
-                                <td>{{ nomsRoles[u.role_id] ?? u.role_id }}</td>
+                                <td>{{ t('role.' + u.role_id) }}</td>
                                 <td>{{ u.statut }}</td>
                                 <td>{{ u.upcycling_score }}</td>
                                 <td>
-                                    <button class="lien-action" @click="modifier(u)">Modifier</button>
-                                    <button class="lien-action lien-supprimer" @click="supprimer(u.id)">Supprimer</button>
+                                    <button class="lien-action" @click="modifier(u)">{{ t('commun.modifier') }}</button>
+                                    <button class="lien-action lien-supprimer" @click="supprimer(u.id)">{{ t('commun.supprimer') }}</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -55,41 +55,41 @@ $titrePage = "Utilisateurs";
                 </section>
 
                 <div class="carte carte-formulaire">
-                    <h2>{{ formulaire.id ? "Modifier l'utilisateur" : "Nouvel utilisateur" }}</h2>
+                    <h2>{{ formulaire.id ? t('admin.utilisateurs.modifier') : t('admin.utilisateurs.nouveau') }}</h2>
 
                     <form @submit.prevent="enregistrer">
                         <div class="form-group">
-                            <label for="nom">Nom</label>
+                            <label for="nom">{{ t('commun.nom') }}</label>
                             <input id="nom" type="text" v-model="formulaire.nom" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="prenom">Prénom</label>
+                            <label for="prenom">{{ t('commun.prenom') }}</label>
                             <input id="prenom" type="text" v-model="formulaire.prenom" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">{{ t('commun.email') }}</label>
                             <input id="email" type="email" v-model="formulaire.email" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="role">Rôle</label>
+                            <label for="role">{{ t('commun.role') }}</label>
                             <select id="role" v-model="formulaire.role_id">
-                                <option v-for="(nom, id) in nomsRoles" :key="id" :value="Number(id)">{{ nom }}</option>
+                                <option v-for="id in [1, 2, 3, 4]" :key="id" :value="id">{{ t('role.' + id) }}</option>
                             </select>
                         </div>
 
                         <div v-if="!formulaire.id" class="form-group">
-                            <label for="mot-de-passe">Mot de passe</label>
+                            <label for="mot-de-passe">{{ t('commun.mot_de_passe') }}</label>
                             <input id="mot-de-passe" type="password" v-model="formulaire.mot_de_passe" required>
                         </div>
 
                         <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
                         <div class="form-buttons">
-                            <button type="submit" class="button-submit">Enregistrer</button>
-                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">Annuler</button>
+                            <button type="submit" class="button-submit">{{ t('commun.enregistrer') }}</button>
+                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">{{ t('commun.annuler') }}</button>
                         </div>
                     </form>
                 </div>

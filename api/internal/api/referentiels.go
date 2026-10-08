@@ -84,3 +84,38 @@ func (s *Serveur) gererListeLangues(w http.ResponseWriter, r *http.Request) {
 
 	envoyerJSON(w, http.StatusOK, langues)
 }
+
+// gererTraductions renvoie les textes de l'interface dans la langue demandée
+// (?langue=en), sous la forme {"clé": "texte"}. Une clé qui n'existe pas encore dans
+// cette langue est complétée par le français, pour ne jamais afficher de trou.
+func (s *Serveur) gererTraductions(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Query().Get("langue")
+	if code == "" {
+		code = "fr"
+	}
+
+	// DISTINCT ON garde une seule ligne par clé : celle de la langue demandée si elle
+	// existe (tri sur l.code = $1 en premier), sinon celle en français.
+	lignes, err := s.db.Query(`
+		SELECT DISTINCT ON (t.cle) t.cle, t.texte
+		FROM traductions t JOIN langues l ON l.id = t.langue_id
+		WHERE l.code IN ($1, 'fr')
+		ORDER BY t.cle, (l.code = $1) DESC`, code)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer lignes.Close()
+
+	traductions := make(map[string]string)
+	for lignes.Next() {
+		var cle, texte string
+		if err := lignes.Scan(&cle, &texte); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		traductions[cle] = texte
+	}
+
+	envoyerJSON(w, http.StatusOK, traductions)
+}

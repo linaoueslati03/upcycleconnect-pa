@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             id: new URLSearchParams(window.location.search).get("id"),
@@ -23,7 +21,7 @@ createApp({
         }
         const reponse = await appelerApi(`/ateliers/${this.id}`);
         if (!reponse.ok) {
-            this.erreur = "Atelier introuvable";
+            this.erreur = t("salaries.ateliers.introuvable");
             return;
         }
         const atelier = await reponse.json();
@@ -43,7 +41,7 @@ createApp({
             this.confirmation = false;
 
             if (!this.formulaire.titre || !this.formulaire.date_debut) {
-                this.erreur = "Le titre et la date de début sont obligatoires.";
+                this.erreur = t("salaries.titre_date_obligatoires");
                 return;
             }
 
@@ -68,4 +66,4 @@ createApp({
             this.confirmation = true;
         },
     },
-}).mount("#app");
+});

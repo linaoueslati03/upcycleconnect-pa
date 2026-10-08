@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             prenom: "",
@@ -8,14 +6,8 @@ createApp({
             erreur: "",
             tutorielVisible: false,
             indexEtape: 0,
-            etapesTutoriel: [
-                { titre: "Bienvenue sur UpcycleConnect !", texte: "Voici un rapide tour des fonctionnalités de votre espace." },
-                { titre: "Vos annonces", texte: "Donnez ou vendez vos objets et matériaux depuis « Mes annonces », et parcourez celles des autres membres." },
-                { titre: "Le dépôt en conteneur", texte: "Pas le temps de gérer une vente ? Déposez votre objet dans un conteneur UpcycleConnect : vous recevez un code d'ouverture une fois la demande validée." },
-                { titre: "Le catalogue", texte: "Inscrivez-vous aux formations, ateliers et événements : ils apparaissent ensuite dans « Mon planning »." },
-                { titre: "Votre Upcycling Score", texte: "Chaque dépôt, don ou inscription vous rapporte des points. Suivez leur évolution dans « Upcycling Score »." },
-                { titre: "La communauté", texte: "Partagez vos projets d'upcycling et échangez avec les autres membres sur les forums." },
-            ],
+            // Le contenu des étapes est en base (traductions tutoriel.N.titre / tutoriel.N.texte)
+            etapesTutoriel: ["tutoriel.1", "tutoriel.2", "tutoriel.3", "tutoriel.4", "tutoriel.5", "tutoriel.6"],
         };
     },
 
@@ -36,8 +28,7 @@ createApp({
         formaterDate,
 
         libelleDepot(statut) {
-            const etape = ETAPES_DEPOT.find((e) => e.statut === statut);
-            return etape ? etape.libelle : "Aucun";
+            return statut ? t("depot." + statut) : t("accueil.aucun_depot");
         },
 
         async charger() {
@@ -46,7 +37,7 @@ createApp({
                 appelerApi("/moi/dashboard"),
             ]);
             if (!reponseCompte.ok || !reponseResume.ok) {
-                this.erreur = "Erreur lors du chargement du tableau de bord";
+                this.erreur = t("accueil.erreur_chargement");
                 return;
             }
 
@@ -65,4 +56,4 @@ createApp({
             this.indexEtape = 0;
         },
     },
-}).mount("#app");
+});

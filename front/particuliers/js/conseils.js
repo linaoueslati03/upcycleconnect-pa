@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             conseils: [],
@@ -29,7 +27,7 @@ createApp({
     async mounted() {
         const reponse = await appelerApi("/conseils");
         if (!reponse.ok) {
-            this.erreur = "Erreur lors du chargement des conseils";
+            this.erreur = t("conseils.erreur_chargement");
             return;
         }
         this.conseils = await reponse.json();
@@ -38,4 +36,4 @@ createApp({
     methods: {
         formaterDate,
     },
-}).mount("#app");
+});

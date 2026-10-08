@@ -14,7 +14,7 @@ const (
 
 // RegleScore décrit une action qui rapporte des points (affichée sur la page du score).
 type RegleScore struct {
-	Action string `json:"action"`
+	Cle    string `json:"cle"` // clé de traduction du libellé de l'action
 	Points int    `json:"points"`
 }
 
@@ -22,9 +22,9 @@ type RegleScore struct {
 // sans recopier les valeurs, qui ne sont définies qu'à un seul endroit (les constantes).
 func (s *Serveur) gererBaremeScore(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, []RegleScore{
-		{Action: "Inscription à une formation, un atelier ou un événement", Points: pointsInscriptionOffre},
-		{Action: "Dépôt récupéré par un professionnel", Points: pointsDepotRecupere},
-		{Action: "Annonce cédée (don ou vente)", Points: pointsAnnonceCedee},
+		{Cle: "score.regle.inscription", Points: pointsInscriptionOffre},
+		{Cle: "score.regle.depot", Points: pointsDepotRecupere},
+		{Cle: "score.regle.annonce", Points: pointsAnnonceCedee},
 	})
 }
 

@@ -1,8 +1,6 @@
-const { createApp } = Vue;
-
 const ARTICLE_VIDE = { id: null, titre: "", categorie: "", contenu: "" };
 
-createApp({
+demarrerApp({
     data() {
         return {
             articles: [],
@@ -24,7 +22,7 @@ createApp({
         async chargerArticles() {
             const reponse = await appelerApi("/salaries/conseils");
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement de vos articles";
+                this.erreur = t("salaries.articles.erreur_chargement");
                 return;
             }
             this.articles = await reponse.json();
@@ -68,4 +66,4 @@ createApp({
             this.chargerArticles();
         },
     },
-}).mount("#app");
+});

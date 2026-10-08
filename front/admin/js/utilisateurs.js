@@ -1,11 +1,8 @@
-const { createApp } = Vue;
-
 const FORMULAIRE_VIDE = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "" };
 
-createApp({
+demarrerApp({
     data() {
         return {
-            nomsRoles: { 1: "Particulier", 2: "Professionnel", 3: "Salarié", 4: "Administrateur" },
             utilisateurs: [],
             formulaire: { ...FORMULAIRE_VIDE },
             erreur: "",
@@ -21,7 +18,7 @@ createApp({
         async chargerUtilisateurs() {
             const reponse = await appelerApi("/utilisateurs");
             if (!reponse.ok) {
-                this.erreurListe = "Erreur lors du chargement des utilisateurs";
+                this.erreurListe = t("admin.utilisateurs.erreur_chargement");
                 return;
             }
             this.utilisateurs = await reponse.json();
@@ -73,7 +70,7 @@ createApp({
         },
 
         async supprimer(id) {
-            if (!confirm("Supprimer cet utilisateur ?")) {
+            if (!confirm(t("admin.utilisateurs.confirmer_suppression"))) {
                 return;
             }
 
@@ -87,4 +84,4 @@ createApp({
             this.chargerUtilisateurs();
         },
     },
-}).mount("#app");
+});

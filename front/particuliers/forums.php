@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Forums";
+$titrePage = "nav.forums";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +16,7 @@ $titrePage = "Forums";
         <main>
 
             <div class="page-header">
-                <h1>Forums</h1>
+                <h1>{{ t('nav.forums') }}</h1>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
@@ -25,7 +25,7 @@ $titrePage = "Forums";
 
                 <section>
                     <div v-if="sujet" class="carte section">
-                        <button class="button-draft" @click="sujet = null">← Tous les sujets</button>
+                        <button class="button-draft" @click="sujet = null">← {{ t('forums.tous_les_sujets') }}</button>
                         <h2>{{ sujet.titre }}</h2>
 
                         <ul class="liste-simple">
@@ -36,12 +36,12 @@ $titrePage = "Forums";
 
                                 <form v-if="signalementOuvert === m.id" @submit.prevent="signaler(m.id)">
                                     <div class="form-group">
-                                        <label :for="'motif-' + m.id">Motif du signalement</label>
+                                        <label :for="'motif-' + m.id">{{ t('forums.motif') }}</label>
                                         <input :id="'motif-' + m.id" type="text" v-model="motif" required>
                                     </div>
-                                    <button type="submit" class="button-submit">Envoyer le signalement</button>
+                                    <button type="submit" class="button-submit">{{ t('forums.envoyer_signalement') }}</button>
                                 </form>
-                                <button v-else class="button-draft" @click="signalementOuvert = m.id">Signaler</button>
+                                <button v-else class="button-draft" @click="signalementOuvert = m.id">{{ t('forums.signaler') }}</button>
                             </li>
                         </ul>
 
@@ -49,35 +49,35 @@ $titrePage = "Forums";
 
                         <form @submit.prevent="repondre">
                             <div class="form-group">
-                                <label for="reponse">Votre réponse</label>
+                                <label for="reponse">{{ t('forums.votre_reponse') }}</label>
                                 <textarea id="reponse" v-model="reponse" required></textarea>
                             </div>
-                            <button type="submit" class="button-submit">Répondre</button>
+                            <button type="submit" class="button-submit">{{ t('forums.repondre') }}</button>
                         </form>
                     </div>
 
                     <div v-else>
-                        <p v-if="sujets.length === 0" class="discret">Aucun sujet pour le moment.</p>
+                        <p v-if="sujets.length === 0" class="discret">{{ t('forums.aucun') }}</p>
                         <div v-for="s in sujets" :key="s.id" class="carte carte-cliquable section" @click="ouvrirSujet(s)">
-                            <span v-if="s.statut === 'en_attente'" class="badge badge-attente">En attente de modération</span>
+                            <span v-if="s.statut === 'en_attente'" class="badge badge-attente">{{ t('forums.en_attente') }}</span>
                             <h3>{{ s.titre }}</h3>
-                            <p class="discret">Par {{ s.auteur }} · {{ formaterDate(s.created_at) }}</p>
+                            <p class="discret">{{ t('forums.par', { auteur: s.auteur }) }} · {{ formaterDate(s.created_at) }}</p>
                         </div>
                     </div>
                 </section>
 
                 <div class="carte">
-                    <h2>Nouveau sujet</h2>
+                    <h2>{{ t('forums.nouveau') }}</h2>
                     <form @submit.prevent="creerSujet">
                         <div class="form-group">
-                            <label for="titre">Titre</label>
+                            <label for="titre">{{ t('commun.titre') }}</label>
                             <input id="titre" type="text" v-model="nouveauSujet.titre" required>
                         </div>
                         <div class="form-group">
-                            <label for="contenu">Message</label>
+                            <label for="contenu">{{ t('forums.message') }}</label>
                             <textarea id="contenu" v-model="nouveauSujet.contenu" required></textarea>
                         </div>
-                        <button type="submit" class="button-submit">Publier</button>
+                        <button type="submit" class="button-submit">{{ t('commun.publier') }}</button>
                     </form>
                 </div>
 

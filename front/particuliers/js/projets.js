@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             projets: [],
@@ -21,7 +19,7 @@ createApp({
         async chargerProjets() {
             const reponse = await appelerApi("/moi/projets");
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement de vos projets";
+                this.erreur = t("projets.erreur_chargement");
                 return;
             }
             this.projets = await reponse.json();
@@ -83,7 +81,7 @@ createApp({
         },
 
         async supprimerProjet() {
-            if (!confirm("Supprimer ce projet et ses étapes ?")) {
+            if (!confirm(t("projets.confirmer_suppression"))) {
                 return;
             }
             const reponse = await appelerApi(`/projets/${this.projet.id}`, { method: "DELETE" });
@@ -95,4 +93,4 @@ createApp({
             this.chargerProjets();
         },
     },
-}).mount("#app");
+});

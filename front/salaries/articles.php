@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Articles";
+$titrePage = "nav.articles";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,39 +16,39 @@ $titrePage = "Articles";
         <main>
 
             <div class="page-header">
-                <h1>Articles de conseils</h1>
-                <button class="btn-primary" @click="nouvelArticle">Créer un article</button>
+                <h1>{{ t('salaries.articles.titre') }}</h1>
+                <button class="btn-primary" @click="nouvelArticle">{{ t('salaries.articles.creer') }}</button>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
             <div v-if="formulaireVisible" class="form-article">
-                <h2>{{ formulaire.id ? "Modifier l'article" : "Nouvel article" }}</h2>
+                <h2>{{ formulaire.id ? t('salaries.articles.modifier') : t('salaries.articles.nouveau') }}</h2>
 
                 <div class="form-group">
-                    <label for="titre">Titre</label>
-                    <input id="titre" type="text" placeholder="Titre de l'article" v-model="formulaire.titre">
+                    <label for="titre">{{ t('commun.titre') }}</label>
+                    <input id="titre" type="text" :placeholder="t('salaries.articles.placeholder_titre')" v-model="formulaire.titre">
                 </div>
 
                 <div class="form-group">
-                    <label for="categorie">Catégorie</label>
+                    <label for="categorie">{{ t('commun.categorie') }}</label>
                     <select id="categorie" v-model="formulaire.categorie">
-                        <option value="">Sélectionner une catégorie</option>
-                        <option value="actualites">Actualités</option>
-                        <option value="conseils">Conseils</option>
-                        <option value="evenements">Événements</option>
-                        <option value="upcycling">Upcycling</option>
+                        <option value="">{{ t('commun.choisir_categorie') }}</option>
+                        <option value="actualites">{{ t('categorie_article.actualites') }}</option>
+                        <option value="conseils">{{ t('categorie_article.conseils') }}</option>
+                        <option value="evenements">{{ t('categorie_article.evenements') }}</option>
+                        <option value="upcycling">{{ t('categorie_article.upcycling') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="texte">Article</label>
-                    <textarea id="texte" placeholder="Écrivez votre article..." v-model="formulaire.contenu"></textarea>
+                    <label for="texte">{{ t('salaries.articles.article') }}</label>
+                    <textarea id="texte" :placeholder="t('salaries.articles.placeholder_texte')" v-model="formulaire.contenu"></textarea>
                 </div>
 
                 <div class="form-buttons">
-                    <button type="button" class="button-draft" @click="enregistrer('brouillon')">Enregistrer en brouillon</button>
-                    <button type="button" class="button-submit" @click="enregistrer('publie')">Publier</button>
+                    <button type="button" class="button-draft" @click="enregistrer('brouillon')">{{ t('commun.enregistrer_brouillon') }}</button>
+                    <button type="button" class="button-submit" @click="enregistrer('publie')">{{ t('commun.publier') }}</button>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@ $titrePage = "Articles";
                     <span class="evenement-titre">{{ a.titre }}</span>
                     <span class="evenement-date">{{ formaterDate(a.updated_at) }}</span>
                     <span class="badge-statut" :class="'statut-' + a.statut">{{ formaterStatut(a.statut) }}</span>
-                    <button class="btn-modifier" @click="modifier(a)">Modifier</button>
+                    <button class="btn-modifier" @click="modifier(a)">{{ t('commun.modifier') }}</button>
                 </div>
             </div>
 

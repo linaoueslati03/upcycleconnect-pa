@@ -3,11 +3,11 @@
 $roleRequis = "salarie";
 
 $liens = [
-    "planning.php"   => ["Mon planning", "people-svgrepo-com.svg"],
-    "evenements.php" => ["Événements", "party-horn-svgrepo-com.svg"],
-    "ateliers.php"   => ["Ateliers", "pencil-square-svgrepo-com.svg"],
-    "articles.php"   => ["Articles", "news-svgrepo-com.svg"],
-    "depots.php"     => ["Dépôts", "book-svgrepo-com.svg"],
+    "planning.php"   => ["nav.mon_planning", "people-svgrepo-com.svg"],
+    "evenements.php" => ["nav.evenements", "party-horn-svgrepo-com.svg"],
+    "ateliers.php"   => ["nav.ateliers", "pencil-square-svgrepo-com.svg"],
+    "articles.php"   => ["nav.articles", "news-svgrepo-com.svg"],
+    "depots.php"     => ["nav.depots", "book-svgrepo-com.svg"],
 ];
 
 $scriptsEspace = ["js/outils.js"];

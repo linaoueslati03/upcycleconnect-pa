@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             evenements: [],
@@ -30,7 +28,7 @@ createApp({
         async chargerEvenements() {
             const reponse = await appelerApi("/evenements");
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement des événements";
+                this.erreur = t("salaries.evenements.erreur_chargement");
                 return;
             }
             this.evenements = await reponse.json();
@@ -51,7 +49,7 @@ createApp({
         },
 
         async supprimer(id) {
-            if (!confirm("Supprimer définitivement ?")) {
+            if (!confirm(t("commun.confirmer_suppression"))) {
                 return;
             }
             const reponse = await appelerApi(`/evenements/${id}`, { method: "DELETE" });
@@ -62,4 +60,4 @@ createApp({
             this.chargerEvenements();
         },
     },
-}).mount("#app");
+});
