@@ -19,12 +19,12 @@ type Conseil struct {
 
 func gererListeConseils(w http.ResponseWriter, r *http.Request) {
 	requete := `SELECT id, titre, contenu, categorie, auteur_id, created_at, updated_at
-		FROM conseils WHERE statut = 'Publiée' ORDER BY created_at DESC`
+		FROM conseils WHERE statut = 'publie' ORDER BY created_at DESC`
 	args := []any{}
 
 	if categorie := r.URL.Query().Get("categorie"); categorie != "" {
 		requete = `SELECT id, titre, contenu, categorie, auteur_id, created_at, updated_at
-			FROM conseils WHERE statut = 'Publiée' AND categorie = $1 ORDER BY created_at DESC`
+			FROM conseils WHERE statut = 'publie' AND categorie = $1 ORDER BY created_at DESC`
 		args = append(args, categorie)
 	}
 
@@ -63,7 +63,7 @@ func gererDetailConseil(w http.ResponseWriter, r *http.Request) {
 	var categorie sql.NullString
 	err = db.QueryRow(`
 		SELECT id, titre, contenu, categorie, auteur_id, created_at, updated_at
-		FROM conseils WHERE id = $1 AND statut = 'Publiée'`, id,
+		FROM conseils WHERE id = $1 AND statut = 'publie'`, id,
 	).Scan(&c.ID, &c.Titre, &c.Contenu, &categorie, &c.AuteurID, &c.CreatedAt, &c.UpdatedAt)
 
 	if errors.Is(err, sql.ErrNoRows) {

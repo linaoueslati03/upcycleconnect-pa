@@ -79,6 +79,9 @@ func main() {
 	mux.HandleFunc("DELETE /api/evenements/{id}", gererSuppressionEvenement)
 	mux.HandleFunc("POST /api/evenements/{id}/valider", gererValidationEvenement)
 
+	mux.HandleFunc("GET /api/ateliers", gererListeAteliers)
+	mux.HandleFunc("POST /api/ateliers", gererCreationAtelier)
+
 	log.Println("API démarrée sur http://localhost:8081")
 	if err := http.ListenAndServe(":8081", autoriserCORS(mux)); err != nil {
 		log.Fatal(err)

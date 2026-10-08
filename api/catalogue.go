@@ -25,13 +25,13 @@ func gererCatalogue(w http.ResponseWriter, r *http.Request) {
 
 	requete := `
 		SELECT 'formation' AS type, id, titre, description, date_debut, date_fin, lieu, tarif, nb_places
-			FROM formations WHERE statut = 'Publiée'
+			FROM formations WHERE statut = 'publie'
 		UNION ALL
 		SELECT 'atelier' AS type, id, titre, description, date_debut, date_fin, lieu, NULL, NULL
-			FROM ateliers WHERE statut = 'Publiée'
+			FROM ateliers WHERE statut = 'publie'
 		UNION ALL
 		SELECT 'evenement' AS type, id, titre, description, date_debut, date_fin, lieu, NULL, NULL
-			FROM evenements WHERE statut = 'Publiée'
+			FROM evenements WHERE statut = 'publie'
 		ORDER BY date_debut ASC`
 
 	lignes, err := db.Query(requete)
@@ -139,7 +139,7 @@ func gererCreationInscription(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if statutOffre != "Publiée" {
+	if statutOffre != "publie" {
 		envoyerErreur(w, http.StatusBadRequest, "cette offre n'est pas publiée")
 		return
 	}
