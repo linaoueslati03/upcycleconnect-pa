@@ -71,6 +71,7 @@ func main() {
 	mux.HandleFunc("POST /api/prestations", gererCreationPrestation)
 	mux.HandleFunc("PUT /api/prestations/{id}", gererModificationPrestation)
 	mux.HandleFunc("DELETE /api/prestations/{id}", gererSuppressionPrestation)
+	mux.HandleFunc("GET /api/prestations/{id}/pdf", gererPDFPrestation)
 
 	mux.HandleFunc("GET /api/evenements", gererListeEvenements)
 	mux.HandleFunc("GET /api/evenements/{id}", gererDetailEvenement)
