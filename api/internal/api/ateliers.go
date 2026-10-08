@@ -3,12 +3,9 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"net/http"
 	"strings"
 	"time"
-
-	"github.com/lib/pq"
 )
 
 type Atelier struct {
@@ -30,7 +27,6 @@ type AtelierEntree struct {
 	DateFin     *time.Time `json:"date_fin"`
 	Lieu        string     `json:"lieu"`
 	Statut      string     `json:"statut"`
-	CreateurID  int        `json:"createur_id"`
 }
 
 const colonnesAtelier = `id, titre, description, date_debut, date_fin, lieu, statut, createur_id, responsable_id`
@@ -82,6 +78,11 @@ func (s *Serveur) gererListeAteliers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
+	salarieID, _, ok := s.exigerSalarie(w, r)
+	if !ok {
+		return
+	}
+
 	var entree AtelierEntree
 	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
@@ -107,15 +108,9 @@ func (s *Serveur) gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
 		INSERT INTO ateliers (titre, description, date_debut, date_fin, lieu, statut, createur_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING `+colonnesAtelier,
-		entree.Titre, entree.Description, entree.DateDebut, entree.DateFin, entree.Lieu, entree.Statut, entree.CreateurID,
+		entree.Titre, entree.Description, entree.DateDebut, entree.DateFin, entree.Lieu, entree.Statut, salarieID,
 	)
 	if err := scannerAtelier(ligne, &a); err != nil {
-		// 23503 = clé étrangère : createur_id ne correspond à aucun salarié
-		var erreurPg *pq.Error
-		if errors.As(err, &erreurPg) && erreurPg.Code == "23503" {
-			envoyerErreur(w, http.StatusBadRequest, "createur_id invalide")
-			return
-		}
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}

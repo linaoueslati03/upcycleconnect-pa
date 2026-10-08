@@ -184,11 +184,9 @@ func genererCodeDepot(longueurOctets int) (string, error) {
 }
 
 func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
-	// Action réservée en pratique au Back Office / salarié habilité. Pas de vérification
-	// de rôle pour l'instant (le Back Office n'a pas encore de système de rôles/permissions
-	// côté API) : accessible à tout utilisateur authentifié, à restreindre plus tard.
-	if _, err := s.utilisateurConnecte(r); err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	// Le suivi d'un dépôt (validation, dépôt, récupération) est fait par le personnel
+	// ou par le professionnel qui récupère l'objet, jamais par le particulier lui-même.
+	if _, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur, roleProfessionnel); !ok {
 		return
 	}
 
