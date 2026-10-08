@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -8,16 +8,16 @@ import (
 )
 
 type Conseil struct {
-	ID         int       `json:"id"`
-	Titre      string    `json:"titre"`
-	Contenu    string    `json:"contenu"`
-	Categorie  *string   `json:"categorie"`
-	AuteurID   int       `json:"auteur_id"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID        int       `json:"id"`
+	Titre     string    `json:"titre"`
+	Contenu   string    `json:"contenu"`
+	Categorie *string   `json:"categorie"`
+	AuteurID  int       `json:"auteur_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func gererListeConseils(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererListeConseils(w http.ResponseWriter, r *http.Request) {
 	requete := `SELECT id, titre, contenu, categorie, auteur_id, created_at, updated_at
 		FROM conseils WHERE statut = 'publie' ORDER BY created_at DESC`
 	args := []any{}
@@ -28,7 +28,7 @@ func gererListeConseils(w http.ResponseWriter, r *http.Request) {
 		args = append(args, categorie)
 	}
 
-	lignes, err := db.Query(requete, args...)
+	lignes, err := s.db.Query(requete, args...)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -52,7 +52,7 @@ func gererListeConseils(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, conseils)
 }
 
-func gererDetailConseil(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererDetailConseil(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
@@ -61,7 +61,7 @@ func gererDetailConseil(w http.ResponseWriter, r *http.Request) {
 
 	var c Conseil
 	var categorie sql.NullString
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		SELECT id, titre, contenu, categorie, auteur_id, created_at, updated_at
 		FROM conseils WHERE id = $1 AND statut = 'publie'`, id,
 	).Scan(&c.ID, &c.Titre, &c.Contenu, &categorie, &c.AuteurID, &c.CreatedAt, &c.UpdatedAt)

@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"crypto/rand"
@@ -27,7 +27,7 @@ func genererToken() (string, error) {
 	return hex.EncodeToString(octets), nil
 }
 
-func gererLogin(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	var creds identifiants
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
@@ -36,7 +36,7 @@ func gererLogin(w http.ResponseWriter, r *http.Request) {
 
 	var utilisateurID int
 	var hash string
-	err := db.QueryRow(
+	err := s.db.QueryRow(
 		"SELECT id, mot_de_passe_hash FROM utilisateurs WHERE email = $1",
 		creds.Email,
 	).Scan(&utilisateurID, &hash)
@@ -61,7 +61,7 @@ func gererLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.Exec(
+	_, err = s.db.Exec(
 		"INSERT INTO sessions (token, utilisateur_id, date_expiration) VALUES ($1, $2, $3)",
 		token, utilisateurID, time.Now().Add(dureeSession),
 	)
@@ -73,27 +73,27 @@ func gererLogin(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, map[string]string{"token": token})
 }
 
-func gererLogout(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("Authorization")
 	if token == "" {
 		envoyerErreur(w, http.StatusBadRequest, "token manquant")
 		return
 	}
 
-	db.Exec("DELETE FROM sessions WHERE token = $1", token)
+	s.db.Exec("DELETE FROM sessions WHERE token = $1", token)
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "déconnecté"})
 }
 
 // utilisateurConnecte retourne l'id de l'utilisateur associé au token dans le header
 // Authorization, ou une erreur si le token est absent, inconnu ou expiré.
-func utilisateurConnecte(r *http.Request) (int, error) {
+func (s *Serveur) utilisateurConnecte(r *http.Request) (int, error) {
 	token := r.Header.Get("Authorization")
 	if token == "" {
 		return 0, errors.New("token manquant")
 	}
 
 	var utilisateurID int
-	err := db.QueryRow(
+	err := s.db.QueryRow(
 		"SELECT utilisateur_id FROM sessions WHERE token = $1 AND date_expiration > now()",
 		token,
 	).Scan(&utilisateurID)

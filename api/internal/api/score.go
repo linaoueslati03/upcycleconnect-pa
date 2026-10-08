@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -33,15 +33,15 @@ func ajouterPointsScore(ex executeur, utilisateurID int, delta int, motif string
 	return err
 }
 
-func gererMonScore(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererMonScore(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
 
 	var score int
-	err = db.QueryRow("SELECT upcycling_score FROM utilisateurs WHERE id = $1", utilisateurID).Scan(&score)
+	err = s.db.QueryRow("SELECT upcycling_score FROM utilisateurs WHERE id = $1", utilisateurID).Scan(&score)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -51,20 +51,20 @@ func gererMonScore(w http.ResponseWriter, r *http.Request) {
 }
 
 type LigneScoreHistorique struct {
-	ID     int       `json:"id"`
-	Delta  int       `json:"delta"`
-	Motif  *string   `json:"motif"`
-	Date   time.Time `json:"date"`
+	ID    int       `json:"id"`
+	Delta int       `json:"delta"`
+	Motif *string   `json:"motif"`
+	Date  time.Time `json:"date"`
 }
 
-func gererMonScoreHistorique(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererMonScoreHistorique(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
 
-	lignes, err := db.Query(
+	lignes, err := s.db.Query(
 		"SELECT id, delta, motif, date FROM score_historique WHERE utilisateur_id = $1 ORDER BY date DESC",
 		utilisateurID,
 	)

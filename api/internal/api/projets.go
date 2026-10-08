@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -19,14 +19,14 @@ type EtapeProjet struct {
 }
 
 type Projet struct {
-	ID             int           `json:"id"`
-	UtilisateurID  int           `json:"utilisateur_id"`
-	Titre          string        `json:"titre"`
-	Description    string        `json:"description"`
-	PartagePublic  bool          `json:"partage_public"`
-	Sponsorise     bool          `json:"sponsorise"`
-	DateCreation   time.Time     `json:"date_creation"`
-	Etapes         []EtapeProjet `json:"etapes,omitempty"`
+	ID            int           `json:"id"`
+	UtilisateurID int           `json:"utilisateur_id"`
+	Titre         string        `json:"titre"`
+	Description   string        `json:"description"`
+	PartagePublic bool          `json:"partage_public"`
+	Sponsorise    bool          `json:"sponsorise"`
+	DateCreation  time.Time     `json:"date_creation"`
+	Etapes        []EtapeProjet `json:"etapes,omitempty"`
 }
 
 type ProjetEntree struct {
@@ -41,8 +41,8 @@ type EtapeEntree struct {
 	Ordre       int     `json:"ordre"`
 }
 
-func gererCreationProjet(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererCreationProjet(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -59,7 +59,7 @@ func gererCreationProjet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var p Projet
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		INSERT INTO projets_upcycling (utilisateur_id, titre, description, partage_public)
 		VALUES ($1, $2, $3, $4)
 		RETURNING id, utilisateur_id, titre, description, partage_public, sponsorise, date_creation`,
@@ -74,14 +74,14 @@ func gererCreationProjet(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusCreated, p)
 }
 
-func gererMesProjets(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererMesProjets(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
 
-	lignes, err := db.Query(`
+	lignes, err := s.db.Query(`
 		SELECT id, utilisateur_id, titre, description, partage_public, sponsorise, date_creation
 		FROM projets_upcycling WHERE utilisateur_id = $1 ORDER BY date_creation DESC`, utilisateurID)
 	if err != nil {
@@ -103,7 +103,7 @@ func gererMesProjets(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, projets)
 }
 
-func gererDetailProjet(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererDetailProjet(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
@@ -111,7 +111,7 @@ func gererDetailProjet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var p Projet
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		SELECT id, utilisateur_id, titre, description, partage_public, sponsorise, date_creation
 		FROM projets_upcycling WHERE id = $1`, id,
 	).Scan(&p.ID, &p.UtilisateurID, &p.Titre, &p.Description, &p.PartagePublic, &p.Sponsorise, &p.DateCreation)
@@ -126,14 +126,14 @@ func gererDetailProjet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !p.PartagePublic {
-		utilisateurID, err := utilisateurConnecte(r)
+		utilisateurID, err := s.utilisateurConnecte(r)
 		if err != nil || utilisateurID != p.UtilisateurID {
 			envoyerErreur(w, http.StatusForbidden, "ce projet n'est pas public")
 			return
 		}
 	}
 
-	lignes, err := db.Query(`
+	lignes, err := s.db.Query(`
 		SELECT id, projet_id, description, photo_url, ordre, date
 		FROM etapes_projet WHERE projet_id = $1 ORDER BY ordre ASC`, id)
 	if err != nil {
@@ -159,15 +159,15 @@ func gererDetailProjet(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, p)
 }
 
-func verifierProprietaireProjet(w http.ResponseWriter, r *http.Request, projetID int) (int, bool) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) verifierProprietaireProjet(w http.ResponseWriter, r *http.Request, projetID int) (int, bool) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return 0, false
 	}
 
 	var proprietaireID int
-	err = db.QueryRow("SELECT utilisateur_id FROM projets_upcycling WHERE id = $1", projetID).Scan(&proprietaireID)
+	err = s.db.QueryRow("SELECT utilisateur_id FROM projets_upcycling WHERE id = $1", projetID).Scan(&proprietaireID)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "projet introuvable")
 		return 0, false
@@ -184,14 +184,14 @@ func verifierProprietaireProjet(w http.ResponseWriter, r *http.Request, projetID
 	return utilisateurID, true
 }
 
-func gererModificationProjet(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererModificationProjet(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
 		return
 	}
 
-	if _, ok := verifierProprietaireProjet(w, r, id); !ok {
+	if _, ok := s.verifierProprietaireProjet(w, r, id); !ok {
 		return
 	}
 
@@ -206,7 +206,7 @@ func gererModificationProjet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var p Projet
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		UPDATE projets_upcycling SET titre = $1, description = $2, partage_public = $3
 		WHERE id = $4
 		RETURNING id, utilisateur_id, titre, description, partage_public, sponsorise, date_creation`,
@@ -220,29 +220,29 @@ func gererModificationProjet(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, p)
 }
 
-func gererSuppressionProjet(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererSuppressionProjet(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
 		return
 	}
 
-	if _, ok := verifierProprietaireProjet(w, r, id); !ok {
+	if _, ok := s.verifierProprietaireProjet(w, r, id); !ok {
 		return
 	}
 
-	db.Exec("DELETE FROM projets_upcycling WHERE id = $1", id)
+	s.db.Exec("DELETE FROM projets_upcycling WHERE id = $1", id)
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "projet supprimé"})
 }
 
-func gererCreationEtape(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererCreationEtape(w http.ResponseWriter, r *http.Request) {
 	projetID, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
 		return
 	}
 
-	if _, ok := verifierProprietaireProjet(w, r, projetID); !ok {
+	if _, ok := s.verifierProprietaireProjet(w, r, projetID); !ok {
 		return
 	}
 
@@ -258,7 +258,7 @@ func gererCreationEtape(w http.ResponseWriter, r *http.Request) {
 
 	var e EtapeProjet
 	var photoURL sql.NullString
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		INSERT INTO etapes_projet (projet_id, description, photo_url, ordre)
 		VALUES ($1, $2, $3, $4)
 		RETURNING id, projet_id, description, photo_url, ordre, date`,

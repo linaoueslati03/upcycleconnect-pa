@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"crypto/rand"
@@ -80,8 +80,8 @@ func scannerDepot(ligne interface{ Scan(...any) error }, d *Depot) error {
 const colonnesDepot = `id, utilisateur_id, conteneur_id, description_objet, code_ouverture, code_barre,
 	statut, professionnel_recuperateur_id, date_demande, date_validation, date_recuperation`
 
-func gererCreationDepot(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -98,7 +98,7 @@ func gererCreationDepot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var d Depot
-	ligne := db.QueryRow(`
+	ligne := s.db.QueryRow(`
 		INSERT INTO depots (utilisateur_id, conteneur_id, description_objet)
 		VALUES ($1, $2, $3)
 		RETURNING `+colonnesDepot,
@@ -112,14 +112,14 @@ func gererCreationDepot(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusCreated, d)
 }
 
-func gererMesDepots(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererMesDepots(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
 
-	lignes, err := db.Query(`SELECT `+colonnesDepot+` FROM depots WHERE utilisateur_id = $1 ORDER BY date_demande DESC`, utilisateurID)
+	lignes, err := s.db.Query(`SELECT `+colonnesDepot+` FROM depots WHERE utilisateur_id = $1 ORDER BY date_demande DESC`, utilisateurID)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -139,8 +139,8 @@ func gererMesDepots(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, depots)
 }
 
-func gererDetailDepot(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererDetailDepot(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -153,7 +153,7 @@ func gererDetailDepot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var d Depot
-	ligne := db.QueryRow(`SELECT `+colonnesDepot+` FROM depots WHERE id = $1`, id)
+	ligne := s.db.QueryRow(`SELECT `+colonnesDepot+` FROM depots WHERE id = $1`, id)
 	if err := scannerDepot(ligne, &d); errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "dépôt introuvable")
 		return
@@ -183,11 +183,11 @@ func genererCodeDepot(longueurOctets int) (string, error) {
 	return fmt.Sprintf("%x", octets), nil
 }
 
-func gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
 	// Action réservée en pratique au Back Office / salarié habilité. Pas de vérification
 	// de rôle pour l'instant (le Back Office n'a pas encore de système de rôles/permissions
 	// côté API) : accessible à tout utilisateur authentifié, à restreindre plus tard.
-	if _, err := utilisateurConnecte(r); err != nil {
+	if _, err := s.utilisateurConnecte(r); err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -211,7 +211,7 @@ func gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var statutActuel string
-	if err := db.QueryRow("SELECT statut FROM depots WHERE id = $1", id).Scan(&statutActuel); errors.Is(err, sql.ErrNoRows) {
+	if err := s.db.QueryRow("SELECT statut FROM depots WHERE id = $1", id).Scan(&statutActuel); errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "dépôt introuvable")
 		return
 	} else if err != nil {
@@ -235,14 +235,14 @@ func gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
-		ligne = db.QueryRow(`
+		ligne = s.db.QueryRow(`
 			UPDATE depots SET statut = 'validee', code_ouverture = $1, code_barre = $2, date_validation = now()
 			WHERE id = $3
 			RETURNING `+colonnesDepot,
 			codeOuverture, codeBarre, id,
 		)
 	case "deposee":
-		ligne = db.QueryRow(`
+		ligne = s.db.QueryRow(`
 			UPDATE depots SET statut = 'deposee' WHERE id = $1
 			RETURNING `+colonnesDepot, id)
 	case "recuperee":
@@ -250,7 +250,7 @@ func gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
 			envoyerErreur(w, http.StatusBadRequest, "professionnel_recuperateur_id obligatoire")
 			return
 		}
-		ligne = db.QueryRow(`
+		ligne = s.db.QueryRow(`
 			UPDATE depots SET statut = 'recuperee', professionnel_recuperateur_id = $1, date_recuperation = now()
 			WHERE id = $2
 			RETURNING `+colonnesDepot,
@@ -264,7 +264,7 @@ func gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if entree.Statut == "recuperee" {
-		ajouterPointsScore(db, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré")
+		ajouterPointsScore(s.db, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré")
 	}
 
 	envoyerJSON(w, http.StatusOK, d)

@@ -16,7 +16,12 @@ autour du réemploi d'objets et de matériaux.
 
 ```
 .
-├── api/                 # API Go
+├── api/                 # API Go (module github.com/linaoueslati03/upcycleconnect-pa/api)
+│   ├── cmd/api/         # point d'entrée : main.go
+│   └── internal/
+│       ├── api/         # handlers HTTP, un fichier par domaine + routes.go
+│       ├── database/    # connexion PostgreSQL
+│       └── middleware/  # CORS
 ├── db/
 │   ├── migrations/      # schéma SQL, un fichier numéroté par évolution
 │   ├── seeds/           # données de démonstration

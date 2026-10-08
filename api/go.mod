@@ -1,4 +1,4 @@
-module upcycleconnect/api
+module github.com/linaoueslati03/upcycleconnect-pa/api
 
 go 1.26.0
 

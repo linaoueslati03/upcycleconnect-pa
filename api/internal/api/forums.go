@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -41,9 +41,9 @@ type SignalementEntree struct {
 	Motif string `json:"motif"`
 }
 
-func verifierAntiSpam(utilisateurID int) bool {
+func (s *Serveur) verifierAntiSpam(utilisateurID int) bool {
 	var dernierMessage time.Time
-	err := db.QueryRow(
+	err := s.db.QueryRow(
 		"SELECT created_at FROM forum_messages WHERE auteur_utilisateur_id = $1 ORDER BY created_at DESC LIMIT 1",
 		utilisateurID,
 	).Scan(&dernierMessage)
@@ -56,8 +56,8 @@ func verifierAntiSpam(utilisateurID int) bool {
 	return time.Since(dernierMessage) >= delaiAntiSpamForum
 }
 
-func gererListeSujetsForum(w http.ResponseWriter, r *http.Request) {
-	lignes, err := db.Query(`
+func (s *Serveur) gererListeSujetsForum(w http.ResponseWriter, r *http.Request) {
+	lignes, err := s.db.Query(`
 		SELECT id, titre, auteur_utilisateur_id, statut, created_at
 		FROM forum_sujets WHERE statut != 'rejete' ORDER BY created_at DESC`)
 	if err != nil {
@@ -68,19 +68,19 @@ func gererListeSujetsForum(w http.ResponseWriter, r *http.Request) {
 
 	sujets := make([]SujetForum, 0)
 	for lignes.Next() {
-		var s SujetForum
-		if err := lignes.Scan(&s.ID, &s.Titre, &s.AuteurUtilisateurID, &s.Statut, &s.CreatedAt); err != nil {
+		var sujet SujetForum
+		if err := lignes.Scan(&sujet.ID, &sujet.Titre, &sujet.AuteurUtilisateurID, &sujet.Statut, &sujet.CreatedAt); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
-		sujets = append(sujets, s)
+		sujets = append(sujets, sujet)
 	}
 
 	envoyerJSON(w, http.StatusOK, sujets)
 }
 
-func gererCreationSujetForum(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererCreationSujetForum(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -95,23 +95,23 @@ func gererCreationSujetForum(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusBadRequest, "titre et contenu obligatoires")
 		return
 	}
-	if !verifierAntiSpam(utilisateurID) {
+	if !s.verifierAntiSpam(utilisateurID) {
 		envoyerErreur(w, http.StatusTooManyRequests, "veuillez patienter avant de publier à nouveau")
 		return
 	}
 
-	tx, err := db.Begin()
+	tx, err := s.db.Begin()
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
 	defer tx.Rollback()
 
-	var s SujetForum
+	var sujet SujetForum
 	err = tx.QueryRow(
 		"INSERT INTO forum_sujets (titre, auteur_utilisateur_id) VALUES ($1, $2) RETURNING id, titre, auteur_utilisateur_id, statut, created_at",
 		entree.Titre, utilisateurID,
-	).Scan(&s.ID, &s.Titre, &s.AuteurUtilisateurID, &s.Statut, &s.CreatedAt)
+	).Scan(&sujet.ID, &sujet.Titre, &sujet.AuteurUtilisateurID, &sujet.Statut, &sujet.CreatedAt)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -119,7 +119,7 @@ func gererCreationSujetForum(w http.ResponseWriter, r *http.Request) {
 
 	_, err = tx.Exec(
 		"INSERT INTO forum_messages (sujet_id, auteur_utilisateur_id, contenu) VALUES ($1, $2, $3)",
-		s.ID, utilisateurID, entree.Contenu,
+		sujet.ID, utilisateurID, entree.Contenu,
 	)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
@@ -131,17 +131,17 @@ func gererCreationSujetForum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	envoyerJSON(w, http.StatusCreated, s)
+	envoyerJSON(w, http.StatusCreated, sujet)
 }
 
-func gererMessagesSujet(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererMessagesSujet(w http.ResponseWriter, r *http.Request) {
 	sujetID, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
 		return
 	}
 
-	lignes, err := db.Query(`
+	lignes, err := s.db.Query(`
 		SELECT id, sujet_id, auteur_utilisateur_id, contenu, statut, created_at
 		FROM forum_messages WHERE sujet_id = $1 AND statut = 'visible' ORDER BY created_at ASC`, sujetID)
 	if err != nil {
@@ -163,8 +163,8 @@ func gererMessagesSujet(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, messages)
 }
 
-func gererReponseSujet(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererReponseSujet(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -185,13 +185,13 @@ func gererReponseSujet(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusBadRequest, "contenu obligatoire")
 		return
 	}
-	if !verifierAntiSpam(utilisateurID) {
+	if !s.verifierAntiSpam(utilisateurID) {
 		envoyerErreur(w, http.StatusTooManyRequests, "veuillez patienter avant de publier à nouveau")
 		return
 	}
 
 	var m MessageForum
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		INSERT INTO forum_messages (sujet_id, auteur_utilisateur_id, contenu)
 		VALUES ($1, $2, $3)
 		RETURNING id, sujet_id, auteur_utilisateur_id, contenu, statut, created_at`,
@@ -205,8 +205,8 @@ func gererReponseSujet(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusCreated, m)
 }
 
-func gererSignalementMessage(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererSignalementMessage(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -224,7 +224,7 @@ func gererSignalementMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.Exec(
+	_, err = s.db.Exec(
 		"INSERT INTO forum_signalements (message_id, signale_par_utilisateur_id, motif) VALUES ($1, $2, $3)",
 		messageID, utilisateurID, entree.Motif,
 	)

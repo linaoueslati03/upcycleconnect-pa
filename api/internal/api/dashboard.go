@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -14,8 +14,8 @@ type DashboardReponse struct {
 	ProchaineOffreDate  *time.Time `json:"prochaine_offre_date"`
 }
 
-func gererDashboard(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererDashboard(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -23,7 +23,7 @@ func gererDashboard(w http.ResponseWriter, r *http.Request) {
 
 	var reponse DashboardReponse
 
-	err = db.QueryRow(
+	err = s.db.QueryRow(
 		"SELECT COUNT(*) FROM annonces WHERE utilisateur_id = $1 AND statut = 'en_ligne'",
 		utilisateurID,
 	).Scan(&reponse.AnnoncesActives)
@@ -33,7 +33,7 @@ func gererDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var statutDepot sql.NullString
-	err = db.QueryRow(
+	err = s.db.QueryRow(
 		"SELECT statut FROM depots WHERE utilisateur_id = $1 ORDER BY date_demande DESC LIMIT 1",
 		utilisateurID,
 	).Scan(&statutDepot)
@@ -45,7 +45,7 @@ func gererDashboard(w http.ResponseWriter, r *http.Request) {
 		reponse.DernierDepotStatut = &statutDepot.String
 	}
 
-	err = db.QueryRow(
+	err = s.db.QueryRow(
 		"SELECT upcycling_score FROM utilisateurs WHERE id = $1",
 		utilisateurID,
 	).Scan(&reponse.UpcyclingScore)
@@ -56,7 +56,7 @@ func gererDashboard(w http.ResponseWriter, r *http.Request) {
 
 	var titre sql.NullString
 	var date sql.NullTime
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		SELECT titre, date_debut FROM (
 			SELECT f.titre, f.date_debut FROM inscriptions i
 				JOIN formations f ON i.offre_id = f.id AND i.type_offre = 'formation'

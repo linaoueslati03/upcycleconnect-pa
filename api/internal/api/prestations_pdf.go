@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 )
 
 // gererPDFPrestation renvoie le récapitulatif d'une prestation sous forme de fichier PDF.
-func gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
@@ -19,7 +19,7 @@ func gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var prestation Prestation
-	err = db.QueryRow(
+	err = s.db.QueryRow(
 		"SELECT id, titre, categorie, tarif, statut FROM prestations WHERE id = $1", id,
 	).Scan(&prestation.ID, &prestation.Titre, &prestation.Categorie, &prestation.Tarif, &prestation.Statut)
 
