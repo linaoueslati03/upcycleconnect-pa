@@ -1,8 +1,23 @@
+# Variables d'environnement (mots de passe)
 .env
-node_modules/
-.DS_Store
-*.log
-/vendor/
-pgdata/
+
+# Binaire compilé de l'API Go
 api/api
 
+# Données locales PostgreSQL
+pgdata/
+
+# Dépendances
+node_modules/
+/vendor/
+
+# Logs
+*.log
+
+# Système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/

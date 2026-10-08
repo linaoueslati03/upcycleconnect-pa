@@ -6,10 +6,10 @@
 
     <title>Gestion des utilisateurs</title>
 
-    <link rel="stylesheet" href="../pages/style.css">
+    <link rel="stylesheet" href="../assets/css/utilisateurs.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../js/config.js"></script>
+    <script src="../assets/js/config.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 

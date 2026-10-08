@@ -3,32 +3,32 @@
     <head>
         <meta charset="UTF-8">
         <title>UpcycleConnect - Prestations</title>
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/prestations.css">
+        <link rel="stylesheet" href="../assets/css/style.css">
+        <link rel="stylesheet" href="../assets/css/prestations.css">
     </head>
     <body>
         <aside>
             <button id="toggle-button">
-                <img src="../assets/LOGO-pa.png" alt="Logo UpcycleConnect">
+                <img src="../assets/img/LOGO-pa.png" alt="Logo UpcycleConnect">
             </button>
 
             <ul>
                 <li>
                     <button class="nav-button">
-                        <img src="../assets/people-svgrepo-com (1).svg" alt="Utilisateurs">
+                        <img src="../assets/img/people-svgrepo-com.svg" alt="Utilisateurs">
                         <span>Utilisateurs</span>
                     </button>
                 </li>
                 <li>
                     <button class="nav-button">
-                        <img src="../assets/book-svgrepo-com.svg" alt="Prestations">
+                        <img src="../assets/img/book-svgrepo-com.svg" alt="Prestations">
                         <span>Prestations</span>
                     </button>
                 </li>
             </ul>
 
             <button id="logout-button">
-                <img src="../assets/logout-svgrepo-com.svg" alt="Déconnexion">
+                <img src="../assets/img/logout-svgrepo-com.svg" alt="Déconnexion">
             </button>
         </aside>
 

@@ -11,7 +11,7 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql
-      - ./init:/docker-entrypoint-initdb.d
+      - ./db/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 5s
@@ -30,7 +30,7 @@ services:
 
   api:
     build:
-      context: ../api
+      context: ./api
     container_name: upcycleconnect_api
     restart: unless-stopped
     environment:
