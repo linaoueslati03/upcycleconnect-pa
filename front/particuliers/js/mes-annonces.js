@@ -12,6 +12,7 @@ demarrerApp({
             formulaire: { ...ANNONCE_VIDE },
             erreur: "",
             erreurListe: "",
+            message: "",
         };
     },
 
@@ -38,6 +39,7 @@ demarrerApp({
         reinitialiserFormulaire() {
             this.formulaire = { ...ANNONCE_VIDE };
             this.erreur = "";
+            this.message = "";
         },
 
         modifier(annonce) {
@@ -68,7 +70,12 @@ demarrerApp({
                 this.erreur = await messageErreur(reponse);
                 return;
             }
+            const annonce = await reponse.json();
             this.reinitialiserFormulaire();
+            // Toute annonce nouvelle (ou modifiée avant validation) passe par le service administratif
+            if (annonce.statut === "en_attente") {
+                this.message = t("annonces.envoyee_validation");
+            }
             this.chargerAnnonces();
         },
 

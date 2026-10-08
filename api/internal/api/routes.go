@@ -11,7 +11,7 @@ import "net/http"
 //   - utilisateur connecté : /api/moi/*, annonces, dépôts, inscriptions, projets, forums ;
 //   - salarié : écriture des événements, ateliers et conseils, planning salarié
 //     (validation : responsable) ; suivi des dépôts (avec admin et professionnel) ;
-//   - administrateur : gestion des utilisateurs et des prestations.
+//   - administrateur : gestion des utilisateurs et des prestations, validation des annonces.
 func (s *Serveur) Routes() http.Handler {
 	mux := http.NewServeMux()
 
@@ -30,6 +30,9 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/annonces", s.gererCreationAnnonce)
 	mux.HandleFunc("PUT /api/annonces/{id}", s.gererModificationAnnonce)
 	mux.HandleFunc("DELETE /api/annonces/{id}", s.gererSuppressionAnnonce)
+	mux.HandleFunc("GET /api/admin/annonces", s.gererModerationAnnonces)
+	mux.HandleFunc("POST /api/annonces/{id}/valider", s.gererValidationAnnonce)
+	mux.HandleFunc("POST /api/annonces/{id}/refuser", s.gererRefusAnnonce)
 
 	mux.HandleFunc("POST /api/depots", s.gererCreationDepot)
 	mux.HandleFunc("GET /api/moi/depots", s.gererMesDepots)
