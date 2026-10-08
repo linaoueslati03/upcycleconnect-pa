@@ -18,7 +18,10 @@ autour du réemploi d'objets et de matériaux.
 .
 ├── api/                 # API Go
 ├── db/
-│   └── init/            # scripts SQL exécutés à la création de la base
+│   ├── migrations/      # schéma SQL, un fichier numéroté par évolution
+│   ├── seeds/           # données de démonstration
+│   ├── migrer.sh        # applique les migrations pas encore passées
+│   └── initialiser.sh   # migrations + données, à la création de la base
 ├── front/
 │   ├── admin/           # back-office administrateur
 │   ├── salaries/        # espace salariés
@@ -43,7 +46,27 @@ php -S localhost:8000 -t front
 | API | http://localhost:8081/api/sante |
 | Adminer (base de données) | http://localhost:8080 |
 
-Les scripts de `db/init/` ne s'exécutent qu'à la première création du volume PostgreSQL.
+## Base de données
+
+À la première création du volume, `db/initialiser.sh` applique toutes les migrations puis charge
+les données de démonstration (mot de passe des comptes : `Test1234!`) :
+
+| Compte | Rôle |
+|---|---|
+| admin@upcycleconnect.fr | Administrateur |
+| salarie@upcycleconnect.fr | Salarié (responsable) |
+| particulier@upcycleconnect.fr | Particulier |
+| pro@upcycleconnect.fr | Professionnel |
+
+Pour faire évoluer le schéma, on ne modifie jamais une migration déjà appliquée : on ajoute un
+nouveau fichier `db/migrations/009_....sql`, puis on l'applique sur la base existante :
+
+```bash
+docker compose exec postgres sh /db/migrer.sh
+```
+
+La table `schema_migrations` liste les migrations déjà appliquées. Pour repartir d'une base vide :
+`docker compose down -v && docker compose up -d` (efface toutes les données locales).
 
 ## Organisation Git
 
