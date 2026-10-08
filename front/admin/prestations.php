@@ -88,6 +88,7 @@
             </div>
         </main>
 
+        <script src="../assets/js/config.js"></script>
         <script src="js/prestations.js"></script>
     </body>
 </html>
