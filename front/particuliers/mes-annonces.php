@@ -34,7 +34,7 @@ $titrePage = "nav.mes_annonces";
                         </p>
                         <div class="form-buttons">
                             <button class="button-draft" @click="modifier(a)">{{ t('commun.modifier') }}</button>
-                            <button v-if="a.statut !== 'cedee'" class="button-submit" @click="marquerCedee(a)">{{ t('annonces.marquer_cedee') }}</button>
+                            <button v-if="['en_ligne', 'reservee'].includes(a.statut)" class="button-submit" @click="marquerCedee(a)">{{ t('annonces.marquer_cedee') }}</button>
                             <button class="button-draft" @click="supprimer(a.id)">{{ t('commun.supprimer') }}</button>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ $titrePage = "nav.mes_annonces";
                             <input id="localisation" type="text" v-model="formulaire.localisation">
                         </div>
 
-                        <div v-if="formulaire.id" class="form-group">
+                        <div v-if="formulaire.id && statutsAnnonce.includes(formulaire.statut)" class="form-group">
                             <label for="statut">{{ t('commun.statut') }}</label>
                             <select id="statut" v-model="formulaire.statut">
                                 <option v-for="statut in statutsAnnonce" :key="statut" :value="statut">{{ t('annonce.' + statut) }}</option>
@@ -88,6 +88,7 @@ $titrePage = "nav.mes_annonces";
                         </div>
 
                         <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                        <p v-if="message" class="succes">{{ message }}</p>
 
                         <div class="form-buttons">
                             <button type="submit" class="button-submit">{{ t('commun.enregistrer') }}</button>

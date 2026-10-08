@@ -1,6 +1,7 @@
 // Fonctions et libellés communs aux pages de l'espace Particulier.
 
 // Les libellés affichés sont des clés de traduction : t("annonce." + statut), t("offre." + type)…
+// Statuts qu'un particulier peut choisir, une fois son annonce validée par l'administration.
 const STATUTS_ANNONCE = ["en_ligne", "reservee", "cedee"];
 
 const TYPES_OFFRE = ["formation", "atelier", "evenement"];
