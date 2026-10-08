@@ -1,15 +1,10 @@
 <?php
-// Liens du menu : fichier => [libellé, icône]
-$liens = [
-    "planning.php"   => ["Mon planning", "people-svgrepo-com.svg"],
-    "evenements.php" => ["Événements", "party-horn-svgrepo-com.svg"],
-    "ateliers.php"   => ["Ateliers", "pencil-square-svgrepo-com.svg"],
-    "articles.php"   => ["Articles", "news-svgrepo-com.svg"],
-];
+// Menu latéral commun aux espaces connectés.
+// $liens (défini dans inclus/espace.php de chaque espace) : fichier => [libellé, icône]
 ?>
 <aside>
 
-    <a id="toggle-button" href="planning.php" aria-label="Accueil">
+    <a id="toggle-button" href="<?= array_key_first($liens) ?>" aria-label="Accueil">
         <img src="../assets/img/LOGO-pa.png" alt="Logo">
     </a>
 

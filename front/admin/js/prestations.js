@@ -1,80 +1,79 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const tbody = document.getElementById('prestations-list'); 
+const { createApp } = Vue;
 
-    appelerApi("/prestations")
-        .then(response => {
-            if (!response.ok) throw new Error("Erreur serveur");
-            return response.json();
-        })
-        .then(data => {
-            tbody.innerHTML = ''; 
-            data.forEach(prest => {
-                let row = `
-                    <tr>
-                        <td class="presta-title">${prest.titre}</td>
-                        <td>${prest.categorie}</td>
-                        <td>${prest.tarif} €</td>
-                        <td>${prest.statut}</td>
-                        <td>
-                            <a href="#" class="orange-link" onclick="editer(${prest.id}, '${prest.titre.replace(/'/g, "\\'")}', '${prest.categorie}', ${prest.tarif}, '${prest.statut}')">Editer</a>
-                            <a href="#" style="color: #d32f2f; margin-left: 15px; text-decoration: none; font-weight: bold;" onclick="supprimer(${prest.id})">Supprimer</a>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
-        })
-        .catch(error => {
-            console.error("Erreur API :", error);
-            tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Erreur de chargement</td></tr>`;
-        });
-});
+const FORMULAIRE_VIDE = { id: null, titre: "", categorie: "", tarif: 0, statut: "Brouillon" };
 
-document.getElementById('prestation-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const id = document.getElementById('presta-id').value;
-    const method = id ? 'PUT' : 'POST';
-    const chemin = id ? `/prestations/${id}` : "/prestations";
+createApp({
+    data() {
+        return {
+            prestations: [],
+            formulaire: { ...FORMULAIRE_VIDE },
+            erreur: "",
+            erreurListe: "",
+        };
+    },
 
-    const payload = {
-        titre: document.getElementById('presta-titre').value,
-        categorie: document.getElementById('presta-categorie').value,
-        tarif: parseFloat(document.getElementById('presta-tarif').value),
-        statut: document.getElementById('presta-statut').value
-    };
+    mounted() {
+        this.chargerPrestations();
+    },
 
-    appelerApi(chemin, {
-        method: method,
-        body: JSON.stringify(payload)
-    }).then(async (reponse) => {
-        if (!reponse.ok) {
-            const resultat = await reponse.json();
-            alert(resultat.erreur);
-            return;
-        }
-        reinitialiserFormulaire();
-        location.reload();
-    });
-});
+    methods: {
+        async chargerPrestations() {
+            const reponse = await appelerApi("/prestations");
+            if (!reponse.ok) {
+                this.erreurListe = "Erreur lors du chargement des prestations";
+                return;
+            }
+            this.prestations = await reponse.json();
+        },
 
-function editer(id, titre, categorie, tarif, statut) {
-    document.getElementById('form-title').innerText = "MODIFIER L'OFFRE";
-    document.getElementById('presta-id').value = id;
-    document.getElementById('presta-titre').value = titre;
-    document.getElementById('presta-categorie').value = categorie;
-    document.getElementById('presta-tarif').value = tarif;
-    document.getElementById('presta-statut').value = statut;
-}
+        formaterTarif(tarif) {
+            return tarif.toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+        },
 
-function supprimer(id) {
-    if(confirm("Supprimer cette prestation ?")) {
-        appelerApi(`/prestations/${id}`, { method: 'DELETE' })
-            .then(() => location.reload());
-    }
-}
+        // Le récapitulatif PDF est généré par l'API Go (route publique GET /prestations/{id}/pdf)
+        lienPDF(id) {
+            return `${API_BASE_URL}/prestations/${id}/pdf`;
+        },
 
-function reinitialiserFormulaire() {
-    document.getElementById('prestation-form').reset();
-    document.getElementById('presta-id').value = '';
-    document.getElementById('form-title').innerText = "NOUVELLE OFFRE";
-}
+        reinitialiserFormulaire() {
+            this.formulaire = { ...FORMULAIRE_VIDE };
+            this.erreur = "";
+        },
+
+        modifier(prestation) {
+            this.formulaire = { ...prestation };
+            this.erreur = "";
+        },
+
+        async enregistrer() {
+            const { id, ...donnees } = this.formulaire;
+            const chemin = id ? `/prestations/${id}` : "/prestations";
+            const methode = id ? "PUT" : "POST";
+
+            const reponse = await appelerApi(chemin, { method: methode, body: JSON.stringify(donnees) });
+            if (!reponse.ok) {
+                const resultat = await reponse.json();
+                this.erreur = resultat.erreur;
+                return;
+            }
+
+            this.reinitialiserFormulaire();
+            this.chargerPrestations();
+        },
+
+        async supprimer(id) {
+            if (!confirm("Supprimer cette prestation ?")) {
+                return;
+            }
+
+            const reponse = await appelerApi(`/prestations/${id}`, { method: "DELETE" });
+            if (!reponse.ok) {
+                const resultat = await reponse.json();
+                this.erreurListe = resultat.erreur;
+                return;
+            }
+
+            this.chargerPrestations();
+        },
+    },
+}).mount("#app");
