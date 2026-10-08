@@ -3,17 +3,17 @@
 $roleRequis = "particulier";
 
 $liens = [
-    "tableau-de-bord.php" => ["Accueil", "people-svgrepo-com.svg"],
-    "annonces.php"        => ["Annonces", "book-svgrepo-com.svg"],
-    "mes-annonces.php"    => ["Mes annonces", "pencil-square-svgrepo-com.svg"],
-    "depots.php"          => ["Dépôt en conteneur", "book-svgrepo-com.svg"],
-    "catalogue.php"       => ["Catalogue", "party-horn-svgrepo-com.svg"],
-    "planning.php"        => ["Mon planning", "party-horn-svgrepo-com.svg"],
-    "projets.php"         => ["Mes projets", "pencil-square-svgrepo-com.svg"],
-    "conseils.php"        => ["Conseils", "news-svgrepo-com.svg"],
-    "forums.php"          => ["Forums", "message-square-shield-svgrepo-com.svg"],
-    "score.php"           => ["Upcycling Score", "news-svgrepo-com.svg"],
-    "mon-compte.php"      => ["Mon compte", "people-svgrepo-com.svg"],
+    "tableau-de-bord.php" => ["nav.accueil", "people-svgrepo-com.svg"],
+    "annonces.php"        => ["nav.annonces", "book-svgrepo-com.svg"],
+    "mes-annonces.php"    => ["nav.mes_annonces", "pencil-square-svgrepo-com.svg"],
+    "depots.php"          => ["nav.depot_conteneur", "book-svgrepo-com.svg"],
+    "catalogue.php"       => ["nav.catalogue", "party-horn-svgrepo-com.svg"],
+    "planning.php"        => ["nav.mon_planning", "party-horn-svgrepo-com.svg"],
+    "projets.php"         => ["nav.mes_projets", "pencil-square-svgrepo-com.svg"],
+    "conseils.php"        => ["nav.conseils", "news-svgrepo-com.svg"],
+    "forums.php"          => ["nav.forums", "message-square-shield-svgrepo-com.svg"],
+    "score.php"           => ["nav.score", "news-svgrepo-com.svg"],
+    "mon-compte.php"      => ["nav.mon_compte", "people-svgrepo-com.svg"],
 ];
 
 $feuillesStyle = ["../assets/css/particuliers.css"];

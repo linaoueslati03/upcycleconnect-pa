@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Mes ateliers";
+$titrePage = "salaries.ateliers.titre";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,15 +16,15 @@ $titrePage = "Mes ateliers";
         <main>
 
             <div class="page-header">
-                <h1>Mes ateliers</h1>
-                <a class="btn-primary" href="creer-atelier.php">+ Créer un atelier</a>
+                <h1>{{ t('salaries.ateliers.titre') }}</h1>
+                <a class="btn-primary" href="creer-atelier.php">+ {{ t('salaries.ateliers.creer') }}</a>
             </div>
 
             <div class="filtres">
                 <button v-for="filtre in filtres" :key="filtre.valeur"
                     class="pill" :class="{ active: statutSelectionne === filtre.valeur }"
                     @click="statutSelectionne = filtre.valeur">
-                    {{ filtre.nom }}
+                    {{ t(filtre.nom) }}
                 </button>
             </div>
 
@@ -37,9 +37,9 @@ $titrePage = "Mes ateliers";
                     <span class="badge-statut" :class="'statut-' + atelier.statut">
                         {{ formaterStatut(atelier.statut) }}
                     </span>
-                    <button class="btn-modifier" @click="modifierAtelier(atelier.id)">Modifier</button>
-                    <button v-if="atelier.statut === 'en_attente'" class="btn-modifier" @click="valider(atelier.id)">Valider</button>
-                    <button class="btn-modifier" @click="supprimer(atelier.id)">Supprimer</button>
+                    <button class="btn-modifier" @click="modifierAtelier(atelier.id)">{{ t('commun.modifier') }}</button>
+                    <button v-if="atelier.statut === 'en_attente'" class="btn-modifier" @click="valider(atelier.id)">{{ t('commun.valider') }}</button>
+                    <button class="btn-modifier" @click="supprimer(atelier.id)">{{ t('commun.supprimer') }}</button>
                 </div>
             </div>
 

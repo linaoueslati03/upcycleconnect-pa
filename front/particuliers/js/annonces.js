@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             annonces: [],
@@ -25,7 +23,7 @@ createApp({
 
         nomCategorie(id) {
             const categorie = this.categories.find((c) => c.id === id);
-            return categorie ? categorie.code : "Non précisée";
+            return categorie ? traduireOu("categorie." + categorie.code, categorie.code) : t("commun.non_precisee");
         },
 
         async chargerAnnonces() {
@@ -40,7 +38,7 @@ createApp({
 
             const reponse = await appelerApi(`/annonces?${parametres}`);
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement des annonces";
+                this.erreur = t("annonces.erreur_chargement");
                 return;
             }
             this.erreur = "";
@@ -48,4 +46,4 @@ createApp({
             this.selection = null;
         },
     },
-}).mount("#app");
+});

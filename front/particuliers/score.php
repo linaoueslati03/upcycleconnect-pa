@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Upcycling Score";
+$titrePage = "nav.score";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,7 +16,7 @@ $titrePage = "Upcycling Score";
         <main>
 
             <div class="page-header">
-                <h1>Mon Upcycling Score</h1>
+                <h1>{{ t('score.titre') }}</h1>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
@@ -24,12 +24,12 @@ $titrePage = "Upcycling Score";
             <div class="deux-colonnes">
 
                 <section class="carte">
-                    <h2>Historique</h2>
-                    <p v-if="historique.length === 0" class="discret">Aucun point gagné pour le moment.</p>
+                    <h2>{{ t('score.historique') }}</h2>
+                    <p v-if="historique.length === 0" class="discret">{{ t('score.aucun_point') }}</p>
                     <ul class="liste-simple">
                         <li v-for="h in historique" :key="h.id">
                             <strong :class="h.delta >= 0 ? 'succes' : 'erreur'">{{ h.delta >= 0 ? "+" : "" }}{{ h.delta }}</strong>
-                            {{ h.motif }}
+                            {{ traduireOu('score.motif.' + h.motif, h.motif) }}
                             <span class="discret"> · {{ formaterDate(h.date) }}</span>
                         </li>
                     </ul>
@@ -37,15 +37,15 @@ $titrePage = "Upcycling Score";
 
                 <div>
                     <div class="carte section">
-                        <span class="discret">Score actuel</span>
-                        <p class="chiffre-cle">{{ score }} points</p>
+                        <span class="discret">{{ t('score.actuel') }}</span>
+                        <p class="chiffre-cle">{{ t('score.points', { nombre: score }) }}</p>
                     </div>
 
                     <div class="carte">
-                        <h3>Comment gagner des points ?</h3>
+                        <h3>{{ t('score.comment_gagner') }}</h3>
                         <ul class="liste-simple">
-                            <li v-for="regle in bareme" :key="regle.action">
-                                {{ regle.action }} : <strong>+{{ regle.points }}</strong>
+                            <li v-for="regle in bareme" :key="regle.cle">
+                                {{ t(regle.cle) }} : <strong>+{{ regle.points }}</strong>
                             </li>
                         </ul>
                     </div>

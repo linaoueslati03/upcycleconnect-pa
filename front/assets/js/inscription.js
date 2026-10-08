@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             compte: { role: "particulier", nom: "", prenom: "", email: "", mot_de_passe: "" },
@@ -33,7 +31,8 @@ createApp({
 
             localStorage.setItem("token", resultat.token);
             localStorage.setItem("role", resultat.role);
+            localStorage.setItem("langue", resultat.langue);
             window.location.href = espace;
         },
     },
-}).mount("#app");
+});

@@ -3,8 +3,8 @@
 $roleRequis = "administrateur";
 
 $liens = [
-    "utilisateurs.php" => ["Utilisateurs", "people-svgrepo-com.svg"],
-    "prestations.php"  => ["Prestations", "book-svgrepo-com.svg"],
+    "utilisateurs.php" => ["nav.utilisateurs", "people-svgrepo-com.svg"],
+    "prestations.php"  => ["nav.prestations", "book-svgrepo-com.svg"],
 ];
 
 $feuillesStyle = ["../assets/css/admin.css"];

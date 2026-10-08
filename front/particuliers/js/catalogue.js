@@ -1,11 +1,9 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             offres: [],
             inscriptions: [],
-            libellesOffre: LIBELLES_OFFRE,
+            typesOffre: TYPES_OFFRE,
             typeFiltre: "",
             erreur: "",
             message: "",
@@ -25,7 +23,7 @@ createApp({
             const chemin = this.typeFiltre ? `/catalogue?type=${this.typeFiltre}` : "/catalogue";
             const reponse = await appelerApi(chemin);
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement du catalogue";
+                this.erreur = t("catalogue.erreur_chargement");
                 return;
             }
             this.offres = await reponse.json();
@@ -56,9 +54,9 @@ createApp({
                 return;
             }
 
-            this.message = `Inscription confirmée : « ${offre.titre} » a été ajouté à votre planning.`;
+            this.message = t("catalogue.inscription_confirmee", { titre: offre.titre });
             this.chargerCatalogue();
             this.chargerInscriptions();
         },
     },
-}).mount("#app");
+});

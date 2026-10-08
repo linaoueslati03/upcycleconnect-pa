@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             depots: [],
@@ -30,13 +28,13 @@ createApp({
         },
 
         indexStatut(statut) {
-            return ETAPES_DEPOT.findIndex((e) => e.statut === statut);
+            return ETAPES_DEPOT.indexOf(statut);
         },
 
         async chargerDepots() {
             const reponse = await appelerApi("/moi/depots");
             if (!reponse.ok) {
-                this.erreurListe = "Erreur lors du chargement de vos dépôts";
+                this.erreurListe = t("depots.erreur_chargement");
                 return;
             }
             this.depots = await reponse.json();
@@ -60,4 +58,4 @@ createApp({
             this.chargerDepots();
         },
     },
-}).mount("#app");
+});

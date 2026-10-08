@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             score: 0,
@@ -17,7 +15,7 @@ createApp({
             appelerApi("/score/bareme"),
         ]);
         if (!reponseScore.ok || !reponseHistorique.ok || !reponseBareme.ok) {
-            this.erreur = "Erreur lors du chargement du score";
+            this.erreur = t("score.erreur_chargement");
             return;
         }
         this.score = (await reponseScore.json()).upcycling_score;
@@ -28,4 +26,4 @@ createApp({
     methods: {
         formaterDate,
     },
-}).mount("#app");
+});

@@ -1,10 +1,7 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             entrees: [],
-            libellesOffre: LIBELLES_OFFRE,
             erreur: "",
         };
     },
@@ -13,7 +10,7 @@ createApp({
         // L'API fusionne formations, ateliers et événements et les trie par date
         const reponse = await appelerApi("/moi/planning");
         if (!reponse.ok) {
-            this.erreur = "Erreur lors du chargement du planning";
+            this.erreur = t("salaries.planning.erreur_chargement");
             return;
         }
         this.entrees = await reponse.json();
@@ -22,4 +19,4 @@ createApp({
     methods: {
         formaterDateHeure,
     },
-}).mount("#app");
+});

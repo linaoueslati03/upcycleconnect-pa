@@ -75,6 +75,21 @@ docker compose exec postgres sh /db/migrer.sh
 La table `schema_migrations` liste les migrations déjà appliquées. Pour repartir d'une base vide :
 `docker compose down -v && docker compose up -d` (efface toutes les données locales).
 
+## Multilingue
+
+Les textes de l'interface sont stockés en base (table `traductions`, une ligne par clé et par
+langue) et chargés par le front au démarrage de chaque page (`GET /api/traductions?langue=en`).
+Dans le code, un texte s'écrit `{{ t('nav.mes_annonces') }}`. Pour ajouter une langue, sans
+modifier le code :
+
+```sql
+INSERT INTO langues (code, libelle) VALUES ('es', 'Español');
+INSERT INTO traductions (langue_id, cle, texte)
+SELECT id, 'nav.mes_annonces', 'Mis anuncios' FROM langues WHERE code = 'es';
+```
+
+Une clé non traduite dans une langue s'affiche en français.
+
 ## Organisation Git
 
 - `main` : version stable, modifiée uniquement par Pull Request

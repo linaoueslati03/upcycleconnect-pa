@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Mon planning";
+$titrePage = "nav.mon_planning";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,20 +16,20 @@ $titrePage = "Mon planning";
         <main>
 
             <div class="planning-header">
-                <h1>Mon planning</h1>
+                <h1>{{ t('nav.mon_planning') }}</h1>
 
                 <div class="planning-filtres">
                     <div>
-                        <label for="semaine">Semaine</label>
+                        <label for="semaine">{{ t('salaries.planning.semaine') }}</label>
                         <select id="semaine" v-model="semaineSelectionnee">
                             <option v-for="semaine in semaines" :key="semaine.numero" :value="semaine.numero">
-                                Semaine du {{ formaterJourMois(semaine.date) }}
+                                {{ t('salaries.planning.semaine_du', { date: formaterJourMois(semaine.date) }) }}
                             </option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="annee">Année</label>
+                        <label for="annee">{{ t('salaries.planning.annee') }}</label>
                         <select id="annee" v-model="anneeSelectionnee">
                             <option v-for="annee in annees" :key="annee" :value="annee">{{ annee }}</option>
                         </select>
@@ -39,7 +39,7 @@ $titrePage = "Mon planning";
 
             <div class="semaine-titre">
                 <button @click="semainePrecedente">←</button>
-                <h2>Semaine du {{ formaterJourMois(debutSemaine) }}</h2>
+                <h2>{{ t('salaries.planning.semaine_du', { date: formaterJourMois(debutSemaine) }) }}</h2>
                 <button @click="semaineSuivante">→</button>
             </div>
 
@@ -47,7 +47,7 @@ $titrePage = "Mon planning";
 
             <div class="planning">
                 <div class="jour" v-for="(jour, index) in jours" :key="jour">
-                    <h3>{{ jour }}</h3>
+                    <h3>{{ t(jour) }}</h3>
                     <div class="evenements">
                         <a v-for="e in entreesDuJour(index)" :key="e.type + e.id" class="evenement"
                             :href="(e.type === 'atelier' ? 'creer-atelier.php' : 'creer-evenement.php') + '?id=' + e.id">

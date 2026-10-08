@@ -1,6 +1,4 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             sujets: [],
@@ -26,7 +24,7 @@ createApp({
         async chargerSujets() {
             const reponse = await appelerApi("/forums/sujets");
             if (!reponse.ok) {
-                this.erreur = "Erreur lors du chargement des sujets";
+                this.erreur = t("forums.erreur_chargement");
                 return;
             }
             this.sujets = await reponse.json();
@@ -84,7 +82,7 @@ createApp({
             }
             this.signalementOuvert = null;
             this.motif = "";
-            this.message = "Merci, le message a été signalé à l'équipe de modération.";
+            this.message = t("forums.signalement_envoye");
         },
     },
-}).mount("#app");
+});

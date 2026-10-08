@@ -1,15 +1,24 @@
-const { createApp } = Vue;
-
-createApp({
+demarrerApp({
     data() {
         return {
             email: "",
             motDePasse: "",
             erreur: "",
+            langues: [],
         };
     },
 
+    // Langues proposées : celles actives en base (ajouter une langue = une ligne SQL)
+    async mounted() {
+        const reponse = await appelerApi("/langues");
+        if (reponse.ok) {
+            this.langues = await reponse.json();
+        }
+    },
+
     methods: {
+        changerLangue,
+
         async seConnecter() {
             this.erreur = "";
             oublierConnexion();
@@ -27,13 +36,14 @@ createApp({
 
             const espace = ESPACES[resultat.role];
             if (!espace) {
-                this.erreur = "Votre espace n'est pas encore disponible.";
+                this.erreur = t("connexion.espace_indisponible");
                 return;
             }
 
             localStorage.setItem("token", resultat.token);
             localStorage.setItem("role", resultat.role);
+            localStorage.setItem("langue", resultat.langue);
             window.location.href = espace;
         },
     },
-}).mount("#app");
+});

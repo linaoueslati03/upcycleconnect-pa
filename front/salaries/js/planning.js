@@ -1,5 +1,3 @@
-const { createApp } = Vue;
-
 // Numéro de semaine ISO (la semaine 1 est celle qui contient le premier jeudi de l'année).
 function numeroSemaine(date) {
     const copie = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -27,7 +25,7 @@ function dateDepuisSemaine(semaine, annee) {
 
 const aujourdHui = new Date();
 
-createApp({
+demarrerApp({
     data() {
         const annees = [];
         for (let a = aujourdHui.getFullYear() - 2; a <= aujourdHui.getFullYear() + 2; a++) {
@@ -35,7 +33,7 @@ createApp({
         }
 
         return {
-            jours: ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
+            jours: ["jour.1", "jour.2", "jour.3", "jour.4", "jour.5", "jour.6", "jour.7"], // clés de traduction
             annees: annees,
             semaineSelectionnee: numeroSemaine(aujourdHui),
             anneeSelectionnee: aujourdHui.getFullYear(),
@@ -61,7 +59,7 @@ createApp({
     async mounted() {
         const reponse = await appelerApi("/salaries/planning");
         if (!reponse.ok) {
-            this.erreur = "Erreur lors du chargement du planning";
+            this.erreur = t("salaries.planning.erreur_chargement");
             return;
         }
         this.entrees = await reponse.json();
@@ -79,7 +77,7 @@ createApp({
 
         // "2026-10-20T14:00:00Z" → "16:00" (heure locale)
         formaterHeure(date) {
-            return new Date(date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+            return new Date(date).toLocaleTimeString(langueCourante(), { hour: "2-digit", minute: "2-digit" });
         },
 
         // Date → "20/10"
@@ -107,4 +105,4 @@ createApp({
             }
         },
     },
-}).mount("#app");
+});

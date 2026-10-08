@@ -1,30 +1,23 @@
 // Fonctions communes aux pages de l'espace Salarié.
 
-const NOMS_STATUTS = {
-    brouillon: "Brouillon",
-    en_attente: "En attente",
-    publie: "Publié",
-    annule: "Annulé",
-    termine: "Terminé",
-};
-
 // Filtres affichés au-dessus des listes d'événements et d'ateliers.
+// nom = clé de traduction du libellé
 const FILTRES_STATUT = [
-    { nom: "Tous", valeur: "tous" },
-    { nom: "Brouillon", valeur: "brouillon" },
-    { nom: "En attente", valeur: "en_attente" },
-    { nom: "Publié", valeur: "publie" },
-    { nom: "Annulé", valeur: "annule" },
-    { nom: "Terminé", valeur: "termine" },
+    { nom: "commun.tous", valeur: "tous" },
+    { nom: "statut.brouillon", valeur: "brouillon" },
+    { nom: "statut.en_attente", valeur: "en_attente" },
+    { nom: "statut.publie", valeur: "publie" },
+    { nom: "statut.annule", valeur: "annule" },
+    { nom: "statut.termine", valeur: "termine" },
 ];
 
 function formaterStatut(statut) {
-    return NOMS_STATUTS[statut] || statut;
+    return t("statut." + statut);
 }
 
 // "2026-10-20T14:00:00Z" → "20 octobre 2026"
 function formaterDate(date) {
-    return new Date(date).toLocaleDateString("fr-FR", {
+    return new Date(date).toLocaleDateString(langueCourante(), {
         day: "numeric",
         month: "long",
         year: "numeric",

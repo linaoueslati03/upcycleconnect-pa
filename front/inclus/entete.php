@@ -1,14 +1,14 @@
 <?php
 // En-tête commun aux pages des espaces connectés (admin, salariés, particuliers).
 // Variables définies avant l'inclusion :
-//   $titrePage     titre de l'onglet
+//   $titrePage     clé de traduction du titre de l'onglet
 //   $roleRequis    rôle qui a accès à l'espace (sinon renvoi vers la connexion)
 //   $feuillesStyle feuilles CSS propres à l'espace (facultatif)
 //   $scriptsEspace scripts JS communs à l'espace (facultatif)
 ?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= htmlspecialchars($titrePage) ?> — UpcycleConnect</title>
+<title data-titre="<?= htmlspecialchars($titrePage) ?>">UpcycleConnect</title>
 <link rel="stylesheet" href="../assets/css/style.css">
 <?php foreach ($feuillesStyle ?? [] as $feuille): ?>
 <link rel="stylesheet" href="<?= $feuille ?>">

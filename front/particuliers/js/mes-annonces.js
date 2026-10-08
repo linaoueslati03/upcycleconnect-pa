@@ -1,16 +1,14 @@
-const { createApp } = Vue;
-
 const ANNONCE_VIDE = {
     id: null, titre: "", description: "", type: "don", prix: null,
     categorie_id: null, localisation: "", statut: "en_ligne",
 };
 
-createApp({
+demarrerApp({
     data() {
         return {
             annonces: [],
             categories: [],
-            libellesStatut: LIBELLES_ANNONCE,
+            statutsAnnonce: STATUTS_ANNONCE,
             formulaire: { ...ANNONCE_VIDE },
             erreur: "",
             erreurListe: "",
@@ -28,14 +26,10 @@ createApp({
     methods: {
         formaterPrix,
 
-        libelleStatut(statut) {
-            return LIBELLES_ANNONCE[statut] || statut;
-        },
-
         async chargerAnnonces() {
             const reponse = await appelerApi("/annonces?mine=true");
             if (!reponse.ok) {
-                this.erreurListe = "Erreur lors du chargement de vos annonces";
+                this.erreurListe = t("annonces.erreur_chargement_miennes");
                 return;
             }
             this.annonces = await reponse.json();
@@ -91,7 +85,7 @@ createApp({
         },
 
         async supprimer(id) {
-            if (!confirm("Supprimer cette annonce ?")) {
+            if (!confirm(t("annonces.confirmer_suppression"))) {
                 return;
             }
             const reponse = await appelerApi(`/annonces/${id}`, { method: "DELETE" });
@@ -102,4 +96,4 @@ createApp({
             this.chargerAnnonces();
         },
     },
-}).mount("#app");
+});

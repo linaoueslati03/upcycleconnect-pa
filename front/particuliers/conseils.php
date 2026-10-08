@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "Conseils";
+$titrePage = "nav.conseils";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -16,40 +16,40 @@ $titrePage = "Conseils";
         <main>
 
             <div class="page-header">
-                <h1>Conseils</h1>
+                <h1>{{ t('nav.conseils') }}</h1>
             </div>
 
             <div class="barre-filtres">
                 <div class="form-group">
-                    <label for="recherche">Rechercher</label>
-                    <input id="recherche" type="search" v-model="recherche" placeholder="Mot-clé">
+                    <label for="recherche">{{ t('commun.rechercher') }}</label>
+                    <input id="recherche" type="search" v-model="recherche" :placeholder="t('conseils.mot_cle')">
                 </div>
                 <div class="form-group">
-                    <label for="categorie">Catégorie</label>
+                    <label for="categorie">{{ t('commun.categorie') }}</label>
                     <select id="categorie" v-model="categorie">
-                        <option value="">Toutes</option>
-                        <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+                        <option value="">{{ t('commun.toutes') }}</option>
+                        <option v-for="c in categories" :key="c" :value="c">{{ traduireOu('categorie_article.' + c, c) }}</option>
                     </select>
                 </div>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
-            <p v-if="!erreur && conseilsFiltres.length === 0" class="discret">Aucun conseil trouvé.</p>
+            <p v-if="!erreur && conseilsFiltres.length === 0" class="discret">{{ t('conseils.aucun') }}</p>
 
             <div class="deux-colonnes">
                 <div class="grille">
                     <div v-for="c in conseilsFiltres" :key="c.id" class="carte carte-cliquable"
                         :class="{ 'carte-selectionnee': selection && selection.id === c.id }" @click="selection = c">
-                        <span v-if="c.categorie" class="badge">{{ c.categorie }}</span>
+                        <span v-if="c.categorie" class="badge">{{ traduireOu('categorie_article.' + c.categorie, c.categorie) }}</span>
                         <h3>{{ c.titre }}</h3>
                         <p class="discret">{{ formaterDate(c.created_at) }}</p>
                     </div>
                 </div>
 
                 <article v-if="selection" class="carte">
-                    <span v-if="selection.categorie" class="badge">{{ selection.categorie }}</span>
+                    <span v-if="selection.categorie" class="badge">{{ traduireOu('categorie_article.' + selection.categorie, selection.categorie) }}</span>
                     <h2>{{ selection.titre }}</h2>
-                    <p class="discret">Publié le {{ formaterDate(selection.created_at) }}</p>
+                    <p class="discret">{{ t('conseils.publie_le', { date: formaterDate(selection.created_at) }) }}</p>
                     <p>{{ selection.contenu }}</p>
                 </article>
             </div>
