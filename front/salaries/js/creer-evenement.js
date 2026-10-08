@@ -66,6 +66,8 @@ demarrerApp({
                 return;
             }
 
+            // Le formulaire passe en modification : un nouveau clic ne recrée pas l'élément
+            this.id = (await reponse.json()).id;
             this.confirmation = true;
         },
     },

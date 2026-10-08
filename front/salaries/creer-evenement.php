@@ -48,11 +48,11 @@ $titrePage = "salaries.evenements.creer";
                     <label for="site">{{ t('commun.site') }}</label>
                     <select id="site" v-model="formulaire.site">
                         <option value="">{{ t('salaries.evenements.choisir_site') }}</option>
-                        <option value="paris-10">Paris 10e</option>
-                        <option value="paris-11">Paris 11e</option>
-                        <option value="paris-13">Paris 13e</option>
-                        <option value="montreuil">Montreuil</option>
-                        <option value="suisse">{{ t('site.suisse') }}</option>
+                        <option value="Paris 10e">Paris 10e</option>
+                        <option value="Paris 11e">Paris 11e</option>
+                        <option value="Paris 13e">Paris 13e</option>
+                        <option value="Montreuil">Montreuil</option>
+                        <option value="Suisse">{{ t('site.suisse') }}</option>
                     </select>
                 </div>
 

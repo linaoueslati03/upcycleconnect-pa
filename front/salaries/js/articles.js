@@ -47,6 +47,7 @@ demarrerApp({
 
         // statut = "brouillon" ou "publie" selon le bouton cliqué
         async enregistrer(statut) {
+            this.erreur = "";
             const id = this.formulaire.id;
             const reponse = await appelerApi(id ? `/conseils/${id}` : "/conseils", {
                 method: id ? "PUT" : "POST",

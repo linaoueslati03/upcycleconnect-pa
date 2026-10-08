@@ -45,6 +45,7 @@ demarrerApp({
         modifier(annonce) {
             this.formulaire = { ...annonce };
             this.erreur = "";
+            this.message = "";
         },
 
         // L'API attend l'annonce complète (PUT remplace toutes les valeurs)

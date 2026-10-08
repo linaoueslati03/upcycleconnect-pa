@@ -23,10 +23,16 @@ demarrerApp({
             this.erreur = "";
             oublierConnexion();
 
-            const reponse = await appelerApi("/login", {
-                method: "POST",
-                body: JSON.stringify({ email: this.email, mot_de_passe: this.motDePasse }),
-            });
+            let reponse;
+            try {
+                reponse = await appelerApi("/login", {
+                    method: "POST",
+                    body: JSON.stringify({ email: this.email, mot_de_passe: this.motDePasse }),
+                });
+            } catch (erreur) {
+                this.erreur = t("commun.serveur_injoignable");
+                return;
+            }
             const resultat = await reponse.json();
 
             if (!reponse.ok) {
@@ -42,7 +48,10 @@ demarrerApp({
 
             localStorage.setItem("token", resultat.token);
             localStorage.setItem("role", resultat.role);
-            localStorage.setItem("langue", resultat.langue);
+            // Langue enregistrée dans le compte ; sinon on garde celle choisie à l'écran
+            if (resultat.langue) {
+                localStorage.setItem("langue", resultat.langue);
+            }
             window.location.href = espace;
         },
     },

@@ -23,6 +23,19 @@ function dateDepuisSemaine(semaine, annee) {
     return debut;
 }
 
+// Nombre de semaines ISO de l'année (52 ou 53) : le 28 décembre est toujours dans la dernière.
+function nombreSemaines(annee) {
+    return numeroSemaine(new Date(annee, 11, 28));
+}
+
+// Année ISO d'une date : celle du jeudi de sa semaine (le 1er janvier peut appartenir à la
+// dernière semaine de l'année précédente).
+function anneeISO(date) {
+    const jeudi = lundiDeLaSemaine(date);
+    jeudi.setDate(jeudi.getDate() + 3);
+    return jeudi.getFullYear();
+}
+
 const aujourdHui = new Date();
 
 demarrerApp({
@@ -36,7 +49,7 @@ demarrerApp({
             jours: ["jour.1", "jour.2", "jour.3", "jour.4", "jour.5", "jour.6", "jour.7"], // clés de traduction
             annees: annees,
             semaineSelectionnee: numeroSemaine(aujourdHui),
-            anneeSelectionnee: aujourdHui.getFullYear(),
+            anneeSelectionnee: anneeISO(aujourdHui),
             entrees: [], // événements et ateliers du salarié connecté
             erreur: "",
         };
@@ -45,7 +58,7 @@ demarrerApp({
     computed: {
         semaines() {
             const resultat = [];
-            for (let i = 1; i <= 53; i++) {
+            for (let i = 1; i <= nombreSemaines(this.anneeSelectionnee); i++) {
                 resultat.push({ numero: i, date: dateDepuisSemaine(i, this.anneeSelectionnee) });
             }
             return resultat;
@@ -92,12 +105,12 @@ demarrerApp({
                 this.semaineSelectionnee--;
             } else {
                 this.anneeSelectionnee--;
-                this.semaineSelectionnee = 52;
+                this.semaineSelectionnee = nombreSemaines(this.anneeSelectionnee);
             }
         },
 
         semaineSuivante() {
-            if (this.semaineSelectionnee < 53) {
+            if (this.semaineSelectionnee < nombreSemaines(this.anneeSelectionnee)) {
                 this.semaineSelectionnee++;
             } else {
                 this.anneeSelectionnee++;
