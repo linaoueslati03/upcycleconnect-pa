@@ -15,7 +15,7 @@ $titrePage = "Créer un atelier";
     <div id="app">
         <main id="main-content">
 
-            <h1>Créer un atelier</h1>
+            <h1>{{ id ? "Modifier" : "Créer" }} un atelier</h1>
 
             <form @submit.prevent>
 

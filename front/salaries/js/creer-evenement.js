@@ -3,6 +3,7 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
+            id: new URLSearchParams(window.location.search).get("id"),
             formulaire: {
                 titre: "",
                 description: "",
@@ -13,6 +14,27 @@ createApp({
             },
             confirmation: false,
             erreur: "",
+        };
+    },
+
+    // En modification, on pré-remplit le formulaire avec les valeurs actuelles
+    async mounted() {
+        if (!this.id) {
+            return;
+        }
+        const reponse = await appelerApi(`/evenements/${this.id}`);
+        if (!reponse.ok) {
+            this.erreur = "Événement introuvable";
+            return;
+        }
+        const evenement = await reponse.json();
+        this.formulaire = {
+            titre: evenement.titre || "",
+            description: evenement.description || "",
+            lieu: evenement.lieu || "",
+            site: evenement.site || "",
+            date_debut: versChampDate(evenement.date_debut),
+            date_fin: versChampDate(evenement.date_fin),
         };
     },
 
@@ -27,8 +49,8 @@ createApp({
                 return;
             }
 
-            const reponse = await appelerApi("/evenements", {
-                method: "POST",
+            const reponse = await appelerApi(this.id ? `/evenements/${this.id}` : "/evenements", {
+                method: this.id ? "PUT" : "POST",
                 body: JSON.stringify({
                     titre: this.formulaire.titre,
                     description: this.formulaire.description,

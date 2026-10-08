@@ -37,8 +37,29 @@ createApp({
         },
 
         modifierEvenement(id) {
-            // Pas encore de page de modification : à faire (la route PUT existe déjà).
-            console.log("Modifier l'événement :", id);
+            window.location.href = `creer-evenement.php?id=${id}`;
+        },
+
+        // L'API vérifie que le salarié connecté est responsable (sinon 403, affiché ici)
+        async valider(id) {
+            const reponse = await appelerApi(`/evenements/${id}/valider`, { method: "POST" });
+            if (!reponse.ok) {
+                this.erreur = (await reponse.json()).erreur;
+                return;
+            }
+            this.chargerEvenements();
+        },
+
+        async supprimer(id) {
+            if (!confirm("Supprimer définitivement ?")) {
+                return;
+            }
+            const reponse = await appelerApi(`/evenements/${id}`, { method: "DELETE" });
+            if (!reponse.ok) {
+                this.erreur = (await reponse.json()).erreur;
+                return;
+            }
+            this.chargerEvenements();
         },
     },
 }).mount("#app");

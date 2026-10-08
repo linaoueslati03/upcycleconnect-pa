@@ -1,6 +1,6 @@
 const { createApp } = Vue;
 
-const FORMULAIRE_VIDE = { id: null, titre: "", categorie: "", tarif: 0, statut: "Brouillon" };
+const FORMULAIRE_VIDE = { id: null, titre: "", categorie: "", tarif: 0, statut: "brouillon" };
 
 createApp({
     data() {

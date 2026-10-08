@@ -15,7 +15,7 @@ $titrePage = "Créer un événement";
     <div id="app">
         <main id="main-content">
 
-            <h1>Créer un événement</h1>
+            <h1>{{ id ? "Modifier" : "Créer" }} un événement</h1>
 
             <form @submit.prevent>
 

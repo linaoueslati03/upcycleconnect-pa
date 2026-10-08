@@ -1,23 +1,71 @@
 const { createApp } = Vue;
 
+const ARTICLE_VIDE = { id: null, titre: "", categorie: "", contenu: "" };
+
 createApp({
     data() {
         return {
+            articles: [],
             formulaireVisible: false,
-            titre: "",
-            categorie: "",
-            texte: "",
+            formulaire: { ...ARTICLE_VIDE },
+            erreur: "",
         };
     },
 
+    mounted() {
+        this.chargerArticles();
+    },
+
     methods: {
-        publier() {
-            // Pas encore de route POST /api/conseils côté API : à brancher quand elle existera.
-            console.log({
-                titre: this.titre,
-                categorie: this.categorie,
-                texte: this.texte,
+        formaterDate,
+        formaterStatut,
+
+        // Articles du salarié connecté, brouillons compris
+        async chargerArticles() {
+            const reponse = await appelerApi("/salaries/conseils");
+            if (!reponse.ok) {
+                this.erreur = "Erreur lors du chargement de vos articles";
+                return;
+            }
+            this.articles = await reponse.json();
+        },
+
+        nouvelArticle() {
+            this.formulaire = { ...ARTICLE_VIDE };
+            this.formulaireVisible = true;
+            this.erreur = "";
+        },
+
+        modifier(article) {
+            this.formulaire = {
+                id: article.id,
+                titre: article.titre,
+                categorie: article.categorie || "",
+                contenu: article.contenu,
+            };
+            this.formulaireVisible = true;
+            this.erreur = "";
+        },
+
+        // statut = "brouillon" ou "publie" selon le bouton cliqué
+        async enregistrer(statut) {
+            const id = this.formulaire.id;
+            const reponse = await appelerApi(id ? `/conseils/${id}` : "/conseils", {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify({
+                    titre: this.formulaire.titre,
+                    contenu: this.formulaire.contenu,
+                    categorie: this.formulaire.categorie || null,
+                    statut: statut,
+                }),
             });
+            if (!reponse.ok) {
+                this.erreur = (await reponse.json()).erreur;
+                return;
+            }
+
+            this.formulaireVisible = false;
+            this.chargerArticles();
         },
     },
 }).mount("#app");

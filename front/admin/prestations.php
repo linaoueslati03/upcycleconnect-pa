@@ -40,7 +40,7 @@ $titrePage = "Prestations";
                                 <td><strong>{{ p.titre }}</strong></td>
                                 <td>{{ p.categorie }}</td>
                                 <td>{{ formaterTarif(p.tarif) }}</td>
-                                <td>{{ p.statut }}</td>
+                                <td>{{ p.statut === "publie" ? "Publiée" : "Brouillon" }}</td>
                                 <td>
                                     <button class="lien-action" @click="modifier(p)">Modifier</button>
                                     <a class="lien-action" :href="lienPDF(p.id)">PDF</a>
@@ -73,8 +73,8 @@ $titrePage = "Prestations";
                         <div class="form-group">
                             <label for="statut">Statut</label>
                             <select id="statut" v-model="formulaire.statut">
-                                <option value="Brouillon">Brouillon</option>
-                                <option value="Publiée">Publiée</option>
+                                <option value="brouillon">Brouillon</option>
+                                <option value="publie">Publiée</option>
                             </select>
                         </div>
 

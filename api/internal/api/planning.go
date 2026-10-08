@@ -70,3 +70,52 @@ func (s *Serveur) gererMonPlanning(w http.ResponseWriter, r *http.Request) {
 
 	envoyerJSON(w, http.StatusOK, planning)
 }
+
+// EntreePlanningSalarie est un événement ou un atelier dans le planning d'un salarié.
+type EntreePlanningSalarie struct {
+	Type      string     `json:"type"`
+	ID        int        `json:"id"`
+	Titre     string     `json:"titre"`
+	DateDebut time.Time  `json:"date_debut"`
+	DateFin   *time.Time `json:"date_fin"`
+	Lieu      *string    `json:"lieu"`
+	Statut    string     `json:"statut"`
+}
+
+// gererPlanningSalarie renvoie les événements et ateliers du salarié connecté : ceux qu'il
+// a créés, dont il est responsable, ou auxquels il participe (tables de liaison).
+func (s *Serveur) gererPlanningSalarie(w http.ResponseWriter, r *http.Request) {
+	salarieID, _, ok := s.exigerSalarie(w, r)
+	if !ok {
+		return
+	}
+
+	lignes, err := s.db.Query(`
+		SELECT 'evenement', e.id, e.titre, e.date_debut, e.date_fin, e.lieu, e.statut
+		FROM evenements e
+		WHERE e.createur_id = $1
+		   OR e.id IN (SELECT evenement_id FROM evenement_salarie WHERE salarie_id = $1)
+		UNION ALL
+		SELECT 'atelier', a.id, a.titre, a.date_debut, a.date_fin, a.lieu, a.statut
+		FROM ateliers a
+		WHERE a.createur_id = $1 OR a.responsable_id = $1
+		   OR a.id IN (SELECT atelier_id FROM atelier_intervenant WHERE salarie_id = $1)
+		ORDER BY 4`, salarieID)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer lignes.Close()
+
+	planning := make([]EntreePlanningSalarie, 0)
+	for lignes.Next() {
+		var e EntreePlanningSalarie
+		if err := lignes.Scan(&e.Type, &e.ID, &e.Titre, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Statut); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		planning = append(planning, e)
+	}
+
+	envoyerJSON(w, http.StatusOK, planning)
+}
