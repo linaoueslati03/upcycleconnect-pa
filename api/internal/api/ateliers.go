@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -60,8 +60,8 @@ func scannerAtelier(ligne interface{ Scan(...any) error }, a *Atelier) error {
 	return nil
 }
 
-func gererListeAteliers(w http.ResponseWriter, r *http.Request) {
-	lignes, err := db.Query(`SELECT ` + colonnesAtelier + ` FROM ateliers ORDER BY date_debut ASC`)
+func (s *Serveur) gererListeAteliers(w http.ResponseWriter, r *http.Request) {
+	lignes, err := s.db.Query(`SELECT ` + colonnesAtelier + ` FROM ateliers ORDER BY date_debut ASC`)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -81,7 +81,7 @@ func gererListeAteliers(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, ateliers)
 }
 
-func gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
 	var entree AtelierEntree
 	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
@@ -103,7 +103,7 @@ func gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var a Atelier
-	ligne := db.QueryRow(`
+	ligne := s.db.QueryRow(`
 		INSERT INTO ateliers (titre, description, date_debut, date_fin, lieu, statut, createur_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING `+colonnesAtelier,

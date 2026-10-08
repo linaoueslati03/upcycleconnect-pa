@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -17,8 +17,8 @@ type EntreePlanning struct {
 	Lieu          *string    `json:"lieu"`
 }
 
-func gererMonPlanning(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererMonPlanning(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -38,7 +38,7 @@ func gererMonPlanning(w http.ResponseWriter, r *http.Request) {
 			WHERE i.utilisateur_id = $1
 		ORDER BY date_debut ASC`
 
-	lignes, err := db.Query(requete, utilisateurID)
+	lignes, err := s.db.Query(requete, utilisateurID)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return

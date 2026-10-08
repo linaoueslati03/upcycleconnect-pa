@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -20,7 +20,7 @@ type OffreCatalogue struct {
 	NbPlaces    *int       `json:"nb_places"`
 }
 
-func gererCatalogue(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererCatalogue(w http.ResponseWriter, r *http.Request) {
 	typeFiltre := r.URL.Query().Get("type")
 
 	requete := `
@@ -34,7 +34,7 @@ func gererCatalogue(w http.ResponseWriter, r *http.Request) {
 			FROM evenements WHERE statut = 'publie'
 		ORDER BY date_debut ASC`
 
-	lignes, err := db.Query(requete)
+	lignes, err := s.db.Query(requete)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -99,8 +99,8 @@ var tableParTypeOffre = map[string]string{
 	"evenement": "evenements",
 }
 
-func gererCreationInscription(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -118,7 +118,7 @@ func gererCreationInscription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tx, err := db.Begin()
+	tx, err := s.db.Begin()
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return

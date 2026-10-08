@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -33,8 +33,8 @@ type UtilisateurEntree struct {
 	LanguePrefereeID *int   `json:"langue_preferee_id"`
 }
 
-func gererListeUtilisateurs(w http.ResponseWriter, r *http.Request) {
-	lignes, err := db.Query(`
+func (s *Serveur) gererListeUtilisateurs(w http.ResponseWriter, r *http.Request) {
+	lignes, err := s.db.Query(`
 		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation
 		FROM utilisateurs ORDER BY id`)
 	if err != nil {
@@ -61,7 +61,7 @@ func gererListeUtilisateurs(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, utilisateurs)
 }
 
-func gererDetailUtilisateur(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererDetailUtilisateur(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
@@ -70,7 +70,7 @@ func gererDetailUtilisateur(w http.ResponseWriter, r *http.Request) {
 
 	var u Utilisateur
 	var langueID sql.NullInt64
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation
 		FROM utilisateurs WHERE id = $1`, id,
 	).Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore, &u.DateCreation)
@@ -91,7 +91,7 @@ func gererDetailUtilisateur(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, u)
 }
 
-func gererModificationUtilisateur(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererModificationUtilisateur(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
@@ -118,7 +118,7 @@ func gererModificationUtilisateur(w http.ResponseWriter, r *http.Request) {
 		LanguePrefereeID: entree.LanguePrefereeID,
 	}
 
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		UPDATE utilisateurs SET role_id = $1, nom = $2, prenom = $3, email = $4, langue_preferee_id = $5
 		WHERE id = $6
 		RETURNING statut, upcycling_score, date_creation`,
@@ -137,14 +137,14 @@ func gererModificationUtilisateur(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, u)
 }
 
-func gererSuppressionUtilisateur(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererSuppressionUtilisateur(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
 		return
 	}
 
-	resultat, err := db.Exec("DELETE FROM utilisateurs WHERE id = $1", id)
+	resultat, err := s.db.Exec("DELETE FROM utilisateurs WHERE id = $1", id)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -190,7 +190,7 @@ func gererErreurPostgres(w http.ResponseWriter, err error) {
 	envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 }
 
-func gererCreationUtilisateur(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererCreationUtilisateur(w http.ResponseWriter, r *http.Request) {
 	var entree UtilisateurEntree
 	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
@@ -216,7 +216,7 @@ func gererCreationUtilisateur(w http.ResponseWriter, r *http.Request) {
 		LanguePrefereeID: entree.LanguePrefereeID,
 	}
 
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		INSERT INTO utilisateurs (role_id, nom, prenom, email, mot_de_passe_hash, langue_preferee_id)
 		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id, statut, upcycling_score, date_creation`,

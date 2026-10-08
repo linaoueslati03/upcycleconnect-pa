@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -11,16 +11,16 @@ import (
 )
 
 type Annonce struct {
-	ID           int       `json:"id"`
-	UtilisateurID int      `json:"utilisateur_id"`
-	Titre        string    `json:"titre"`
-	Description  string    `json:"description"`
-	Type         string    `json:"type"`
-	Prix         *float64  `json:"prix"`
-	CategorieID  *int      `json:"categorie_id"`
-	Localisation string    `json:"localisation"`
-	Statut       string    `json:"statut"`
-	DateCreation time.Time `json:"date_creation"`
+	ID            int       `json:"id"`
+	UtilisateurID int       `json:"utilisateur_id"`
+	Titre         string    `json:"titre"`
+	Description   string    `json:"description"`
+	Type          string    `json:"type"`
+	Prix          *float64  `json:"prix"`
+	CategorieID   *int      `json:"categorie_id"`
+	Localisation  string    `json:"localisation"`
+	Statut        string    `json:"statut"`
+	DateCreation  time.Time `json:"date_creation"`
 }
 
 type AnnonceEntree struct {
@@ -50,14 +50,14 @@ func scannerAnnonce(lignes interface{ Scan(...any) error }, a *Annonce) error {
 	return nil
 }
 
-func gererListeAnnonces(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererListeAnnonces(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("mine") == "true" {
-		utilisateurID, err := utilisateurConnecte(r)
+		utilisateurID, err := s.utilisateurConnecte(r)
 		if err != nil {
 			envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 			return
 		}
-		listerAnnonces(w, "utilisateur_id = $1", utilisateurID)
+		s.listerAnnonces(w, "utilisateur_id = $1", utilisateurID)
 		return
 	}
 
@@ -71,14 +71,14 @@ func gererListeAnnonces(w http.ResponseWriter, r *http.Request) {
 		args = append(args, "%"+localisation+"%")
 		conditions = append(conditions, "localisation ILIKE $"+strconv.Itoa(len(args)))
 	}
-	listerAnnonces(w, strings.Join(conditions, " AND "), args...)
+	s.listerAnnonces(w, strings.Join(conditions, " AND "), args...)
 }
 
-func listerAnnonces(w http.ResponseWriter, whereClause string, args ...any) {
+func (s *Serveur) listerAnnonces(w http.ResponseWriter, whereClause string, args ...any) {
 	requete := `SELECT id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation
 		FROM annonces WHERE ` + whereClause + ` ORDER BY date_creation DESC`
 
-	lignes, err := db.Query(requete, args...)
+	lignes, err := s.db.Query(requete, args...)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -98,7 +98,7 @@ func listerAnnonces(w http.ResponseWriter, whereClause string, args ...any) {
 	envoyerJSON(w, http.StatusOK, annonces)
 }
 
-func gererDetailAnnonce(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererDetailAnnonce(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
@@ -106,7 +106,7 @@ func gererDetailAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var a Annonce
-	ligne := db.QueryRow(`SELECT id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation
+	ligne := s.db.QueryRow(`SELECT id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation
 		FROM annonces WHERE id = $1`, id)
 	if err := scannerAnnonce(ligne, &a); errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "annonce introuvable")
@@ -132,8 +132,8 @@ func validerAnnonce(entree AnnonceEntree) string {
 	return ""
 }
 
-func gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -150,7 +150,7 @@ func gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var a Annonce
-	ligne := db.QueryRow(`
+	ligne := s.db.QueryRow(`
 		INSERT INTO annonces (utilisateur_id, titre, description, type, prix, categorie_id, localisation)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation`,
@@ -164,8 +164,8 @@ func gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusCreated, a)
 }
 
-func gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -179,7 +179,7 @@ func gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
 
 	var proprietaireID int
 	var statutAvant string
-	err = db.QueryRow("SELECT utilisateur_id, statut FROM annonces WHERE id = $1", id).Scan(&proprietaireID, &statutAvant)
+	err = s.db.QueryRow("SELECT utilisateur_id, statut FROM annonces WHERE id = $1", id).Scan(&proprietaireID, &statutAvant)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "annonce introuvable")
 		return
@@ -207,7 +207,7 @@ func gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var a Annonce
-	ligne := db.QueryRow(`
+	ligne := s.db.QueryRow(`
 		UPDATE annonces SET titre=$1, description=$2, type=$3, prix=$4, categorie_id=$5, localisation=$6, statut=$7
 		WHERE id = $8
 		RETURNING id, utilisateur_id, titre, description, type, prix, categorie_id, localisation, statut, date_creation`,
@@ -219,14 +219,14 @@ func gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if entree.Statut == "cedee" && statutAvant != "cedee" {
-		ajouterPointsScore(db, a.UtilisateurID, pointsAnnonceCedee, "Annonce cédée")
+		ajouterPointsScore(s.db, a.UtilisateurID, pointsAnnonceCedee, "Annonce cédée")
 	}
 
 	envoyerJSON(w, http.StatusOK, a)
 }
 
-func gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -239,7 +239,7 @@ func gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var proprietaireID int
-	err = db.QueryRow("SELECT utilisateur_id FROM annonces WHERE id = $1", id).Scan(&proprietaireID)
+	err = s.db.QueryRow("SELECT utilisateur_id FROM annonces WHERE id = $1", id).Scan(&proprietaireID)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "annonce introuvable")
 		return
@@ -253,6 +253,6 @@ func gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.Exec("DELETE FROM annonces WHERE id = $1", id)
+	s.db.Exec("DELETE FROM annonces WHERE id = $1", id)
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "annonce supprimée"})
 }

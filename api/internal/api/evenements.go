@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"encoding/json"
@@ -20,8 +20,8 @@ type Evenement struct {
 	ValideParID *int       `json:"valide_par_id,omitempty"`
 }
 
-func gererListeEvenements(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query(`
+func (s *Serveur) gererListeEvenements(w http.ResponseWriter, r *http.Request) {
+	rows, err := s.db.Query(`
 		SELECT id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id
 		FROM evenements
 		ORDER BY date_debut ASC
@@ -45,7 +45,7 @@ func gererListeEvenements(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, evenements)
 }
 
-func gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
@@ -53,7 +53,7 @@ func gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var e Evenement
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		SELECT id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id
 		FROM evenements WHERE id=$1
 	`, id).Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
@@ -65,7 +65,7 @@ func gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, e)
 }
 
-func gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
 	var e Evenement
 	if err := json.NewDecoder(r.Body).Decode(&e); err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête invalide")
@@ -79,7 +79,7 @@ func gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
 		e.Statut = "brouillon"
 	}
 
-	err := db.QueryRow(`
+	err := s.db.QueryRow(`
 		INSERT INTO evenements (titre, description, date_debut, date_fin, lieu, site, statut, createur_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id
@@ -92,7 +92,7 @@ func gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusCreated, e)
 }
 
-func gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
@@ -105,7 +105,7 @@ func gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.Exec(`
+	_, err = s.db.Exec(`
 		UPDATE evenements
 		SET titre=$1, description=$2, date_debut=$3, date_fin=$4, lieu=$5, site=$6
 		WHERE id=$7
@@ -118,14 +118,14 @@ func gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, map[string]string{"statut": "modifié"})
 }
 
-func gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
 		return
 	}
 
-	_, err = db.Exec("DELETE FROM evenements WHERE id=$1", id)
+	_, err = s.db.Exec("DELETE FROM evenements WHERE id=$1", id)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, err.Error())
 		return
@@ -137,7 +137,7 @@ func gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
 // Validation d'un événement par un responsable : passe le statut à "publie"
 // et enregistre quel salarié a validé (règle de gestion : seul un responsable
 // peut valider, ce contrôle sera fait via le middleware d'authentification)
-func gererValidationEvenement(w http.ResponseWriter, r *http.Request) {
+func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Request) {
 	id, err := idDepuisChemin(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusBadRequest, "id invalide")
@@ -152,7 +152,7 @@ func gererValidationEvenement(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = db.Exec(
+	_, err = s.db.Exec(
 		"UPDATE evenements SET statut='publie', valide_par_id=$1 WHERE id=$2",
 		corps.ValidateurID, id,
 	)

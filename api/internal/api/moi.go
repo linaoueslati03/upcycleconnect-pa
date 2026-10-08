@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"database/sql"
@@ -14,8 +14,8 @@ type MonCompteEntree struct {
 	LanguePrefereeID *int   `json:"langue_preferee_id"`
 }
 
-func gererMonCompte(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererMonCompte(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -23,7 +23,7 @@ func gererMonCompte(w http.ResponseWriter, r *http.Request) {
 
 	var u Utilisateur
 	var langueID sql.NullInt64
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation
 		FROM utilisateurs WHERE id = $1`, utilisateurID,
 	).Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore, &u.DateCreation)
@@ -40,8 +40,8 @@ func gererMonCompte(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, u)
 }
 
-func gererModificationMonCompte(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererModificationMonCompte(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
@@ -63,7 +63,7 @@ func gererModificationMonCompte(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var u Utilisateur
-	err = db.QueryRow(`
+	err = s.db.QueryRow(`
 		UPDATE utilisateurs SET nom = $1, prenom = $2, email = $3, langue_preferee_id = $4
 		WHERE id = $5
 		RETURNING id, role_id, statut, upcycling_score, date_creation`,
@@ -83,14 +83,14 @@ func gererModificationMonCompte(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, u)
 }
 
-func gererTutorielVu(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := utilisateurConnecte(r)
+func (s *Serveur) gererTutorielVu(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
 
-	_, err = db.Exec(
+	_, err = s.db.Exec(
 		"UPDATE utilisateurs SET tutoriel_vu = TRUE, date_tutoriel_vu = now() WHERE id = $1",
 		utilisateurID,
 	)
