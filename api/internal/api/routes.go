@@ -40,6 +40,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/categories", s.gererListeCategories)
 	mux.HandleFunc("GET /api/conteneurs", s.gererListeConteneurs)
 	mux.HandleFunc("GET /api/langues", s.gererListeLangues)
+	mux.HandleFunc("GET /api/traductions", s.gererTraductions)
 
 	mux.HandleFunc("GET /api/conseils", s.gererListeConseils)
 	mux.HandleFunc("GET /api/conseils/{id}", s.gererDetailConseil)

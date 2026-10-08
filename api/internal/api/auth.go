@@ -44,13 +44,15 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var utilisateurID int
-	var hash, role string
+	var hash, role, langue string
 	err := s.db.QueryRow(`
-		SELECT u.id, u.mot_de_passe_hash, r.code
-		FROM utilisateurs u JOIN roles r ON r.id = u.role_id
+		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, 'fr')
+		FROM utilisateurs u
+		JOIN roles r ON r.id = u.role_id
+		LEFT JOIN langues l ON l.id = u.langue_preferee_id
 		WHERE u.email = $1`,
 		creds.Email,
-	).Scan(&utilisateurID, &hash, &role)
+	).Scan(&utilisateurID, &hash, &role, &langue)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusUnauthorized, "email ou mot de passe incorrect")
@@ -83,7 +85,7 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 
 	// Le rôle sert seulement au front à choisir l'espace à afficher : chaque route
 	// protégée revérifie le rôle côté API, le front ne décide jamais des droits.
-	envoyerJSON(w, http.StatusOK, map[string]string{"token": token, "role": role})
+	envoyerJSON(w, http.StatusOK, map[string]string{"token": token, "role": role, "langue": langue})
 }
 
 func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
