@@ -11,10 +11,15 @@ import (
 
 const delaiAntiSpamForum = 10 * time.Second
 
+// nomAuteur affiche l'auteur sous la forme « Paul D. » : on ne publie pas le nom complet
+// ni l'email des membres sur le forum.
+const nomAuteur = `u.prenom || ' ' || LEFT(u.nom, 1) || '.'`
+
 type SujetForum struct {
 	ID                  int       `json:"id"`
 	Titre               string    `json:"titre"`
 	AuteurUtilisateurID int       `json:"auteur_utilisateur_id"`
+	Auteur              string    `json:"auteur,omitempty"`
 	Statut              string    `json:"statut"`
 	CreatedAt           time.Time `json:"created_at"`
 }
@@ -23,6 +28,7 @@ type MessageForum struct {
 	ID                  int       `json:"id"`
 	SujetID             int       `json:"sujet_id"`
 	AuteurUtilisateurID int       `json:"auteur_utilisateur_id"`
+	Auteur              string    `json:"auteur,omitempty"`
 	Contenu             string    `json:"contenu"`
 	Statut              string    `json:"statut"`
 	CreatedAt           time.Time `json:"created_at"`
@@ -58,8 +64,9 @@ func (s *Serveur) verifierAntiSpam(utilisateurID int) bool {
 
 func (s *Serveur) gererListeSujetsForum(w http.ResponseWriter, r *http.Request) {
 	lignes, err := s.db.Query(`
-		SELECT id, titre, auteur_utilisateur_id, statut, created_at
-		FROM forum_sujets WHERE statut != 'rejete' ORDER BY created_at DESC`)
+		SELECT f.id, f.titre, f.auteur_utilisateur_id, ` + nomAuteur + `, f.statut, f.created_at
+		FROM forum_sujets f JOIN utilisateurs u ON u.id = f.auteur_utilisateur_id
+		WHERE f.statut != 'rejete' ORDER BY f.created_at DESC`)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -69,7 +76,7 @@ func (s *Serveur) gererListeSujetsForum(w http.ResponseWriter, r *http.Request) 
 	sujets := make([]SujetForum, 0)
 	for lignes.Next() {
 		var sujet SujetForum
-		if err := lignes.Scan(&sujet.ID, &sujet.Titre, &sujet.AuteurUtilisateurID, &sujet.Statut, &sujet.CreatedAt); err != nil {
+		if err := lignes.Scan(&sujet.ID, &sujet.Titre, &sujet.AuteurUtilisateurID, &sujet.Auteur, &sujet.Statut, &sujet.CreatedAt); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
@@ -142,8 +149,9 @@ func (s *Serveur) gererMessagesSujet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lignes, err := s.db.Query(`
-		SELECT id, sujet_id, auteur_utilisateur_id, contenu, statut, created_at
-		FROM forum_messages WHERE sujet_id = $1 AND statut = 'visible' ORDER BY created_at ASC`, sujetID)
+		SELECT m.id, m.sujet_id, m.auteur_utilisateur_id, `+nomAuteur+`, m.contenu, m.statut, m.created_at
+		FROM forum_messages m JOIN utilisateurs u ON u.id = m.auteur_utilisateur_id
+		WHERE m.sujet_id = $1 AND m.statut = 'visible' ORDER BY m.created_at ASC`, sujetID)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -153,7 +161,7 @@ func (s *Serveur) gererMessagesSujet(w http.ResponseWriter, r *http.Request) {
 	messages := make([]MessageForum, 0)
 	for lignes.Next() {
 		var m MessageForum
-		if err := lignes.Scan(&m.ID, &m.SujetID, &m.AuteurUtilisateurID, &m.Contenu, &m.Statut, &m.CreatedAt); err != nil {
+		if err := lignes.Scan(&m.ID, &m.SujetID, &m.AuteurUtilisateurID, &m.Auteur, &m.Contenu, &m.Statut, &m.CreatedAt); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}

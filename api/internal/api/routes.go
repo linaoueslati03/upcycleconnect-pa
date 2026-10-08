@@ -21,6 +21,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/moi", s.gererMonCompte)
 	mux.HandleFunc("PUT /api/moi", s.gererModificationMonCompte)
 	mux.HandleFunc("PUT /api/moi/tutoriel", s.gererTutorielVu)
+	mux.HandleFunc("PUT /api/moi/mot-de-passe", s.gererChangementMotDePasse)
 	mux.HandleFunc("GET /api/moi/dashboard", s.gererDashboard)
 
 	mux.HandleFunc("GET /api/annonces", s.gererListeAnnonces)
@@ -34,6 +35,10 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/depots/{id}", s.gererDetailDepot)
 	mux.HandleFunc("PUT /api/depots/{id}/statut", s.gererChangementStatutDepot)
 
+	mux.HandleFunc("GET /api/categories", s.gererListeCategories)
+	mux.HandleFunc("GET /api/conteneurs", s.gererListeConteneurs)
+	mux.HandleFunc("GET /api/langues", s.gererListeLangues)
+
 	mux.HandleFunc("GET /api/conseils", s.gererListeConseils)
 	mux.HandleFunc("GET /api/conseils/{id}", s.gererDetailConseil)
 
@@ -42,6 +47,7 @@ func (s *Serveur) Routes() http.Handler {
 
 	mux.HandleFunc("GET /api/moi/score", s.gererMonScore)
 	mux.HandleFunc("GET /api/moi/score/historique", s.gererMonScoreHistorique)
+	mux.HandleFunc("GET /api/score/bareme", s.gererBaremeScore)
 	mux.HandleFunc("GET /api/moi/planning", s.gererMonPlanning)
 
 	mux.HandleFunc("POST /api/projets", s.gererCreationProjet)
