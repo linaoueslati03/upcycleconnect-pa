@@ -1,121 +1,100 @@
-const NOMS_ROLES = { 1: "Particulier", 2: "Professionnel", 3: "Salarié", 4: "Administrateur" };
+const { createApp } = Vue;
 
-let utilisateursActuels = [];
+createApp({
+    data() {
+        return {
+            nomsRoles: { 1: "Particulier", 2: "Professionnel", 3: "Salarié", 4: "Administrateur" },
+            utilisateurs: [],
+            formulaireVisible: false,
+            erreur: "",
+            formulaire: {
+                id: null,
+                nom: "",
+                prenom: "",
+                email: "",
+                role_id: 1,
+                mot_de_passe: "",
+            },
+        };
+    },
 
-async function chargerUtilisateurs() {
-    const reponse = await fetch(`${API_BASE_URL}/utilisateurs`);
-    utilisateursActuels = await reponse.json();
+    mounted() {
+        this.chargerUtilisateurs();
+    },
 
-    const corps = document.getElementById("corps-tableau");
-    corps.innerHTML = "";
+    methods: {
+        async chargerUtilisateurs() {
+            const reponse = await fetch(`${API_BASE_URL}/utilisateurs`);
+            this.utilisateurs = await reponse.json();
+        },
 
-    for (const u of utilisateursActuels) {
-        const ligne = document.createElement("tr");
-        ligne.className = "border-t";
-        ligne.innerHTML = `
-            <td class="p-3">${u.id}</td>
-            <td class="p-3">${u.nom}</td>
-            <td class="p-3">${u.prenom}</td>
-            <td class="p-3">${u.email}</td>
-            <td class="p-3">${NOMS_ROLES[u.role_id] ?? u.role_id}</td>
-            <td class="p-3">${u.statut}</td>
-            <td class="p-3">${u.upcycling_score}</td>
-            <td class="p-3">
-                <button class="text-brand-navy underline mr-2" onclick="ouvrirFormulaireEditionParId(${u.id})">Modifier</button>
-                <button class="text-red-600 underline" onclick="supprimerUtilisateur(${u.id})">Supprimer</button>
-            </td>
-        `;
-        corps.appendChild(ligne);
-    }
-}
+        reinitialiserFormulaire() {
+            this.formulaire = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "" };
+            this.erreur = "";
+        },
 
-function ouvrirFormulaireEditionParId(id) {
-    const utilisateur = utilisateursActuels.find((u) => u.id === id);
-    if (utilisateur) {
-        ouvrirFormulaireEdition(utilisateur);
-    }
-}
+        ouvrirFormulaireCreation() {
+            this.reinitialiserFormulaire();
+            this.formulaireVisible = true;
+        },
 
-function ouvrirFormulaireCreation() {
-    document.getElementById("titre-formulaire").textContent = "Nouvel utilisateur";
-    document.getElementById("champ-id").value = "";
-    document.getElementById("champ-nom").value = "";
-    document.getElementById("champ-prenom").value = "";
-    document.getElementById("champ-email").value = "";
-    document.getElementById("champ-role").value = "1";
-    document.getElementById("champ-mot-de-passe").value = "";
-    document.getElementById("conteneur-mot-de-passe").classList.remove("hidden");
-    document.getElementById("erreur-formulaire").classList.add("hidden");
-    document.getElementById("formulaire-utilisateur").classList.remove("hidden");
-}
+        ouvrirFormulaireEdition(utilisateur) {
+            this.formulaire = {
+                id: utilisateur.id,
+                nom: utilisateur.nom,
+                prenom: utilisateur.prenom,
+                email: utilisateur.email,
+                role_id: utilisateur.role_id,
+                mot_de_passe: "",
+            };
+            this.erreur = "";
+            this.formulaireVisible = true;
+        },
 
-function ouvrirFormulaireEdition(u) {
-    document.getElementById("titre-formulaire").textContent = "Modifier l'utilisateur";
-    document.getElementById("champ-id").value = u.id;
-    document.getElementById("champ-nom").value = u.nom;
-    document.getElementById("champ-prenom").value = u.prenom;
-    document.getElementById("champ-email").value = u.email;
-    document.getElementById("champ-role").value = u.role_id;
-    document.getElementById("champ-mot-de-passe").value = "";
-    document.getElementById("conteneur-mot-de-passe").classList.add("hidden");
-    document.getElementById("erreur-formulaire").classList.add("hidden");
-    document.getElementById("formulaire-utilisateur").classList.remove("hidden");
-}
+        fermerFormulaire() {
+            this.formulaireVisible = false;
+        },
 
-function fermerFormulaire() {
-    document.getElementById("formulaire-utilisateur").classList.add("hidden");
-}
+        async soumettreFormulaire() {
+            const donnees = {
+                nom: this.formulaire.nom,
+                prenom: this.formulaire.prenom,
+                email: this.formulaire.email,
+                role_id: this.formulaire.role_id,
+            };
 
-async function soumettreFormulaire(evenement) {
-    evenement.preventDefault();
+            let url = `${API_BASE_URL}/utilisateurs`;
+            let methode = "POST";
+            if (this.formulaire.id) {
+                url = `${API_BASE_URL}/utilisateurs/${this.formulaire.id}`;
+                methode = "PUT";
+            } else {
+                donnees.mot_de_passe = this.formulaire.mot_de_passe;
+            }
 
-    const id = document.getElementById("champ-id").value;
-    const donnees = {
-        nom: document.getElementById("champ-nom").value,
-        prenom: document.getElementById("champ-prenom").value,
-        email: document.getElementById("champ-email").value,
-        role_id: parseInt(document.getElementById("champ-role").value, 10),
-    };
+            const reponse = await fetch(url, {
+                method: methode,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(donnees),
+            });
 
-    let url = `${API_BASE_URL}/utilisateurs`;
-    let methode = "POST";
-    if (id) {
-        url = `${API_BASE_URL}/utilisateurs/${id}`;
-        methode = "PUT";
-    } else {
-        donnees.mot_de_passe = document.getElementById("champ-mot-de-passe").value;
-    }
+            const resultat = await reponse.json();
 
-    const reponse = await fetch(url, {
-        method: methode,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(donnees),
-    });
+            if (!reponse.ok) {
+                this.erreur = resultat.erreur;
+                return;
+            }
 
-    const resultat = await reponse.json();
+            this.formulaireVisible = false;
+            this.chargerUtilisateurs();
+        },
 
-    if (!reponse.ok) {
-        const erreur = document.getElementById("erreur-formulaire");
-        erreur.textContent = resultat.erreur;
-        erreur.classList.remove("hidden");
-        return;
-    }
-
-    fermerFormulaire();
-    chargerUtilisateurs();
-}
-
-async function supprimerUtilisateur(id) {
-    if (!confirm("Supprimer cet utilisateur ?")) {
-        return;
-    }
-    await fetch(`${API_BASE_URL}/utilisateurs/${id}`, { method: "DELETE" });
-    chargerUtilisateurs();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    chargerUtilisateurs();
-    document.getElementById("bouton-nouveau").addEventListener("click", ouvrirFormulaireCreation);
-    document.getElementById("bouton-annuler").addEventListener("click", fermerFormulaire);
-    document.getElementById("formulaire-utilisateur").addEventListener("submit", soumettreFormulaire);
-});
+        async supprimerUtilisateur(id) {
+            if (!confirm("Supprimer cet utilisateur ?")) {
+                return;
+            }
+            await fetch(`${API_BASE_URL}/utilisateurs/${id}`, { method: "DELETE" });
+            this.chargerUtilisateurs();
+        },
+    },
+}).mount("#app");
