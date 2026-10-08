@@ -31,6 +31,17 @@ function formaterDate(date) {
     });
 }
 
+// Inverse de versDateAPI : pré-remplit un <input type="datetime-local"> en heure locale.
+// "2026-10-20T14:00:00Z" → "2026-10-20T16:00" (à Paris, en heure d'été)
+function versChampDate(dateAPI) {
+    if (!dateAPI) {
+        return "";
+    }
+    const date = new Date(dateAPI);
+    const decalage = date.getTimezoneOffset() * 60000;
+    return new Date(date - decalage).toISOString().slice(0, 16);
+}
+
 // Un champ <input type="datetime-local"> donne "2026-10-20T14:00",
 // alors que l'API Go attend une date complète ("2026-10-20T14:00:00.000Z").
 function versDateAPI(valeurChamp) {

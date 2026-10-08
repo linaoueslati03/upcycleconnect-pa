@@ -7,6 +7,7 @@ $liens = [
     "evenements.php" => ["Événements", "party-horn-svgrepo-com.svg"],
     "ateliers.php"   => ["Ateliers", "pencil-square-svgrepo-com.svg"],
     "articles.php"   => ["Articles", "news-svgrepo-com.svg"],
+    "depots.php"     => ["Dépôts", "book-svgrepo-com.svg"],
 ];
 
 $scriptsEspace = ["js/outils.js"];

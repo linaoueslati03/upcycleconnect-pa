@@ -38,6 +38,8 @@ $titrePage = "Mes événements";
                         {{ formaterStatut(evenement.statut) }}
                     </span>
                     <button class="btn-modifier" @click="modifierEvenement(evenement.id)">Modifier</button>
+                    <button v-if="evenement.statut === 'en_attente'" class="btn-modifier" @click="valider(evenement.id)">Valider</button>
+                    <button class="btn-modifier" @click="supprimer(evenement.id)">Supprimer</button>
                 </div>
             </div>
 

@@ -43,10 +43,18 @@ $titrePage = "Mon planning";
                 <button @click="semaineSuivante">→</button>
             </div>
 
+            <p v-if="erreur" class="erreur">{{ erreur }}</p>
+
             <div class="planning">
-                <div class="jour" v-for="jour in jours" :key="jour">
+                <div class="jour" v-for="(jour, index) in jours" :key="jour">
                     <h3>{{ jour }}</h3>
-                    <div class="evenements"></div>
+                    <div class="evenements">
+                        <a v-for="e in entreesDuJour(index)" :key="e.type + e.id" class="evenement"
+                            :href="(e.type === 'atelier' ? 'creer-atelier.php' : 'creer-evenement.php') + '?id=' + e.id">
+                            <span class="evenement-titre">{{ e.titre }}</span>
+                            <span class="evenement-heure">{{ formaterHeure(e.date_debut) }} · {{ formaterStatut(e.statut) }}</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 

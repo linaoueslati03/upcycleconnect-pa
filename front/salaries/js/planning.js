@@ -39,6 +39,8 @@ createApp({
             annees: annees,
             semaineSelectionnee: numeroSemaine(aujourdHui),
             anneeSelectionnee: aujourdHui.getFullYear(),
+            entrees: [], // événements et ateliers du salarié connecté
+            erreur: "",
         };
     },
 
@@ -56,7 +58,30 @@ createApp({
         },
     },
 
+    async mounted() {
+        const reponse = await appelerApi("/salaries/planning");
+        if (!reponse.ok) {
+            this.erreur = "Erreur lors du chargement du planning";
+            return;
+        }
+        this.entrees = await reponse.json();
+    },
+
     methods: {
+        formaterStatut,
+
+        // Entrées du jour n°index (0 = lundi) de la semaine affichée
+        entreesDuJour(index) {
+            const jour = new Date(this.debutSemaine);
+            jour.setDate(jour.getDate() + index);
+            return this.entrees.filter((e) => new Date(e.date_debut).toDateString() === jour.toDateString());
+        },
+
+        // "2026-10-20T14:00:00Z" → "16:00" (heure locale)
+        formaterHeure(date) {
+            return new Date(date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+        },
+
         // Date → "20/10"
         formaterJourMois(date) {
             const jour = String(date.getDate()).padStart(2, "0");

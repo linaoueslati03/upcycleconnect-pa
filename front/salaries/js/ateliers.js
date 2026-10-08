@@ -37,8 +37,29 @@ createApp({
         },
 
         modifierAtelier(id) {
-            // Pas encore de page ni de route de modification : à faire.
-            console.log("Modifier l'atelier :", id);
+            window.location.href = `creer-atelier.php?id=${id}`;
+        },
+
+        // L'API vérifie que le salarié connecté est responsable (sinon 403, affiché ici)
+        async valider(id) {
+            const reponse = await appelerApi(`/ateliers/${id}/valider`, { method: "POST" });
+            if (!reponse.ok) {
+                this.erreur = (await reponse.json()).erreur;
+                return;
+            }
+            this.chargerAteliers();
+        },
+
+        async supprimer(id) {
+            if (!confirm("Supprimer définitivement ?")) {
+                return;
+            }
+            const reponse = await appelerApi(`/ateliers/${id}`, { method: "DELETE" });
+            if (!reponse.ok) {
+                this.erreur = (await reponse.json()).erreur;
+                return;
+            }
+            this.chargerAteliers();
         },
     },
 }).mount("#app");

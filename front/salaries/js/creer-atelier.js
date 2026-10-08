@@ -3,6 +3,7 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
+            id: new URLSearchParams(window.location.search).get("id"),
             formulaire: {
                 titre: "",
                 description: "",
@@ -12,6 +13,26 @@ createApp({
             },
             confirmation: false,
             erreur: "",
+        };
+    },
+
+    // En modification, on pré-remplit le formulaire avec les valeurs actuelles
+    async mounted() {
+        if (!this.id) {
+            return;
+        }
+        const reponse = await appelerApi(`/ateliers/${this.id}`);
+        if (!reponse.ok) {
+            this.erreur = "Atelier introuvable";
+            return;
+        }
+        const atelier = await reponse.json();
+        this.formulaire = {
+            titre: atelier.titre || "",
+            description: atelier.description || "",
+            lieu: atelier.lieu || "",
+            date_debut: versChampDate(atelier.date_debut),
+            date_fin: versChampDate(atelier.date_fin),
         };
     },
 
@@ -26,8 +47,8 @@ createApp({
                 return;
             }
 
-            const reponse = await appelerApi("/ateliers", {
-                method: "POST",
+            const reponse = await appelerApi(this.id ? `/ateliers/${this.id}` : "/ateliers", {
+                method: this.id ? "PUT" : "POST",
                 body: JSON.stringify({
                     titre: this.formulaire.titre,
                     description: this.formulaire.description,
