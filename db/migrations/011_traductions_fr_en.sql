@@ -547,3 +547,25 @@ SELECT (SELECT id FROM langues WHERE code = 'en'), cle, texte FROM (VALUES
     ('tutoriel.6.titre', 'The community'),
     ('tutoriel.etape_sur', 'Step {numero} of {total}')
 ) AS t(cle, texte);
+
+
+-- Ajout des clés pour l'espace Professionnels
+INSERT INTO traductions (langue_id, cle, texte)
+SELECT (SELECT id FROM langues WHERE code = 'fr'), cle, texte FROM (VALUES
+    ('nav.pro_tableau_bord', 'Tableau de bord pro'),
+    ('nav.pro_annonces', 'Catalogue des annonces'),
+    ('nav.pro_conteneurs', 'Conteneurs'),
+    ('nav.pro_projets', 'Projets Upcycling'),
+    ('nav.pro_contrats', 'Contrats & Facturation'),
+    ('nav.pro_statistiques', 'Statistiques avancées')
+) AS t(cle, texte);
+
+INSERT INTO traductions (langue_id, cle, texte)
+SELECT (SELECT id FROM langues WHERE code = 'en'), cle, texte FROM (VALUES
+    ('nav.pro_tableau_bord', 'Pro Dashboard'),
+    ('nav.pro_annonces', 'Listings Catalog'),
+    ('nav.pro_conteneurs', 'Containers'),
+    ('nav.pro_projets', 'Upcycling Projects'),
+    ('nav.pro_contrats', 'Contracts & Billing'),
+    ('nav.pro_statistiques', 'Advanced Statistics')
+) AS t(cle, texte);
