@@ -8,6 +8,7 @@ const ESPACES = {
     administrateur: "/admin/utilisateurs.php",
     salarie: "/salaries/planning.php",
     particulier: "/particuliers/tableau-de-bord.php",
+    professionnel: "/professionnels/tableau-de-bord.php",
 };
 
 function oublierConnexion() {
