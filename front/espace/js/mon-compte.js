@@ -8,6 +8,7 @@ demarrerApp({
             messageProfil: "",
             erreurMotDePasse: "",
             messageMotDePasse: "",
+            entreprise: { siret: "", adresse: "", abonnement: "Freemium" },
         };
     },
 
@@ -23,6 +24,11 @@ demarrerApp({
             prenom: compte.prenom,
             email: compte.email,
             langue_preferee_id: compte.langue_preferee_id,
+        };
+        this.entreprise = {
+            siret: compte.siret || "",
+            adresse: compte.adresse || "",
+            abonnement: compte.abonnement || "Freemium",
         };
         this.langues = await reponseLangues.json();
     },
@@ -57,6 +63,11 @@ demarrerApp({
             }
             this.motsDePasse = { ancien_mot_de_passe: "", nouveau_mot_de_passe: "" };
             this.messageMotDePasse = t("compte.mot_de_passe_modifie");
+        },
+
+        passerPremium() {
+            alert("Redirection vers la passerelle de paiement Stripe...");
+            this.entreprise.abonnement = "Premium";
         },
     },
 });

@@ -17,6 +17,7 @@ $titrePage = "nav.mon_planning";
 
             <div class="planning-header">
                 <h1>{{ $t('nav.mon_planning') }}</h1>
+                <a v-if="roleConnecte() === 'particulier'" class="btn-primary" href="catalogue.php">{{ $t('planning.voir_catalogue') }}</a>
 
                 <div class="planning-filtres">
                     <div>
@@ -44,16 +45,25 @@ $titrePage = "nav.mon_planning";
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
+            <p v-if="!erreur && roleConnecte() === 'particulier' && entrees.length === 0" class="discret">
+                {{ $t('planning.aucune_inscription') }}
+            </p>
 
             <div class="planning">
                 <div class="jour" v-for="(jour, index) in jours" :key="jour">
                     <h3>{{ $t(jour) }}</h3>
                     <div class="evenements">
-                        <a v-for="e in entreesDuJour(index)" :key="e.type + e.id" class="evenement"
-                            :href="(e.type === 'atelier' ? 'creer-atelier.php' : 'creer-evenement.php') + '?id=' + e.id">
-                            <span class="evenement-titre">{{ e.titre }}</span>
-                            <span class="evenement-heure">{{ formaterHeure(e.date_debut) }} · {{ formaterStatut(e.statut) }}</span>
-                        </a>
+                        <template v-for="e in entreesDuJour(index)" :key="e.type + (e.id || e.inscription_id)">
+                            <a v-if="roleConnecte() === 'salarie'" class="evenement"
+                                :href="(e.type === 'atelier' ? 'creer-atelier.php' : 'creer-evenement.php') + '?id=' + e.id">
+                                <span class="evenement-titre">{{ e.titre }}</span>
+                                <span class="evenement-heure">{{ formaterHeure(e.date_debut) }} · {{ formaterStatut(e.statut) }}</span>
+                            </a>
+                            <div v-else class="evenement">
+                                <span class="evenement-titre">{{ e.titre }}</span>
+                                <span class="evenement-heure">{{ formaterHeure(e.date_debut) }}<template v-if="e.lieu"> · {{ e.lieu }}</template></span>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>

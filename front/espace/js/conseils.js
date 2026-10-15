@@ -3,25 +3,57 @@ const ARTICLE_VIDE = { id: null, titre: "", categorie: "", contenu: "" };
 demarrerApp({
     data() {
         return {
+            conseils: [],
+            recherche: "",
+            categorie: "",
+            selection: null,
+            erreur: "",
+
             articles: [],
             formulaireVisible: false,
             formulaire: { ...ARTICLE_VIDE },
-            erreur: "",
+            erreurArticle: "",
         };
     },
 
+    computed: {
+        categories() {
+            return [...new Set(this.conseils.map((c) => c.categorie).filter(Boolean))];
+        },
+
+        conseilsFiltres() {
+            const motCle = this.recherche.toLowerCase();
+            return this.conseils.filter((c) =>
+                (!this.categorie || c.categorie === this.categorie) &&
+                (c.titre.toLowerCase().includes(motCle) || c.contenu.toLowerCase().includes(motCle))
+            );
+        },
+    },
+
     mounted() {
-        this.chargerArticles();
+        this.chargerConseils();
+        if (roleConnecte() === "salarie") {
+            this.chargerArticles();
+        }
     },
 
     methods: {
         formaterDate,
         formaterStatut,
 
+        async chargerConseils() {
+            const reponse = await appelerApi("/conseils");
+            if (!reponse.ok) {
+                this.erreur = t("conseils.erreur_chargement");
+                return;
+            }
+            this.conseils = await reponse.json();
+        },
+
         async chargerArticles() {
             const reponse = await appelerApi("/salaries/conseils");
             if (!reponse.ok) {
-                this.erreur = t("salaries.articles.erreur_chargement");
+                this.erreurArticle = t("salaries.articles.erreur_chargement");
                 return;
             }
             this.articles = await reponse.json();
@@ -30,7 +62,7 @@ demarrerApp({
         nouvelArticle() {
             this.formulaire = { ...ARTICLE_VIDE };
             this.formulaireVisible = true;
-            this.erreur = "";
+            this.erreurArticle = "";
         },
 
         modifier(article) {
@@ -41,11 +73,11 @@ demarrerApp({
                 contenu: article.contenu,
             };
             this.formulaireVisible = true;
-            this.erreur = "";
+            this.erreurArticle = "";
         },
 
         async enregistrer(statut) {
-            this.erreur = "";
+            this.erreurArticle = "";
             const id = this.formulaire.id;
             const reponse = await appelerApi(id ? `/conseils/${id}` : "/conseils", {
                 method: id ? "PUT" : "POST",
@@ -57,12 +89,13 @@ demarrerApp({
                 }),
             });
             if (!reponse.ok) {
-                this.erreur = (await reponse.json()).erreur;
+                this.erreurArticle = (await reponse.json()).erreur;
                 return;
             }
 
             this.formulaireVisible = false;
             this.chargerArticles();
+            this.chargerConseils();
         },
     },
 });

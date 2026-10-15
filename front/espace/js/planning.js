@@ -64,12 +64,14 @@ demarrerApp({
     },
 
     async mounted() {
-        const reponse = await appelerApi("/salaries/planning");
+        const chemin = roleConnecte() === "salarie" ? "/salaries/planning" : "/moi/planning";
+        const reponse = await appelerApi(chemin);
         if (!reponse.ok) {
             this.erreur = t("salaries.planning.erreur_chargement");
             return;
         }
         this.entrees = await reponse.json();
+        this.allerAuProchainRendezVous();
     },
 
     methods: {
@@ -89,6 +91,18 @@ demarrerApp({
             const jour = String(date.getDate()).padStart(2, "0");
             const mois = String(date.getMonth() + 1).padStart(2, "0");
             return `${jour}/${mois}`;
+        },
+
+        allerAuProchainRendezVous() {
+            const semaineVide = [0, 1, 2, 3, 4, 5, 6].every((index) => this.entreesDuJour(index).length === 0);
+            const prochain = this.entrees
+                .map((e) => new Date(e.date_debut))
+                .filter((date) => date >= aujourdHui)
+                .sort((a, b) => a - b)[0];
+            if (semaineVide && prochain) {
+                this.anneeSelectionnee = anneeISO(prochain);
+                this.semaineSelectionnee = numeroSemaine(prochain);
+            }
         },
 
         semainePrecedente() {

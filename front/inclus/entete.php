@@ -12,7 +12,7 @@
 <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
 <script src="https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.prod.js"></script>
 <script src="../assets/js/api.js"></script>
-<script>exigerConnexion(<?= json_encode($roleRequis) ?>);</script>
+<script>exigerConnexion(...<?= json_encode($rolesAutorises) ?>);</script>
 <?php foreach ($scriptsEspace ?? [] as $script): ?>
 <script src="<?= $script ?>"></script>
 <?php endforeach; ?>

@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "nav.prestations";
+$titrePage = "nav.contrats";
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -2,10 +2,28 @@ const PAGE_CONNEXION = "/connexion.php";
 
 const ESPACES = {
     administrateur: "/admin/utilisateurs.php",
-    salarie: "/salaries/planning.php",
-    particulier: "/particuliers/tableau-de-bord.php",
-    professionnel: "/professionnels/tableau-de-bord.php",
+    salarie: "/espace/planning.php",
+    particulier: "/espace/tableau-de-bord.php",
+    professionnel: "/espace/tableau-de-bord.php",
 };
+
+function roleConnecte() {
+    return localStorage.getItem("role");
+}
+
+function afficherMenuDuRole() {
+    const role = roleConnecte();
+    const elements = document.querySelectorAll("aside li[data-roles]:not([data-roles=''])");
+    elements.forEach((element) => {
+        element.hidden = !element.dataset.roles.split(" ").includes(role);
+    });
+
+    const premierLien = document.querySelector("aside li:not([hidden]) a");
+    const logo = document.getElementById("toggle-button");
+    if (premierLien && logo) {
+        logo.href = premierLien.getAttribute("href");
+    }
+}
 
 function oublierConnexion() {
     localStorage.removeItem("token");
@@ -60,10 +78,12 @@ async function chargerTraductions() {
 }
 
 async function demarrerApp(options) {
+    afficherMenuDuRole();
     await chargerTraductions();
     const app = Vue.createApp(options);
     app.use(i18n);
     app.config.globalProperties.langueCourante = langueCourante;
+    app.config.globalProperties.roleConnecte = roleConnecte;
     app.mount("#app");
 }
 
@@ -84,7 +104,7 @@ async function appelerApi(chemin, options = {}) {
 }
 
 function exigerConnexion(...roles) {
-    if (!localStorage.getItem("token") || !roles.includes(localStorage.getItem("role"))) {
+    if (!localStorage.getItem("token") || !roles.includes(roleConnecte())) {
         window.location.href = PAGE_CONNEXION;
     }
 }

@@ -17,6 +17,7 @@ $titrePage = "nav.annonces";
 
             <div class="page-header">
                 <h1>{{ $t('nav.annonces') }}</h1>
+                <a v-if="roleConnecte() === 'particulier'" class="btn-primary" href="mes-annonces.php">{{ $t('annonces.deposer') }}</a>
             </div>
 
             <form class="barre-filtres" @submit.prevent="chargerAnnonces">
