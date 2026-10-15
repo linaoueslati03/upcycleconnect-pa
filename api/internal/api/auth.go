@@ -22,6 +22,13 @@ const (
 	roleAdministrateur = "administrateur"
 )
 
+const (
+	statutActif    = "actif"
+	statutSuspendu = "suspendu"
+)
+
+const abonnementPremium = "premium"
+
 type identifiants struct {
 	Email      string `json:"email"`
 	MotDePasse string `json:"mot_de_passe"`
@@ -43,15 +50,15 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var utilisateurID int
-	var hash, role, langue string
+	var hash, role, langue, statut string
 	err := s.db.QueryRow(`
-		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, '')
+		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, ''), u.statut
 		FROM utilisateurs u
 		JOIN roles r ON r.id = u.role_id
 		LEFT JOIN langues l ON l.id = u.langue_preferee_id
 		WHERE u.email = $1`,
 		creds.Email,
-	).Scan(&utilisateurID, &hash, &role, &langue)
+	).Scan(&utilisateurID, &hash, &role, &langue, &statut)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusUnauthorized, "email ou mot de passe incorrect")
@@ -64,6 +71,11 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 
 	if bcrypt.CompareHashAndPassword([]byte(hash), []byte(creds.MotDePasse)) != nil {
 		envoyerErreur(w, http.StatusUnauthorized, "email ou mot de passe incorrect")
+		return
+	}
+
+	if statut == statutSuspendu {
+		envoyerErreur(w, http.StatusForbidden, "compte suspendu, contactez UpcycleConnect")
 		return
 	}
 
@@ -106,9 +118,12 @@ func (s *Serveur) utilisateurConnecte(r *http.Request) (int, error) {
 	}
 
 	var utilisateurID int
-	err := s.db.QueryRow(
-		"SELECT utilisateur_id FROM sessions WHERE token = $1 AND date_expiration > now()",
-		token,
+	err := s.db.QueryRow(`
+		SELECT s.utilisateur_id
+		FROM sessions s
+		JOIN utilisateurs u ON u.id = s.utilisateur_id
+		WHERE s.token = $1 AND s.date_expiration > now() AND u.statut = $2`,
+		token, statutActif,
 	).Scan(&utilisateurID)
 	if err != nil {
 		return 0, errors.New("session invalide ou expirée")
@@ -167,6 +182,37 @@ func (s *Serveur) exigerSalarie(w http.ResponseWriter, r *http.Request) (id int,
 	}
 
 	return utilisateurID, estResponsable, true
+}
+
+func (s *Serveur) exigerSalarieOuAdmin(w http.ResponseWriter, r *http.Request) (id int, peutValider bool, ok bool) {
+	utilisateurID, role := s.roleConnecte(r)
+	if role == roleAdministrateur {
+		return utilisateurID, true, true
+	}
+	return s.exigerSalarie(w, r)
+}
+
+func (s *Serveur) exigerPremium(w http.ResponseWriter, r *http.Request) (int, bool) {
+	utilisateurID, ok := s.exigerRole(w, r, roleProfessionnel, roleAdministrateur)
+	if !ok {
+		return 0, false
+	}
+
+	var role, abonnement string
+	err := s.db.QueryRow(
+		"SELECT r.code, u.abonnement FROM utilisateurs u JOIN roles r ON r.id = u.role_id WHERE u.id = $1",
+		utilisateurID,
+	).Scan(&role, &abonnement)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return 0, false
+	}
+
+	if role == roleProfessionnel && abonnement != abonnementPremium {
+		envoyerErreur(w, http.StatusForbidden, "réservé aux abonnés Premium")
+		return 0, false
+	}
+	return utilisateurID, true
 }
 
 func (s *Serveur) roleConnecte(r *http.Request) (int, string) {

@@ -81,9 +81,8 @@ const colonnesDepot = `id, utilisateur_id, conteneur_id, description_objet, code
 	statut, professionnel_recuperateur_id, date_demande, date_validation, date_recuperation`
 
 func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleAdministrateur)
+	if !ok {
 		return
 	}
 
@@ -140,8 +139,8 @@ func (s *Serveur) gererMesDepots(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererDetailDepot(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -164,7 +163,8 @@ func (s *Serveur) gererDetailDepot(w http.ResponseWriter, r *http.Request) {
 
 	estProprietaire := d.UtilisateurID == utilisateurID
 	estRecuperateur := d.ProfessionnelRecuperateurID != nil && *d.ProfessionnelRecuperateurID == utilisateurID
-	if !estProprietaire && !estRecuperateur {
+	estEquipe := role == roleSalarie || role == roleAdministrateur
+	if !estProprietaire && !estRecuperateur && !estEquipe {
 		envoyerErreur(w, http.StatusForbidden, "accès non autorisé à ce dépôt")
 		return
 	}

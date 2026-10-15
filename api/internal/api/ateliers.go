@@ -84,7 +84,7 @@ func (s *Serveur) gererListeAteliers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
-	salarieID, _, ok := s.exigerSalarie(w, r)
+	salarieID, _, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -151,7 +151,7 @@ func (s *Serveur) gererDetailAtelier(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -198,7 +198,7 @@ func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *Serveur) gererSuppressionAtelier(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -227,7 +227,7 @@ func (s *Serveur) gererSuppressionAtelier(w http.ResponseWriter, r *http.Request
 }
 
 func (s *Serveur) gererValidationAtelier(w http.ResponseWriter, r *http.Request) {
-	responsableID, estResponsable, ok := s.exigerSalarie(w, r)
+	responsableID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}

@@ -65,6 +65,8 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/utilisateurs/{id}", s.gererDetailUtilisateur)
 	mux.HandleFunc("PUT /api/utilisateurs/{id}", s.gererModificationUtilisateur)
 	mux.HandleFunc("DELETE /api/utilisateurs/{id}", s.gererSuppressionUtilisateur)
+	mux.HandleFunc("PUT /api/utilisateurs/{id}/statut", s.gererChangementStatutUtilisateur)
+	mux.HandleFunc("PUT /api/utilisateurs/{id}/responsable", s.gererChangementResponsable)
 
 	mux.HandleFunc("GET /api/prestations", s.gererListePrestations)
 	mux.HandleFunc("POST /api/prestations", s.gererCreationPrestation)
