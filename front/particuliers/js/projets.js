@@ -2,7 +2,7 @@ demarrerApp({
     data() {
         return {
             projets: [],
-            projet: null, // projet ouvert, avec ses étapes
+            projet: null,
             formulaire: { titre: "", description: "", partage_public: false },
             nouvelleEtape: { description: "", photo_url: "" },
             erreur: "",
@@ -33,7 +33,7 @@ demarrerApp({
                 return;
             }
             const projet = await reponse.json();
-            projet.etapes = projet.etapes || []; // absent de la réponse quand le projet n'a pas d'étape
+            projet.etapes = projet.etapes || [];
             this.projet = projet;
         },
 

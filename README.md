@@ -66,7 +66,7 @@ les données de démonstration (mot de passe des comptes : `Test1234!`) :
 | pro@upcycleconnect.fr | Professionnel |
 
 Pour faire évoluer le schéma, on ne modifie jamais une migration déjà appliquée : on ajoute un
-nouveau fichier `db/migrations/009_....sql`, puis on l'applique sur la base existante :
+nouveau fichier `db/migrations/013_....sql`, puis on l'applique sur la base existante :
 
 ```bash
 docker compose exec postgres sh /db/migrer.sh
@@ -77,18 +77,24 @@ La table `schema_migrations` liste les migrations déjà appliquées. Pour repar
 
 ## Multilingue
 
-Les textes de l'interface sont stockés en base (table `traductions`, une ligne par clé et par
-langue) et chargés par le front au démarrage de chaque page (`GET /api/traductions?langue=en`).
-Dans le code, un texte s'écrit `{{ t('nav.mes_annonces') }}`. Pour ajouter une langue, sans
-modifier le code :
+Le front utilise la bibliothèque [vue-i18n](https://vue-i18n.intlify.dev/) (v11, chargée par CDN).
+Les textes sont dans un fichier JSON par langue : `front/assets/locales/fr.json`, `en.json`. La liste
+des langues proposées reste en base (table `langues`, liée à la langue préférée de chaque utilisateur).
+
+Dans un template Vue, un texte s'écrit `{{ $t('nav.mes_annonces') }}`, avec des paramètres
+`{{ $t('accueil.bonjour', { prenom }) }}` ou une valeur par défaut `{{ $t('categorie.' + code, code) }}`.
+Dans le JavaScript, on utilise `t(...)` de la même façon.
+
+Pour ajouter une langue, sans modifier le code :
+
+1. copier `front/assets/locales/fr.json` en `es.json` et traduire les textes ;
+2. déclarer la langue en base :
 
 ```sql
 INSERT INTO langues (code, libelle) VALUES ('es', 'Español');
-INSERT INTO traductions (langue_id, cle, texte)
-SELECT id, 'nav.mes_annonces', 'Mis anuncios' FROM langues WHERE code = 'es';
 ```
 
-Une clé non traduite dans une langue s'affiche en français.
+Une clé absente d'une langue s'affiche en français (`fallbackLocale`).
 
 ## Organisation Git
 

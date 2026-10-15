@@ -12,7 +12,7 @@ $titrePage = "nav.accueil";
     <div id="app">
         <main>
             <div class="page-header">
-                <h1>{{ t('nav.accueil') }} - Espace Professionnel</h1>
+                <h1>{{ $t('nav.accueil') }} - Espace Professionnel</h1>
             </div>
             <div class="mise-en-page-admin">
                 <section class="carte">

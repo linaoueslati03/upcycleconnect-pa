@@ -16,15 +16,15 @@ $titrePage = "salaries.evenements.titre";
         <main>
 
             <div class="page-header">
-                <h1>{{ t('salaries.evenements.titre') }}</h1>
-                <a class="btn-primary" href="creer-evenement.php">+ {{ t('salaries.evenements.creer') }}</a>
+                <h1>{{ $t('salaries.evenements.titre') }}</h1>
+                <a class="btn-primary" href="creer-evenement.php">+ {{ $t('salaries.evenements.creer') }}</a>
             </div>
 
             <div class="filtres">
                 <button v-for="filtre in filtres" :key="filtre.valeur"
                     class="pill" :class="{ active: statutSelectionne === filtre.valeur }"
                     @click="statutSelectionne = filtre.valeur">
-                    {{ t(filtre.nom) }}
+                    {{ $t(filtre.nom) }}
                 </button>
             </div>
 
@@ -37,9 +37,9 @@ $titrePage = "salaries.evenements.titre";
                     <span class="badge-statut" :class="'statut-' + evenement.statut">
                         {{ formaterStatut(evenement.statut) }}
                     </span>
-                    <button class="btn-modifier" @click="modifierEvenement(evenement.id)">{{ t('commun.modifier') }}</button>
-                    <button v-if="evenement.statut === 'en_attente'" class="btn-modifier" @click="valider(evenement.id)">{{ t('commun.valider') }}</button>
-                    <button class="btn-modifier" @click="supprimer(evenement.id)">{{ t('commun.supprimer') }}</button>
+                    <button class="btn-modifier" @click="modifierEvenement(evenement.id)">{{ $t('commun.modifier') }}</button>
+                    <button v-if="evenement.statut === 'en_attente'" class="btn-modifier" @click="valider(evenement.id)">{{ $t('commun.valider') }}</button>
+                    <button class="btn-modifier" @click="supprimer(evenement.id)">{{ $t('commun.supprimer') }}</button>
                 </div>
             </div>
 

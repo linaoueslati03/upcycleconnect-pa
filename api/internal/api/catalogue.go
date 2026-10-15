@@ -18,7 +18,7 @@ type OffreCatalogue struct {
 	Lieu        *string    `json:"lieu"`
 	Tarif       *float64   `json:"tarif"`
 	NbPlaces    *int       `json:"nb_places"`
-	// Places encore disponibles (capacité moins inscrits) ; null si l'offre n'a pas de limite
+
 	PlacesRestantes *int `json:"places_restantes"`
 }
 
@@ -156,8 +156,6 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// L'offre est verrouillée (FOR UPDATE) : deux requêtes simultanées du même utilisateur
-	// ne peuvent pas passer toutes les deux cette vérification.
 	var dejaInscrit bool
 	err = tx.QueryRow(
 		"SELECT EXISTS (SELECT 1 FROM inscriptions WHERE utilisateur_id = $1 AND type_offre = $2 AND offre_id = $3)",
@@ -213,8 +211,6 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 	envoyerJSON(w, http.StatusCreated, ins)
 }
 
-// placesColonne renvoie le nom de la colonne de places max pour un type d'offre, ou "NULL"
-// si ce type n'a pas de limite de places (seules les formations en ont une).
 func placesColonne(typeOffre string) string {
 	if typeOffre == "formation" {
 		return "nb_places"

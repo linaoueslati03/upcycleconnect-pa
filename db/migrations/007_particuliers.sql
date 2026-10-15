@@ -1,11 +1,7 @@
--- Espace particuliers : annonces, dépôts en conteneur, inscriptions aux offres,
--- Upcycling Score et projets d'upcycling.
-
 CREATE TABLE categories_materiaux (
     id SERIAL PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL
 );
-
 
 CREATE TABLE annonces (
     id SERIAL PRIMARY KEY,
@@ -20,13 +16,11 @@ CREATE TABLE annonces (
     date_creation TIMESTAMP DEFAULT now()
 );
 
-
 CREATE TABLE conteneurs (
     id SERIAL PRIMARY KEY,
     site VARCHAR(50) NOT NULL,
     statut VARCHAR(20) DEFAULT 'vide'
 );
-
 
 CREATE TABLE depots (
     id SERIAL PRIMARY KEY,
@@ -42,10 +36,6 @@ CREATE TABLE depots (
     date_recuperation TIMESTAMP
 );
 
-
--- Pas de FK stricte sur (type_offre, offre_id) : selon type_offre, offre_id pointe vers
--- formations, ateliers ou evenements (3 tables distinctes), Postgres ne supporte pas de
--- FK polymorphe native.
 CREATE TABLE inscriptions (
     id SERIAL PRIMARY KEY,
     utilisateur_id INT NOT NULL REFERENCES utilisateurs(id),
@@ -56,7 +46,6 @@ CREATE TABLE inscriptions (
     montant_paye NUMERIC(10, 2) DEFAULT 0
 );
 
-
 CREATE TABLE score_historique (
     id SERIAL PRIMARY KEY,
     utilisateur_id INT NOT NULL REFERENCES utilisateurs(id),
@@ -64,7 +53,6 @@ CREATE TABLE score_historique (
     motif VARCHAR(150),
     date TIMESTAMP DEFAULT now()
 );
-
 
 CREATE TABLE projets_upcycling (
     id SERIAL PRIMARY KEY,
@@ -75,7 +63,6 @@ CREATE TABLE projets_upcycling (
     sponsorise BOOLEAN DEFAULT FALSE,
     date_creation TIMESTAMP DEFAULT now()
 );
-
 
 CREATE TABLE etapes_projet (
     id SERIAL PRIMARY KEY,

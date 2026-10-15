@@ -1,5 +1,3 @@
--- Articles de conseils rédigés par les salariés, avec l'historique de leurs versions.
-
 CREATE TABLE conseils (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(150) NOT NULL,

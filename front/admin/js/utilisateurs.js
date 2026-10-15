@@ -48,7 +48,7 @@ demarrerApp({
                 prenom: this.formulaire.prenom,
                 email: this.formulaire.email,
                 role_id: this.formulaire.role_id,
-                langue_preferee_id: this.formulaire.langue_preferee_id, // sinon l'API l'effacerait
+                langue_preferee_id: this.formulaire.langue_preferee_id,
             };
 
             let chemin = "/utilisateurs";

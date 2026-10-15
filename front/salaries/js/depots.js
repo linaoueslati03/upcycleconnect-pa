@@ -10,8 +10,6 @@ demarrerApp({
                 { nom: "salaries.depots.deposes", valeur: "deposee" },
                 { nom: "commun.tous", valeur: "" },
             ],
-            // Le salarié valide la demande puis confirme le dépôt ; la récupération est
-            // enregistrée par le professionnel qui scanne le code-barre (espace Pro).
             statutSuivant: { demande: "validee", validee: "deposee" },
             libellesAction: { demande: "salaries.depots.valider_demande", validee: "salaries.depots.confirmer_depot" },
         };

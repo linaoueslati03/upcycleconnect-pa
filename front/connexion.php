@@ -20,8 +20,9 @@
     <link rel="stylesheet" href="assets/css/connexion.css">
 
     <script src="assets/js/config.js"></script>
-    <script src="assets/js/api.js"></script>
     <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.prod.js"></script>
+    <script src="assets/js/api.js"></script>
 </head>
 
 <body class="page-connexion">
@@ -45,7 +46,7 @@
             <div class="choix-langue">
 
                 <label for="langue">
-                    {{ t('commun.langue') }}
+                    {{ $t('commun.langue') }}
                 </label>
 
                 <select
@@ -67,7 +68,7 @@
             </div>
 
 
-            <h1>{{ t('connexion.titre') }}</h1>
+            <h1>{{ $t('connexion.titre') }}</h1>
 
 
             <form @submit.prevent="seConnecter">
@@ -78,7 +79,7 @@
                         type="email"
                         id="email"
                         v-model="email"
-                        :placeholder="t('commun.email')"
+                        :placeholder="$t('commun.email')"
                         autocomplete="username"
                         required
                     >
@@ -92,7 +93,7 @@
                         type="password"
                         id="mot-de-passe"
                         v-model="motDePasse"
-                        :placeholder="t('commun.mot_de_passe')"
+                        :placeholder="$t('commun.mot_de_passe')"
                         autocomplete="current-password"
                         required
                     >
@@ -112,7 +113,7 @@
                     type="submit"
                     class="button-submit"
                 >
-                    {{ t('connexion.se_connecter') }}
+                    {{ $t('connexion.se_connecter') }}
                 </button>
 
             </form>
@@ -121,7 +122,7 @@
             <p class="mot-de-passe-oublie">
 
                 <a href="mot-de-passe-oublie.php">
-                    Vous avez oublié votre mot de passe ?
+                    {{ $t('connexion.mot_de_passe_oublie') }}
                 </a>
 
             </p>

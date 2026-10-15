@@ -14,7 +14,6 @@ demarrerApp({
         };
     },
 
-    // En modification, on pré-remplit le formulaire avec les valeurs actuelles
     async mounted() {
         if (!this.id) {
             return;
@@ -35,7 +34,6 @@ demarrerApp({
     },
 
     methods: {
-        // statut = "brouillon" ou "en_attente" selon le bouton cliqué
         async envoyerAtelier(statut) {
             this.erreur = "";
             this.confirmation = false;
@@ -63,7 +61,6 @@ demarrerApp({
                 return;
             }
 
-            // Le formulaire passe en modification : un nouveau clic ne recrée pas l'élément
             this.id = (await reponse.json()).id;
             this.confirmation = true;
         },

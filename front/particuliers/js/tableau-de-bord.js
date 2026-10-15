@@ -6,7 +6,6 @@ demarrerApp({
             erreur: "",
             tutorielVisible: false,
             indexEtape: 0,
-            // Le contenu des étapes est en base (traductions tutoriel.N.titre / tutoriel.N.texte)
             etapesTutoriel: ["tutoriel.1", "tutoriel.2", "tutoriel.3", "tutoriel.4", "tutoriel.5", "tutoriel.6"],
         };
     },
@@ -45,7 +44,6 @@ demarrerApp({
             this.prenom = compte.prenom;
             this.resume = await reponseResume.json();
 
-            // ?tutoriel=1 : lien « Revoir le tutoriel » de la page Mon compte
             const revoir = new URLSearchParams(window.location.search).has("tutoriel");
             this.tutorielVisible = !compte.tutoriel_vu || revoir;
         },

@@ -13,7 +13,7 @@ $titrePage = "nav.depot_conteneur";
     <div id="app">
         <main>
             <div class="page-header">
-                <h1>{{ t('nav.depot_conteneur') }} (Récupération)</h1>
+                <h1>{{ $t('nav.depot_conteneur') }} (Récupération)</h1>
             </div>
 
             <div class="mise-en-page-admin">

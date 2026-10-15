@@ -1,7 +1,3 @@
--- Données de démonstration, chargées uniquement à la création de la base locale.
--- Mot de passe de tous les comptes : Test1234!
--- Le salarié est créé en premier (id 1) : le front Salarié envoie encore createur_id = 1 en dur.
-
 INSERT INTO utilisateurs (role_id, nom, prenom, email, mot_de_passe_hash, langue_preferee_id) VALUES
     ((SELECT id FROM roles WHERE code = 'salarie'), 'Martin', 'Sophie', 'salarie@upcycleconnect.fr',
      '$2a$10$HDK2AXzOOGuvVHeeI759R.Xz2oREQp2BAQRL381FMBAvIrXZZGqGO', 1),

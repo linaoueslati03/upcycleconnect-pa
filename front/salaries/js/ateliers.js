@@ -38,7 +38,6 @@ demarrerApp({
             window.location.href = `creer-atelier.php?id=${id}`;
         },
 
-        // L'API vérifie que le salarié connecté est responsable (sinon 403, affiché ici)
         async valider(id) {
             const reponse = await appelerApi(`/ateliers/${id}/valider`, { method: "POST" });
             if (!reponse.ok) {

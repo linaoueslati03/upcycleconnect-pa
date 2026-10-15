@@ -23,11 +23,10 @@ demarrerApp({
 
         nomCategorie(id) {
             const categorie = this.categories.find((c) => c.id === id);
-            return categorie ? traduireOu("categorie." + categorie.code, categorie.code) : t("commun.non_precisee");
+            return categorie ? t("categorie." + categorie.code, categorie.code) : t("commun.non_precisee");
         },
 
         async chargerAnnonces() {
-            // Les filtres sont envoyés à l'API : c'est la base qui filtre, pas le navigateur
             const parametres = new URLSearchParams();
             if (this.filtres.type) {
                 parametres.set("type", this.filtres.type);

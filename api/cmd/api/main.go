@@ -1,4 +1,3 @@
-// Commande api : démarre l'API HTTP d'UpcycleConnect sur le port 8081.
 package main
 
 import (

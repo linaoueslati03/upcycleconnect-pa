@@ -13,7 +13,7 @@ $titrePage = "nav.prestations";
     <div id="app">
         <main>
             <div class="page-header">
-                <h1>{{ t('nav.prestations') }} (Factures & Contrats)</h1>
+                <h1>{{ $t('nav.prestations') }} (Factures & Contrats)</h1>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
@@ -23,11 +23,11 @@ $titrePage = "nav.prestations";
                     <table class="tableau">
                         <thead>
                             <tr>
-                                <th>{{ t('commun.titre') }}</th>
-                                <th>{{ t('commun.categorie') }}</th>
-                                <th>{{ t('commun.tarif') }}</th>
-                                <th>{{ t('commun.statut') }}</th>
-                                <th>{{ t('commun.actions') }}</th>
+                                <th>{{ $t('commun.titre') }}</th>
+                                <th>{{ $t('commun.categorie') }}</th>
+                                <th>{{ $t('commun.tarif') }}</th>
+                                <th>{{ $t('commun.statut') }}</th>
+                                <th>{{ $t('commun.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,7 +35,7 @@ $titrePage = "nav.prestations";
                                 <td><strong>{{ p.titre }}</strong></td>
                                 <td>{{ p.categorie }}</td>
                                 <td>{{ formaterTarif(p.tarif) }}</td>
-                                <td>{{ t('statut.' + p.statut) }}</td>
+                                <td>{{ $t('statut.' + p.statut) }}</td>
                                 <td>
                                     <a class="lien-action" :href="lienPDF(p.id)">Télécharger PDF</a>
                                 </td>

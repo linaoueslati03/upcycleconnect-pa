@@ -1,5 +1,4 @@
 <?php
-// Reglages de l'espace Professionnels
 $roleRequis = "professionnel";
 
 $liens = [
@@ -12,5 +11,5 @@ $liens = [
     "mon-compte.php"      => ["nav.mon_compte", "people-svgrepo-com.svg"],
 ];
 
-$feuillesStyle = ["../assets/css/professionnels.css"]; // Style de l'espace pro
+$feuillesStyle = ["../assets/css/professionnels.css"];
 $scriptsEspace = ["js/outils.js"];

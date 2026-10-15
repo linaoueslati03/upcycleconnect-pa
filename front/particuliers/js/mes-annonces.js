@@ -48,7 +48,6 @@ demarrerApp({
             this.message = "";
         },
 
-        // L'API attend l'annonce complète (PUT remplace toutes les valeurs)
         corpsAnnonce(annonce) {
             return JSON.stringify({
                 titre: annonce.titre,
@@ -73,7 +72,6 @@ demarrerApp({
             }
             const annonce = await reponse.json();
             this.reinitialiserFormulaire();
-            // Toute annonce nouvelle (ou modifiée avant validation) passe par le service administratif
             if (annonce.statut === "en_attente") {
                 this.message = t("annonces.envoyee_validation");
             }

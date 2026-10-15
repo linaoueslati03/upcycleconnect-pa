@@ -71,7 +71,6 @@ func (s *Serveur) gererMonPlanning(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, planning)
 }
 
-// EntreePlanningSalarie est un événement ou un atelier dans le planning d'un salarié.
 type EntreePlanningSalarie struct {
 	Type      string     `json:"type"`
 	ID        int        `json:"id"`
@@ -82,8 +81,6 @@ type EntreePlanningSalarie struct {
 	Statut    string     `json:"statut"`
 }
 
-// gererPlanningSalarie renvoie les événements et ateliers du salarié connecté : ceux qu'il
-// a créés, dont il est responsable, ou auxquels il participe (tables de liaison).
 func (s *Serveur) gererPlanningSalarie(w http.ResponseWriter, r *http.Request) {
 	salarieID, _, ok := s.exigerSalarie(w, r)
 	if !ok {

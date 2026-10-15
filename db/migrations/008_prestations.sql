@@ -1,5 +1,3 @@
--- Catalogue des prestations, géré depuis le back-office administrateur.
-
 CREATE TABLE prestations (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(255) NOT NULL,
