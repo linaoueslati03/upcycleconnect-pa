@@ -13,7 +13,7 @@ $titrePage = "nav.mon_compte";
     <div id="app">
         <main>
             <div class="page-header">
-                <h1>{{ t('nav.mon_compte') }}</h1>
+                <h1>{{ $t('nav.mon_compte') }}</h1>
             </div>
 
             <div class="mise-en-page-admin">
@@ -21,7 +21,7 @@ $titrePage = "nav.mon_compte";
                     <h2>Profil de l'entreprise</h2>
                     <form @submit.prevent="enregistrerProfil">
                         <div class="form-group">
-                            <label for="nom">{{ t('commun.nom') }} (Entreprise)</label>
+                            <label for="nom">{{ $t('commun.nom') }} (Entreprise)</label>
                             <input id="nom" type="text" v-model="profil.nom" required>
                         </div>
 
@@ -36,7 +36,7 @@ $titrePage = "nav.mon_compte";
                         </div>
 
                         <div class="form-buttons">
-                            <button type="submit" class="button-submit">{{ t('commun.enregistrer') }}</button>
+                            <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
                         </div>
                         <p v-if="succesProfil" style="color: green; margin-top: 10px;">Profil mis à jour avec succès.</p>
                         <p v-if="erreurProfil" class="erreur">{{ erreurProfil }}</p>

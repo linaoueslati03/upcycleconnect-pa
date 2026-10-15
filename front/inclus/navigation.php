@@ -1,5 +1,3 @@
-<?php
-?>
 <aside>
 
     <a id="toggle-button" href="<?= array_key_first($liens) ?>" aria-label="UpcycleConnect">

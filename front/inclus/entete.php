@@ -1,5 +1,3 @@
-<?php
-?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-titre="<?= htmlspecialchars($titrePage) ?>">UpcycleConnect</title>
@@ -11,9 +9,10 @@
 <link rel="stylesheet" href="<?= $feuille ?>">
 <?php endforeach; ?>
 <script src="../assets/js/config.js"></script>
+<script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.prod.js"></script>
 <script src="../assets/js/api.js"></script>
 <script>exigerConnexion(<?= json_encode($roleRequis) ?>);</script>
-<script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
 <?php foreach ($scriptsEspace ?? [] as $script): ?>
 <script src="<?= $script ?>"></script>
 <?php endforeach; ?>

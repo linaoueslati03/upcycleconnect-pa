@@ -15,44 +15,44 @@ $titrePage = "salaries.evenements.creer";
     <div id="app">
         <main id="main-content">
 
-            <h1>{{ id ? t('salaries.evenements.modifier') : t('salaries.evenements.creer') }}</h1>
+            <h1>{{ id ? $t('salaries.evenements.modifier') : $t('salaries.evenements.creer') }}</h1>
 
             <form @submit.prevent>
 
                 <div class="form-group">
-                    <label for="titre">{{ t('commun.titre') }}</label>
+                    <label for="titre">{{ $t('commun.titre') }}</label>
                     <input type="text" id="titre" v-model="formulaire.titre" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">{{ t('commun.description') }}</label>
+                    <label for="description">{{ $t('commun.description') }}</label>
                     <textarea id="description" v-model="formulaire.description"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="date-debut">{{ t('commun.date_debut') }}</label>
+                    <label for="date-debut">{{ $t('commun.date_debut') }}</label>
                     <input type="datetime-local" id="date-debut" v-model="formulaire.date_debut" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="date-fin">{{ t('commun.date_fin') }}</label>
+                    <label for="date-fin">{{ $t('commun.date_fin') }}</label>
                     <input type="datetime-local" id="date-fin" v-model="formulaire.date_fin">
                 </div>
 
                 <div class="form-group">
-                    <label for="lieu">{{ t('commun.lieu') }}</label>
+                    <label for="lieu">{{ $t('commun.lieu') }}</label>
                     <input type="text" id="lieu" v-model="formulaire.lieu">
                 </div>
 
                 <div class="form-group">
-                    <label for="site">{{ t('commun.site') }}</label>
+                    <label for="site">{{ $t('commun.site') }}</label>
                     <select id="site" v-model="formulaire.site">
-                        <option value="">{{ t('salaries.evenements.choisir_site') }}</option>
+                        <option value="">{{ $t('salaries.evenements.choisir_site') }}</option>
                         <option value="Paris 10e">Paris 10e</option>
                         <option value="Paris 11e">Paris 11e</option>
                         <option value="Paris 13e">Paris 13e</option>
                         <option value="Montreuil">Montreuil</option>
-                        <option value="Suisse">{{ t('site.suisse') }}</option>
+                        <option value="Suisse">{{ $t('site.suisse') }}</option>
                     </select>
                 </div>
 
@@ -60,17 +60,17 @@ $titrePage = "salaries.evenements.creer";
 
                 <div class="form-buttons">
                     <button type="button" class="button-draft" @click="envoyerEvenement('brouillon')">
-                        {{ t('commun.enregistrer_brouillon') }}
+                        {{ $t('commun.enregistrer_brouillon') }}
                     </button>
                     <button type="button" class="button-submit" @click="envoyerEvenement('en_attente')">
-                        {{ t('commun.soumettre_validation') }}
+                        {{ $t('commun.soumettre_validation') }}
                     </button>
                 </div>
 
             </form>
 
             <div v-if="confirmation" id="confirmation">
-                {{ t('salaries.evenements.enregistre') }} <a href="evenements.php">{{ t('salaries.evenements.retour') }}</a>
+                {{ $t('salaries.evenements.enregistre') }} <a href="evenements.php">{{ $t('salaries.evenements.retour') }}</a>
             </div>
 
         </main>

@@ -12,10 +12,8 @@ function oublierConnexion() {
     localStorage.removeItem("role");
 }
 
-let traductions = {};
-
 function langueCourante() {
-    return localStorage.getItem("langue") || "fr";
+    return localStorage.getItem("langue") || LANGUE_PAR_DEFAUT;
 }
 
 function changerLangue(code) {
@@ -23,26 +21,30 @@ function changerLangue(code) {
     window.location.reload();
 }
 
-function t(cle, valeurs = {}) {
-    let texte = traductions[cle] || cle;
-    for (const [nom, valeur] of Object.entries(valeurs)) {
-        texte = texte.replace(`{${nom}}`, valeur);
-    }
-    return texte;
-}
+const i18n = VueI18n.createI18n({
+    legacy: false,
+    locale: langueCourante(),
+    fallbackLocale: LANGUE_PAR_DEFAUT,
+    messages: {},
+    missingWarn: false,
+    fallbackWarn: false,
+});
 
-function traduireOu(cle, valeurParDefaut) {
-    return traductions[cle] || valeurParDefaut;
-}
+const { t } = i18n.global;
 
-async function chargerTraductions() {
+async function chargerMessages(code) {
     try {
-        const reponse = await fetch(`${API_BASE_URL}/traductions?langue=${langueCourante()}`);
+        const reponse = await fetch(`${LOCALES_URL}/${code}.json`);
         if (reponse.ok) {
-            traductions = await reponse.json();
+            i18n.global.setLocaleMessage(code, await reponse.json());
         }
     } catch (erreur) {
     }
+}
+
+async function chargerTraductions() {
+    const codes = new Set([LANGUE_PAR_DEFAUT, langueCourante()]);
+    await Promise.all([...codes].map(chargerMessages));
 
     document.documentElement.lang = langueCourante();
     document.querySelectorAll("[data-t]").forEach((element) => {
@@ -60,8 +62,7 @@ async function chargerTraductions() {
 async function demarrerApp(options) {
     await chargerTraductions();
     const app = Vue.createApp(options);
-    app.config.globalProperties.t = t;
-    app.config.globalProperties.traduireOu = traduireOu;
+    app.use(i18n);
     app.config.globalProperties.langueCourante = langueCourante;
     app.mount("#app");
 }

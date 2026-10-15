@@ -23,7 +23,7 @@ demarrerApp({
 
         nomCategorie(id) {
             const categorie = this.categories.find((c) => c.id === id);
-            return categorie ? traduireOu("categorie." + categorie.code, categorie.code) : t("commun.non_precisee");
+            return categorie ? t("categorie." + categorie.code, categorie.code) : t("commun.non_precisee");
         },
 
         async chargerAnnonces() {
