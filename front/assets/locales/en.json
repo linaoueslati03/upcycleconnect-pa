@@ -17,6 +17,17 @@
             "refusees": "Rejected",
             "titre": "Listing approval"
         },
+        "plannings": {
+            "a_venir": "Upcoming only",
+            "anime": "Hosts",
+            "aucune": "No scheduled activity.",
+            "erreur_chargement": "Error while loading schedules",
+            "inscrit": "Registered",
+            "participation": "Participation",
+            "personne": "Person",
+            "rechercher_personne": "Search for a person",
+            "titre": "Schedules"
+        },
         "prestations": {
             "confirmer_suppression": "Delete this service?",
             "erreur_chargement": "Error while loading services",
@@ -26,9 +37,15 @@
         },
         "utilisateurs": {
             "confirmer_suppression": "Delete this user?",
+            "confirmer_suspension": "Suspend this account? The user will be logged out and will no longer be able to log in.",
             "erreur_chargement": "Error while loading users",
             "modifier": "Edit user",
             "nouveau": "New user",
+            "reactiver": "Reactivate",
+            "responsable": "Manager",
+            "statut_actif": "Active",
+            "statut_suspendu": "Suspended",
+            "suspendre": "Suspend",
             "titre": "User management"
         }
     },
@@ -224,6 +241,7 @@
         "mes_projets": "My projects",
         "mon_compte": "My account",
         "mon_planning": "My schedule",
+        "plannings": "Schedules",
         "prestations": "Services",
         "score": "Upcycling Score",
         "statistiques": "Advanced Statistics",

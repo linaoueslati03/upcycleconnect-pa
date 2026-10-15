@@ -89,6 +89,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/ateliers/{id}/valider", s.gererValidationAtelier)
 
 	mux.HandleFunc("GET /api/salaries/planning", s.gererPlanningSalarie)
+	mux.HandleFunc("GET /api/admin/plannings", s.gererPlanningsAdmin)
 	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)
 
 	return mux
