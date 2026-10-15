@@ -1,5 +1,4 @@
 <?php
-// Réglages communs aux pages de l'espace Salarié.
 $roleRequis = "salarie";
 
 $liens = [

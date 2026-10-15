@@ -18,7 +18,6 @@ demarrerApp({
         formaterDate,
         formaterStatut,
 
-        // Articles du salarié connecté, brouillons compris
         async chargerArticles() {
             const reponse = await appelerApi("/salaries/conseils");
             if (!reponse.ok) {
@@ -45,7 +44,6 @@ demarrerApp({
             this.erreur = "";
         },
 
-        // statut = "brouillon" ou "publie" selon le bouton cliqué
         async enregistrer(statut) {
             this.erreur = "";
             const id = this.formulaire.id;

@@ -1,6 +1,4 @@
 #!/bin/sh
-# Lancé par l'image postgres à la première création du volume uniquement :
-# crée le schéma via les migrations, puis charge les données de démonstration.
 
 set -e
 

@@ -10,7 +10,6 @@ demarrerApp({
     },
 
     computed: {
-        // Catégories présentes dans les articles publiés (sans doublon)
         categories() {
             return [...new Set(this.conseils.map((c) => c.categorie).filter(Boolean))];
         },

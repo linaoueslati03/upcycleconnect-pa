@@ -1,7 +1,3 @@
--- Textes de l'interface en français et en anglais (une ligne par clé et par langue).
--- Pour ajouter une langue : INSERT dans langues, puis les mêmes clés avec langue_id de la nouvelle langue.
--- Une clé absente dans une langue est remplacée par le français (voir GET /api/traductions).
-
 INSERT INTO traductions (langue_id, cle, texte)
 SELECT (SELECT id FROM langues WHERE code = 'fr'), cle, texte FROM (VALUES
     ('accueil.annonces_en_ligne', 'Annonces en ligne'),
@@ -548,8 +544,6 @@ SELECT (SELECT id FROM langues WHERE code = 'en'), cle, texte FROM (VALUES
     ('tutoriel.etape_sur', 'Step {numero} of {total}')
 ) AS t(cle, texte);
 
-
--- Ajout des clés pour l'espace Professionnels
 INSERT INTO traductions (langue_id, cle, texte)
 SELECT (SELECT id FROM langues WHERE code = 'fr'), cle, texte FROM (VALUES
     ('nav.pro_tableau_bord', 'Tableau de bord pro'),

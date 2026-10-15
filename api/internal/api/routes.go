@@ -2,16 +2,6 @@ package api
 
 import "net/http"
 
-// Routes associe chaque route de l'API à son handler, avec le routeur de la
-// bibliothèque standard (méthode HTTP et paramètres {id} gérés depuis Go 1.22).
-//
-// Les droits sont vérifiés au début de chaque handler (exigerRole, exigerSalarie) :
-//   - publiques : santé, création de compte, login, lectures du catalogue, annonces, conseils,
-//     événements, ateliers, prestations et forums ;
-//   - utilisateur connecté : /api/moi/*, annonces, dépôts, inscriptions, projets, forums ;
-//   - salarié : écriture des événements, ateliers et conseils, planning salarié
-//     (validation : responsable) ; suivi des dépôts (avec admin et professionnel) ;
-//   - administrateur : gestion des utilisateurs et des prestations, validation des annonces.
 func (s *Serveur) Routes() http.Handler {
 	mux := http.NewServeMux()
 

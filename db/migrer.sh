@@ -1,12 +1,7 @@
 #!/bin/sh
-# Applique dans l'ordre les fichiers de db/migrations/ qui n'ont pas encore été appliqués.
-# La table schema_migrations garde la liste des fichiers déjà passés.
-#
-# Utilisation (base déjà créée) : docker compose exec postgres sh /db/migrer.sh
 
 set -e
 
-# Masque les messages d'information de PostgreSQL (ex. « table déjà existante »)
 export PGOPTIONS="--client-min-messages=warning"
 
 PSQL="psql -v ON_ERROR_STOP=1 --username $POSTGRES_USER --dbname $POSTGRES_DB --quiet"
@@ -23,7 +18,6 @@ for fichier in /db/migrations/*.sql; do
 
     if [ -z "$deja_appliquee" ]; then
         echo "Migration $version"
-        # --single-transaction : si le fichier échoue, rien n'est appliqué ni enregistré
         $PSQL --single-transaction \
             -f "$fichier" \
             -c "INSERT INTO schema_migrations (version) VALUES ('$version')"

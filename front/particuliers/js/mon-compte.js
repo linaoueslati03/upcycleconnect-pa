@@ -12,7 +12,6 @@ demarrerApp({
     },
 
     async mounted() {
-        // Les langues proposées viennent de la base : en ajouter une ne demande aucun changement de code
         const [reponseCompte, reponseLangues] = await Promise.all([appelerApi("/moi"), appelerApi("/langues")]);
         if (!reponseCompte.ok || !reponseLangues.ok) {
             this.erreurProfil = t("compte.erreur_chargement");
@@ -39,7 +38,6 @@ demarrerApp({
             }
             this.messageProfil = t("compte.profil_enregistre");
 
-            // La langue choisie s'applique tout de suite : on recharge la page dans cette langue
             const langue = this.langues.find((l) => l.id === this.profil.langue_preferee_id);
             if (langue && langue.code !== langueCourante()) {
                 changerLangue(langue.code);

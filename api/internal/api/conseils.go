@@ -90,7 +90,6 @@ type ConseilEntree struct {
 	Statut    string  `json:"statut"`
 }
 
-// ConseilRedaction est un conseil vu par son auteur : avec son statut (brouillon ou publié).
 type ConseilRedaction struct {
 	Conseil
 	Statut string `json:"statut"`
@@ -112,7 +111,6 @@ func validerConseil(entree ConseilEntree) string {
 	return ""
 }
 
-// gererMesConseils liste les articles du salarié connecté, brouillons compris.
 func (s *Serveur) gererMesConseils(w http.ResponseWriter, r *http.Request) {
 	salarieID, _, ok := s.exigerSalarie(w, r)
 	if !ok {
@@ -170,8 +168,6 @@ func (s *Serveur) gererCreationConseil(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusCreated, c)
 }
 
-// gererModificationConseil met à jour un article de son auteur et garde l'ancien contenu
-// dans conseils_historique, dans la même transaction.
 func (s *Serveur) gererModificationConseil(w http.ResponseWriter, r *http.Request) {
 	salarieID, _, ok := s.exigerSalarie(w, r)
 	if !ok {

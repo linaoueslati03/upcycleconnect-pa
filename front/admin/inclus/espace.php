@@ -1,5 +1,4 @@
 <?php
-// Réglages communs aux pages du back-office administrateur.
 $roleRequis = "administrateur";
 
 $liens = [

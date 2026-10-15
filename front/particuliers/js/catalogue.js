@@ -29,7 +29,6 @@ demarrerApp({
             this.offres = await reponse.json();
         },
 
-        // Mon planning = la liste de mes inscriptions : sert à afficher « inscrit·e »
         async chargerInscriptions() {
             const reponse = await appelerApi("/moi/planning");
             if (reponse.ok) {

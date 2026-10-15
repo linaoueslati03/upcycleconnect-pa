@@ -1,12 +1,7 @@
--- Le sujet impose qu'une annonce soit validée par le service administratif avant d'être
--- publiée : une nouvelle annonce est créée « en_attente », puis validée ou refusée.
--- Les annonces déjà en ligne restent en ligne.
-
 ALTER TABLE annonces ALTER COLUMN statut SET DEFAULT 'en_attente';
 ALTER TABLE annonces ADD CONSTRAINT annonces_statut_valide
     CHECK (statut IN ('en_attente', 'refusee', 'en_ligne', 'reservee', 'cedee'));
 
--- Textes de l'interface liés à la validation des annonces
 INSERT INTO traductions (langue_id, cle, texte)
 SELECT l.id, t.cle, CASE l.code WHEN 'fr' THEN t.fr ELSE t.en END
 FROM langues l

@@ -1,6 +1,3 @@
--- Les prestations utilisaient 'Brouillon' / 'Publiée' alors que toutes les autres tables
--- utilisent 'brouillon' / 'publie' : on aligne les valeurs et on les contraint.
-
 UPDATE prestations SET statut = 'publie' WHERE statut = 'Publiée';
 UPDATE prestations SET statut = 'brouillon' WHERE statut <> 'publie';
 

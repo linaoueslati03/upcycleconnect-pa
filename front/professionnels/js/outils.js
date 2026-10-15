@@ -1,11 +1,9 @@
-
 const STATUTS_ANNONCE = ["en_ligne", "reservee", "cedee"];
 
 const TYPES_OFFRE = ["formation", "atelier", "evenement"];
 
 const ETAPES_DEPOT = ["demande", "validee", "deposee", "recuperee"];
 
-// 00 mois année
 function formaterDate(date) {
     return new Date(date).toLocaleDateString(langueCourante(), { day: "numeric", month: "long", year: "numeric" });
 }

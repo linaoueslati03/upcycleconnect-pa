@@ -1,7 +1,3 @@
--- L'API lit ces colonnes comme du texte (ou un nombre) toujours présent : une valeur NULL
--- insérée hors de l'API (ex. directement en SQL) faisait échouer toute la liste concernée.
--- On remplace les NULL existants puis on interdit les nouveaux, avec une valeur par défaut.
-
 UPDATE evenements SET description = '' WHERE description IS NULL;
 UPDATE evenements SET lieu = '' WHERE lieu IS NULL;
 UPDATE evenements SET site = '' WHERE site IS NULL;

@@ -32,7 +32,6 @@ demarrerApp({
             this.annonces = await reponse.json();
         },
 
-        // decision = "valider" (l'annonce passe en ligne) ou "refuser"
         async decider(id, decision) {
             const reponse = await appelerApi(`/annonces/${id}/${decision}`, { method: "POST" });
             if (!reponse.ok) {

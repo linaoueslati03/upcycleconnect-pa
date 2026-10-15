@@ -19,7 +19,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Interface web légère pour visualiser la base sans installer pgAdmin
   adminer:
     image: adminer
     container_name: upcycleconnect_adminer

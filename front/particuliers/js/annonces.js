@@ -27,7 +27,6 @@ demarrerApp({
         },
 
         async chargerAnnonces() {
-            // Les filtres sont envoyés à l'API : c'est la base qui filtre, pas le navigateur
             const parametres = new URLSearchParams();
             if (this.filtres.type) {
                 parametres.set("type", this.filtres.type);

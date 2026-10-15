@@ -168,7 +168,7 @@ func (s *Serveur) gererSuppressionUtilisateur(w http.ResponseWriter, r *http.Req
 	resultat, err := s.db.Exec("DELETE FROM utilisateurs WHERE id = $1", id)
 	var erreurPg *pq.Error
 	if errors.As(err, &erreurPg) && erreurPg.Code == "23503" {
-		// 23503 = clé étrangère : le compte est encore référencé (annonces, inscriptions, offres créées…)
+
 		envoyerErreur(w, http.StatusConflict, "ce compte est lié à des données (annonces, inscriptions, offres…) et ne peut pas être supprimé")
 		return
 	}
@@ -210,7 +210,7 @@ func gererErreurPostgres(w http.ResponseWriter, err error) {
 			envoyerErreur(w, http.StatusConflict, "cet email est déjà utilisé")
 			return
 		case "23503":
-			// clé étrangère : un identifiant envoyé (rôle, langue, catégorie, conteneur…) n'existe pas
+
 			envoyerErreur(w, http.StatusBadRequest, "un identifiant fourni ne correspond à aucun élément existant")
 			return
 		}
@@ -268,8 +268,6 @@ func (s *Serveur) gererCreationUtilisateur(w http.ResponseWriter, r *http.Reques
 	envoyerJSON(w, http.StatusCreated, u)
 }
 
-// creerProfilSalarie ajoute la ligne salaries d'un compte qui a le rôle salarié
-// (sans effet pour les autres rôles, ni si le profil existe déjà).
 func (s *Serveur) creerProfilSalarie(utilisateurID, roleID int) error {
 	_, err := s.db.Exec(`
 		INSERT INTO salaries (utilisateur_id)
@@ -280,8 +278,6 @@ func (s *Serveur) creerProfilSalarie(utilisateurID, roleID int) error {
 	return err
 }
 
-// CompteEntree est le corps de POST /api/comptes : comme UtilisateurEntree,
-// mais le rôle est donné par son code et seuls particulier et professionnel sont permis.
 type CompteEntree struct {
 	Role             string `json:"role"`
 	Nom              string `json:"nom"`
@@ -291,9 +287,6 @@ type CompteEntree struct {
 	LanguePrefereeID *int   `json:"langue_preferee_id"`
 }
 
-// gererCreationCompte crée un compte depuis le site public. Contrairement à
-// POST /api/utilisateurs (réservé aux administrateurs), on ne peut pas y choisir
-// le rôle salarié ou administrateur.
 func (s *Serveur) gererCreationCompte(w http.ResponseWriter, r *http.Request) {
 	var entree CompteEntree
 	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {

@@ -48,7 +48,6 @@ $titrePage = "nav.accueil";
 
         </main>
 
-        <!-- Tutoriel de première connexion : s'affiche tant que tutoriel_vu est faux -->
         <div v-if="tutorielVisible" class="fond-modal">
             <div class="modal" role="dialog" aria-modal="true" aria-labelledby="titre-tutoriel">
                 <h2 id="titre-tutoriel">{{ t(etapeCourante + '.titre') }}</h2>

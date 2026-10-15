@@ -605,7 +605,6 @@ main {
     resize: vertical;
 }
 
-/* Menu de l'espace Salarié : liens <a> stylés comme les boutons */
 a.nav-button,
 a#toggle-button,
 a.btn-primary {

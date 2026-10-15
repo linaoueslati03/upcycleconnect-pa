@@ -11,8 +11,6 @@ import (
 
 const delaiAntiSpamForum = 10 * time.Second
 
-// nomAuteur affiche l'auteur sous la forme « Paul D. » : on ne publie pas le nom complet
-// ni l'email des membres sur le forum.
 const nomAuteur = `u.prenom || ' ' || LEFT(u.nom, 1) || '.'`
 
 type SujetForum struct {
@@ -250,8 +248,6 @@ func (s *Serveur) gererSignalementMessage(w http.ResponseWriter, r *http.Request
 	envoyerJSON(w, http.StatusCreated, map[string]string{"message": "signalement enregistré"})
 }
 
-// sujetVisible vérifie qu'un sujet existe et n'a pas été rejeté par la modération ;
-// sinon elle répond 404 et renvoie false.
 func (s *Serveur) sujetVisible(w http.ResponseWriter, sujetID int) bool {
 	var existe bool
 	err := s.db.QueryRow(

@@ -1,9 +1,5 @@
-// Fonctions partagées par toutes les pages pour appeler l'API Go.
-// Le token reçu à la connexion est gardé dans le localStorage du navigateur.
-
 const PAGE_CONNEXION = "/connexion.php";
 
-// Page d'accueil de chaque espace, selon le rôle renvoyé par POST /api/login.
 const ESPACES = {
     administrateur: "/admin/utilisateurs.php",
     salarie: "/salaries/planning.php",
@@ -16,10 +12,6 @@ function oublierConnexion() {
     localStorage.removeItem("role");
 }
 
-// ---------- Multilingue
-// Les textes de l'interface sont en base (table traductions) et chargés au démarrage
-// de chaque page : ajouter une langue ne demande aucune modification du code.
-
 let traductions = {};
 
 function langueCourante() {
@@ -31,8 +23,6 @@ function changerLangue(code) {
     window.location.reload();
 }
 
-// Texte de la clé dans la langue courante. {nom} est remplacé par valeurs.nom.
-// Si la clé n'existe pas, on affiche la clé elle-même (repérable pendant le développement).
 function t(cle, valeurs = {}) {
     let texte = traductions[cle] || cle;
     for (const [nom, valeur] of Object.entries(valeurs)) {
@@ -41,14 +31,10 @@ function t(cle, valeurs = {}) {
     return texte;
 }
 
-// Comme t(), mais pour une donnée venant de la base (ex. code de catégorie) : si aucune
-// traduction n'existe encore pour cette valeur, on affiche la valeur elle-même.
 function traduireOu(cle, valeurParDefaut) {
     return traductions[cle] || valeurParDefaut;
 }
 
-// Charge les traductions puis traduit les textes écrits en PHP hors de Vue
-// (menu, titre de l'onglet), repérés par l'attribut data-t="clé".
 async function chargerTraductions() {
     try {
         const reponse = await fetch(`${API_BASE_URL}/traductions?langue=${langueCourante()}`);
@@ -56,7 +42,6 @@ async function chargerTraductions() {
             traductions = await reponse.json();
         }
     } catch (erreur) {
-        // API injoignable : les clés s'affichent, la page reste utilisable
     }
 
     document.documentElement.lang = langueCourante();
@@ -72,8 +57,6 @@ async function chargerTraductions() {
     }
 }
 
-// Démarre l'application Vue de la page une fois les traductions chargées :
-// t() est alors utilisable dans tous les templates ({{ t("cle") }}).
 async function demarrerApp(options) {
     await chargerTraductions();
     const app = Vue.createApp(options);
@@ -83,8 +66,6 @@ async function demarrerApp(options) {
     app.mount("#app");
 }
 
-// Appelle l'API en ajoutant le token de connexion, et renvoie la réponse de fetch.
-// Si la session a expiré (401), renvoie vers la page de connexion.
 async function appelerApi(chemin, options = {}) {
     const entetes = { "Content-Type": "application/json" };
     const token = localStorage.getItem("token");
@@ -101,8 +82,6 @@ async function appelerApi(chemin, options = {}) {
     return reponse;
 }
 
-// Renvoie vers la connexion si l'utilisateur n'est pas connecté avec l'un des rôles donnés.
-// C'est un confort d'affichage : les droits sont toujours revérifiés par l'API.
 function exigerConnexion(...roles) {
     if (!localStorage.getItem("token") || !roles.includes(localStorage.getItem("role"))) {
         window.location.href = PAGE_CONNEXION;
@@ -113,7 +92,6 @@ async function deconnecter() {
     try {
         await appelerApi("/logout", { method: "POST" });
     } catch (erreur) {
-        // API injoignable : on déconnecte quand même côté navigateur
     }
     oublierConnexion();
     window.location.href = PAGE_CONNEXION;

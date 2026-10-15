@@ -1,8 +1,3 @@
--- Un utilisateur ne peut s'inscrire qu'une fois à une même offre : sans cette règle, une
--- double inscription consommait deux places et comptait deux fois les points du score.
--- Les doublons éventuels sont supprimés (on garde la première inscription) avant d'ajouter
--- la contrainte, qui sert de filet de sécurité à la vérification faite par l'API.
-
 DELETE FROM inscriptions i
 USING inscriptions plus_ancienne
 WHERE i.utilisateur_id = plus_ancienne.utilisateur_id

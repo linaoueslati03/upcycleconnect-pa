@@ -8,7 +8,6 @@ demarrerApp({
         };
     },
 
-    // Langues proposées : celles actives en base (ajouter une langue = une ligne SQL)
     async mounted() {
         const reponse = await appelerApi("/langues");
         if (reponse.ok) {
@@ -48,7 +47,6 @@ demarrerApp({
 
             localStorage.setItem("token", resultat.token);
             localStorage.setItem("role", resultat.role);
-            // Langue enregistrée dans le compte ; sinon on garde celle choisie à l'écran
             if (resultat.langue) {
                 localStorage.setItem("langue", resultat.langue);
             }

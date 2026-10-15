@@ -2,11 +2,11 @@ demarrerApp({
     data() {
         return {
             sujets: [],
-            sujet: null, // sujet ouvert
+            sujet: null,
             messages: [],
             nouveauSujet: { titre: "", contenu: "" },
             reponse: "",
-            signalementOuvert: null, // id du message dont le formulaire de signalement est ouvert
+            signalementOuvert: null,
             motif: "",
             message: "",
             erreur: "",
@@ -48,7 +48,6 @@ demarrerApp({
                 method: "POST",
                 body: JSON.stringify(this.nouveauSujet),
             });
-            // 429 : l'API limite la fréquence des publications (anti-spam)
             if (!reponse.ok) {
                 this.erreur = await messageErreur(reponse);
                 return;

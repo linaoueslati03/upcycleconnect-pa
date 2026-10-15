@@ -9,8 +9,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// MonCompte est la réponse de GET /api/moi : le compte, plus l'état du tutoriel
-// de première connexion (qui ne concerne que l'utilisateur lui-même).
 type MonCompte struct {
 	Utilisateur
 	TutorielVu bool `json:"tutoriel_vu"`
@@ -116,8 +114,6 @@ func (s *Serveur) gererTutorielVu(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "tutoriel marqué comme vu"})
 }
 
-// gererChangementMotDePasse vérifie l'ancien mot de passe avant d'enregistrer le
-// nouveau (haché avec bcrypt, jamais stocké en clair).
 func (s *Serveur) gererChangementMotDePasse(w http.ResponseWriter, r *http.Request) {
 	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {
