@@ -71,6 +71,34 @@ demarrerApp({
             this.chargerUtilisateurs();
         },
 
+        async changerStatut(utilisateur) {
+            const nouveauStatut = utilisateur.statut === "suspendu" ? "actif" : "suspendu";
+            if (nouveauStatut === "suspendu" && !confirm(t("admin.utilisateurs.confirmer_suspension"))) {
+                return;
+            }
+
+            const reponse = await appelerApi(`/utilisateurs/${utilisateur.id}/statut`, {
+                method: "PUT",
+                body: JSON.stringify({ statut: nouveauStatut }),
+            });
+            if (!reponse.ok) {
+                this.erreurListe = (await reponse.json()).erreur;
+                return;
+            }
+            this.chargerUtilisateurs();
+        },
+
+        async changerResponsable(utilisateur, estResponsable) {
+            const reponse = await appelerApi(`/utilisateurs/${utilisateur.id}/responsable`, {
+                method: "PUT",
+                body: JSON.stringify({ est_responsable: estResponsable }),
+            });
+            if (!reponse.ok) {
+                this.erreurListe = (await reponse.json()).erreur;
+            }
+            this.chargerUtilisateurs();
+        },
+
         async supprimer(id) {
             if (!confirm(t("admin.utilisateurs.confirmer_suppression"))) {
                 return;

@@ -162,9 +162,8 @@ func validerAnnonce(entree AnnonceEntree) string {
 }
 
 func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleProfessionnel, roleAdministrateur)
+	if !ok {
 		return
 	}
 
@@ -194,8 +193,8 @@ func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -217,7 +216,7 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if avant.UtilisateurID != utilisateurID {
+	if avant.UtilisateurID != utilisateurID && role != roleAdministrateur {
 		envoyerErreur(w, http.StatusForbidden, "vous n'êtes pas propriétaire de cette annonce")
 		return
 	}
@@ -272,8 +271,8 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -294,7 +293,7 @@ func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if proprietaireID != utilisateurID {
+	if proprietaireID != utilisateurID && role != roleAdministrateur {
 		envoyerErreur(w, http.StatusForbidden, "vous n'êtes pas propriétaire de cette annonce")
 		return
 	}

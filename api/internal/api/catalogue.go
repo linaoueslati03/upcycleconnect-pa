@@ -107,9 +107,8 @@ var tableParTypeOffre = map[string]string{
 }
 
 func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	utilisateurID, ok := s.exigerRole(w, r, roleParticulier)
+	if !ok {
 		return
 	}
 

@@ -33,6 +33,7 @@ $titrePage = "nav.utilisateurs";
                                 <th>{{ $t('commun.email') }}</th>
                                 <th>{{ $t('commun.role') }}</th>
                                 <th>{{ $t('commun.statut') }}</th>
+                                <th>{{ $t('admin.utilisateurs.responsable') }}</th>
                                 <th>{{ $t('commun.score') }}</th>
                                 <th>{{ $t('commun.actions') }}</th>
                             </tr>
@@ -43,10 +44,18 @@ $titrePage = "nav.utilisateurs";
                                 <td>{{ u.prenom }}</td>
                                 <td>{{ u.email }}</td>
                                 <td>{{ $t('role.' + u.role_id) }}</td>
-                                <td>{{ u.statut }}</td>
+                                <td :class="{ 'statut-suspendu': u.statut === 'suspendu' }">{{ $t('admin.utilisateurs.statut_' + u.statut) }}</td>
+                                <td>
+                                    <input v-if="u.est_responsable !== undefined" type="checkbox" :checked="u.est_responsable"
+                                        :aria-label="$t('admin.utilisateurs.responsable')"
+                                        @change="changerResponsable(u, $event.target.checked)">
+                                </td>
                                 <td>{{ u.upcycling_score }}</td>
                                 <td>
                                     <button class="lien-action" @click="modifier(u)">{{ $t('commun.modifier') }}</button>
+                                    <button class="lien-action" @click="changerStatut(u)">
+                                        {{ u.statut === 'suspendu' ? $t('admin.utilisateurs.reactiver') : $t('admin.utilisateurs.suspendre') }}
+                                    </button>
                                     <button class="lien-action lien-supprimer" @click="supprimer(u.id)">{{ $t('commun.supprimer') }}</button>
                                 </td>
                             </tr>

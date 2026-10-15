@@ -17,6 +17,17 @@
             "refusees": "Refusées",
             "titre": "Validation des annonces"
         },
+        "plannings": {
+            "a_venir": "À venir uniquement",
+            "anime": "Anime",
+            "aucune": "Aucune activité planifiée.",
+            "erreur_chargement": "Erreur lors du chargement des plannings",
+            "inscrit": "Inscrit",
+            "participation": "Participation",
+            "personne": "Personne",
+            "rechercher_personne": "Rechercher une personne",
+            "titre": "Plannings"
+        },
         "prestations": {
             "confirmer_suppression": "Supprimer cette prestation ?",
             "erreur_chargement": "Erreur lors du chargement des prestations",
@@ -26,9 +37,15 @@
         },
         "utilisateurs": {
             "confirmer_suppression": "Supprimer cet utilisateur ?",
+            "confirmer_suspension": "Suspendre ce compte ? La personne sera déconnectée et ne pourra plus se connecter.",
             "erreur_chargement": "Erreur lors du chargement des utilisateurs",
             "modifier": "Modifier l'utilisateur",
             "nouveau": "Nouvel utilisateur",
+            "reactiver": "Réactiver",
+            "responsable": "Responsable",
+            "statut_actif": "Actif",
+            "statut_suspendu": "Suspendu",
+            "suspendre": "Suspendre",
             "titre": "Gestion des utilisateurs"
         }
     },
@@ -224,6 +241,7 @@
         "mes_projets": "Mes projets",
         "mon_compte": "Mon compte",
         "mon_planning": "Mon planning",
+        "plannings": "Plannings",
         "prestations": "Prestations",
         "score": "Upcycling Score",
         "statistiques": "Statistiques avancées",

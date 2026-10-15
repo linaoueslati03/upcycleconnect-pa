@@ -71,3 +71,8 @@
         flex-direction: column;
     }
 }
+
+.statut-suspendu {
+    color: #b91c1c;
+    font-weight: 600;
+}

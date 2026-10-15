@@ -138,7 +138,7 @@ func (s *Serveur) gererMesConseils(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationConseil(w http.ResponseWriter, r *http.Request) {
-	salarieID, _, ok := s.exigerSalarie(w, r)
+	salarieID, _, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -169,10 +169,12 @@ func (s *Serveur) gererCreationConseil(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererModificationConseil(w http.ResponseWriter, r *http.Request) {
-	salarieID, _, ok := s.exigerSalarie(w, r)
+	salarieID, _, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
+	_, role := s.roleConnecte(r)
+	estAdmin := role == roleAdministrateur
 
 	id, err := idDepuisChemin(r)
 	if err != nil {
@@ -199,7 +201,7 @@ func (s *Serveur) gererModificationConseil(w http.ResponseWriter, r *http.Reques
 
 	resultat, err := tx.Exec(`
 		INSERT INTO conseils_historique (conseil_id, contenu)
-		SELECT id, contenu FROM conseils WHERE id = $1 AND auteur_id = $2`, id, salarieID)
+		SELECT id, contenu FROM conseils WHERE id = $1 AND (auteur_id = $2 OR $3)`, id, salarieID, estAdmin)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return

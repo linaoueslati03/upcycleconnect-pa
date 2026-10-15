@@ -132,7 +132,7 @@ func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
-	salarieID, _, ok := s.exigerSalarie(w, r)
+	salarieID, _, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -166,7 +166,7 @@ func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -213,7 +213,7 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 }
 
 func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -242,7 +242,7 @@ func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Reque
 }
 
 func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Request) {
-	responsableID, estResponsable, ok := s.exigerSalarie(w, r)
+	responsableID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
