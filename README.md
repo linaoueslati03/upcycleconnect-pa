@@ -66,7 +66,7 @@ les données de démonstration (mot de passe des comptes : `Test1234!`) :
 | pro@upcycleconnect.fr | Professionnel |
 
 Pour faire évoluer le schéma, on ne modifie jamais une migration déjà appliquée : on ajoute un
-nouveau fichier `db/migrations/009_....sql`, puis on l'applique sur la base existante :
+nouveau fichier `db/migrations/013_....sql`, puis on l'applique sur la base existante :
 
 ```bash
 docker compose exec postgres sh /db/migrer.sh
