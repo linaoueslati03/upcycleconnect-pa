@@ -28,11 +28,11 @@ autour du réemploi d'objets et de matériaux.
 │   ├── migrer.sh        # applique les migrations pas encore passées
 │   └── initialiser.sh   # migrations + données, à la création de la base
 ├── front/
+│   ├── espace/          # application des particuliers, professionnels et salariés
+│   │   └── inclus/espace.php   # liste des pages et rôles autorisés pour chacune
 │   ├── admin/           # back-office administrateur
-│   ├── salaries/        # espace salariés
-│   ├── particuliers/    # espace particuliers
-│   ├── inclus/          # en-tête et menu communs aux espaces
-│   └── assets/          # css, js, images partagés
+│   ├── inclus/          # en-tête et menu communs
+│   └── assets/          # css, js, traductions (locales/), images
 ├── docker-compose.yml
 └── .env.example
 ```
@@ -74,6 +74,18 @@ docker compose exec postgres sh /db/migrer.sh
 
 La table `schema_migrations` liste les migrations déjà appliquées. Pour repartir d'une base vide :
 `docker compose down -v && docker compose up -d` (efface toutes les données locales).
+
+## Une application, un affichage par rôle
+
+Particuliers, professionnels et salariés utilisent la même application (`front/espace/`). Le fichier
+`front/espace/inclus/espace.php` liste chaque page avec les rôles qui y ont accès : le menu n'affiche
+que les pages du rôle connecté, et une page refuse un rôle qui n'est pas dans sa liste. Dans une page
+partagée, une partie propre à un rôle s'écrit `<div v-if="roleConnecte() === 'professionnel'">`.
+
+Ces contrôles ne règlent que l'affichage : les droits sont vérifiés par l'API Go sur chaque route.
+
+Pour ajouter une page : créer `front/espace/ma-page.php` et `front/espace/js/ma-page.js`, puis l'ajouter
+dans la liste de `espace.php` avec son libellé, son icône et ses rôles.
 
 ## Multilingue
 

@@ -5,11 +5,12 @@
     </a>
 
     <ul>
-        <?php foreach ($liens as $fichier => [$libelle, $icone]): ?>
-            <li>
+        <?php foreach ($liens as $fichier => $lien): ?>
+            <?php $roles = $lien[2] ?? []; ?>
+            <li data-roles="<?= implode(" ", $roles) ?>" <?= $roles ? "hidden" : "" ?>>
                 <a class="nav-button" href="<?= $fichier ?>">
-                    <img src="../assets/img/<?= $icone ?>" alt="" aria-hidden="true">
-                    <span data-t="<?= $libelle ?>"></span>
+                    <img src="../assets/img/<?= $lien[1] ?>" alt="" aria-hidden="true">
+                    <span data-t="<?= $lien[0] ?>"></span>
                 </a>
             </li>
         <?php endforeach; ?>

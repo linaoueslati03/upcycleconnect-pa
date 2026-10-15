@@ -17,7 +17,7 @@ $titrePage = "nav.accueil";
 
             <div class="page-header">
                 <h1>{{ $t('accueil.bonjour', { prenom }) }}</h1>
-                <div class="form-buttons">
+                <div v-if="roleConnecte() === 'particulier'" class="form-buttons">
                     <a class="btn-primary" href="mes-annonces.php">{{ $t('annonces.deposer') }}</a>
                     <a class="btn-primary" href="depots.php">{{ $t('accueil.demander_depot') }}</a>
                 </div>
@@ -25,7 +25,7 @@ $titrePage = "nav.accueil";
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
-            <div v-if="resume" class="grille">
+            <div v-if="resume && roleConnecte() === 'particulier'" class="grille">
                 <a class="carte carte-cliquable" href="mes-annonces.php">
                     <span class="discret">{{ $t('accueil.annonces_en_ligne') }}</span>
                     <p class="chiffre-cle">{{ resume.annonces_actives }}</p>
@@ -44,6 +44,13 @@ $titrePage = "nav.accueil";
                     <p class="discret" v-if="resume.prochaine_offre_date">{{ formaterDate(resume.prochaine_offre_date) }}</p>
                     <p class="chiffre-cle" v-else>—</p>
                 </a>
+            </div>
+
+            <div v-if="roleConnecte() === 'professionnel'" class="mise-en-page-admin">
+                <section class="carte">
+                    <h2>Résumé de votre activité</h2>
+                    <p>Bienvenue sur votre espace.</p>
+                </section>
             </div>
 
         </main>

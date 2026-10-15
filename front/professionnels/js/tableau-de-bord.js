@@ -1,8 +1,0 @@
-demarrerApp({
-    data() {
-        return {
-        };
-    },
-    mounted() {
-    }
-});

@@ -70,10 +70,28 @@ $titrePage = "nav.mon_compte";
                         </form>
                     </div>
 
-                    <div class="carte">
+                    <div v-if="roleConnecte() === 'particulier'" class="carte">
                         <h2>{{ $t('compte.tutoriel') }}</h2>
                         <p>{{ $t('compte.tutoriel_explication') }}</p>
                         <a class="btn-primary" href="tableau-de-bord.php?tutoriel=1">{{ $t('compte.revoir_tutoriel') }}</a>
+                    </div>
+
+                    <div v-if="roleConnecte() === 'professionnel'" class="carte section">
+                        <h2>Profil de l'entreprise</h2>
+                        <div class="form-group">
+                            <label for="siret">SIRET</label>
+                            <input id="siret" type="text" v-model="entreprise.siret">
+                        </div>
+                        <div class="form-group">
+                            <label for="adresse">Adresse de l'entreprise</label>
+                            <input id="adresse" type="text" v-model="entreprise.adresse">
+                        </div>
+                    </div>
+
+                    <div v-if="roleConnecte() === 'professionnel'" class="carte">
+                        <h2>Abonnement</h2>
+                        <p>Votre abonnement actuel : <strong>{{ entreprise.abonnement }}</strong></p>
+                        <button v-if="entreprise.abonnement !== 'Premium'" class="btn-primary" @click="passerPremium">Passer Premium</button>
                     </div>
                 </div>
 

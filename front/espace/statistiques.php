@@ -1,6 +1,6 @@
 <?php
 require "inclus/espace.php";
-$titrePage = "nav.score";
+$titrePage = "nav.statistiques";
 ?>
 <!DOCTYPE html>
 <html lang="fr">

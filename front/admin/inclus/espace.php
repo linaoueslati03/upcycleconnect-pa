@@ -1,5 +1,5 @@
 <?php
-$roleRequis = "administrateur";
+$rolesAutorises = ["administrateur"];
 
 $liens = [
     "utilisateurs.php" => ["nav.utilisateurs", "people-svgrepo-com.svg"],

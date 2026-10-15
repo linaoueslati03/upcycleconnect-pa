@@ -31,17 +31,23 @@ demarrerApp({
         },
 
         async charger() {
-            const [reponseCompte, reponseResume] = await Promise.all([
-                appelerApi("/moi"),
-                appelerApi("/moi/dashboard"),
-            ]);
-            if (!reponseCompte.ok || !reponseResume.ok) {
+            const reponseCompte = await appelerApi("/moi");
+            if (!reponseCompte.ok) {
                 this.erreur = t("accueil.erreur_chargement");
                 return;
             }
-
             const compte = await reponseCompte.json();
             this.prenom = compte.prenom;
+
+            if (roleConnecte() !== "particulier") {
+                return;
+            }
+
+            const reponseResume = await appelerApi("/moi/dashboard");
+            if (!reponseResume.ok) {
+                this.erreur = t("accueil.erreur_chargement");
+                return;
+            }
             this.resume = await reponseResume.json();
 
             const revoir = new URLSearchParams(window.location.search).has("tutoriel");
