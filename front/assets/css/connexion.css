@@ -157,6 +157,63 @@
     font-size: 14px;
 }
 
+.panneau-inscription {
+    padding: 45px 62px;
+}
+
+.panneau-inscription form {
+    gap: 14px;
+}
+
+.panneau-inscription label {
+    display: block;
+    margin-bottom: 6px;
+    color: #292d32;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.panneau-inscription input {
+    height: 44px;
+    padding: 0 16px;
+}
+
+.panneau-inscription select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #eee;
+    background: #fff;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.10);
+    color: #292d32;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+}
+
+.panneau-inscription small {
+    display: block;
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.lien-secondaire {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 14px;
+}
+
+.lien-secondaire a {
+    color: #24344c;
+    text-decoration: none;
+}
+
+.lien-secondaire a:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 650px) {
     .page-connexion {
         padding: 20px;
@@ -182,5 +239,9 @@
 
     .panneau-formulaire {
         padding: 80px 25px 35px;
+    }
+
+    .panneau-inscription {
+        padding: 35px 25px;
     }
 }
