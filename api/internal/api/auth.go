@@ -2,6 +2,7 @@ package api
 
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
@@ -40,6 +41,11 @@ func genererToken() (string, error) {
 		return "", err
 	}
 	return hex.EncodeToString(octets), nil
+}
+
+func empreinteJeton(token string) string {
+	empreinte := sha256.Sum256([]byte(token))
+	return hex.EncodeToString(empreinte[:])
 }
 
 func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
@@ -86,8 +92,8 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = s.db.Exec(
-		"INSERT INTO sessions (token, utilisateur_id, date_expiration) VALUES ($1, $2, $3)",
-		token, utilisateurID, time.Now().Add(dureeSession),
+		"INSERT INTO sessions (empreinte_token, utilisateur_id, date_expiration) VALUES ($1, $2, $3)",
+		empreinteJeton(token), utilisateurID, time.Now().Add(dureeSession),
 	)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
@@ -104,7 +110,7 @@ func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, err := s.db.Exec("DELETE FROM sessions WHERE token = $1", token); err != nil {
+	if _, err := s.db.Exec("DELETE FROM sessions WHERE empreinte_token = $1", empreinteJeton(token)); err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
@@ -122,8 +128,8 @@ func (s *Serveur) utilisateurConnecte(r *http.Request) (int, error) {
 		SELECT s.utilisateur_id
 		FROM sessions s
 		JOIN utilisateurs u ON u.id = s.utilisateur_id
-		WHERE s.token = $1 AND s.date_expiration > now() AND u.statut = $2`,
-		token, statutActif,
+		WHERE s.empreinte_token = $1 AND s.date_expiration > now() AND u.statut = $2`,
+		empreinteJeton(token), statutActif,
 	).Scan(&utilisateurID)
 	if err != nil {
 		return 0, errors.New("session invalide ou expirée")
