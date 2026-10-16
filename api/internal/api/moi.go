@@ -126,8 +126,8 @@ func (s *Serveur) gererChangementMotDePasse(w http.ResponseWriter, r *http.Reque
 		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
 		return
 	}
-	if len(entree.NouveauMotDePasse) < 8 {
-		envoyerErreur(w, http.StatusBadRequest, "le nouveau mot de passe doit faire au moins 8 caractères")
+	if message := validerMotDePasse(entree.NouveauMotDePasse); message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
 		return
 	}
 

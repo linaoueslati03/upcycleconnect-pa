@@ -45,7 +45,8 @@
             <div class="form-group">
                 <label for="mot-de-passe">{{ $t('commun.mot_de_passe_min') }}</label>
                 <input id="mot-de-passe" type="password" v-model="compte.mot_de_passe" autocomplete="new-password"
-                    minlength="8" required>
+                    minlength="12" maxlength="72" required aria-describedby="regle-mot-de-passe">
+                <small id="regle-mot-de-passe">{{ $t('commun.regle_mot_de_passe') }}</small>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>

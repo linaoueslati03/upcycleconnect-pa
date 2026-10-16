@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"slices"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -29,6 +31,35 @@ const (
 )
 
 const abonnementPremium = "premium"
+
+const (
+	longueurMinimaleMotDePasse = 12
+	tailleMaximaleMotDePasse   = 72
+)
+
+func validerMotDePasse(motDePasse string) string {
+	var majuscule, minuscule, chiffre, special bool
+	for _, caractere := range motDePasse {
+		switch {
+		case unicode.IsUpper(caractere):
+			majuscule = true
+		case unicode.IsLower(caractere):
+			minuscule = true
+		case unicode.IsDigit(caractere):
+			chiffre = true
+		default:
+			special = true
+		}
+	}
+
+	if utf8.RuneCountInString(motDePasse) < longueurMinimaleMotDePasse || !(majuscule && minuscule && chiffre && special) {
+		return "le mot de passe doit faire au moins 12 caractères et contenir une majuscule, une minuscule, un chiffre et un caractère spécial"
+	}
+	if len(motDePasse) > tailleMaximaleMotDePasse {
+		return "le mot de passe est trop long (72 caractères au plus)"
+	}
+	return ""
+}
 
 type identifiants struct {
 	Email      string `json:"email"`

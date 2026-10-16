@@ -61,7 +61,9 @@ $titrePage = "nav.mon_compte";
                             <div class="form-group">
                                 <label for="nouveau">{{ $t('compte.nouveau_mot_de_passe') }}</label>
                                 <input id="nouveau" type="password" v-model="motsDePasse.nouveau_mot_de_passe"
-                                    autocomplete="new-password" minlength="8" required>
+                                    autocomplete="new-password" minlength="12" maxlength="72" required
+                                    aria-describedby="regle-mot-de-passe">
+                                <small id="regle-mot-de-passe">{{ $t('commun.regle_mot_de_passe') }}</small>
                             </div>
 
                             <p v-if="erreurMotDePasse" class="erreur">{{ erreurMotDePasse }}</p>

@@ -282,8 +282,10 @@ func validerEntree(entree UtilisateurEntree, motDePasseObligatoire bool) string 
 	if strings.TrimSpace(entree.Nom) == "" || strings.TrimSpace(entree.Prenom) == "" || strings.TrimSpace(entree.Email) == "" {
 		return "champs obligatoires manquants"
 	}
-	if motDePasseObligatoire && len(entree.MotDePasse) < 8 {
-		return "le mot de passe doit faire au moins 8 caractères"
+	if motDePasseObligatoire {
+		if message := validerMotDePasse(entree.MotDePasse); message != "" {
+			return message
+		}
 	}
 	if !strings.Contains(entree.Email, "@") {
 		return "email invalide"
