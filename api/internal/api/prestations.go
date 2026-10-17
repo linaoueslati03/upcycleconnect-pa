@@ -9,15 +9,20 @@ import (
 )
 
 type Prestation struct {
-	ID        int     `json:"id"`
-	Titre     string  `json:"titre"`
-	Categorie string  `json:"categorie"`
-	Tarif     float64 `json:"tarif"`
-	Statut    string  `json:"statut"`
+	ID          int     `json:"id"`
+	Titre       string  `json:"titre"`
+	CategorieID int     `json:"categorie_id"`
+	Categorie   string  `json:"categorie"`
+	Tarif       float64 `json:"tarif"`
+	Statut      string  `json:"statut"`
 }
 
+const selectionPrestations = `
+	SELECT p.id, p.titre, p.categorie_id, c.libelle, p.tarif, p.statut
+	FROM prestations p JOIN categories_prestations c ON c.id = p.categorie_id`
+
 func validerPrestation(p Prestation) string {
-	if strings.TrimSpace(p.Titre) == "" || strings.TrimSpace(p.Categorie) == "" {
+	if strings.TrimSpace(p.Titre) == "" || p.CategorieID <= 0 {
 		return "titre et catégorie obligatoires"
 	}
 	if p.Tarif < 0 {
@@ -30,9 +35,9 @@ func validerPrestation(p Prestation) string {
 }
 
 func (s *Serveur) gererListePrestations(w http.ResponseWriter, r *http.Request) {
-	requete := "SELECT id, titre, categorie, tarif, statut FROM prestations WHERE statut = 'publie' ORDER BY id"
+	requete := selectionPrestations + " WHERE p.statut = 'publie' ORDER BY p.id"
 	if _, role := s.roleConnecte(r); role == roleAdministrateur {
-		requete = "SELECT id, titre, categorie, tarif, statut FROM prestations ORDER BY id"
+		requete = selectionPrestations + " ORDER BY p.id"
 	}
 	lignes, err := s.db.Query(requete)
 	if err != nil {
@@ -44,7 +49,7 @@ func (s *Serveur) gererListePrestations(w http.ResponseWriter, r *http.Request) 
 	prestations := make([]Prestation, 0)
 	for lignes.Next() {
 		var p Prestation
-		if err := lignes.Scan(&p.ID, &p.Titre, &p.Categorie, &p.Tarif, &p.Statut); err != nil {
+		if err := lignes.Scan(&p.ID, &p.Titre, &p.CategorieID, &p.Categorie, &p.Tarif, &p.Statut); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
@@ -69,9 +74,20 @@ func (s *Serveur) gererCreationPrestation(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	err := s.db.QueryRow(
-		"INSERT INTO prestations (titre, categorie, tarif, statut) VALUES ($1, $2, $3, $4) RETURNING id",
-		p.Titre, p.Categorie, p.Tarif, p.Statut,
+	libelle, message, err := s.verifierCategorie(tableCategoriesPrestations, p.CategorieID, 0)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
+		return
+	}
+	p.Categorie = libelle
+
+	err = s.db.QueryRow(
+		"INSERT INTO prestations (titre, categorie_id, tarif, statut) VALUES ($1, $2, $3, $4) RETURNING id",
+		p.Titre, p.CategorieID, p.Tarif, p.Statut,
 	).Scan(&p.ID)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
@@ -102,9 +118,30 @@ func (s *Serveur) gererModificationPrestation(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	var categorieActuelle int
+	err = s.db.QueryRow("SELECT categorie_id FROM prestations WHERE id = $1", id).Scan(&categorieActuelle)
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusNotFound, "prestation introuvable")
+		return
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	libelle, message, err := s.verifierCategorie(tableCategoriesPrestations, p.CategorieID, categorieActuelle)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
+		return
+	}
+	p.Categorie = libelle
+
 	err = s.db.QueryRow(
-		"UPDATE prestations SET titre = $1, categorie = $2, tarif = $3, statut = $4 WHERE id = $5 RETURNING id",
-		p.Titre, p.Categorie, p.Tarif, p.Statut, id,
+		"UPDATE prestations SET titre = $1, categorie_id = $2, tarif = $3, statut = $4 WHERE id = $5 RETURNING id",
+		p.Titre, p.CategorieID, p.Tarif, p.Statut, id,
 	).Scan(&p.ID)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "prestation introuvable")

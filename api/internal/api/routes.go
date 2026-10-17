@@ -32,6 +32,11 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("PUT /api/depots/{id}/statut", s.gererChangementStatutDepot)
 
 	mux.HandleFunc("GET /api/categories", s.gererListeCategories)
+	mux.HandleFunc("GET /api/admin/categories/prestations", s.gererListeCategoriesPrestations)
+	mux.HandleFunc("POST /api/admin/categories/prestations", s.gererCreationCategoriePrestation)
+	mux.HandleFunc("PUT /api/admin/categories/prestations/{id}", s.gererModificationCategoriePrestation)
+	mux.HandleFunc("POST /api/admin/categories/materiaux", s.gererCreationCategorieMateriau)
+	mux.HandleFunc("PUT /api/admin/categories/materiaux/{id}", s.gererModificationCategorieMateriau)
 	mux.HandleFunc("GET /api/conteneurs", s.gererListeConteneurs)
 	mux.HandleFunc("GET /api/langues", s.gererListeLangues)
 	mux.HandleFunc("GET /api/admin/langues", s.gererListeLanguesAdmin)

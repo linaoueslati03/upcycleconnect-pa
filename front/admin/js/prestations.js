@@ -1,17 +1,26 @@
-const FORMULAIRE_VIDE = { id: null, titre: "", categorie: "", tarif: 0, statut: "brouillon" };
+const FORMULAIRE_VIDE = { id: null, titre: "", categorie_id: null, tarif: 0, statut: "brouillon" };
 
 demarrerApp({
     data() {
         return {
             prestations: [],
+            categories: [],
+            categorieInitiale: null,
             formulaire: { ...FORMULAIRE_VIDE },
             erreur: "",
             erreurListe: "",
         };
     },
 
+    computed: {
+        categoriesProposees() {
+            return this.categories.filter((c) => c.actif || c.id === this.categorieInitiale);
+        },
+    },
+
     mounted() {
         this.chargerPrestations();
+        this.chargerCategories();
     },
 
     methods: {
@@ -24,6 +33,13 @@ demarrerApp({
             this.prestations = await reponse.json();
         },
 
+        async chargerCategories() {
+            const reponse = await appelerApi("/admin/categories/prestations");
+            if (reponse.ok) {
+                this.categories = await reponse.json();
+            }
+        },
+
         formaterTarif(tarif) {
             return tarif.toLocaleString(langueCourante(), { style: "currency", currency: "EUR" });
         },
@@ -34,11 +50,19 @@ demarrerApp({
 
         reinitialiserFormulaire() {
             this.formulaire = { ...FORMULAIRE_VIDE };
+            this.categorieInitiale = null;
             this.erreur = "";
         },
 
         modifier(prestation) {
-            this.formulaire = { ...prestation };
+            this.formulaire = {
+                id: prestation.id,
+                titre: prestation.titre,
+                categorie_id: prestation.categorie_id,
+                tarif: prestation.tarif,
+                statut: prestation.statut,
+            };
+            this.categorieInitiale = prestation.categorie_id;
             this.erreur = "";
         },
 

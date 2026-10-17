@@ -161,6 +161,26 @@ func validerAnnonce(entree AnnonceEntree) string {
 	return ""
 }
 
+func (s *Serveur) categorieAnnonceUtilisable(w http.ResponseWriter, categorieID, categorieActuelle *int) bool {
+	if categorieID == nil {
+		return true
+	}
+	actuelle := 0
+	if categorieActuelle != nil {
+		actuelle = *categorieActuelle
+	}
+	_, message, err := s.verifierCategorie(tableCategoriesMateriaux, *categorieID, actuelle)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return false
+	}
+	if message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
+		return false
+	}
+	return true
+}
+
 func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
 	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleProfessionnel, roleAdministrateur)
 	if !ok {
@@ -174,6 +194,9 @@ func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
 	}
 	if message := validerAnnonce(entree); message != "" {
 		envoyerErreur(w, http.StatusBadRequest, message)
+		return
+	}
+	if !s.categorieAnnonceUtilisable(w, entree.CategorieID, nil) {
 		return
 	}
 
@@ -228,6 +251,9 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 	}
 	if message := validerAnnonce(entree); message != "" {
 		envoyerErreur(w, http.StatusBadRequest, message)
+		return
+	}
+	if !s.categorieAnnonceUtilisable(w, entree.CategorieID, avant.CategorieID) {
 		return
 	}
 	if avant.Statut == "cedee" && !memeContenu(avant, entree) {

@@ -21,8 +21,8 @@ func (s *Serveur) gererPDFPrestation(w http.ResponseWriter, r *http.Request) {
 
 	var prestation Prestation
 	err = s.db.QueryRow(
-		"SELECT id, titre, categorie, tarif, statut FROM prestations WHERE id = $1", id,
-	).Scan(&prestation.ID, &prestation.Titre, &prestation.Categorie, &prestation.Tarif, &prestation.Statut)
+		selectionPrestations+" WHERE p.id = $1", id,
+	).Scan(&prestation.ID, &prestation.Titre, &prestation.CategorieID, &prestation.Categorie, &prestation.Tarif, &prestation.Statut)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "prestation introuvable")

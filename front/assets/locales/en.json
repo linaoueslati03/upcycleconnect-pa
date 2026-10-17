@@ -17,6 +17,20 @@
             "refusees": "Rejected",
             "titre": "Listing approval"
         },
+        "categories": {
+            "active": "Active",
+            "activer": "Activate",
+            "ajouter": "Add",
+            "desactiver": "Deactivate",
+            "erreur_chargement": "Error while loading categories",
+            "explication": "A deactivated category is no longer offered, but services and listings using it keep it. For items, the displayed name comes from the translation files when it exists; otherwise it is the name entered here.",
+            "inactive": "Inactive",
+            "materiaux": "Item categories (listings)",
+            "nouvelle": "New category name",
+            "prestations": "Service categories",
+            "renommer": "Rename",
+            "titre": "Categories"
+        },
         "langues": {
             "active": "Active",
             "activer": "Activate",
@@ -285,6 +299,7 @@
         "annonces": "Listings",
         "ateliers": "Workshops",
         "catalogue": "Catalogue",
+        "categories": "Categories",
         "conseils": "Advice",
         "contrats": "Contracts & Billing",
         "depots": "Container drop-offs",

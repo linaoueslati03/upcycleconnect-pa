@@ -62,7 +62,10 @@ $titrePage = "nav.prestations";
 
                         <div class="form-group">
                             <label for="categorie">{{ $t('commun.categorie') }}</label>
-                            <input id="categorie" type="text" v-model="formulaire.categorie" required>
+                            <select id="categorie" v-model="formulaire.categorie_id" required>
+                                <option :value="null" disabled>{{ $t('commun.choisir_categorie') }}</option>
+                                <option v-for="c in categoriesProposees" :key="c.id" :value="c.id">{{ c.libelle }}</option>
+                            </select>
                         </div>
 
                         <div class="form-group">

@@ -17,6 +17,20 @@
             "refusees": "Refusées",
             "titre": "Validation des annonces"
         },
+        "categories": {
+            "active": "Active",
+            "activer": "Activer",
+            "ajouter": "Ajouter",
+            "desactiver": "Désactiver",
+            "erreur_chargement": "Erreur lors du chargement des catégories",
+            "explication": "Une catégorie désactivée n'est plus proposée, mais les prestations et annonces qui l'utilisent la gardent. Pour les objets, le nom affiché vient des fichiers de traduction quand il existe ; sinon, c'est le nom saisi ici.",
+            "inactive": "Inactive",
+            "materiaux": "Catégories des objets (annonces)",
+            "nouvelle": "Nom de la nouvelle catégorie",
+            "prestations": "Catégories des prestations",
+            "renommer": "Renommer",
+            "titre": "Catégories"
+        },
         "langues": {
             "active": "Active",
             "activer": "Activer",
@@ -285,6 +299,7 @@
         "annonces": "Annonces",
         "ateliers": "Ateliers",
         "catalogue": "Catalogue",
+        "categories": "Catégories",
         "conseils": "Conseils",
         "contrats": "Contrats & Facturation",
         "depots": "Dépôts en conteneur",

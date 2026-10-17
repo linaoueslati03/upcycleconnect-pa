@@ -86,3 +86,21 @@ label.lien-action {
     display: inline-block;
     cursor: pointer;
 }
+
+.discret {
+    color: #6b7280;
+}
+
+.section-categories {
+    margin-bottom: 24px;
+}
+
+.ajout-categorie {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.ajout-categorie input {
+    flex: 1;
+}
