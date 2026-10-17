@@ -11,7 +11,8 @@ import (
 
 type MonCompte struct {
 	Utilisateur
-	TutorielVu bool `json:"tutoriel_vu"`
+	TutorielVu            bool `json:"tutoriel_vu"`
+	DoitChangerMotDePasse bool `json:"doit_changer_mot_de_passe"`
 }
 
 type MotDePasseEntree struct {
@@ -36,9 +37,11 @@ func (s *Serveur) gererMonCompte(w http.ResponseWriter, r *http.Request) {
 	var u MonCompte
 	var langueID sql.NullInt64
 	err = s.db.QueryRow(`
-		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation, tutoriel_vu
+		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation, tutoriel_vu,
+		       doit_changer_mot_de_passe
 		FROM utilisateurs WHERE id = $1`, utilisateurID,
-	).Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore, &u.DateCreation, &u.TutorielVu)
+	).Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore, &u.DateCreation, &u.TutorielVu,
+		&u.DoitChangerMotDePasse)
 
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
@@ -146,7 +149,7 @@ func (s *Serveur) gererChangementMotDePasse(w http.ResponseWriter, r *http.Reque
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if _, err := s.db.Exec("UPDATE utilisateurs SET mot_de_passe_hash = $1 WHERE id = $2", string(nouveauHash), utilisateurID); err != nil {
+	if _, err := s.db.Exec("UPDATE utilisateurs SET mot_de_passe_hash = $1, doit_changer_mot_de_passe = FALSE WHERE id = $2", string(nouveauHash), utilisateurID); err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}

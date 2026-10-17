@@ -102,17 +102,27 @@
             "titre": "Gestion des prestations"
         },
         "utilisateurs": {
+            "confirmer_reinitialisation": "Réinitialiser le mot de passe de ce compte ? La personne sera déconnectée.",
             "confirmer_suppression": "Supprimer cet utilisateur ?",
             "confirmer_suspension": "Suspendre ce compte ? La personne sera déconnectée et ne pourra plus se connecter.",
             "erreur_chargement": "Erreur lors du chargement des utilisateurs",
+            "fermer": "Fermer",
             "modifier": "Modifier l'utilisateur",
+            "mot_de_passe_temporaire": "Mot de passe temporaire de {personne} :",
+            "mot_de_passe_temporaire_aide": "Transmettez-le à la personne : il ne sera plus affiché. Elle devra le changer à sa prochaine connexion.",
             "nouveau": "Nouvel utilisateur",
+            "page": "Page {page} sur {pages}",
             "reactiver": "Réactiver",
+            "rechercher": "Rechercher par nom, prénom ou e-mail",
+            "reinitialiser_mot_de_passe": "Réinitialiser le mot de passe",
             "responsable": "Responsable",
+            "resultats": "{total} compte(s)",
             "statut_actif": "Actif",
             "statut_suspendu": "Suspendu",
             "suspendre": "Suspendre",
-            "titre": "Gestion des utilisateurs"
+            "titre": "Gestion des utilisateurs",
+            "tous_roles": "Tous les rôles",
+            "tous_statuts": "Tous les statuts"
         }
     },
     "annonce": {
@@ -213,6 +223,7 @@
         "valider": "Valider"
     },
     "compte": {
+        "changement_obligatoire": "Votre mot de passe a été réinitialisé : choisissez-en un nouveau pour continuer.",
         "changer_mot_de_passe": "Changer le mot de passe",
         "erreur_chargement": "Erreur lors du chargement de votre compte",
         "langue_affichage": "Langue d'affichage",

@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -34,23 +36,68 @@ type UtilisateurEntree struct {
 	LanguePrefereeID *int   `json:"langue_preferee_id"`
 }
 
+const utilisateursParPage = 20
+
+var echappementRecherche = strings.NewReplacer(`\`, `\\`, "%", `\%`, "_", `\_`)
+
+type PageUtilisateurs struct {
+	Utilisateurs []Utilisateur `json:"utilisateurs"`
+	Total        int           `json:"total"`
+	Page         int           `json:"page"`
+	ParPage      int           `json:"par_page"`
+}
+
+func filtresUtilisateurs(r *http.Request) (string, []any) {
+	conditions := []string{"TRUE"}
+	args := []any{}
+
+	if recherche := strings.TrimSpace(r.URL.Query().Get("recherche")); recherche != "" {
+		args = append(args, "%"+echappementRecherche.Replace(strings.ToLower(recherche))+"%")
+		conditions = append(conditions, fmt.Sprintf("lower(u.nom || ' ' || u.prenom || ' ' || u.email) LIKE $%d", len(args)))
+	}
+	if roleID, err := strconv.Atoi(r.URL.Query().Get("role_id")); err == nil {
+		args = append(args, roleID)
+		conditions = append(conditions, fmt.Sprintf("u.role_id = $%d", len(args)))
+	}
+	if statut := r.URL.Query().Get("statut"); statut == statutActif || statut == statutSuspendu {
+		args = append(args, statut)
+		conditions = append(conditions, fmt.Sprintf("u.statut = $%d", len(args)))
+	}
+
+	return strings.Join(conditions, " AND "), args
+}
+
 func (s *Serveur) gererListeUtilisateurs(w http.ResponseWriter, r *http.Request) {
 	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
 		return
 	}
 
-	lignes, err := s.db.Query(`
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil || page < 1 {
+		page = 1
+	}
+	where, args := filtresUtilisateurs(r)
+
+	resultat := PageUtilisateurs{Utilisateurs: make([]Utilisateur, 0), Page: page, ParPage: utilisateursParPage}
+	if err := s.db.QueryRow("SELECT count(*) FROM utilisateurs u WHERE "+where, args...).Scan(&resultat.Total); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
+	args = append(args, utilisateursParPage, (page-1)*utilisateursParPage)
+	lignes, err := s.db.Query(fmt.Sprintf(`
 		SELECT u.id, u.role_id, u.nom, u.prenom, u.email, u.statut, u.langue_preferee_id, u.upcycling_score,
 		       u.date_creation, s.est_responsable
 		FROM utilisateurs u LEFT JOIN salaries s ON s.utilisateur_id = u.id
-		ORDER BY u.id`)
+		WHERE %s
+		ORDER BY u.nom, u.prenom, u.id
+		LIMIT $%d OFFSET $%d`, where, len(args)-1, len(args)), args...)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
 	defer lignes.Close()
 
-	utilisateurs := make([]Utilisateur, 0)
 	for lignes.Next() {
 		var u Utilisateur
 		var langueID sql.NullInt64
@@ -67,10 +114,10 @@ func (s *Serveur) gererListeUtilisateurs(w http.ResponseWriter, r *http.Request)
 		if estResponsable.Valid {
 			u.EstResponsable = &estResponsable.Bool
 		}
-		utilisateurs = append(utilisateurs, u)
+		resultat.Utilisateurs = append(resultat.Utilisateurs, u)
 	}
 
-	envoyerJSON(w, http.StatusOK, utilisateurs)
+	envoyerJSON(w, http.StatusOK, resultat)
 }
 
 func (s *Serveur) gererDetailUtilisateur(w http.ResponseWriter, r *http.Request) {

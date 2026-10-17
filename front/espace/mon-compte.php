@@ -19,6 +19,8 @@ $titrePage = "nav.mon_compte";
                 <h1>{{ $t('nav.mon_compte') }}</h1>
             </div>
 
+            <p v-if="motDePasseObligatoire" class="erreur">{{ $t('compte.changement_obligatoire') }}</p>
+
             <div class="deux-colonnes">
 
                 <div class="carte">

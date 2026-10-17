@@ -9,6 +9,7 @@ $liens = [
     "plannings.php"    => ["nav.plannings", "party-horn-svgrepo-com.svg"],
     "moderation.php"   => ["nav.moderation", "message-square-shield-svgrepo-com.svg"],
     "langues.php"      => ["nav.langues", "news-svgrepo-com.svg"],
+    "mon-compte.php"   => ["nav.mon_compte", "people-svgrepo-com.svg"],
 ];
 
 $feuillesStyle = ["../assets/css/admin.css"];

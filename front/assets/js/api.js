@@ -28,6 +28,15 @@ function afficherMenuDuRole() {
 function oublierConnexion() {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("changer_mot_de_passe");
+}
+
+function pageMonCompte() {
+    return roleConnecte() === "administrateur" ? "/admin/mon-compte.php" : "/espace/mon-compte.php";
+}
+
+function doitChangerMotDePasse() {
+    return localStorage.getItem("changer_mot_de_passe") === "1";
 }
 
 function langueCourante() {
@@ -135,6 +144,10 @@ async function appelerApi(chemin, options = {}) {
 function exigerConnexion(...roles) {
     if (!localStorage.getItem("token") || !roles.includes(roleConnecte())) {
         window.location.href = PAGE_CONNEXION;
+        return;
+    }
+    if (doitChangerMotDePasse() && window.location.pathname !== pageMonCompte()) {
+        window.location.href = pageMonCompte();
     }
 }
 

@@ -102,17 +102,27 @@
             "titre": "Service management"
         },
         "utilisateurs": {
+            "confirmer_reinitialisation": "Reset this account's password? The user will be logged out.",
             "confirmer_suppression": "Delete this user?",
             "confirmer_suspension": "Suspend this account? The user will be logged out and will no longer be able to log in.",
             "erreur_chargement": "Error while loading users",
+            "fermer": "Close",
             "modifier": "Edit user",
+            "mot_de_passe_temporaire": "Temporary password for {personne}:",
+            "mot_de_passe_temporaire_aide": "Give it to the user: it will not be shown again. They will have to change it at their next login.",
             "nouveau": "New user",
+            "page": "Page {page} of {pages}",
             "reactiver": "Reactivate",
+            "rechercher": "Search by last name, first name or e-mail",
+            "reinitialiser_mot_de_passe": "Reset password",
             "responsable": "Manager",
+            "resultats": "{total} account(s)",
             "statut_actif": "Active",
             "statut_suspendu": "Suspended",
             "suspendre": "Suspend",
-            "titre": "User management"
+            "titre": "User management",
+            "tous_roles": "All roles",
+            "tous_statuts": "All statuses"
         }
     },
     "annonce": {
@@ -213,6 +223,7 @@
         "valider": "Approve"
     },
     "compte": {
+        "changement_obligatoire": "Your password has been reset: choose a new one to continue.",
         "changer_mot_de_passe": "Change password",
         "erreur_chargement": "Error while loading your account",
         "langue_affichage": "Display language",

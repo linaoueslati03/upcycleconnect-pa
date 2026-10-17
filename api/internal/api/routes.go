@@ -82,6 +82,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("DELETE /api/utilisateurs/{id}", s.gererSuppressionUtilisateur)
 	mux.HandleFunc("PUT /api/utilisateurs/{id}/statut", s.gererChangementStatutUtilisateur)
 	mux.HandleFunc("PUT /api/utilisateurs/{id}/responsable", s.gererChangementResponsable)
+	mux.HandleFunc("PUT /api/utilisateurs/{id}/mot-de-passe", s.gererReinitialisationMotDePasse)
 
 	mux.HandleFunc("GET /api/prestations", s.gererListePrestations)
 	mux.HandleFunc("POST /api/prestations", s.gererCreationPrestation)

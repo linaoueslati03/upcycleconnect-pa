@@ -104,3 +104,38 @@ label.lien-action {
 .ajout-categorie input {
     flex: 1;
 }
+
+.filtres-utilisateurs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.filtres-utilisateurs input[type="search"] {
+    flex: 1;
+    min-width: 240px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+}
+
+.lien-action:disabled {
+    opacity: 0.4;
+    cursor: default;
+    text-decoration: none;
+}
+
+.mot-de-passe-temporaire {
+    margin-bottom: 18px;
+    border-left: 4px solid #2E7D32;
+}
+
+.mot-de-passe-temporaire code {
+    font-size: 20px;
+    letter-spacing: 1px;
+}

@@ -32,6 +32,8 @@ const (
 
 const abonnementPremium = "premium"
 
+var routesAvantChangementMotDePasse = []string{"/api/moi", "/api/moi/mot-de-passe", "/api/moi/langue", "/api/logout"}
+
 const (
 	longueurMinimaleMotDePasse = 12
 	tailleMaximaleMotDePasse   = 72
@@ -88,14 +90,15 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 
 	var utilisateurID int
 	var hash, role, langue, statut string
+	var doitChangerMotDePasse bool
 	err := s.db.QueryRow(`
-		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, ''), u.statut
+		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, ''), u.statut, u.doit_changer_mot_de_passe
 		FROM utilisateurs u
 		JOIN roles r ON r.id = u.role_id
 		LEFT JOIN langues l ON l.id = u.langue_preferee_id
 		WHERE u.email = $1`,
 		creds.Email,
-	).Scan(&utilisateurID, &hash, &role, &langue, &statut)
+	).Scan(&utilisateurID, &hash, &role, &langue, &statut, &doitChangerMotDePasse)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusUnauthorized, "email ou mot de passe incorrect")
@@ -131,7 +134,9 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	envoyerJSON(w, http.StatusOK, map[string]string{"token": token, "role": role, "langue": langue})
+	envoyerJSON(w, http.StatusOK, map[string]any{
+		"token": token, "role": role, "langue": langue, "doit_changer_mot_de_passe": doitChangerMotDePasse,
+	})
 }
 
 func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
@@ -155,15 +160,19 @@ func (s *Serveur) utilisateurConnecte(r *http.Request) (int, error) {
 	}
 
 	var utilisateurID int
+	var doitChangerMotDePasse bool
 	err := s.db.QueryRow(`
-		SELECT s.utilisateur_id
+		SELECT s.utilisateur_id, u.doit_changer_mot_de_passe
 		FROM sessions s
 		JOIN utilisateurs u ON u.id = s.utilisateur_id
 		WHERE s.empreinte_token = $1 AND s.date_expiration > now() AND u.statut = $2`,
 		empreinteJeton(token), statutActif,
-	).Scan(&utilisateurID)
+	).Scan(&utilisateurID, &doitChangerMotDePasse)
 	if err != nil {
 		return 0, errors.New("session invalide ou expirée")
+	}
+	if doitChangerMotDePasse && !slices.Contains(routesAvantChangementMotDePasse, r.URL.Path) {
+		return 0, errors.New("changement de mot de passe obligatoire")
 	}
 
 	return utilisateurID, nil
