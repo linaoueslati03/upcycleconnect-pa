@@ -124,9 +124,30 @@ aside li {
     color: #1F3864;
 }
 
-#logout-button {
+.pied-menu {
     margin-top: auto;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+#selecteur-langue {
+    padding: 6px 10px;
+
+    border: 1px solid rgba(31, 56, 100, 0.15);
+    border-radius: 6px;
+    background: #fff;
+
+    color: #1F3864;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+#logout-button {
     padding: 8px;
 
     border: none;

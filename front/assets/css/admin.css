@@ -76,3 +76,13 @@
     color: #b91c1c;
     font-weight: 600;
 }
+
+.succes {
+    color: #2E7D32;
+    font-weight: 600;
+}
+
+label.lien-action {
+    display: inline-block;
+    cursor: pointer;
+}

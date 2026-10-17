@@ -13,6 +13,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("PUT /api/moi", s.gererModificationMonCompte)
 	mux.HandleFunc("PUT /api/moi/tutoriel", s.gererTutorielVu)
 	mux.HandleFunc("PUT /api/moi/mot-de-passe", s.gererChangementMotDePasse)
+	mux.HandleFunc("PUT /api/moi/langue", s.gererChangementLanguePreferee)
 	mux.HandleFunc("GET /api/moi/dashboard", s.gererDashboard)
 
 	mux.HandleFunc("GET /api/annonces", s.gererListeAnnonces)
@@ -33,6 +34,10 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/categories", s.gererListeCategories)
 	mux.HandleFunc("GET /api/conteneurs", s.gererListeConteneurs)
 	mux.HandleFunc("GET /api/langues", s.gererListeLangues)
+	mux.HandleFunc("GET /api/admin/langues", s.gererListeLanguesAdmin)
+	mux.HandleFunc("POST /api/admin/langues", s.gererCreationLangue)
+	mux.HandleFunc("PUT /api/admin/langues/{id}", s.gererModificationLangue)
+	mux.HandleFunc("PUT /api/admin/langues/{id}/traduction", s.gererImportTraduction)
 
 	mux.HandleFunc("GET /api/conseils", s.gererListeConseils)
 	mux.HandleFunc("GET /api/conseils/{id}", s.gererDetailConseil)
