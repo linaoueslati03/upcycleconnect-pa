@@ -59,6 +59,11 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/forums/sujets/{id}/messages", s.gererMessagesSujet)
 	mux.HandleFunc("POST /api/forums/sujets/{id}/messages", s.gererReponseSujet)
 	mux.HandleFunc("POST /api/forums/messages/{id}/signalement", s.gererSignalementMessage)
+	mux.HandleFunc("PUT /api/forums/messages/{id}/statut", s.gererStatutMessage)
+	mux.HandleFunc("PUT /api/forums/sujets/{id}/statut", s.gererStatutSujet)
+	mux.HandleFunc("GET /api/moderation/signalements", s.gererListeSignalements)
+	mux.HandleFunc("PUT /api/moderation/signalements/{id}", s.gererDecisionSignalement)
+	mux.HandleFunc("GET /api/moderation/sujets", s.gererListeSujetsModeration)
 
 	mux.HandleFunc("GET /api/utilisateurs", s.gererListeUtilisateurs)
 	mux.HandleFunc("POST /api/utilisateurs", s.gererCreationUtilisateur)

@@ -17,6 +17,38 @@
             "refusees": "Rejected",
             "titre": "Listing approval"
         },
+        "moderation": {
+            "a_traiter": "To review",
+            "aucun_signalement": "No reports.",
+            "aucun_sujet": "No topics.",
+            "auteur": "Author",
+            "date": "Date",
+            "en_attente": "Pending",
+            "erreur_chargement": "Error while loading moderation",
+            "masquer": "Hide message",
+            "message": "Message",
+            "motif": "Reason",
+            "rejeter_signalement": "Dismiss report",
+            "rejetes": "Rejected",
+            "retablir": "Restore message",
+            "signale_par": "Reported by",
+            "signalements": "Reported messages",
+            "statut_signalement": {
+                "a_traiter": "To review",
+                "rejete": "Dismissed",
+                "traite": "Handled"
+            },
+            "statut_sujet": {
+                "en_attente": "Pending",
+                "rejete": "Rejected",
+                "valide": "Approved"
+            },
+            "sujet": "Topic",
+            "sujets": "Topics",
+            "titre": "Forum moderation",
+            "traites": "Handled",
+            "valides": "Approved"
+        },
         "plannings": {
             "a_venir": "Upcoming only",
             "anime": "Hosts",
@@ -240,6 +272,7 @@
         "forums": "Forums",
         "mes_annonces": "My listings",
         "mes_projets": "My projects",
+        "moderation": "Moderation",
         "mon_compte": "My account",
         "mon_planning": "My schedule",
         "plannings": "Schedules",
