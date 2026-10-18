@@ -1,8 +1,3 @@
-<?php
-// Menu latéral commun aux espaces connectés.
-// $liens (défini dans inclus/espace.php de chaque espace) : fichier => [clé du libellé, icône]
-// Les libellés sont traduits au chargement de la page (attribut data-t, voir api.js).
-?>
 <aside>
 
     <a id="toggle-button" href="<?= array_key_first($liens) ?>" aria-label="UpcycleConnect">
@@ -10,11 +5,12 @@
     </a>
 
     <ul>
-        <?php foreach ($liens as $fichier => [$libelle, $icone]): ?>
-            <li>
+        <?php foreach ($liens as $fichier => $lien): ?>
+            <?php $roles = $lien[2] ?? []; ?>
+            <li data-roles="<?= implode(" ", $roles) ?>" <?= $roles ? "hidden" : "" ?>>
                 <a class="nav-button" href="<?= $fichier ?>">
-                    <img src="../assets/img/<?= $icone ?>" alt="" aria-hidden="true">
-                    <span data-t="<?= $libelle ?>"></span>
+                    <img src="../assets/img/<?= $lien[1] ?>" alt="" aria-hidden="true">
+                    <span data-t="<?= $lien[0] ?>"></span>
                 </a>
             </li>
         <?php endforeach; ?>

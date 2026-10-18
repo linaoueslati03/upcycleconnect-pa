@@ -1,5 +1,3 @@
--- Forum : tout utilisateur peut écrire, la modération est faite par les salariés.
-
 CREATE TABLE forum_sujets (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(150) NOT NULL,

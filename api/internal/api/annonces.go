@@ -125,16 +125,8 @@ func (s *Serveur) gererDetailAnnonce(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, a)
 }
 
-// Cycle de vie d'une annonce : créée « en_attente », elle est validée (« en_ligne ») ou
-// refusée (« refusee ») par un administrateur. Une fois en ligne, son auteur peut la passer
-// en « reservee » ou « cedee ». Le sujet impose cette validation par le service administratif.
 var statutsAnnonceValidee = []string{"en_ligne", "reservee", "cedee"}
 
-// statutApresModification calcule le statut d'une annonce modifiée par son auteur :
-//   - une annonce cédée est définitive (sinon on pourrait regagner les points en boucle) ;
-//   - une annonce pas encore validée, refusée, ou dont le contenu change, repart en
-//     validation : l'auteur ne peut jamais publier lui-même un contenu non vérifié ;
-//   - sinon l'auteur peut seulement la passer en ligne, réservée ou cédée.
 func statutApresModification(statutAvant, statutDemande string, contenuModifie bool) string {
 	if statutAvant == "cedee" {
 		return "cedee"
@@ -148,7 +140,6 @@ func statutApresModification(statutAvant, statutDemande string, contenuModifie b
 	return statutAvant
 }
 
-// memeContenu compare le contenu d'une annonce (hors statut) avec les nouvelles valeurs.
 func memeContenu(a Annonce, e AnnonceEntree) bool {
 	memePrix := (a.Prix == nil && e.Prix == nil) || (a.Prix != nil && e.Prix != nil && *a.Prix == *e.Prix)
 	memeCategorie := (a.CategorieID == nil && e.CategorieID == nil) ||
@@ -171,9 +162,8 @@ func validerAnnonce(entree AnnonceEntree) string {
 }
 
 func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleProfessionnel, roleAdministrateur)
+	if !ok {
 		return
 	}
 
@@ -203,8 +193,8 @@ func (s *Serveur) gererCreationAnnonce(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -226,7 +216,7 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if avant.UtilisateurID != utilisateurID {
+	if avant.UtilisateurID != utilisateurID && role != roleAdministrateur {
 		envoyerErreur(w, http.StatusForbidden, "vous n'êtes pas propriétaire de cette annonce")
 		return
 	}
@@ -246,7 +236,6 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 	}
 	entree.Statut = statutApresModification(avant.Statut, entree.Statut, !memeContenu(avant, entree))
 
-	// La mise à jour et l'éventuel ajout de points se font dans la même transaction
 	tx, err := s.db.Begin()
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
@@ -282,8 +271,8 @@ func (s *Serveur) gererModificationAnnonce(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -304,7 +293,7 @@ func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	if proprietaireID != utilisateurID {
+	if proprietaireID != utilisateurID && role != roleAdministrateur {
 		envoyerErreur(w, http.StatusForbidden, "vous n'êtes pas propriétaire de cette annonce")
 		return
 	}
@@ -316,20 +305,16 @@ func (s *Serveur) gererSuppressionAnnonce(w http.ResponseWriter, r *http.Request
 	envoyerJSON(w, http.StatusOK, map[string]string{"message": "annonce supprimée"})
 }
 
-// peutVoirAnnonceNonValidee : l'auteur de l'annonce ou un administrateur.
 func (s *Serveur) peutVoirAnnonceNonValidee(r *http.Request, auteurID int) bool {
 	utilisateurID, role := s.roleConnecte(r)
 	return utilisateurID != 0 && (utilisateurID == auteurID || role == roleAdministrateur)
 }
 
-// AnnonceModeration est une annonce vue par l'administrateur, avec son auteur.
 type AnnonceModeration struct {
 	Annonce
 	Auteur string `json:"auteur"`
 }
 
-// gererModerationAnnonces liste les annonces pour le service administratif
-// (par défaut celles en attente ; ?statut= pour un autre statut, ?statut=tous pour tout).
 func (s *Serveur) gererModerationAnnonces(w http.ResponseWriter, r *http.Request) {
 	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
 		return
@@ -389,7 +374,6 @@ func (s *Serveur) gererRefusAnnonce(w http.ResponseWriter, r *http.Request) {
 	s.deciderAnnonce(w, r, "refusee")
 }
 
-// deciderAnnonce applique la décision de l'administrateur à une annonce en attente.
 func (s *Serveur) deciderAnnonce(w http.ResponseWriter, r *http.Request, nouveauStatut string) {
 	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
 		return

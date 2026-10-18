@@ -58,7 +58,7 @@ func scannerAtelier(ligne interface{ Scan(...any) error }, a *Atelier) error {
 }
 
 func (s *Serveur) gererListeAteliers(w http.ResponseWriter, r *http.Request) {
-	// Brouillons et offres en attente ne sont visibles que du personnel
+
 	requete := `SELECT ` + colonnesAtelier + ` FROM ateliers WHERE statut = 'publie' ORDER BY date_debut ASC`
 	if _, role := s.roleConnecte(r); role == roleSalarie || role == roleAdministrateur {
 		requete = `SELECT ` + colonnesAtelier + ` FROM ateliers ORDER BY date_debut ASC`
@@ -84,7 +84,7 @@ func (s *Serveur) gererListeAteliers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
-	salarieID, _, ok := s.exigerSalarie(w, r)
+	salarieID, _, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -103,8 +103,6 @@ func (s *Serveur) gererCreationAtelier(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Même règle que pour les événements : un salarié crée un atelier en brouillon ou
-	// le soumet à validation ; la publication est faite ensuite par un responsable.
 	if entree.Statut != "brouillon" && entree.Statut != "en_attente" {
 		entree.Statut = "brouillon"
 	}
@@ -142,7 +140,6 @@ func (s *Serveur) gererDetailAtelier(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Un brouillon ou une offre en attente n'est visible que du personnel
 	if a.Statut != "publie" {
 		if _, role := s.roleConnecte(r); role != roleSalarie && role != roleAdministrateur {
 			envoyerErreur(w, http.StatusNotFound, "introuvable")
@@ -154,7 +151,7 @@ func (s *Serveur) gererDetailAtelier(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -201,7 +198,7 @@ func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Reques
 }
 
 func (s *Serveur) gererSuppressionAtelier(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -229,10 +226,8 @@ func (s *Serveur) gererSuppressionAtelier(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// Même règle que les événements : seul un responsable publie un atelier en attente,
-// et il en devient le responsable.
 func (s *Serveur) gererValidationAtelier(w http.ResponseWriter, r *http.Request) {
-	responsableID, estResponsable, ok := s.exigerSalarie(w, r)
+	responsableID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}

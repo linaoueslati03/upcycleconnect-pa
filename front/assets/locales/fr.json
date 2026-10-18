@@ -1,0 +1,384 @@
+{
+    "accueil": {
+        "annonces_en_ligne": "Annonces en ligne",
+        "aucun_depot": "Aucun",
+        "bonjour": "Bonjour {prenom}",
+        "demander_depot": "Demander un dépôt en conteneur",
+        "dernier_depot": "Dernier dépôt en conteneur",
+        "erreur_chargement": "Erreur lors du chargement du tableau de bord",
+        "prochain_rdv": "Prochain rendez-vous"
+    },
+    "admin": {
+        "annonces": {
+            "a_valider": "À valider",
+            "aucune": "Aucune annonce.",
+            "auteur": "Auteur",
+            "erreur_chargement": "Erreur lors du chargement des annonces",
+            "refusees": "Refusées",
+            "titre": "Validation des annonces"
+        },
+        "plannings": {
+            "a_venir": "À venir uniquement",
+            "anime": "Anime",
+            "aucune": "Aucune activité planifiée.",
+            "erreur_chargement": "Erreur lors du chargement des plannings",
+            "inscrit": "Inscrit",
+            "participation": "Participation",
+            "personne": "Personne",
+            "rechercher_personne": "Rechercher une personne",
+            "titre": "Plannings"
+        },
+        "prestations": {
+            "confirmer_suppression": "Supprimer cette prestation ?",
+            "erreur_chargement": "Erreur lors du chargement des prestations",
+            "modifier": "Modifier la prestation",
+            "nouvelle": "Nouvelle prestation",
+            "titre": "Gestion des prestations"
+        },
+        "utilisateurs": {
+            "confirmer_suppression": "Supprimer cet utilisateur ?",
+            "confirmer_suspension": "Suspendre ce compte ? La personne sera déconnectée et ne pourra plus se connecter.",
+            "erreur_chargement": "Erreur lors du chargement des utilisateurs",
+            "modifier": "Modifier l'utilisateur",
+            "nouveau": "Nouvel utilisateur",
+            "reactiver": "Réactiver",
+            "responsable": "Responsable",
+            "statut_actif": "Actif",
+            "statut_suspendu": "Suspendu",
+            "suspendre": "Suspendre",
+            "titre": "Gestion des utilisateurs"
+        }
+    },
+    "annonce": {
+        "cedee": "Cédée",
+        "en_attente": "En attente de validation",
+        "en_ligne": "En ligne",
+        "refusee": "Refusée",
+        "reservee": "Réservée",
+        "type": {
+            "don": "Don",
+            "vente": "Vente"
+        }
+    },
+    "annonces": {
+        "aucune": "Aucune annonce ne correspond à votre recherche.",
+        "aucune_mienne": "Vous n'avez pas encore publié d'annonce.",
+        "categorie_materiau": "Catégorie de matériau",
+        "confirmer_suppression": "Supprimer cette annonce ?",
+        "deposer": "Déposer une annonce",
+        "envoyee_validation": "Annonce envoyée : elle sera visible après validation par notre équipe.",
+        "erreur_chargement": "Erreur lors du chargement des annonces",
+        "erreur_chargement_miennes": "Erreur lors du chargement de vos annonces",
+        "exemple_localisation": "Ex. Paris",
+        "marquer_cedee": "Marquer comme cédée",
+        "modifier": "Modifier l'annonce",
+        "nouvelle": "Nouvelle annonce",
+        "pas_de_description": "Pas de description.",
+        "publiee_le": "Publiée le"
+    },
+    "catalogue": {
+        "aucune": "Aucune offre publiée pour le moment.",
+        "erreur_chargement": "Erreur lors du chargement du catalogue",
+        "inscription_confirmee": "Inscription confirmée : « {titre} » a été ajouté à votre planning.",
+        "inscrit": "Vous êtes inscrit·e",
+        "places_restantes": "{nombre} places restantes",
+        "sinscrire": "S'inscrire",
+        "titre": "Formations, ateliers et événements"
+    },
+    "categorie": {
+        "bois": "Bois",
+        "metal": "Métal",
+        "plastique": "Plastique",
+        "textile": "Textile",
+        "verre": "Verre"
+    },
+    "categorie_article": {
+        "actualites": "Actualités",
+        "bois": "Bois",
+        "conseils": "Conseils",
+        "evenements": "Événements",
+        "upcycling": "Upcycling"
+    },
+    "commun": {
+        "actions": "Actions",
+        "annuler": "Annuler",
+        "categorie": "Catégorie",
+        "choisir_categorie": "Sélectionner une catégorie",
+        "confirmer_suppression": "Supprimer définitivement ?",
+        "date_debut": "Date de début",
+        "date_fin": "Date de fin",
+        "deconnexion": "Déconnexion",
+        "description": "Description",
+        "email": "Email",
+        "enregistrer": "Enregistrer",
+        "enregistrer_brouillon": "Enregistrer en brouillon",
+        "erreur": "Une erreur est survenue",
+        "erreur_chargement": "Erreur lors du chargement",
+        "gratuit": "Gratuit",
+        "langue": "Langue",
+        "lieu": "Lieu",
+        "localisation": "Localisation",
+        "modifier": "Modifier",
+        "mot_de_passe": "Mot de passe",
+        "mot_de_passe_min": "Mot de passe (8 caractères minimum)",
+        "nom": "Nom",
+        "non_precisee": "Non précisée",
+        "precedent": "Précédent",
+        "prenom": "Prénom",
+        "prix": "Prix",
+        "publier": "Publier",
+        "rechercher": "Rechercher",
+        "refuser": "Refuser",
+        "role": "Rôle",
+        "score": "Score",
+        "serveur_injoignable": "Le serveur est injoignable, réessayez dans un instant.",
+        "site": "Site",
+        "soumettre_validation": "Soumettre à validation",
+        "statut": "Statut",
+        "suivant": "Suivant",
+        "supprimer": "Supprimer",
+        "tarif": "Tarif",
+        "terminer": "Terminer",
+        "titre": "Titre",
+        "tous": "Tous",
+        "toutes": "Toutes",
+        "type": "Type",
+        "valider": "Valider"
+    },
+    "compte": {
+        "changer_mot_de_passe": "Changer le mot de passe",
+        "erreur_chargement": "Erreur lors du chargement de votre compte",
+        "langue_affichage": "Langue d'affichage",
+        "mot_de_passe_actuel": "Mot de passe actuel",
+        "mot_de_passe_modifie": "Mot de passe modifié.",
+        "nouveau_mot_de_passe": "Nouveau mot de passe (8 caractères minimum)",
+        "profil": "Profil",
+        "profil_enregistre": "Profil enregistré.",
+        "revoir_tutoriel": "Revoir le tutoriel",
+        "tutoriel": "Tutoriel",
+        "tutoriel_explication": "Revoir la présentation des fonctionnalités de votre espace."
+    },
+    "connexion": {
+        "creer_compte": "Créer un compte",
+        "espace_indisponible": "Votre espace n'est pas encore disponible.",
+        "mot_de_passe_oublie": "Vous avez oublié votre mot de passe ?",
+        "se_connecter": "Se connecter",
+        "titre": "Connexion"
+    },
+    "conseils": {
+        "aucun": "Aucun conseil trouvé.",
+        "erreur_chargement": "Erreur lors du chargement des conseils",
+        "mot_cle": "Mot-clé",
+        "publie_le": "Publié le {date}"
+    },
+    "depot": {
+        "demande": "Demande envoyée",
+        "deposee": "Objet déposé",
+        "recuperee": "Récupéré par un professionnel",
+        "validee": "Validée"
+    },
+    "depots": {
+        "aucun": "Aucune demande de dépôt pour le moment.",
+        "choisir_conteneur": "Choisir un conteneur",
+        "code_barre": "Code-barre de l'objet",
+        "code_ouverture": "Code d'ouverture du conteneur",
+        "codes_apres_validation": "Les codes vous seront communiqués dès que la demande sera validée.",
+        "conteneur_demande_le": "Conteneur : {conteneur} · demandé le {date}",
+        "conteneur_souhaite": "Conteneur souhaité",
+        "demande_envoyee": "Demande envoyée !",
+        "demander": "Demander un dépôt",
+        "description_objet": "Description de l'objet",
+        "envoyer": "Envoyer la demande",
+        "erreur_chargement": "Erreur lors du chargement de vos dépôts",
+        "explication": "Votre demande est validée par notre équipe, puis vous recevez un code pour ouvrir le conteneur.",
+        "placeholder_objet": "Type d'objet, état, dimensions…",
+        "suivi": "Suivi de mes dépôts",
+        "titre": "Dépôts en conteneur"
+    },
+    "forums": {
+        "aucun": "Aucun sujet pour le moment.",
+        "en_attente": "En attente de modération",
+        "envoyer_signalement": "Envoyer le signalement",
+        "erreur_chargement": "Erreur lors du chargement des sujets",
+        "message": "Message",
+        "motif": "Motif du signalement",
+        "nouveau": "Nouveau sujet",
+        "par": "Par {auteur}",
+        "repondre": "Répondre",
+        "signalement_envoye": "Merci, le message a été signalé à l'équipe de modération.",
+        "signaler": "Signaler",
+        "tous_les_sujets": "Tous les sujets",
+        "votre_reponse": "Votre réponse"
+    },
+    "inscription": {
+        "compte_cree_espace_indisponible": "Votre compte est créé. L'espace professionnel sera bientôt disponible.",
+        "creer": "Créer mon compte",
+        "deja_compte": "J'ai déjà un compte",
+        "je_suis": "Je suis",
+        "particulier": "Un particulier",
+        "professionnel": "Un professionnel / artisan"
+    },
+    "jour": {
+        "1": "Lundi",
+        "2": "Mardi",
+        "3": "Mercredi",
+        "4": "Jeudi",
+        "5": "Vendredi",
+        "6": "Samedi",
+        "7": "Dimanche"
+    },
+    "nav": {
+        "accueil": "Accueil",
+        "annonces": "Annonces",
+        "ateliers": "Ateliers",
+        "catalogue": "Catalogue",
+        "conseils": "Conseils",
+        "contrats": "Contrats & Facturation",
+        "depots": "Dépôts en conteneur",
+        "evenements": "Événements",
+        "forums": "Forums",
+        "mes_annonces": "Mes annonces",
+        "mes_projets": "Mes projets",
+        "mon_compte": "Mon compte",
+        "mon_planning": "Mon planning",
+        "plannings": "Plannings",
+        "prestations": "Prestations",
+        "score": "Upcycling Score",
+        "statistiques": "Statistiques avancées",
+        "utilisateurs": "Utilisateurs"
+    },
+    "offre": {
+        "atelier": "Atelier",
+        "evenement": "Événement",
+        "formation": "Formation"
+    },
+    "planning": {
+        "aucune_inscription": "Vous n'êtes inscrit·e à aucune formation, aucun atelier ni aucun événement.",
+        "voir_catalogue": "Voir le catalogue"
+    },
+    "projets": {
+        "ajouter_etape": "Ajouter l'étape",
+        "aucun": "Vous n'avez pas encore de projet.",
+        "aucune_etape": "Aucune étape documentée.",
+        "confirmer_suppression": "Supprimer ce projet et ses étapes ?",
+        "cree_le": "Créé le {date}",
+        "creer": "Créer le projet",
+        "erreur_chargement": "Erreur lors du chargement de vos projets",
+        "etapes": "Étapes de transformation",
+        "lien_photo": "Lien vers une photo (facultatif)",
+        "ne_plus_partager": "Ne plus partager",
+        "nouveau": "Nouveau projet",
+        "nouvelle_etape": "Nouvelle étape",
+        "partage": "Partagé",
+        "partager": "Partager avec la communauté",
+        "photo": "photo",
+        "prive": "Privé",
+        "supprimer": "Supprimer le projet",
+        "titre": "Mes projets d'upcycling"
+    },
+    "role": {
+        "1": "Particulier",
+        "2": "Professionnel",
+        "3": "Salarié",
+        "4": "Administrateur"
+    },
+    "salaries": {
+        "articles": {
+            "article": "Article",
+            "creer": "Créer un article",
+            "erreur_chargement": "Erreur lors du chargement de vos articles",
+            "modifier": "Modifier l'article",
+            "nouveau": "Nouvel article",
+            "placeholder_texte": "Écrivez votre article...",
+            "placeholder_titre": "Titre de l'article",
+            "titre": "Articles de conseils"
+        },
+        "ateliers": {
+            "creer": "Créer un atelier",
+            "enregistre": "Atelier enregistré !",
+            "erreur_chargement": "Erreur lors du chargement des ateliers",
+            "introuvable": "Atelier introuvable",
+            "modifier": "Modifier l'atelier",
+            "retour": "Retour à mes ateliers",
+            "titre": "Mes ateliers"
+        },
+        "depots": {
+            "a_valider": "À valider",
+            "aucun": "Aucun dépôt.",
+            "code": "Code : {code}",
+            "confirmer_depot": "Confirmer le dépôt",
+            "deposes": "Déposés",
+            "erreur_chargement": "Erreur lors du chargement des dépôts",
+            "valider_demande": "Valider la demande",
+            "valides": "Validés"
+        },
+        "evenements": {
+            "choisir_site": "Sélectionner un site",
+            "creer": "Créer un événement",
+            "enregistre": "Événement enregistré !",
+            "erreur_chargement": "Erreur lors du chargement des événements",
+            "introuvable": "Événement introuvable",
+            "modifier": "Modifier l'événement",
+            "retour": "Retour à mes événements",
+            "titre": "Mes événements"
+        },
+        "planning": {
+            "annee": "Année",
+            "erreur_chargement": "Erreur lors du chargement du planning",
+            "semaine": "Semaine",
+            "semaine_du": "Semaine du {date}"
+        },
+        "titre_date_obligatoires": "Le titre et la date de début sont obligatoires."
+    },
+    "score": {
+        "actuel": "Score actuel",
+        "aucun_point": "Aucun point gagné pour le moment.",
+        "comment_gagner": "Comment gagner des points ?",
+        "erreur_chargement": "Erreur lors du chargement du score",
+        "historique": "Historique",
+        "points": "{nombre} points",
+        "regle": {
+            "annonce": "Annonce cédée (don ou vente)",
+            "depot": "Dépôt récupéré par un professionnel",
+            "inscription": "Inscription à une formation, un atelier ou un événement"
+        },
+        "titre": "Mon Upcycling Score"
+    },
+    "site": {
+        "suisse": "Suisse"
+    },
+    "statut": {
+        "annule": "Annulé",
+        "brouillon": "Brouillon",
+        "en_attente": "En attente",
+        "publie": "Publié",
+        "termine": "Terminé"
+    },
+    "tutoriel": {
+        "1": {
+            "texte": "Voici un rapide tour des fonctionnalités de votre espace.",
+            "titre": "Bienvenue sur UpcycleConnect !"
+        },
+        "2": {
+            "texte": "Donnez ou vendez vos objets et matériaux depuis « Mes annonces », et parcourez celles des autres membres.",
+            "titre": "Vos annonces"
+        },
+        "3": {
+            "texte": "Pas le temps de gérer une vente ? Déposez votre objet dans un conteneur UpcycleConnect : vous recevez un code d'ouverture une fois la demande validée.",
+            "titre": "Le dépôt en conteneur"
+        },
+        "4": {
+            "texte": "Inscrivez-vous aux formations, ateliers et événements : ils apparaissent ensuite dans « Mon planning ».",
+            "titre": "Le catalogue"
+        },
+        "5": {
+            "texte": "Chaque dépôt, don ou inscription vous rapporte des points. Suivez leur évolution dans « Upcycling Score ».",
+            "titre": "Votre Upcycling Score"
+        },
+        "6": {
+            "texte": "Partagez vos projets d'upcycling et échangez avec les autres membres sur les forums.",
+            "titre": "La communauté"
+        },
+        "etape_sur": "Étape {numero} sur {total}"
+    }
+}

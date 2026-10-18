@@ -2,16 +2,6 @@ package api
 
 import "net/http"
 
-// Routes associe chaque route de l'API à son handler, avec le routeur de la
-// bibliothèque standard (méthode HTTP et paramètres {id} gérés depuis Go 1.22).
-//
-// Les droits sont vérifiés au début de chaque handler (exigerRole, exigerSalarie) :
-//   - publiques : santé, création de compte, login, lectures du catalogue, annonces, conseils,
-//     événements, ateliers, prestations et forums ;
-//   - utilisateur connecté : /api/moi/*, annonces, dépôts, inscriptions, projets, forums ;
-//   - salarié : écriture des événements, ateliers et conseils, planning salarié
-//     (validation : responsable) ; suivi des dépôts (avec admin et professionnel) ;
-//   - administrateur : gestion des utilisateurs et des prestations, validation des annonces.
 func (s *Serveur) Routes() http.Handler {
 	mux := http.NewServeMux()
 
@@ -43,7 +33,6 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/categories", s.gererListeCategories)
 	mux.HandleFunc("GET /api/conteneurs", s.gererListeConteneurs)
 	mux.HandleFunc("GET /api/langues", s.gererListeLangues)
-	mux.HandleFunc("GET /api/traductions", s.gererTraductions)
 
 	mux.HandleFunc("GET /api/conseils", s.gererListeConseils)
 	mux.HandleFunc("GET /api/conseils/{id}", s.gererDetailConseil)
@@ -76,6 +65,8 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/utilisateurs/{id}", s.gererDetailUtilisateur)
 	mux.HandleFunc("PUT /api/utilisateurs/{id}", s.gererModificationUtilisateur)
 	mux.HandleFunc("DELETE /api/utilisateurs/{id}", s.gererSuppressionUtilisateur)
+	mux.HandleFunc("PUT /api/utilisateurs/{id}/statut", s.gererChangementStatutUtilisateur)
+	mux.HandleFunc("PUT /api/utilisateurs/{id}/responsable", s.gererChangementResponsable)
 
 	mux.HandleFunc("GET /api/prestations", s.gererListePrestations)
 	mux.HandleFunc("POST /api/prestations", s.gererCreationPrestation)
@@ -98,6 +89,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/ateliers/{id}/valider", s.gererValidationAtelier)
 
 	mux.HandleFunc("GET /api/salaries/planning", s.gererPlanningSalarie)
+	mux.HandleFunc("GET /api/admin/plannings", s.gererPlanningsAdmin)
 	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)
 
 	return mux

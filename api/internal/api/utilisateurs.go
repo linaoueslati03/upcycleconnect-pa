@@ -22,6 +22,7 @@ type Utilisateur struct {
 	LanguePrefereeID *int      `json:"langue_preferee_id"`
 	UpcyclingScore   int       `json:"upcycling_score"`
 	DateCreation     time.Time `json:"date_creation"`
+	EstResponsable   *bool     `json:"est_responsable,omitempty"`
 }
 
 type UtilisateurEntree struct {
@@ -39,8 +40,10 @@ func (s *Serveur) gererListeUtilisateurs(w http.ResponseWriter, r *http.Request)
 	}
 
 	lignes, err := s.db.Query(`
-		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation
-		FROM utilisateurs ORDER BY id`)
+		SELECT u.id, u.role_id, u.nom, u.prenom, u.email, u.statut, u.langue_preferee_id, u.upcycling_score,
+		       u.date_creation, s.est_responsable
+		FROM utilisateurs u LEFT JOIN salaries s ON s.utilisateur_id = u.id
+		ORDER BY u.id`)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -51,13 +54,18 @@ func (s *Serveur) gererListeUtilisateurs(w http.ResponseWriter, r *http.Request)
 	for lignes.Next() {
 		var u Utilisateur
 		var langueID sql.NullInt64
-		if err := lignes.Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore, &u.DateCreation); err != nil {
+		var estResponsable sql.NullBool
+		if err := lignes.Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore,
+			&u.DateCreation, &estResponsable); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
 		if langueID.Valid {
 			v := int(langueID.Int64)
 			u.LanguePrefereeID = &v
+		}
+		if estResponsable.Valid {
+			u.EstResponsable = &estResponsable.Bool
 		}
 		utilisateurs = append(utilisateurs, u)
 	}
@@ -154,6 +162,90 @@ func (s *Serveur) gererModificationUtilisateur(w http.ResponseWriter, r *http.Re
 	envoyerJSON(w, http.StatusOK, u)
 }
 
+type StatutCompteEntree struct {
+	Statut string `json:"statut"`
+}
+
+func (s *Serveur) gererChangementStatutUtilisateur(w http.ResponseWriter, r *http.Request) {
+	adminID, ok := s.exigerRole(w, r, roleAdministrateur)
+	if !ok {
+		return
+	}
+
+	id, err := idDepuisChemin(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
+		return
+	}
+
+	var entree StatutCompteEntree
+	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {
+		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
+		return
+	}
+	if entree.Statut != statutActif && entree.Statut != statutSuspendu {
+		envoyerErreur(w, http.StatusBadRequest, "statut invalide (actif ou suspendu)")
+		return
+	}
+	if id == adminID && entree.Statut == statutSuspendu {
+		envoyerErreur(w, http.StatusBadRequest, "vous ne pouvez pas suspendre votre propre compte")
+		return
+	}
+
+	resultat, err := s.db.Exec("UPDATE utilisateurs SET statut = $1 WHERE id = $2", entree.Statut, id)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if lignes, _ := resultat.RowsAffected(); lignes == 0 {
+		envoyerErreur(w, http.StatusNotFound, "utilisateur introuvable")
+		return
+	}
+
+	if entree.Statut == statutSuspendu {
+		if _, err := s.db.Exec("DELETE FROM sessions WHERE utilisateur_id = $1", id); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+	}
+
+	envoyerJSON(w, http.StatusOK, map[string]string{"statut": entree.Statut})
+}
+
+type ResponsableEntree struct {
+	EstResponsable bool `json:"est_responsable"`
+}
+
+func (s *Serveur) gererChangementResponsable(w http.ResponseWriter, r *http.Request) {
+	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
+		return
+	}
+
+	id, err := idDepuisChemin(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
+		return
+	}
+
+	var entree ResponsableEntree
+	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {
+		envoyerErreur(w, http.StatusBadRequest, "corps de requête JSON invalide")
+		return
+	}
+
+	resultat, err := s.db.Exec("UPDATE salaries SET est_responsable = $1 WHERE utilisateur_id = $2", entree.EstResponsable, id)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if lignes, _ := resultat.RowsAffected(); lignes == 0 {
+		envoyerErreur(w, http.StatusNotFound, "salarié introuvable")
+		return
+	}
+
+	envoyerJSON(w, http.StatusOK, map[string]bool{"est_responsable": entree.EstResponsable})
+}
+
 func (s *Serveur) gererSuppressionUtilisateur(w http.ResponseWriter, r *http.Request) {
 	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
 		return
@@ -168,7 +260,7 @@ func (s *Serveur) gererSuppressionUtilisateur(w http.ResponseWriter, r *http.Req
 	resultat, err := s.db.Exec("DELETE FROM utilisateurs WHERE id = $1", id)
 	var erreurPg *pq.Error
 	if errors.As(err, &erreurPg) && erreurPg.Code == "23503" {
-		// 23503 = clé étrangère : le compte est encore référencé (annonces, inscriptions, offres créées…)
+
 		envoyerErreur(w, http.StatusConflict, "ce compte est lié à des données (annonces, inscriptions, offres…) et ne peut pas être supprimé")
 		return
 	}
@@ -210,7 +302,7 @@ func gererErreurPostgres(w http.ResponseWriter, err error) {
 			envoyerErreur(w, http.StatusConflict, "cet email est déjà utilisé")
 			return
 		case "23503":
-			// clé étrangère : un identifiant envoyé (rôle, langue, catégorie, conteneur…) n'existe pas
+
 			envoyerErreur(w, http.StatusBadRequest, "un identifiant fourni ne correspond à aucun élément existant")
 			return
 		}
@@ -268,8 +360,6 @@ func (s *Serveur) gererCreationUtilisateur(w http.ResponseWriter, r *http.Reques
 	envoyerJSON(w, http.StatusCreated, u)
 }
 
-// creerProfilSalarie ajoute la ligne salaries d'un compte qui a le rôle salarié
-// (sans effet pour les autres rôles, ni si le profil existe déjà).
 func (s *Serveur) creerProfilSalarie(utilisateurID, roleID int) error {
 	_, err := s.db.Exec(`
 		INSERT INTO salaries (utilisateur_id)
@@ -280,8 +370,6 @@ func (s *Serveur) creerProfilSalarie(utilisateurID, roleID int) error {
 	return err
 }
 
-// CompteEntree est le corps de POST /api/comptes : comme UtilisateurEntree,
-// mais le rôle est donné par son code et seuls particulier et professionnel sont permis.
 type CompteEntree struct {
 	Role             string `json:"role"`
 	Nom              string `json:"nom"`
@@ -291,9 +379,6 @@ type CompteEntree struct {
 	LanguePrefereeID *int   `json:"langue_preferee_id"`
 }
 
-// gererCreationCompte crée un compte depuis le site public. Contrairement à
-// POST /api/utilisateurs (réservé aux administrateurs), on ne peut pas y choisir
-// le rôle salarié ou administrateur.
 func (s *Serveur) gererCreationCompte(w http.ResponseWriter, r *http.Request) {
 	var entree CompteEntree
 	if err := json.NewDecoder(r.Body).Decode(&entree); err != nil {

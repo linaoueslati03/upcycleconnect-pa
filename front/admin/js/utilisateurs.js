@@ -48,7 +48,7 @@ demarrerApp({
                 prenom: this.formulaire.prenom,
                 email: this.formulaire.email,
                 role_id: this.formulaire.role_id,
-                langue_preferee_id: this.formulaire.langue_preferee_id, // sinon l'API l'effacerait
+                langue_preferee_id: this.formulaire.langue_preferee_id,
             };
 
             let chemin = "/utilisateurs";
@@ -68,6 +68,34 @@ demarrerApp({
             }
 
             this.reinitialiserFormulaire();
+            this.chargerUtilisateurs();
+        },
+
+        async changerStatut(utilisateur) {
+            const nouveauStatut = utilisateur.statut === "suspendu" ? "actif" : "suspendu";
+            if (nouveauStatut === "suspendu" && !confirm(t("admin.utilisateurs.confirmer_suspension"))) {
+                return;
+            }
+
+            const reponse = await appelerApi(`/utilisateurs/${utilisateur.id}/statut`, {
+                method: "PUT",
+                body: JSON.stringify({ statut: nouveauStatut }),
+            });
+            if (!reponse.ok) {
+                this.erreurListe = (await reponse.json()).erreur;
+                return;
+            }
+            this.chargerUtilisateurs();
+        },
+
+        async changerResponsable(utilisateur, estResponsable) {
+            const reponse = await appelerApi(`/utilisateurs/${utilisateur.id}/responsable`, {
+                method: "PUT",
+                body: JSON.stringify({ est_responsable: estResponsable }),
+            });
+            if (!reponse.ok) {
+                this.erreurListe = (await reponse.json()).erreur;
+            }
             this.chargerUtilisateurs();
         },
 

@@ -28,7 +28,6 @@ demarrerApp({
             return tarif.toLocaleString(langueCourante(), { style: "currency", currency: "EUR" });
         },
 
-        // Le récapitulatif PDF est généré par l'API Go (route publique GET /prestations/{id}/pdf)
         lienPDF(id) {
             return `${API_BASE_URL}/prestations/${id}/pdf`;
         },

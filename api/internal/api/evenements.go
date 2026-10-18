@@ -28,10 +28,6 @@ func scannerEvenement(ligne interface{ Scan(...any) error }, e *Evenement) error
 	return ligne.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
 }
 
-// verifierDroitOffre vérifie qu'un salarié peut modifier ou supprimer une offre : il doit
-// en être le créateur, ou être responsable. Renvoie le statut actuel de l'offre ; en cas
-// de refus, l'erreur HTTP est déjà écrite. table vaut "evenements" ou "ateliers" (valeurs
-// fixées dans le code, jamais venues de la requête).
 func (s *Serveur) verifierDroitOffre(w http.ResponseWriter, table string, id, salarieID int, estResponsable bool) (string, bool) {
 	var createurID int
 	var statut string
@@ -51,9 +47,6 @@ func (s *Serveur) verifierDroitOffre(w http.ResponseWriter, table string, id, sa
 	return statut, true
 }
 
-// statutApresModificationOffre : une offre déjà publiée et modifiée par un salarié non
-// responsable repart en validation ; sinon le salarié choisit brouillon ou en_attente,
-// et un statut absent laisse le statut actuel.
 func statutApresModificationOffre(statutActuel, statutDemande string, estResponsable bool) string {
 	if statutActuel == "publie" {
 		if estResponsable {
@@ -67,8 +60,6 @@ func statutApresModificationOffre(statutActuel, statutDemande string, estRespons
 	return statutActuel
 }
 
-// statutModifiable garde seulement les statuts qu'un salarié peut choisir lui-même
-// (« publie » est réservé à la validation par un responsable) ; "" = statut inchangé.
 func statutModifiable(statut string) string {
 	if statut == "brouillon" || statut == "en_attente" {
 		return statut
@@ -87,7 +78,7 @@ func validerEvenement(e Evenement) string {
 }
 
 func (s *Serveur) gererListeEvenements(w http.ResponseWriter, r *http.Request) {
-	// Brouillons et offres en attente ne sont visibles que du personnel
+
 	requete := `SELECT ` + colonnesEvenement + ` FROM evenements WHERE statut = 'publie' ORDER BY date_debut ASC`
 	if _, role := s.roleConnecte(r); role == roleSalarie || role == roleAdministrateur {
 		requete = `SELECT ` + colonnesEvenement + ` FROM evenements ORDER BY date_debut ASC`
@@ -130,7 +121,6 @@ func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Un brouillon ou une offre en attente n'est visible que du personnel
 	if e.Statut != "publie" {
 		if _, role := s.roleConnecte(r); role != roleSalarie && role != roleAdministrateur {
 			envoyerErreur(w, http.StatusNotFound, "introuvable")
@@ -142,7 +132,7 @@ func (s *Serveur) gererDetailEvenement(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request) {
-	salarieID, _, ok := s.exigerSalarie(w, r)
+	salarieID, _, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -157,15 +147,10 @@ func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// Un salarié ne peut créer un événement qu'en brouillon ou en attente de validation
-	// (les boutons "Enregistrer en brouillon" / "Soumettre à validation" du formulaire
-	// envoient cette valeur ; toute autre valeur est ramenée à "brouillon" par sécurité)
 	if e.Statut != "brouillon" && e.Statut != "en_attente" {
 		e.Statut = "brouillon"
 	}
 
-	// Le créateur est le salarié connecté : on ignore un éventuel createur_id envoyé par
-	// le front, sinon n'importe qui pourrait créer un événement au nom d'un autre.
 	err := scannerEvenement(s.db.QueryRow(`
 		INSERT INTO evenements (titre, description, date_debut, date_fin, lieu, site, statut, createur_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -181,7 +166,7 @@ func (s *Serveur) gererCreationEvenement(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -228,7 +213,7 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 }
 
 func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Request) {
-	salarieID, estResponsable, ok := s.exigerSalarie(w, r)
+	salarieID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}
@@ -256,10 +241,8 @@ func (s *Serveur) gererSuppressionEvenement(w http.ResponseWriter, r *http.Reque
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// Validation d'un événement par un responsable : passe le statut de "en_attente" à
-// "publie" et enregistre quel salarié a validé (le responsable connecté).
 func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Request) {
-	responsableID, estResponsable, ok := s.exigerSalarie(w, r)
+	responsableID, estResponsable, ok := s.exigerSalarieOuAdmin(w, r)
 	if !ok {
 		return
 	}

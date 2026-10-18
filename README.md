@@ -28,11 +28,11 @@ autour du réemploi d'objets et de matériaux.
 │   ├── migrer.sh        # applique les migrations pas encore passées
 │   └── initialiser.sh   # migrations + données, à la création de la base
 ├── front/
+│   ├── espace/          # application des particuliers, professionnels et salariés
+│   │   └── inclus/espace.php   # liste des pages et rôles autorisés pour chacune
 │   ├── admin/           # back-office administrateur
-│   ├── salaries/        # espace salariés
-│   ├── particuliers/    # espace particuliers
-│   ├── inclus/          # en-tête et menu communs aux espaces
-│   └── assets/          # css, js, images partagés
+│   ├── inclus/          # en-tête et menu communs
+│   └── assets/          # css, js, traductions (locales/), images
 ├── docker-compose.yml
 └── .env.example
 ```
@@ -66,7 +66,7 @@ les données de démonstration (mot de passe des comptes : `Test1234!`) :
 | pro@upcycleconnect.fr | Professionnel |
 
 Pour faire évoluer le schéma, on ne modifie jamais une migration déjà appliquée : on ajoute un
-nouveau fichier `db/migrations/009_....sql`, puis on l'applique sur la base existante :
+nouveau fichier `db/migrations/013_....sql`, puis on l'applique sur la base existante :
 
 ```bash
 docker compose exec postgres sh /db/migrer.sh
@@ -75,20 +75,38 @@ docker compose exec postgres sh /db/migrer.sh
 La table `schema_migrations` liste les migrations déjà appliquées. Pour repartir d'une base vide :
 `docker compose down -v && docker compose up -d` (efface toutes les données locales).
 
+## Une application, un affichage par rôle
+
+Particuliers, professionnels et salariés utilisent la même application (`front/espace/`). Le fichier
+`front/espace/inclus/espace.php` liste chaque page avec les rôles qui y ont accès : le menu n'affiche
+que les pages du rôle connecté, et une page refuse un rôle qui n'est pas dans sa liste. Dans une page
+partagée, une partie propre à un rôle s'écrit `<div v-if="roleConnecte() === 'professionnel'">`.
+
+Ces contrôles ne règlent que l'affichage : les droits sont vérifiés par l'API Go sur chaque route.
+
+Pour ajouter une page : créer `front/espace/ma-page.php` et `front/espace/js/ma-page.js`, puis l'ajouter
+dans la liste de `espace.php` avec son libellé, son icône et ses rôles.
+
 ## Multilingue
 
-Les textes de l'interface sont stockés en base (table `traductions`, une ligne par clé et par
-langue) et chargés par le front au démarrage de chaque page (`GET /api/traductions?langue=en`).
-Dans le code, un texte s'écrit `{{ t('nav.mes_annonces') }}`. Pour ajouter une langue, sans
-modifier le code :
+Le front utilise la bibliothèque [vue-i18n](https://vue-i18n.intlify.dev/) (v11, chargée par CDN).
+Les textes sont dans un fichier JSON par langue : `front/assets/locales/fr.json`, `en.json`. La liste
+des langues proposées reste en base (table `langues`, liée à la langue préférée de chaque utilisateur).
+
+Dans un template Vue, un texte s'écrit `{{ $t('nav.mes_annonces') }}`, avec des paramètres
+`{{ $t('accueil.bonjour', { prenom }) }}` ou une valeur par défaut `{{ $t('categorie.' + code, code) }}`.
+Dans le JavaScript, on utilise `t(...)` de la même façon.
+
+Pour ajouter une langue, sans modifier le code :
+
+1. copier `front/assets/locales/fr.json` en `es.json` et traduire les textes ;
+2. déclarer la langue en base :
 
 ```sql
 INSERT INTO langues (code, libelle) VALUES ('es', 'Español');
-INSERT INTO traductions (langue_id, cle, texte)
-SELECT id, 'nav.mes_annonces', 'Mis anuncios' FROM langues WHERE code = 'es';
 ```
 
-Une clé non traduite dans une langue s'affiche en français.
+Une clé absente d'une langue s'affiche en français (`fallbackLocale`).
 
 ## Organisation Git
 

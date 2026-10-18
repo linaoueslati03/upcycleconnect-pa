@@ -1,0 +1,384 @@
+{
+    "accueil": {
+        "annonces_en_ligne": "Online listings",
+        "aucun_depot": "None",
+        "bonjour": "Hello {prenom}",
+        "demander_depot": "Request a container drop-off",
+        "dernier_depot": "Latest container drop-off",
+        "erreur_chargement": "Error while loading the dashboard",
+        "prochain_rdv": "Next appointment"
+    },
+    "admin": {
+        "annonces": {
+            "a_valider": "To approve",
+            "aucune": "No listing.",
+            "auteur": "Author",
+            "erreur_chargement": "Error while loading listings",
+            "refusees": "Rejected",
+            "titre": "Listing approval"
+        },
+        "plannings": {
+            "a_venir": "Upcoming only",
+            "anime": "Hosts",
+            "aucune": "No scheduled activity.",
+            "erreur_chargement": "Error while loading schedules",
+            "inscrit": "Registered",
+            "participation": "Participation",
+            "personne": "Person",
+            "rechercher_personne": "Search for a person",
+            "titre": "Schedules"
+        },
+        "prestations": {
+            "confirmer_suppression": "Delete this service?",
+            "erreur_chargement": "Error while loading services",
+            "modifier": "Edit service",
+            "nouvelle": "New service",
+            "titre": "Service management"
+        },
+        "utilisateurs": {
+            "confirmer_suppression": "Delete this user?",
+            "confirmer_suspension": "Suspend this account? The user will be logged out and will no longer be able to log in.",
+            "erreur_chargement": "Error while loading users",
+            "modifier": "Edit user",
+            "nouveau": "New user",
+            "reactiver": "Reactivate",
+            "responsable": "Manager",
+            "statut_actif": "Active",
+            "statut_suspendu": "Suspended",
+            "suspendre": "Suspend",
+            "titre": "User management"
+        }
+    },
+    "annonce": {
+        "cedee": "Given away / sold",
+        "en_attente": "Awaiting approval",
+        "en_ligne": "Online",
+        "refusee": "Rejected",
+        "reservee": "Reserved",
+        "type": {
+            "don": "Donation",
+            "vente": "Sale"
+        }
+    },
+    "annonces": {
+        "aucune": "No listing matches your search.",
+        "aucune_mienne": "You have not posted any listing yet.",
+        "categorie_materiau": "Material category",
+        "confirmer_suppression": "Delete this listing?",
+        "deposer": "Post a listing",
+        "envoyee_validation": "Listing sent: it will be visible once approved by our team.",
+        "erreur_chargement": "Error while loading listings",
+        "erreur_chargement_miennes": "Error while loading your listings",
+        "exemple_localisation": "e.g. Paris",
+        "marquer_cedee": "Mark as given away / sold",
+        "modifier": "Edit listing",
+        "nouvelle": "New listing",
+        "pas_de_description": "No description.",
+        "publiee_le": "Published on"
+    },
+    "catalogue": {
+        "aucune": "No published offer yet.",
+        "erreur_chargement": "Error while loading the catalogue",
+        "inscription_confirmee": "Registration confirmed: “{titre}” has been added to your schedule.",
+        "inscrit": "You are registered",
+        "places_restantes": "{nombre} places left",
+        "sinscrire": "Sign up",
+        "titre": "Training, workshops and events"
+    },
+    "categorie": {
+        "bois": "Wood",
+        "metal": "Metal",
+        "plastique": "Plastic",
+        "textile": "Textile",
+        "verre": "Glass"
+    },
+    "categorie_article": {
+        "actualites": "News",
+        "bois": "Wood",
+        "conseils": "Advice",
+        "evenements": "Events",
+        "upcycling": "Upcycling"
+    },
+    "commun": {
+        "actions": "Actions",
+        "annuler": "Cancel",
+        "categorie": "Category",
+        "choisir_categorie": "Select a category",
+        "confirmer_suppression": "Delete permanently?",
+        "date_debut": "Start date",
+        "date_fin": "End date",
+        "deconnexion": "Log out",
+        "description": "Description",
+        "email": "Email",
+        "enregistrer": "Save",
+        "enregistrer_brouillon": "Save as draft",
+        "erreur": "An error occurred",
+        "erreur_chargement": "Error while loading",
+        "gratuit": "Free",
+        "langue": "Language",
+        "lieu": "Location",
+        "localisation": "Location",
+        "modifier": "Edit",
+        "mot_de_passe": "Password",
+        "mot_de_passe_min": "Password (at least 8 characters)",
+        "nom": "Last name",
+        "non_precisee": "Not specified",
+        "precedent": "Previous",
+        "prenom": "First name",
+        "prix": "Price",
+        "publier": "Publish",
+        "rechercher": "Search",
+        "refuser": "Reject",
+        "role": "Role",
+        "score": "Score",
+        "serveur_injoignable": "The server cannot be reached, please try again shortly.",
+        "site": "Site",
+        "soumettre_validation": "Submit for approval",
+        "statut": "Status",
+        "suivant": "Next",
+        "supprimer": "Delete",
+        "tarif": "Price",
+        "terminer": "Finish",
+        "titre": "Title",
+        "tous": "All",
+        "toutes": "All",
+        "type": "Type",
+        "valider": "Approve"
+    },
+    "compte": {
+        "changer_mot_de_passe": "Change password",
+        "erreur_chargement": "Error while loading your account",
+        "langue_affichage": "Display language",
+        "mot_de_passe_actuel": "Current password",
+        "mot_de_passe_modifie": "Password changed.",
+        "nouveau_mot_de_passe": "New password (at least 8 characters)",
+        "profil": "Profile",
+        "profil_enregistre": "Profile saved.",
+        "revoir_tutoriel": "See the tutorial again",
+        "tutoriel": "Tutorial",
+        "tutoriel_explication": "See the presentation of your area's features again."
+    },
+    "connexion": {
+        "creer_compte": "Create an account",
+        "espace_indisponible": "Your area is not available yet.",
+        "mot_de_passe_oublie": "Forgot your password?",
+        "se_connecter": "Log in",
+        "titre": "Log in"
+    },
+    "conseils": {
+        "aucun": "No advice found.",
+        "erreur_chargement": "Error while loading advice",
+        "mot_cle": "Keyword",
+        "publie_le": "Published on {date}"
+    },
+    "depot": {
+        "demande": "Request sent",
+        "deposee": "Item dropped off",
+        "recuperee": "Collected by a professional",
+        "validee": "Approved"
+    },
+    "depots": {
+        "aucun": "No drop-off request yet.",
+        "choisir_conteneur": "Choose a container",
+        "code_barre": "Item barcode",
+        "code_ouverture": "Container opening code",
+        "codes_apres_validation": "Your codes will be sent as soon as the request is approved.",
+        "conteneur_demande_le": "Container: {conteneur} · requested on {date}",
+        "conteneur_souhaite": "Preferred container",
+        "demande_envoyee": "Request sent!",
+        "demander": "Request a drop-off",
+        "description_objet": "Item description",
+        "envoyer": "Send request",
+        "erreur_chargement": "Error while loading your drop-offs",
+        "explication": "Our team approves your request, then you receive a code to open the container.",
+        "placeholder_objet": "Type of item, condition, size…",
+        "suivi": "My drop-offs",
+        "titre": "Container drop-offs"
+    },
+    "forums": {
+        "aucun": "No topic yet.",
+        "en_attente": "Awaiting moderation",
+        "envoyer_signalement": "Send report",
+        "erreur_chargement": "Error while loading topics",
+        "message": "Message",
+        "motif": "Reason for reporting",
+        "nouveau": "New topic",
+        "par": "By {auteur}",
+        "repondre": "Reply",
+        "signalement_envoye": "Thank you, the message has been reported to the moderation team.",
+        "signaler": "Report",
+        "tous_les_sujets": "All topics",
+        "votre_reponse": "Your reply"
+    },
+    "inscription": {
+        "compte_cree_espace_indisponible": "Your account has been created. The professional area will be available soon.",
+        "creer": "Create my account",
+        "deja_compte": "I already have an account",
+        "je_suis": "I am",
+        "particulier": "An individual",
+        "professionnel": "A professional / craftsperson"
+    },
+    "jour": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+    },
+    "nav": {
+        "accueil": "Home",
+        "annonces": "Listings",
+        "ateliers": "Workshops",
+        "catalogue": "Catalogue",
+        "conseils": "Advice",
+        "contrats": "Contracts & Billing",
+        "depots": "Container drop-offs",
+        "evenements": "Events",
+        "forums": "Forums",
+        "mes_annonces": "My listings",
+        "mes_projets": "My projects",
+        "mon_compte": "My account",
+        "mon_planning": "My schedule",
+        "plannings": "Schedules",
+        "prestations": "Services",
+        "score": "Upcycling Score",
+        "statistiques": "Advanced Statistics",
+        "utilisateurs": "Users"
+    },
+    "offre": {
+        "atelier": "Workshop",
+        "evenement": "Event",
+        "formation": "Training"
+    },
+    "planning": {
+        "aucune_inscription": "You are not registered for any training, workshop or event.",
+        "voir_catalogue": "See the catalogue"
+    },
+    "projets": {
+        "ajouter_etape": "Add step",
+        "aucun": "You don't have any project yet.",
+        "aucune_etape": "No step documented.",
+        "confirmer_suppression": "Delete this project and its steps?",
+        "cree_le": "Created on {date}",
+        "creer": "Create project",
+        "erreur_chargement": "Error while loading your projects",
+        "etapes": "Transformation steps",
+        "lien_photo": "Link to a photo (optional)",
+        "ne_plus_partager": "Stop sharing",
+        "nouveau": "New project",
+        "nouvelle_etape": "New step",
+        "partage": "Shared",
+        "partager": "Share with the community",
+        "photo": "photo",
+        "prive": "Private",
+        "supprimer": "Delete project",
+        "titre": "My upcycling projects"
+    },
+    "role": {
+        "1": "Individual",
+        "2": "Professional",
+        "3": "Employee",
+        "4": "Administrator"
+    },
+    "salaries": {
+        "articles": {
+            "article": "Article",
+            "creer": "Write an article",
+            "erreur_chargement": "Error while loading your articles",
+            "modifier": "Edit article",
+            "nouveau": "New article",
+            "placeholder_texte": "Write your article...",
+            "placeholder_titre": "Article title",
+            "titre": "Advice articles"
+        },
+        "ateliers": {
+            "creer": "Create a workshop",
+            "enregistre": "Workshop saved!",
+            "erreur_chargement": "Error while loading workshops",
+            "introuvable": "Workshop not found",
+            "modifier": "Edit workshop",
+            "retour": "Back to my workshops",
+            "titre": "My workshops"
+        },
+        "depots": {
+            "a_valider": "To approve",
+            "aucun": "No drop-off.",
+            "code": "Code: {code}",
+            "confirmer_depot": "Confirm drop-off",
+            "deposes": "Dropped off",
+            "erreur_chargement": "Error while loading drop-offs",
+            "valider_demande": "Approve request",
+            "valides": "Approved"
+        },
+        "evenements": {
+            "choisir_site": "Select a site",
+            "creer": "Create an event",
+            "enregistre": "Event saved!",
+            "erreur_chargement": "Error while loading events",
+            "introuvable": "Event not found",
+            "modifier": "Edit event",
+            "retour": "Back to my events",
+            "titre": "My events"
+        },
+        "planning": {
+            "annee": "Year",
+            "erreur_chargement": "Error while loading the schedule",
+            "semaine": "Week",
+            "semaine_du": "Week of {date}"
+        },
+        "titre_date_obligatoires": "Title and start date are required."
+    },
+    "score": {
+        "actuel": "Current score",
+        "aucun_point": "No points earned yet.",
+        "comment_gagner": "How to earn points?",
+        "erreur_chargement": "Error while loading the score",
+        "historique": "History",
+        "points": "{nombre} points",
+        "regle": {
+            "annonce": "Listing given away or sold",
+            "depot": "Drop-off collected by a professional",
+            "inscription": "Signing up for a training, workshop or event"
+        },
+        "titre": "My Upcycling Score"
+    },
+    "site": {
+        "suisse": "Switzerland"
+    },
+    "statut": {
+        "annule": "Cancelled",
+        "brouillon": "Draft",
+        "en_attente": "Pending",
+        "publie": "Published",
+        "termine": "Finished"
+    },
+    "tutoriel": {
+        "1": {
+            "texte": "Here is a quick tour of your area's features.",
+            "titre": "Welcome to UpcycleConnect!"
+        },
+        "2": {
+            "texte": "Give away or sell your items and materials from “My listings”, and browse those of other members.",
+            "titre": "Your listings"
+        },
+        "3": {
+            "texte": "No time to handle a sale? Drop your item in an UpcycleConnect container: you receive an opening code once your request is approved.",
+            "titre": "Container drop-off"
+        },
+        "4": {
+            "texte": "Sign up for training sessions, workshops and events: they then appear in “My schedule”.",
+            "titre": "The catalogue"
+        },
+        "5": {
+            "texte": "Every drop-off, donation or sign-up earns you points. Track them in “Upcycling Score”.",
+            "titre": "Your Upcycling Score"
+        },
+        "6": {
+            "texte": "Share your upcycling projects and chat with other members on the forums.",
+            "titre": "The community"
+        },
+        "etape_sur": "Step {numero} of {total}"
+    }
+}

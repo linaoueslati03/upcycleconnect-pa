@@ -16,8 +16,8 @@ $titrePage = "nav.prestations";
         <main>
 
             <div class="page-header">
-                <h1>{{ t('admin.prestations.titre') }}</h1>
-                <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ t('admin.prestations.nouvelle') }}</button>
+                <h1>{{ $t('admin.prestations.titre') }}</h1>
+                <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ $t('admin.prestations.nouvelle') }}</button>
             </div>
 
             <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
@@ -28,11 +28,11 @@ $titrePage = "nav.prestations";
                     <table class="tableau">
                         <thead>
                             <tr>
-                                <th>{{ t('commun.titre') }}</th>
-                                <th>{{ t('commun.categorie') }}</th>
-                                <th>{{ t('commun.tarif') }}</th>
-                                <th>{{ t('commun.statut') }}</th>
-                                <th>{{ t('commun.actions') }}</th>
+                                <th>{{ $t('commun.titre') }}</th>
+                                <th>{{ $t('commun.categorie') }}</th>
+                                <th>{{ $t('commun.tarif') }}</th>
+                                <th>{{ $t('commun.statut') }}</th>
+                                <th>{{ $t('commun.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,11 +40,11 @@ $titrePage = "nav.prestations";
                                 <td><strong>{{ p.titre }}</strong></td>
                                 <td>{{ p.categorie }}</td>
                                 <td>{{ formaterTarif(p.tarif) }}</td>
-                                <td>{{ t('statut.' + p.statut) }}</td>
+                                <td>{{ $t('statut.' + p.statut) }}</td>
                                 <td>
-                                    <button class="lien-action" @click="modifier(p)">{{ t('commun.modifier') }}</button>
+                                    <button class="lien-action" @click="modifier(p)">{{ $t('commun.modifier') }}</button>
                                     <a class="lien-action" :href="lienPDF(p.id)">PDF</a>
-                                    <button class="lien-action lien-supprimer" @click="supprimer(p.id)">{{ t('commun.supprimer') }}</button>
+                                    <button class="lien-action lien-supprimer" @click="supprimer(p.id)">{{ $t('commun.supprimer') }}</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -52,37 +52,37 @@ $titrePage = "nav.prestations";
                 </section>
 
                 <div class="carte carte-formulaire">
-                    <h2>{{ formulaire.id ? t('admin.prestations.modifier') : t('admin.prestations.nouvelle') }}</h2>
+                    <h2>{{ formulaire.id ? $t('admin.prestations.modifier') : $t('admin.prestations.nouvelle') }}</h2>
 
                     <form @submit.prevent="enregistrer">
                         <div class="form-group">
-                            <label for="titre">{{ t('commun.titre') }}</label>
+                            <label for="titre">{{ $t('commun.titre') }}</label>
                             <input id="titre" type="text" v-model="formulaire.titre" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="categorie">{{ t('commun.categorie') }}</label>
+                            <label for="categorie">{{ $t('commun.categorie') }}</label>
                             <input id="categorie" type="text" v-model="formulaire.categorie" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="tarif">{{ t('commun.tarif') }} (€)</label>
+                            <label for="tarif">{{ $t('commun.tarif') }} (€)</label>
                             <input id="tarif" type="number" min="0" step="0.01" v-model.number="formulaire.tarif" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="statut">{{ t('commun.statut') }}</label>
+                            <label for="statut">{{ $t('commun.statut') }}</label>
                             <select id="statut" v-model="formulaire.statut">
-                                <option value="brouillon">{{ t('statut.brouillon') }}</option>
-                                <option value="publie">{{ t('statut.publie') }}</option>
+                                <option value="brouillon">{{ $t('statut.brouillon') }}</option>
+                                <option value="publie">{{ $t('statut.publie') }}</option>
                             </select>
                         </div>
 
                         <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
                         <div class="form-buttons">
-                            <button type="submit" class="button-submit">{{ t('commun.enregistrer') }}</button>
-                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">{{ t('commun.annuler') }}</button>
+                            <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">{{ $t('commun.annuler') }}</button>
                         </div>
                     </form>
                 </div>

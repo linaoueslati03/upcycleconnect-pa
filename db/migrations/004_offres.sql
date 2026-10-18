@@ -1,6 +1,3 @@
--- Offres proposées par les salariés : événements, formations et ateliers.
--- Statuts : 'brouillon' -> 'en_attente' (soumis) -> 'publie' (validé par un responsable).
-
 CREATE TABLE evenements (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(150) NOT NULL,
@@ -22,7 +19,6 @@ CREATE TABLE evenement_salarie (
     PRIMARY KEY (evenement_id, salarie_id)
 );
 
-
 CREATE TABLE formations (
     id SERIAL PRIMARY KEY,
     titre VARCHAR(150) NOT NULL,
@@ -39,7 +35,6 @@ CREATE TABLE formations (
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now()
 );
-
 
 CREATE TABLE ateliers (
     id SERIAL PRIMARY KEY,

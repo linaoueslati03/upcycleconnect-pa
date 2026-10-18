@@ -1,5 +1,3 @@
--- Comptes de la plateforme : un seul compte par personne, son rôle dit à quel espace il accède.
-
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     code VARCHAR(20) UNIQUE NOT NULL,
@@ -12,7 +10,6 @@ INSERT INTO roles (code, libelle) VALUES
     ('salarie', 'Salarié'),
     ('administrateur', 'Administrateur');
 
-
 CREATE TABLE langues (
     id SERIAL PRIMARY KEY,
     code VARCHAR(5) UNIQUE NOT NULL,
@@ -23,7 +20,6 @@ CREATE TABLE langues (
 INSERT INTO langues (code, libelle) VALUES
     ('fr', 'Français'),
     ('en', 'English');
-
 
 CREATE TABLE utilisateurs (
     id SERIAL PRIMARY KEY,

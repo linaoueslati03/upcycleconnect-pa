@@ -71,7 +71,6 @@ func (s *Serveur) gererMonPlanning(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, planning)
 }
 
-// EntreePlanningSalarie est un événement ou un atelier dans le planning d'un salarié.
 type EntreePlanningSalarie struct {
 	Type      string     `json:"type"`
 	ID        int        `json:"id"`
@@ -82,8 +81,6 @@ type EntreePlanningSalarie struct {
 	Statut    string     `json:"statut"`
 }
 
-// gererPlanningSalarie renvoie les événements et ateliers du salarié connecté : ceux qu'il
-// a créés, dont il est responsable, ou auxquels il participe (tables de liaison).
 func (s *Serveur) gererPlanningSalarie(w http.ResponseWriter, r *http.Request) {
 	salarieID, _, ok := s.exigerSalarie(w, r)
 	if !ok {
@@ -118,4 +115,63 @@ func (s *Serveur) gererPlanningSalarie(w http.ResponseWriter, r *http.Request) {
 	}
 
 	envoyerJSON(w, http.StatusOK, planning)
+}
+
+type EntreePlanningGlobal struct {
+	UtilisateurID int       `json:"utilisateur_id"`
+	Personne      string    `json:"personne"`
+	RoleID        int       `json:"role_id"`
+	Participation string    `json:"participation"`
+	Type          string    `json:"type"`
+	OffreID       int       `json:"offre_id"`
+	Titre         string    `json:"titre"`
+	DateDebut     time.Time `json:"date_debut"`
+	Lieu          *string   `json:"lieu"`
+}
+
+func (s *Serveur) gererPlanningsAdmin(w http.ResponseWriter, r *http.Request) {
+	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
+		return
+	}
+
+	lignes, err := s.db.Query(`
+		SELECT u.id, u.prenom || ' ' || u.nom, u.role_id, 'inscrit', o.type, o.id, o.titre, o.date_debut, o.lieu
+		FROM inscriptions i
+		JOIN utilisateurs u ON u.id = i.utilisateur_id
+		JOIN (
+			SELECT 'formation' AS type, id, titre, date_debut, lieu FROM formations
+			UNION ALL SELECT 'atelier', id, titre, date_debut, lieu FROM ateliers
+			UNION ALL SELECT 'evenement', id, titre, date_debut, lieu FROM evenements
+		) o ON o.type = i.type_offre AND o.id = i.offre_id
+		UNION ALL
+		SELECT u.id, u.prenom || ' ' || u.nom, u.role_id, 'anime', a.type, a.id, a.titre, a.date_debut, a.lieu
+		FROM (
+			SELECT 'formation' AS type, id, titre, date_debut, lieu, createur_id AS animateur_id FROM formations
+			UNION SELECT 'atelier', id, titre, date_debut, lieu, createur_id FROM ateliers
+			UNION SELECT 'atelier', a.id, a.titre, a.date_debut, a.lieu, ai.salarie_id
+				FROM ateliers a JOIN atelier_intervenant ai ON ai.atelier_id = a.id
+			UNION SELECT 'evenement', id, titre, date_debut, lieu, createur_id FROM evenements
+			UNION SELECT 'evenement', e.id, e.titre, e.date_debut, e.lieu, es.salarie_id
+				FROM evenements e JOIN evenement_salarie es ON es.evenement_id = e.id
+		) a
+		JOIN utilisateurs u ON u.id = a.animateur_id
+		ORDER BY 8, 2`)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer lignes.Close()
+
+	plannings := make([]EntreePlanningGlobal, 0)
+	for lignes.Next() {
+		var e EntreePlanningGlobal
+		if err := lignes.Scan(&e.UtilisateurID, &e.Personne, &e.RoleID, &e.Participation, &e.Type, &e.OffreID,
+			&e.Titre, &e.DateDebut, &e.Lieu); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		plannings = append(plannings, e)
+	}
+
+	envoyerJSON(w, http.StatusOK, plannings)
 }

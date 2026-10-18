@@ -1,4 +1,3 @@
-// Commande api : démarre l'API HTTP d'UpcycleConnect sur le port 8081.
 package main
 
 import (
@@ -21,7 +20,7 @@ func main() {
 	serveur := api.NouveauServeur(db)
 
 	log.Println("API démarrée sur http://localhost:8081")
-	if err := http.ListenAndServe(":8081", middleware.CORS(serveur.Routes())); err != nil {
+	if err := http.ListenAndServe(":8081", middleware.CORS(middleware.Erreurs(serveur.Routes()))); err != nil {
 		log.Fatal(err)
 	}
 }

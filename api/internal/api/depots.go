@@ -81,9 +81,8 @@ const colonnesDepot = `id, utilisateur_id, conteneur_id, description_objet, code
 	statut, professionnel_recuperateur_id, date_demande, date_validation, date_recuperation`
 
 func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleAdministrateur)
+	if !ok {
 		return
 	}
 
@@ -140,8 +139,8 @@ func (s *Serveur) gererMesDepots(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) gererDetailDepot(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return
 	}
@@ -164,7 +163,8 @@ func (s *Serveur) gererDetailDepot(w http.ResponseWriter, r *http.Request) {
 
 	estProprietaire := d.UtilisateurID == utilisateurID
 	estRecuperateur := d.ProfessionnelRecuperateurID != nil && *d.ProfessionnelRecuperateurID == utilisateurID
-	if !estProprietaire && !estRecuperateur {
+	estEquipe := role == roleSalarie || role == roleAdministrateur
+	if !estProprietaire && !estRecuperateur && !estEquipe {
 		envoyerErreur(w, http.StatusForbidden, "accès non autorisé à ce dépôt")
 		return
 	}
@@ -172,9 +172,6 @@ func (s *Serveur) gererDetailDepot(w http.ResponseWriter, r *http.Request) {
 	envoyerJSON(w, http.StatusOK, d)
 }
 
-// genererCodeDepot produit une chaîne hexadécimale aléatoire de la longueur demandée.
-// Simplifié : pas un vrai format code-barre (EAN13...), juste une valeur unique et
-// non réutilisable, suffisant pour la traçabilité demandée par le sujet.
 func genererCodeDepot(longueurOctets int) (string, error) {
 	octets := make([]byte, longueurOctets)
 	if _, err := rand.Read(octets); err != nil {
@@ -184,8 +181,7 @@ func genererCodeDepot(longueurOctets int) (string, error) {
 }
 
 func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Request) {
-	// Validation et dépôt sont faits par le personnel ; la récupération par le professionnel
-	// qui vient chercher l'objet (ou enregistrée par le personnel). Jamais par le particulier.
+
 	appelantID, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur, roleProfessionnel)
 	if !ok {
 		return
@@ -215,7 +211,7 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 			envoyerErreur(w, http.StatusForbidden, "un professionnel peut seulement enregistrer la récupération")
 			return
 		}
-		// Le professionnel récupère pour lui-même : on ignore l'identifiant envoyé
+
 		entree.ProfessionnelRecuperateurID = &appelantID
 	} else if entree.Statut == "recuperee" && entree.ProfessionnelRecuperateurID != nil {
 		var roleRecuperateur string
@@ -276,7 +272,7 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 	}
 
 	if err := scannerDepot(ligne, &d); errors.Is(err, sql.ErrNoRows) {
-		// le statut a changé entre la lecture et la mise à jour (requête simultanée)
+
 		envoyerErreur(w, http.StatusConflict, "le dépôt a déjà changé de statut")
 		return
 	} else if err != nil {
@@ -294,9 +290,6 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 	envoyerJSON(w, http.StatusOK, d)
 }
 
-// gererListeDepots liste toutes les demandes de dépôt pour le personnel qui les traite
-// (filtre facultatif ?statut=demande). Le particulier, lui, ne voit que les siennes.
-// Réservée au personnel : la réponse contient les codes d'ouverture des conteneurs.
 func (s *Serveur) gererListeDepots(w http.ResponseWriter, r *http.Request) {
 	if _, ok := s.exigerRole(w, r, roleSalarie, roleAdministrateur); !ok {
 		return

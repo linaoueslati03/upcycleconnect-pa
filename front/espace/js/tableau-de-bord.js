@@ -1,0 +1,63 @@
+demarrerApp({
+    data() {
+        return {
+            prenom: "",
+            resume: null,
+            erreur: "",
+            tutorielVisible: false,
+            indexEtape: 0,
+            etapesTutoriel: ["tutoriel.1", "tutoriel.2", "tutoriel.3", "tutoriel.4", "tutoriel.5", "tutoriel.6"],
+        };
+    },
+
+    computed: {
+        etapeCourante() {
+            return this.etapesTutoriel[this.indexEtape];
+        },
+        derniereEtape() {
+            return this.indexEtape === this.etapesTutoriel.length - 1;
+        },
+    },
+
+    mounted() {
+        this.charger();
+    },
+
+    methods: {
+        formaterDate,
+
+        libelleDepot(statut) {
+            return statut ? t("depot." + statut) : t("accueil.aucun_depot");
+        },
+
+        async charger() {
+            const reponseCompte = await appelerApi("/moi");
+            if (!reponseCompte.ok) {
+                this.erreur = t("accueil.erreur_chargement");
+                return;
+            }
+            const compte = await reponseCompte.json();
+            this.prenom = compte.prenom;
+
+            if (roleConnecte() !== "particulier") {
+                return;
+            }
+
+            const reponseResume = await appelerApi("/moi/dashboard");
+            if (!reponseResume.ok) {
+                this.erreur = t("accueil.erreur_chargement");
+                return;
+            }
+            this.resume = await reponseResume.json();
+
+            const revoir = new URLSearchParams(window.location.search).has("tutoriel");
+            this.tutorielVisible = !compte.tutoriel_vu || revoir;
+        },
+
+        async terminerTutoriel() {
+            await appelerApi("/moi/tutoriel", { method: "PUT" });
+            this.tutorielVisible = false;
+            this.indexEtape = 0;
+        },
+    },
+});

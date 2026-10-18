@@ -42,9 +42,8 @@ type EtapeEntree struct {
 }
 
 func (s *Serveur) gererCreationProjet(w http.ResponseWriter, r *http.Request) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
-		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleProfessionnel, roleAdministrateur)
+	if !ok {
 		return
 	}
 
@@ -59,7 +58,7 @@ func (s *Serveur) gererCreationProjet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var p Projet
-	err = s.db.QueryRow(`
+	err := s.db.QueryRow(`
 		INSERT INTO projets_upcycling (utilisateur_id, titre, description, partage_public)
 		VALUES ($1, $2, $3, $4)
 		RETURNING id, utilisateur_id, titre, description, partage_public, sponsorise, date_creation`,
@@ -126,8 +125,8 @@ func (s *Serveur) gererDetailProjet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !p.PartagePublic {
-		utilisateurID, err := s.utilisateurConnecte(r)
-		if err != nil || utilisateurID != p.UtilisateurID {
+		utilisateurID, role := s.roleConnecte(r)
+		if utilisateurID != p.UtilisateurID && role != roleAdministrateur {
 			envoyerErreur(w, http.StatusForbidden, "ce projet n'est pas public")
 			return
 		}
@@ -160,14 +159,14 @@ func (s *Serveur) gererDetailProjet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Serveur) verifierProprietaireProjet(w http.ResponseWriter, r *http.Request, projetID int) (int, bool) {
-	utilisateurID, err := s.utilisateurConnecte(r)
-	if err != nil {
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
 		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
 		return 0, false
 	}
 
 	var proprietaireID int
-	err = s.db.QueryRow("SELECT utilisateur_id FROM projets_upcycling WHERE id = $1", projetID).Scan(&proprietaireID)
+	err := s.db.QueryRow("SELECT utilisateur_id FROM projets_upcycling WHERE id = $1", projetID).Scan(&proprietaireID)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "projet introuvable")
 		return 0, false
@@ -176,7 +175,7 @@ func (s *Serveur) verifierProprietaireProjet(w http.ResponseWriter, r *http.Requ
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return 0, false
 	}
-	if proprietaireID != utilisateurID {
+	if proprietaireID != utilisateurID && role != roleAdministrateur {
 		envoyerErreur(w, http.StatusForbidden, "vous n'êtes pas propriétaire de ce projet")
 		return 0, false
 	}
