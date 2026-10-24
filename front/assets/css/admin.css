@@ -155,6 +155,44 @@ label.lien-action {
     color: #a33;
 }
 
+.fiche-validation {
+    margin-bottom: 20px;
+}
+
+.fiche-validation h2 {
+    margin: 12px 0 4px;
+}
+
+.details-offre {
+    margin: 14px 0;
+    padding-left: 18px;
+    line-height: 1.7;
+}
+
+.description-offre {
+    margin-bottom: 18px;
+    white-space: pre-line;
+}
+
+.type-formation {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.type-atelier {
+    background-color: #ede9fe;
+    color: #5b21b6;
+}
+
+.type-evenement {
+    background-color: #fff3cd;
+    color: #92720a;
+}
+
+.bouton-refus {
+    background-color: #c62828;
+}
+
 .boutons-formulaire {
     display: flex;
     align-items: center;

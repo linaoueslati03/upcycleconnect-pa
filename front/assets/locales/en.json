@@ -151,6 +151,27 @@
             "titre": "User management",
             "tous_roles": "All roles",
             "tous_statuts": "All statuses"
+        },
+        "validations": {
+            "ateliers": "Workshops",
+            "aucune": "No offers awaiting approval.",
+            "confirmer_refus": "Confirm rejection",
+            "erreur_chargement": "Error while loading the offers to approve",
+            "evenements": "Events",
+            "explication": "Training courses, workshops and events proposed by employees wait here for approval. An approved offer is published in the catalogue; a rejected offer goes back to the employee with the reason, so they can fix it and submit it again.",
+            "formations": "Training courses",
+            "motif_exemple": "E.g. date too soon, incomplete description…",
+            "motif_refus": "Reason for rejection",
+            "places": "Seats",
+            "propose_par": "Proposed by {nom} on {date}",
+            "refusee": "\"{titre}\" has been rejected.",
+            "titre": "Approvals",
+            "type": {
+                "atelier": "Workshop",
+                "evenement": "Event",
+                "formation": "Training course"
+            },
+            "validee": "\"{titre}\" is approved and published."
         }
     },
     "annonce": {
@@ -356,7 +377,8 @@
         "prestations": "Services",
         "score": "Upcycling Score",
         "statistiques": "Advanced Statistics",
-        "utilisateurs": "Users"
+        "utilisateurs": "Users",
+        "validations": "Approvals"
     },
     "offre": {
         "atelier": "Workshop",
@@ -463,6 +485,7 @@
         "brouillon": "Draft",
         "en_attente": "Pending",
         "publie": "Published",
+        "refuse": "Rejected",
         "termine": "Finished"
     },
     "tutoriel": {

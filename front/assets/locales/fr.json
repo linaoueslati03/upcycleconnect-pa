@@ -151,6 +151,27 @@
             "titre": "Gestion des utilisateurs",
             "tous_roles": "Tous les rôles",
             "tous_statuts": "Tous les statuts"
+        },
+        "validations": {
+            "ateliers": "Ateliers",
+            "aucune": "Aucune offre en attente de validation.",
+            "confirmer_refus": "Confirmer le refus",
+            "erreur_chargement": "Erreur lors du chargement des offres à valider",
+            "evenements": "Événements",
+            "explication": "Les formations, ateliers et événements proposés par les salariés attendent ici leur validation. Une offre validée est publiée dans le catalogue ; une offre refusée revient au salarié avec le motif, qu'il peut corriger puis soumettre de nouveau.",
+            "formations": "Formations",
+            "motif_exemple": "Ex. date trop proche, description incomplète…",
+            "motif_refus": "Motif du refus",
+            "places": "Places",
+            "propose_par": "Proposé par {nom} le {date}",
+            "refusee": "« {titre} » a été refusée.",
+            "titre": "Validations",
+            "type": {
+                "atelier": "Atelier",
+                "evenement": "Événement",
+                "formation": "Formation"
+            },
+            "validee": "« {titre} » est validée et publiée."
         }
     },
     "annonce": {
@@ -356,7 +377,8 @@
         "prestations": "Prestations",
         "score": "Upcycling Score",
         "statistiques": "Statistiques avancées",
-        "utilisateurs": "Utilisateurs"
+        "utilisateurs": "Utilisateurs",
+        "validations": "Validations"
     },
     "offre": {
         "atelier": "Atelier",
@@ -463,6 +485,7 @@
         "brouillon": "Brouillon",
         "en_attente": "En attente",
         "publie": "Publié",
+        "refuse": "Refusé",
         "termine": "Terminé"
     },
     "tutoriel": {

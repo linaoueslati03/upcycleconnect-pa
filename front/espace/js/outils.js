@@ -9,6 +9,7 @@ const FILTRES_STATUT = [
     { nom: "statut.brouillon", valeur: "brouillon" },
     { nom: "statut.en_attente", valeur: "en_attente" },
     { nom: "statut.publie", valeur: "publie" },
+    { nom: "statut.refuse", valeur: "refuse" },
     { nom: "statut.annule", valeur: "annule" },
     { nom: "statut.termine", valeur: "termine" },
 ];
