@@ -108,6 +108,9 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("DELETE /api/ateliers/{id}", s.gererSuppressionAtelier)
 	mux.HandleFunc("POST /api/ateliers/{id}/valider", s.gererValidationAtelier)
 
+	mux.HandleFunc("GET /api/admin/validations", s.gererListeValidations)
+	mux.HandleFunc("PUT /api/validations/{type}/{id}", s.gererDecisionOffre)
+
 	mux.HandleFunc("GET /api/salaries/planning", s.gererPlanningSalarie)
 	mux.HandleFunc("GET /api/admin/plannings", s.gererPlanningsAdmin)
 	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)

@@ -20,12 +20,13 @@ type Evenement struct {
 	Statut      string     `json:"statut"`
 	CreateurID  int        `json:"createur_id"`
 	ValideParID *int       `json:"valide_par_id,omitempty"`
+	MotifRefus  *string    `json:"motif_refus,omitempty"`
 }
 
-const colonnesEvenement = `id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id`
+const colonnesEvenement = `id, titre, description, date_debut, date_fin, lieu, site, statut, createur_id, valide_par_id, motif_refus`
 
 func scannerEvenement(ligne interface{ Scan(...any) error }, e *Evenement) error {
-	return ligne.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID)
+	return ligne.Scan(&e.ID, &e.Titre, &e.Description, &e.DateDebut, &e.DateFin, &e.Lieu, &e.Site, &e.Statut, &e.CreateurID, &e.ValideParID, &e.MotifRefus)
 }
 
 func (s *Serveur) verifierDroitOffre(w http.ResponseWriter, table string, id, salarieID int, estResponsable bool) (string, bool) {
@@ -259,7 +260,7 @@ func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Reques
 
 	var e Evenement
 	err = scannerEvenement(s.db.QueryRow(`
-		UPDATE evenements SET statut = 'publie', valide_par_id = $1, updated_at = now()
+		UPDATE evenements SET statut = 'publie', valide_par_id = $1, motif_refus = NULL, updated_at = now()
 		WHERE id = $2 AND statut = 'en_attente'
 		RETURNING `+colonnesEvenement,
 		responsableID, id,

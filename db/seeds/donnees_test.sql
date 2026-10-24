@@ -31,6 +31,21 @@ INSERT INTO evenements (titre, description, date_debut, lieu, site, statut, crea
         now() + interval '14 days', '12 rue de la Roquette', 'Paris 11e', 'publie', utilisateur_id
     FROM salaries LIMIT 1;
 
+INSERT INTO formations (titre, description, date_debut, lieu, nb_places, tarif, statut, createur_id)
+    SELECT 'Customiser ses meubles en carton', 'Concevoir une étagère solide à partir de cartons de récupération.',
+        now() + interval '21 days', 'Paris 13e', 10, 30.00, 'en_attente', utilisateur_id
+    FROM salaries LIMIT 1;
+
+INSERT INTO ateliers (titre, description, date_debut, lieu, statut, createur_id)
+    SELECT 'Bijoux en capsules', 'Transformer des capsules de café en bijoux.',
+        now() + interval '18 days', 'Montreuil', 'en_attente', utilisateur_id
+    FROM salaries LIMIT 1;
+
+INSERT INTO evenements (titre, description, date_debut, lieu, site, statut, createur_id)
+    SELECT 'Troc de printemps', 'Échangez vos objets inutilisés contre ceux des autres participants.',
+        now() + interval '30 days', 'Place de la République', 'Paris 10e', 'en_attente', utilisateur_id
+    FROM salaries LIMIT 1;
+
 INSERT INTO conseils (titre, contenu, categorie, statut, auteur_id)
     SELECT 'Bien trier son bois', 'Séparer le bois brut du bois traité avant tout dépôt.', 'conseils', 'publie', utilisateur_id
     FROM salaries LIMIT 1;
