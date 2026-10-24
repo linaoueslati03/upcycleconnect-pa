@@ -59,6 +59,101 @@
             },
             "titre": "Containers"
         },
+        "finances": {
+            "abonnements_premium": "Professionals' premium subscriptions",
+            "ajouter_charge": "Add an expense",
+            "annonceur": "Advertiser",
+            "appliquer": "Apply",
+            "aucun_abonnement": "No subscriptions.",
+            "aucun_paiement": "No payments over this period.",
+            "aucune_campagne": "No campaigns.",
+            "aucune_charge": "No expenses over this period.",
+            "bilan_mensuel": "Monthly summary",
+            "campagnes": "Advertising campaigns",
+            "categorie_charge": {
+                "autre": "Other",
+                "infrastructure": "Infrastructure",
+                "loyers": "Rent",
+                "marketing": "Marketing",
+                "salaires": "Salaries"
+            },
+            "charges": "Expenses",
+            "charges_periode": "Expenses for the period",
+            "cible": {
+                "annonce": "Listing",
+                "projet": "Project"
+            },
+            "commission": "Commission",
+            "confirmer_suppression_charge": "Delete the expense “{libelle}”?",
+            "date": "Date",
+            "depuis": "Since {date}",
+            "derniere_modification": "Last changed on {date}",
+            "encaisse": "Amount paid",
+            "explication_commission": "For item sales, UpcycleConnect only keeps its commission: {volume} worth of items were sold between members over the period.",
+            "explication_parametres": "A new rate only applies to future sales: each sale keeps the rate in force on the day it was paid. The premium price applies to new subscriptions.",
+            "libelle": "Label",
+            "mensualite": "Per month",
+            "mis_en_avant": "Promoted",
+            "mois": "Month",
+            "montant": "Amount",
+            "montant_euros": "Amount (€)",
+            "nb_paiements": "Payments",
+            "onglet": {
+                "abonnements": "Subscriptions",
+                "charges": "Expenses",
+                "parametres": "Settings",
+                "publicite": "Advertising",
+                "synthese": "Overview",
+                "transactions": "Transactions"
+            },
+            "page": "Page {page} of {pages} · {total} payments",
+            "par_source": "Revenue by source",
+            "parametres_enregistres": "Settings saved.",
+            "payeur": "Paid by",
+            "periode": "Period",
+            "prix_premium": "Premium subscription price (€15 to €30 per month)",
+            "professionnel": "Professional",
+            "raccourci": {
+                "12_mois": "Last 12 months",
+                "annee_courante": "This year",
+                "mois_courant": "This month"
+            },
+            "recurrent": "Monthly recurring revenue",
+            "recurrent_detail": "{abonnes} premium subscribers · {campagnes} active campaigns",
+            "resultat": "Net result",
+            "revenu_plateforme": "UpcycleConnect revenue",
+            "revenus": "Revenue",
+            "source": {
+                "abonnement": "Subscriptions",
+                "atelier": "Workshops",
+                "evenement": "Events",
+                "formation": "Training courses",
+                "publicite": "Advertising",
+                "vente": "Sales commissions"
+            },
+            "source_colonne": "Source",
+            "statut_abonnement": {
+                "actif": "Active",
+                "expire": "Expired",
+                "resilie": "Cancelled"
+            },
+            "statut_campagne": {
+                "active": "Active",
+                "annulee": "Cancelled",
+                "terminee": "Ended"
+            },
+            "statut_paiement": {
+                "echoue": "Failed",
+                "en_attente": "Pending",
+                "rembourse": "Refunded",
+                "reussi": "Succeeded"
+            },
+            "taux_commission": "Commission rate on sales (5 to 10%)",
+            "titre": "Financial management",
+            "total_paye": "Total paid",
+            "tous_statuts": "All statuses",
+            "toutes_sources": "All sources"
+        },
         "langues": {
             "active": "Active",
             "activer": "Activate",
@@ -366,6 +461,7 @@
         "contrats": "Contracts & Billing",
         "depots": "Container drop-offs",
         "evenements": "Events",
+        "finances": "Finances",
         "forums": "Forums",
         "langues": "Languages",
         "mes_annonces": "My listings",

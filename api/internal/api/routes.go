@@ -115,5 +115,15 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/admin/plannings", s.gererPlanningsAdmin)
 	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)
 
+	mux.HandleFunc("GET /api/admin/finances/resume", s.gererResumeFinances)
+	mux.HandleFunc("GET /api/admin/finances/paiements", s.gererListePaiements)
+	mux.HandleFunc("GET /api/admin/finances/parametres", s.gererParametresFinances)
+	mux.HandleFunc("PUT /api/admin/finances/parametres", s.gererModificationParametresFinances)
+	mux.HandleFunc("GET /api/admin/finances/abonnements", s.gererListeAbonnementsAdmin)
+	mux.HandleFunc("GET /api/admin/finances/campagnes", s.gererListeCampagnesAdmin)
+	mux.HandleFunc("GET /api/admin/finances/charges", s.gererListeCharges)
+	mux.HandleFunc("POST /api/admin/finances/charges", s.gererCreationCharge)
+	mux.HandleFunc("DELETE /api/admin/finances/charges/{id}", s.gererSuppressionCharge)
+
 	return mux
 }

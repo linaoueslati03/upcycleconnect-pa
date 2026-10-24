@@ -59,6 +59,101 @@
             },
             "titre": "Conteneurs"
         },
+        "finances": {
+            "abonnements_premium": "Abonnements premium des professionnels",
+            "ajouter_charge": "Ajouter une charge",
+            "annonceur": "Annonceur",
+            "appliquer": "Appliquer",
+            "aucun_abonnement": "Aucun abonnement.",
+            "aucun_paiement": "Aucun paiement sur cette période.",
+            "aucune_campagne": "Aucune campagne.",
+            "aucune_charge": "Aucune charge sur cette période.",
+            "bilan_mensuel": "Bilan mensuel",
+            "campagnes": "Campagnes publicitaires",
+            "categorie_charge": {
+                "autre": "Autre",
+                "infrastructure": "Infrastructure",
+                "loyers": "Loyers",
+                "marketing": "Marketing",
+                "salaires": "Salaires"
+            },
+            "charges": "Charges",
+            "charges_periode": "Charges de la période",
+            "cible": {
+                "annonce": "Annonce",
+                "projet": "Projet"
+            },
+            "commission": "Commission",
+            "confirmer_suppression_charge": "Supprimer la charge « {libelle} » ?",
+            "date": "Date",
+            "depuis": "Depuis le {date}",
+            "derniere_modification": "Dernière modification le {date}",
+            "encaisse": "Montant payé",
+            "explication_commission": "Pour les ventes d'objets, UpcycleConnect ne garde que sa commission : {volume} ont été vendus entre membres sur la période.",
+            "explication_parametres": "Le nouveau taux s'applique aux prochaines ventes uniquement : chaque vente garde le taux en vigueur le jour du paiement. Le prix du premium s'applique aux nouveaux abonnements.",
+            "libelle": "Libellé",
+            "mensualite": "Par mois",
+            "mis_en_avant": "Mis en avant",
+            "mois": "Mois",
+            "montant": "Montant",
+            "montant_euros": "Montant (€)",
+            "nb_paiements": "Paiements",
+            "onglet": {
+                "abonnements": "Abonnements",
+                "charges": "Charges",
+                "parametres": "Paramètres",
+                "publicite": "Publicité",
+                "synthese": "Synthèse",
+                "transactions": "Transactions"
+            },
+            "page": "Page {page} sur {pages} · {total} paiements",
+            "par_source": "Revenus par source",
+            "parametres_enregistres": "Paramètres enregistrés.",
+            "payeur": "Payé par",
+            "periode": "Période",
+            "prix_premium": "Prix de l'abonnement premium (15 à 30 € par mois)",
+            "professionnel": "Professionnel",
+            "raccourci": {
+                "12_mois": "12 derniers mois",
+                "annee_courante": "Année en cours",
+                "mois_courant": "Mois en cours"
+            },
+            "recurrent": "Revenu mensuel récurrent",
+            "recurrent_detail": "{abonnes} abonnés premium · {campagnes} campagnes actives",
+            "resultat": "Résultat",
+            "revenu_plateforme": "Revenu UpcycleConnect",
+            "revenus": "Revenus",
+            "source": {
+                "abonnement": "Abonnements",
+                "atelier": "Ateliers",
+                "evenement": "Événements",
+                "formation": "Formations",
+                "publicite": "Publicité",
+                "vente": "Commissions sur ventes"
+            },
+            "source_colonne": "Source",
+            "statut_abonnement": {
+                "actif": "Actif",
+                "expire": "Expiré",
+                "resilie": "Résilié"
+            },
+            "statut_campagne": {
+                "active": "Active",
+                "annulee": "Annulée",
+                "terminee": "Terminée"
+            },
+            "statut_paiement": {
+                "echoue": "Échoué",
+                "en_attente": "En attente",
+                "rembourse": "Remboursé",
+                "reussi": "Réussi"
+            },
+            "taux_commission": "Taux de commission sur les ventes (5 à 10 %)",
+            "titre": "Gestion financière",
+            "total_paye": "Total payé",
+            "tous_statuts": "Tous les statuts",
+            "toutes_sources": "Toutes les sources"
+        },
         "langues": {
             "active": "Active",
             "activer": "Activer",
@@ -366,6 +461,7 @@
         "contrats": "Contrats & Facturation",
         "depots": "Dépôts en conteneur",
         "evenements": "Événements",
+        "finances": "Finances",
         "forums": "Forums",
         "langues": "Langues",
         "mes_annonces": "Mes annonces",
