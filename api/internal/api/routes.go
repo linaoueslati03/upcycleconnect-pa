@@ -38,6 +38,10 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/admin/categories/materiaux", s.gererCreationCategorieMateriau)
 	mux.HandleFunc("PUT /api/admin/categories/materiaux/{id}", s.gererModificationCategorieMateriau)
 	mux.HandleFunc("GET /api/conteneurs", s.gererListeConteneurs)
+	mux.HandleFunc("GET /api/admin/conteneurs", s.gererListeConteneursAdmin)
+	mux.HandleFunc("POST /api/admin/conteneurs", s.gererCreationConteneur)
+	mux.HandleFunc("PUT /api/admin/conteneurs/{id}/statut", s.gererChangementStatutConteneur)
+	mux.HandleFunc("GET /api/admin/conteneurs/{id}/historique", s.gererHistoriqueConteneur)
 	mux.HandleFunc("GET /api/langues", s.gererListeLangues)
 	mux.HandleFunc("GET /api/admin/langues", s.gererListeLanguesAdmin)
 	mux.HandleFunc("POST /api/admin/langues", s.gererCreationLangue)
@@ -104,9 +108,22 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("DELETE /api/ateliers/{id}", s.gererSuppressionAtelier)
 	mux.HandleFunc("POST /api/ateliers/{id}/valider", s.gererValidationAtelier)
 
+	mux.HandleFunc("GET /api/admin/validations", s.gererListeValidations)
+	mux.HandleFunc("PUT /api/validations/{type}/{id}", s.gererDecisionOffre)
+
 	mux.HandleFunc("GET /api/salaries/planning", s.gererPlanningSalarie)
 	mux.HandleFunc("GET /api/admin/plannings", s.gererPlanningsAdmin)
 	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)
+
+	mux.HandleFunc("GET /api/admin/finances/resume", s.gererResumeFinances)
+	mux.HandleFunc("GET /api/admin/finances/paiements", s.gererListePaiements)
+	mux.HandleFunc("GET /api/admin/finances/parametres", s.gererParametresFinances)
+	mux.HandleFunc("PUT /api/admin/finances/parametres", s.gererModificationParametresFinances)
+	mux.HandleFunc("GET /api/admin/finances/abonnements", s.gererListeAbonnementsAdmin)
+	mux.HandleFunc("GET /api/admin/finances/campagnes", s.gererListeCampagnesAdmin)
+	mux.HandleFunc("GET /api/admin/finances/charges", s.gererListeCharges)
+	mux.HandleFunc("POST /api/admin/finances/charges", s.gererCreationCharge)
+	mux.HandleFunc("DELETE /api/admin/finances/charges/{id}", s.gererSuppressionCharge)
 
 	return mux
 }

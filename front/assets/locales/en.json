@@ -31,6 +31,129 @@
             "renommer": "Rename",
             "titre": "Categories"
         },
+        "conteneurs": {
+            "ajouter": "Add a box",
+            "alerte_depot_en_cours": "Warning: a drop-off is in progress in this box. Only force the status in case of an incident.",
+            "aucun": "No containers.",
+            "changement": "Change",
+            "changer_statut": "Change status",
+            "changer_statut_de": "Change the status of {site} #{id}",
+            "date": "Date",
+            "erreur_chargement": "Error while loading the containers",
+            "explication": "A box holds only one item at a time. Its status changes automatically: \"Occupied\" when the item is dropped off, \"Empty\" when a professional collects it. Put a box under maintenance if there is a problem: it will no longer accept drop-offs.",
+            "fermer": "Close",
+            "historique": "History",
+            "historique_de": "History of {site} #{id}",
+            "historique_vide": "No changes recorded.",
+            "motif": "Reason",
+            "motif_depot": "Drop-off #{id}",
+            "motif_exemple": "E.g. door stuck, cleaning…",
+            "nouveau_site": "Location of the new box (e.g. Paris 11e)",
+            "nouveau_statut": "New status",
+            "objet_en_cours": "Current item",
+            "par": "By",
+            "statut": {
+                "maintenance": "Under maintenance",
+                "occupe": "Occupied",
+                "vide": "Empty"
+            },
+            "titre": "Containers"
+        },
+        "finances": {
+            "abonnements_premium": "Professionals' premium subscriptions",
+            "ajouter_charge": "Add an expense",
+            "annonceur": "Advertiser",
+            "appliquer": "Apply",
+            "aucun_abonnement": "No subscriptions.",
+            "aucun_paiement": "No payments over this period.",
+            "aucune_campagne": "No campaigns.",
+            "aucune_charge": "No expenses over this period.",
+            "bilan_mensuel": "Monthly summary",
+            "campagnes": "Advertising campaigns",
+            "categorie_charge": {
+                "autre": "Other",
+                "infrastructure": "Infrastructure",
+                "loyers": "Rent",
+                "marketing": "Marketing",
+                "salaires": "Salaries"
+            },
+            "charges": "Expenses",
+            "charges_periode": "Expenses for the period",
+            "cible": {
+                "annonce": "Listing",
+                "projet": "Project"
+            },
+            "commission": "Commission",
+            "confirmer_suppression_charge": "Delete the expense “{libelle}”?",
+            "date": "Date",
+            "depuis": "Since {date}",
+            "derniere_modification": "Last changed on {date}",
+            "encaisse": "Amount paid",
+            "explication_commission": "For item sales, UpcycleConnect only keeps its commission: {volume} worth of items were sold between members over the period.",
+            "explication_parametres": "A new rate only applies to future sales: each sale keeps the rate in force on the day it was paid. The premium price applies to new subscriptions.",
+            "libelle": "Label",
+            "mensualite": "Per month",
+            "mis_en_avant": "Promoted",
+            "mois": "Month",
+            "montant": "Amount",
+            "montant_euros": "Amount (€)",
+            "nb_paiements": "Payments",
+            "onglet": {
+                "abonnements": "Subscriptions",
+                "charges": "Expenses",
+                "parametres": "Settings",
+                "publicite": "Advertising",
+                "synthese": "Overview",
+                "transactions": "Transactions"
+            },
+            "page": "Page {page} of {pages} · {total} payments",
+            "par_source": "Revenue by source",
+            "parametres_enregistres": "Settings saved.",
+            "payeur": "Paid by",
+            "periode": "Period",
+            "prix_premium": "Premium subscription price (€15 to €30 per month)",
+            "professionnel": "Professional",
+            "raccourci": {
+                "12_mois": "Last 12 months",
+                "annee_courante": "This year",
+                "mois_courant": "This month"
+            },
+            "recurrent": "Monthly recurring revenue",
+            "recurrent_detail": "{abonnes} premium subscribers · {campagnes} active campaigns",
+            "resultat": "Net result",
+            "revenu_plateforme": "UpcycleConnect revenue",
+            "revenus": "Revenue",
+            "source": {
+                "abonnement": "Subscriptions",
+                "atelier": "Workshops",
+                "evenement": "Events",
+                "formation": "Training courses",
+                "publicite": "Advertising",
+                "vente": "Sales commissions"
+            },
+            "source_colonne": "Source",
+            "statut_abonnement": {
+                "actif": "Active",
+                "expire": "Expired",
+                "resilie": "Cancelled"
+            },
+            "statut_campagne": {
+                "active": "Active",
+                "annulee": "Cancelled",
+                "terminee": "Ended"
+            },
+            "statut_paiement": {
+                "echoue": "Failed",
+                "en_attente": "Pending",
+                "rembourse": "Refunded",
+                "reussi": "Succeeded"
+            },
+            "taux_commission": "Commission rate on sales (5 to 10%)",
+            "titre": "Financial management",
+            "total_paye": "Total paid",
+            "tous_statuts": "All statuses",
+            "toutes_sources": "All sources"
+        },
         "langues": {
             "active": "Active",
             "activer": "Activate",
@@ -123,6 +246,27 @@
             "titre": "User management",
             "tous_roles": "All roles",
             "tous_statuts": "All statuses"
+        },
+        "validations": {
+            "ateliers": "Workshops",
+            "aucune": "No offers awaiting approval.",
+            "confirmer_refus": "Confirm rejection",
+            "erreur_chargement": "Error while loading the offers to approve",
+            "evenements": "Events",
+            "explication": "Training courses, workshops and events proposed by employees wait here for approval. An approved offer is published in the catalogue; a rejected offer goes back to the employee with the reason, so they can fix it and submit it again.",
+            "formations": "Training courses",
+            "motif_exemple": "E.g. date too soon, incomplete description…",
+            "motif_refus": "Reason for rejection",
+            "places": "Seats",
+            "propose_par": "Proposed by {nom} on {date}",
+            "refusee": "\"{titre}\" has been rejected.",
+            "titre": "Approvals",
+            "type": {
+                "atelier": "Workshop",
+                "evenement": "Event",
+                "formation": "Training course"
+            },
+            "validee": "\"{titre}\" is approved and published."
         }
     },
     "annonce": {
@@ -262,6 +406,7 @@
         "code_ouverture": "Container opening code",
         "codes_apres_validation": "Your codes will be sent as soon as the request is approved.",
         "conteneur_demande_le": "Container: {conteneur} · requested on {date}",
+        "conteneur_maintenance": "under maintenance",
         "conteneur_souhaite": "Preferred container",
         "demande_envoyee": "Request sent!",
         "demander": "Request a drop-off",
@@ -312,9 +457,11 @@
         "catalogue": "Catalogue",
         "categories": "Categories",
         "conseils": "Advice",
+        "conteneurs": "Containers",
         "contrats": "Contracts & Billing",
         "depots": "Container drop-offs",
         "evenements": "Events",
+        "finances": "Finances",
         "forums": "Forums",
         "langues": "Languages",
         "mes_annonces": "My listings",
@@ -326,7 +473,8 @@
         "prestations": "Services",
         "score": "Upcycling Score",
         "statistiques": "Advanced Statistics",
-        "utilisateurs": "Users"
+        "utilisateurs": "Users",
+        "validations": "Approvals"
     },
     "offre": {
         "atelier": "Workshop",
@@ -433,6 +581,7 @@
         "brouillon": "Draft",
         "en_attente": "Pending",
         "publie": "Published",
+        "refuse": "Rejected",
         "termine": "Finished"
     },
     "tutoriel": {

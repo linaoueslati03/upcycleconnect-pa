@@ -31,6 +31,129 @@
             "renommer": "Renommer",
             "titre": "Catégories"
         },
+        "conteneurs": {
+            "ajouter": "Ajouter une box",
+            "alerte_depot_en_cours": "Attention : un dépôt est en cours dans cette box. Ne forcez le statut qu'en cas d'incident.",
+            "aucun": "Aucun conteneur.",
+            "changement": "Changement",
+            "changer_statut": "Changer le statut",
+            "changer_statut_de": "Changer le statut de {site} #{id}",
+            "date": "Date",
+            "erreur_chargement": "Erreur lors du chargement des conteneurs",
+            "explication": "Une box contient un seul objet à la fois. Son statut change tout seul : « Occupé » quand l'objet est déposé, « Vide » quand un professionnel le récupère. Mettez une box en maintenance en cas de problème : elle ne pourra plus recevoir de dépôt.",
+            "fermer": "Fermer",
+            "historique": "Historique",
+            "historique_de": "Historique de {site} #{id}",
+            "historique_vide": "Aucun changement enregistré.",
+            "motif": "Motif",
+            "motif_depot": "Dépôt n°{id}",
+            "motif_exemple": "Ex. porte bloquée, nettoyage…",
+            "nouveau_site": "Site de la nouvelle box (ex. Paris 11e)",
+            "nouveau_statut": "Nouveau statut",
+            "objet_en_cours": "Objet en cours",
+            "par": "Par",
+            "statut": {
+                "maintenance": "En maintenance",
+                "occupe": "Occupé",
+                "vide": "Vide"
+            },
+            "titre": "Conteneurs"
+        },
+        "finances": {
+            "abonnements_premium": "Abonnements premium des professionnels",
+            "ajouter_charge": "Ajouter une charge",
+            "annonceur": "Annonceur",
+            "appliquer": "Appliquer",
+            "aucun_abonnement": "Aucun abonnement.",
+            "aucun_paiement": "Aucun paiement sur cette période.",
+            "aucune_campagne": "Aucune campagne.",
+            "aucune_charge": "Aucune charge sur cette période.",
+            "bilan_mensuel": "Bilan mensuel",
+            "campagnes": "Campagnes publicitaires",
+            "categorie_charge": {
+                "autre": "Autre",
+                "infrastructure": "Infrastructure",
+                "loyers": "Loyers",
+                "marketing": "Marketing",
+                "salaires": "Salaires"
+            },
+            "charges": "Charges",
+            "charges_periode": "Charges de la période",
+            "cible": {
+                "annonce": "Annonce",
+                "projet": "Projet"
+            },
+            "commission": "Commission",
+            "confirmer_suppression_charge": "Supprimer la charge « {libelle} » ?",
+            "date": "Date",
+            "depuis": "Depuis le {date}",
+            "derniere_modification": "Dernière modification le {date}",
+            "encaisse": "Montant payé",
+            "explication_commission": "Pour les ventes d'objets, UpcycleConnect ne garde que sa commission : {volume} ont été vendus entre membres sur la période.",
+            "explication_parametres": "Le nouveau taux s'applique aux prochaines ventes uniquement : chaque vente garde le taux en vigueur le jour du paiement. Le prix du premium s'applique aux nouveaux abonnements.",
+            "libelle": "Libellé",
+            "mensualite": "Par mois",
+            "mis_en_avant": "Mis en avant",
+            "mois": "Mois",
+            "montant": "Montant",
+            "montant_euros": "Montant (€)",
+            "nb_paiements": "Paiements",
+            "onglet": {
+                "abonnements": "Abonnements",
+                "charges": "Charges",
+                "parametres": "Paramètres",
+                "publicite": "Publicité",
+                "synthese": "Synthèse",
+                "transactions": "Transactions"
+            },
+            "page": "Page {page} sur {pages} · {total} paiements",
+            "par_source": "Revenus par source",
+            "parametres_enregistres": "Paramètres enregistrés.",
+            "payeur": "Payé par",
+            "periode": "Période",
+            "prix_premium": "Prix de l'abonnement premium (15 à 30 € par mois)",
+            "professionnel": "Professionnel",
+            "raccourci": {
+                "12_mois": "12 derniers mois",
+                "annee_courante": "Année en cours",
+                "mois_courant": "Mois en cours"
+            },
+            "recurrent": "Revenu mensuel récurrent",
+            "recurrent_detail": "{abonnes} abonnés premium · {campagnes} campagnes actives",
+            "resultat": "Résultat",
+            "revenu_plateforme": "Revenu UpcycleConnect",
+            "revenus": "Revenus",
+            "source": {
+                "abonnement": "Abonnements",
+                "atelier": "Ateliers",
+                "evenement": "Événements",
+                "formation": "Formations",
+                "publicite": "Publicité",
+                "vente": "Commissions sur ventes"
+            },
+            "source_colonne": "Source",
+            "statut_abonnement": {
+                "actif": "Actif",
+                "expire": "Expiré",
+                "resilie": "Résilié"
+            },
+            "statut_campagne": {
+                "active": "Active",
+                "annulee": "Annulée",
+                "terminee": "Terminée"
+            },
+            "statut_paiement": {
+                "echoue": "Échoué",
+                "en_attente": "En attente",
+                "rembourse": "Remboursé",
+                "reussi": "Réussi"
+            },
+            "taux_commission": "Taux de commission sur les ventes (5 à 10 %)",
+            "titre": "Gestion financière",
+            "total_paye": "Total payé",
+            "tous_statuts": "Tous les statuts",
+            "toutes_sources": "Toutes les sources"
+        },
         "langues": {
             "active": "Active",
             "activer": "Activer",
@@ -123,6 +246,27 @@
             "titre": "Gestion des utilisateurs",
             "tous_roles": "Tous les rôles",
             "tous_statuts": "Tous les statuts"
+        },
+        "validations": {
+            "ateliers": "Ateliers",
+            "aucune": "Aucune offre en attente de validation.",
+            "confirmer_refus": "Confirmer le refus",
+            "erreur_chargement": "Erreur lors du chargement des offres à valider",
+            "evenements": "Événements",
+            "explication": "Les formations, ateliers et événements proposés par les salariés attendent ici leur validation. Une offre validée est publiée dans le catalogue ; une offre refusée revient au salarié avec le motif, qu'il peut corriger puis soumettre de nouveau.",
+            "formations": "Formations",
+            "motif_exemple": "Ex. date trop proche, description incomplète…",
+            "motif_refus": "Motif du refus",
+            "places": "Places",
+            "propose_par": "Proposé par {nom} le {date}",
+            "refusee": "« {titre} » a été refusée.",
+            "titre": "Validations",
+            "type": {
+                "atelier": "Atelier",
+                "evenement": "Événement",
+                "formation": "Formation"
+            },
+            "validee": "« {titre} » est validée et publiée."
         }
     },
     "annonce": {
@@ -262,6 +406,7 @@
         "code_ouverture": "Code d'ouverture du conteneur",
         "codes_apres_validation": "Les codes vous seront communiqués dès que la demande sera validée.",
         "conteneur_demande_le": "Conteneur : {conteneur} · demandé le {date}",
+        "conteneur_maintenance": "en maintenance",
         "conteneur_souhaite": "Conteneur souhaité",
         "demande_envoyee": "Demande envoyée !",
         "demander": "Demander un dépôt",
@@ -312,9 +457,11 @@
         "catalogue": "Catalogue",
         "categories": "Catégories",
         "conseils": "Conseils",
+        "conteneurs": "Conteneurs",
         "contrats": "Contrats & Facturation",
         "depots": "Dépôts en conteneur",
         "evenements": "Événements",
+        "finances": "Finances",
         "forums": "Forums",
         "langues": "Langues",
         "mes_annonces": "Mes annonces",
@@ -326,7 +473,8 @@
         "prestations": "Prestations",
         "score": "Upcycling Score",
         "statistiques": "Statistiques avancées",
-        "utilisateurs": "Utilisateurs"
+        "utilisateurs": "Utilisateurs",
+        "validations": "Validations"
     },
     "offre": {
         "atelier": "Atelier",
@@ -433,6 +581,7 @@
         "brouillon": "Brouillon",
         "en_attente": "En attente",
         "publie": "Publié",
+        "refuse": "Refusé",
         "termine": "Terminé"
     },
     "tutoriel": {

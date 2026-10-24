@@ -19,6 +19,7 @@ type Atelier struct {
 	Statut        string     `json:"statut"`
 	CreateurID    int        `json:"createur_id"`
 	ResponsableID *int       `json:"responsable_id"`
+	MotifRefus    *string    `json:"motif_refus,omitempty"`
 }
 
 type AtelierEntree struct {
@@ -30,14 +31,14 @@ type AtelierEntree struct {
 	Statut      string     `json:"statut"`
 }
 
-const colonnesAtelier = `id, titre, description, date_debut, date_fin, lieu, statut, createur_id, responsable_id`
+const colonnesAtelier = `id, titre, description, date_debut, date_fin, lieu, statut, createur_id, responsable_id, motif_refus`
 
 func scannerAtelier(ligne interface{ Scan(...any) error }, a *Atelier) error {
 	var description, lieu sql.NullString
 	var dateFin sql.NullTime
 	var responsableID sql.NullInt64
 
-	err := ligne.Scan(&a.ID, &a.Titre, &description, &a.DateDebut, &dateFin, &lieu, &a.Statut, &a.CreateurID, &responsableID)
+	err := ligne.Scan(&a.ID, &a.Titre, &description, &a.DateDebut, &dateFin, &lieu, &a.Statut, &a.CreateurID, &responsableID, &a.MotifRefus)
 	if err != nil {
 		return err
 	}
@@ -244,7 +245,7 @@ func (s *Serveur) gererValidationAtelier(w http.ResponseWriter, r *http.Request)
 
 	var a Atelier
 	err = scannerAtelier(s.db.QueryRow(`
-		UPDATE ateliers SET statut = 'publie', responsable_id = $1, updated_at = now()
+		UPDATE ateliers SET statut = 'publie', responsable_id = $1, motif_refus = NULL, updated_at = now()
 		WHERE id = $2 AND statut = 'en_attente'
 		RETURNING `+colonnesAtelier,
 		responsableID, id,

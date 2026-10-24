@@ -61,7 +61,9 @@ $titrePage = "nav.depots";
                                 <label for="conteneur">{{ $t('depots.conteneur_souhaite') }}</label>
                                 <select id="conteneur" v-model="formulaire.conteneur_id" required>
                                     <option :value="null" disabled>{{ $t('depots.choisir_conteneur') }}</option>
-                                    <option v-for="c in conteneurs" :key="c.id" :value="c.id">{{ c.site }}</option>
+                                    <option v-for="c in conteneurs" :key="c.id" :value="c.id" :disabled="c.statut === 'maintenance'">
+                                        {{ c.statut === 'maintenance' ? c.site + ' (' + $t('depots.conteneur_maintenance') + ')' : c.site }}
+                                    </option>
                                 </select>
                             </div>
 

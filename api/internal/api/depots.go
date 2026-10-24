@@ -95,6 +95,21 @@ func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusBadRequest, "description_objet obligatoire")
 		return
 	}
+	if entree.ConteneurID != nil {
+		var statutConteneur string
+		err := s.db.QueryRow("SELECT statut FROM conteneurs WHERE id = $1", *entree.ConteneurID).Scan(&statutConteneur)
+		if errors.Is(err, sql.ErrNoRows) {
+			envoyerErreur(w, http.StatusBadRequest, "conteneur introuvable")
+			return
+		} else if err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		if statutConteneur == "maintenance" {
+			envoyerErreur(w, http.StatusConflict, "ce conteneur est en maintenance, choisissez-en un autre")
+			return
+		}
+	}
 
 	var d Depot
 	ligne := s.db.QueryRow(`
@@ -237,25 +252,36 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	tx, err := s.db.Begin()
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer tx.Rollback()
+
 	var d Depot
 	var ligne *sql.Row
 
 	switch entree.Statut {
 	case "validee":
+		if message := verifierConteneurDisponible(tx, id); message != "" {
+			envoyerErreur(w, http.StatusConflict, message)
+			return
+		}
 		codeOuverture, err1 := genererCodeDepot(3)
 		codeBarre, err2 := genererCodeDepot(8)
 		if err1 != nil || err2 != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
-		ligne = s.db.QueryRow(`
+		ligne = tx.QueryRow(`
 			UPDATE depots SET statut = 'validee', code_ouverture = $1, code_barre = $2, date_validation = now()
 			WHERE id = $3 AND statut = 'demande'
 			RETURNING `+colonnesDepot,
 			codeOuverture, codeBarre, id,
 		)
 	case "deposee":
-		ligne = s.db.QueryRow(`
+		ligne = tx.QueryRow(`
 			UPDATE depots SET statut = 'deposee' WHERE id = $1 AND statut = 'validee'
 			RETURNING `+colonnesDepot, id)
 	case "recuperee":
@@ -263,7 +289,7 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 			envoyerErreur(w, http.StatusBadRequest, "professionnel_recuperateur_id obligatoire")
 			return
 		}
-		ligne = s.db.QueryRow(`
+		ligne = tx.QueryRow(`
 			UPDATE depots SET statut = 'recuperee', professionnel_recuperateur_id = $1, date_recuperation = now()
 			WHERE id = $2 AND statut = 'deposee'
 			RETURNING `+colonnesDepot,
@@ -280,14 +306,65 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	if d.ConteneurID != nil {
+		nouveauStatutConteneur := ""
+		switch entree.Statut {
+		case "deposee":
+			nouveauStatutConteneur = "occupe"
+		case "recuperee":
+			nouveauStatutConteneur = "vide"
+		}
+		if nouveauStatutConteneur != "" {
+			if err := changerStatutConteneur(tx, *d.ConteneurID, nouveauStatutConteneur, d.ID, appelantID); err != nil {
+				envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+				return
+			}
+		}
+	}
+
 	if entree.Statut == "recuperee" {
-		if err := ajouterPointsScore(s.db, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré"); err != nil {
+		if err := ajouterPointsScore(tx, d.UtilisateurID, pointsDepotRecupere, "Dépôt récupéré"); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
 	}
 
+	if err := tx.Commit(); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
 	envoyerJSON(w, http.StatusOK, d)
+}
+
+func verifierConteneurDisponible(tx *sql.Tx, depotID int) string {
+	var conteneurID sql.NullInt64
+	if err := tx.QueryRow("SELECT conteneur_id FROM depots WHERE id = $1", depotID).Scan(&conteneurID); err != nil {
+		return "dépôt introuvable"
+	}
+	if !conteneurID.Valid {
+		return "aucun conteneur n'est associé à ce dépôt"
+	}
+
+	var statut string
+	if err := tx.QueryRow("SELECT statut FROM conteneurs WHERE id = $1 FOR UPDATE", conteneurID.Int64).Scan(&statut); err != nil {
+		return "conteneur introuvable"
+	}
+	if statut == "maintenance" {
+		return "ce conteneur est en maintenance"
+	}
+
+	var occupe bool
+	err := tx.QueryRow(`
+		SELECT EXISTS (SELECT 1 FROM depots WHERE conteneur_id = $1 AND statut IN ('validee', 'deposee'))`,
+		conteneurID.Int64).Scan(&occupe)
+	if err != nil {
+		return "erreur serveur"
+	}
+	if occupe {
+		return "ce conteneur est déjà réservé ou occupé par un autre objet"
+	}
+	return ""
 }
 
 func (s *Serveur) gererListeDepots(w http.ResponseWriter, r *http.Request) {
