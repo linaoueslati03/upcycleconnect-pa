@@ -8,6 +8,7 @@ demarrerApp({
             messageProfil: "",
             erreurMotDePasse: "",
             messageMotDePasse: "",
+            motDePasseObligatoire: doitChangerMotDePasse(),
             entreprise: { siret: "", adresse: "", abonnement: "Freemium" },
         };
     },
@@ -19,6 +20,7 @@ demarrerApp({
             return;
         }
         const compte = await reponseCompte.json();
+        this.motDePasseObligatoire = compte.doit_changer_mot_de_passe;
         this.profil = {
             nom: compte.nom,
             prenom: compte.prenom,
@@ -63,6 +65,8 @@ demarrerApp({
             }
             this.motsDePasse = { ancien_mot_de_passe: "", nouveau_mot_de_passe: "" };
             this.messageMotDePasse = t("compte.mot_de_passe_modifie");
+            this.motDePasseObligatoire = false;
+            localStorage.removeItem("changer_mot_de_passe");
         },
 
         passerPremium() {

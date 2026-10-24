@@ -2,6 +2,7 @@ package api
 
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
@@ -9,6 +10,8 @@ import (
 	"net/http"
 	"slices"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -29,6 +32,37 @@ const (
 
 const abonnementPremium = "premium"
 
+var routesAvantChangementMotDePasse = []string{"/api/moi", "/api/moi/mot-de-passe", "/api/moi/langue", "/api/logout"}
+
+const (
+	longueurMinimaleMotDePasse = 12
+	tailleMaximaleMotDePasse   = 72
+)
+
+func validerMotDePasse(motDePasse string) string {
+	var majuscule, minuscule, chiffre, special bool
+	for _, caractere := range motDePasse {
+		switch {
+		case unicode.IsUpper(caractere):
+			majuscule = true
+		case unicode.IsLower(caractere):
+			minuscule = true
+		case unicode.IsDigit(caractere):
+			chiffre = true
+		default:
+			special = true
+		}
+	}
+
+	if utf8.RuneCountInString(motDePasse) < longueurMinimaleMotDePasse || !(majuscule && minuscule && chiffre && special) {
+		return "le mot de passe doit faire au moins 12 caractères et contenir une majuscule, une minuscule, un chiffre et un caractère spécial"
+	}
+	if len(motDePasse) > tailleMaximaleMotDePasse {
+		return "le mot de passe est trop long (72 caractères au plus)"
+	}
+	return ""
+}
+
 type identifiants struct {
 	Email      string `json:"email"`
 	MotDePasse string `json:"mot_de_passe"`
@@ -42,6 +76,11 @@ func genererToken() (string, error) {
 	return hex.EncodeToString(octets), nil
 }
 
+func empreinteJeton(token string) string {
+	empreinte := sha256.Sum256([]byte(token))
+	return hex.EncodeToString(empreinte[:])
+}
+
 func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	var creds identifiants
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
@@ -51,14 +90,15 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 
 	var utilisateurID int
 	var hash, role, langue, statut string
+	var doitChangerMotDePasse bool
 	err := s.db.QueryRow(`
-		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, ''), u.statut
+		SELECT u.id, u.mot_de_passe_hash, r.code, COALESCE(l.code, ''), u.statut, u.doit_changer_mot_de_passe
 		FROM utilisateurs u
 		JOIN roles r ON r.id = u.role_id
 		LEFT JOIN langues l ON l.id = u.langue_preferee_id
 		WHERE u.email = $1`,
 		creds.Email,
-	).Scan(&utilisateurID, &hash, &role, &langue, &statut)
+	).Scan(&utilisateurID, &hash, &role, &langue, &statut, &doitChangerMotDePasse)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusUnauthorized, "email ou mot de passe incorrect")
@@ -86,15 +126,17 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = s.db.Exec(
-		"INSERT INTO sessions (token, utilisateur_id, date_expiration) VALUES ($1, $2, $3)",
-		token, utilisateurID, time.Now().Add(dureeSession),
+		"INSERT INTO sessions (empreinte_token, utilisateur_id, date_expiration) VALUES ($1, $2, $3)",
+		empreinteJeton(token), utilisateurID, time.Now().Add(dureeSession),
 	)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
 
-	envoyerJSON(w, http.StatusOK, map[string]string{"token": token, "role": role, "langue": langue})
+	envoyerJSON(w, http.StatusOK, map[string]any{
+		"token": token, "role": role, "langue": langue, "doit_changer_mot_de_passe": doitChangerMotDePasse,
+	})
 }
 
 func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
@@ -104,7 +146,7 @@ func (s *Serveur) gererLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, err := s.db.Exec("DELETE FROM sessions WHERE token = $1", token); err != nil {
+	if _, err := s.db.Exec("DELETE FROM sessions WHERE empreinte_token = $1", empreinteJeton(token)); err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
@@ -118,15 +160,19 @@ func (s *Serveur) utilisateurConnecte(r *http.Request) (int, error) {
 	}
 
 	var utilisateurID int
+	var doitChangerMotDePasse bool
 	err := s.db.QueryRow(`
-		SELECT s.utilisateur_id
+		SELECT s.utilisateur_id, u.doit_changer_mot_de_passe
 		FROM sessions s
 		JOIN utilisateurs u ON u.id = s.utilisateur_id
-		WHERE s.token = $1 AND s.date_expiration > now() AND u.statut = $2`,
-		token, statutActif,
-	).Scan(&utilisateurID)
+		WHERE s.empreinte_token = $1 AND s.date_expiration > now() AND u.statut = $2`,
+		empreinteJeton(token), statutActif,
+	).Scan(&utilisateurID, &doitChangerMotDePasse)
 	if err != nil {
 		return 0, errors.New("session invalide ou expirée")
+	}
+	if doitChangerMotDePasse && !slices.Contains(routesAvantChangementMotDePasse, r.URL.Path) {
+		return 0, errors.New("changement de mot de passe obligatoire")
 	}
 
 	return utilisateurID, nil

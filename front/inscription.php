@@ -19,41 +19,50 @@
 <body class="page-connexion">
 
     <div id="app" class="carte-connexion">
-        <img src="assets/img/LOGO-pa.png" alt="UpcycleConnect">
-        <h1>{{ $t('connexion.creer_compte') }}</h1>
 
-        <form @submit.prevent="creerCompte">
-            <div class="form-group">
-                <label for="role">{{ $t('inscription.je_suis') }}</label>
-                <select id="role" v-model="compte.role">
-                    <option value="particulier">{{ $t('inscription.particulier') }}</option>
-                    <option value="professionnel">{{ $t('inscription.professionnel') }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="nom">{{ $t('commun.nom') }}</label>
-                <input id="nom" type="text" v-model="compte.nom" autocomplete="family-name" required>
-            </div>
-            <div class="form-group">
-                <label for="prenom">{{ $t('commun.prenom') }}</label>
-                <input id="prenom" type="text" v-model="compte.prenom" autocomplete="given-name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">{{ $t('commun.email') }}</label>
-                <input id="email" type="email" v-model="compte.email" autocomplete="email" required>
-            </div>
-            <div class="form-group">
-                <label for="mot-de-passe">{{ $t('commun.mot_de_passe_min') }}</label>
-                <input id="mot-de-passe" type="password" v-model="compte.mot_de_passe" autocomplete="new-password"
-                    minlength="8" required>
-            </div>
+        <div class="panneau-logo">
+            <img src="assets/img/LOGO-pa.png" alt="UpcycleConnect">
+            <h2>UpcycleConnect</h2>
+        </div>
 
-            <p v-if="erreur" class="erreur">{{ erreur }}</p>
+        <div class="panneau-formulaire panneau-inscription">
+            <h1>{{ $t('connexion.creer_compte') }}</h1>
 
-            <button type="submit" class="button-submit">{{ $t('inscription.creer') }}</button>
-        </form>
+            <form @submit.prevent="creerCompte">
+                <div class="form-group">
+                    <label for="role">{{ $t('inscription.je_suis') }}</label>
+                    <select id="role" v-model="compte.role">
+                        <option value="particulier">{{ $t('inscription.particulier') }}</option>
+                        <option value="professionnel">{{ $t('inscription.professionnel') }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nom">{{ $t('commun.nom') }}</label>
+                    <input id="nom" type="text" v-model="compte.nom" autocomplete="family-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="prenom">{{ $t('commun.prenom') }}</label>
+                    <input id="prenom" type="text" v-model="compte.prenom" autocomplete="given-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">{{ $t('commun.email') }}</label>
+                    <input id="email" type="email" v-model="compte.email" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="mot-de-passe">{{ $t('commun.mot_de_passe_min') }}</label>
+                    <input id="mot-de-passe" type="password" v-model="compte.mot_de_passe" autocomplete="new-password"
+                        minlength="12" maxlength="72" required aria-describedby="regle-mot-de-passe">
+                    <small id="regle-mot-de-passe">{{ $t('commun.regle_mot_de_passe') }}</small>
+                </div>
 
-        <p><a href="connexion.php">{{ $t('inscription.deja_compte') }}</a></p>
+                <p v-if="erreur" class="erreur">{{ erreur }}</p>
+
+                <button type="submit" class="button-submit">{{ $t('inscription.creer') }}</button>
+            </form>
+
+            <p class="lien-secondaire"><a href="connexion.php">{{ $t('inscription.deja_compte') }}</a></p>
+        </div>
+
     </div>
 
     <script src="assets/js/inscription.js"></script>

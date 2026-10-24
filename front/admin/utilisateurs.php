@@ -20,11 +20,34 @@ $titrePage = "nav.utilisateurs";
                 <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ $t('admin.utilisateurs.nouveau') }}</button>
             </div>
 
+            <form class="filtres-utilisateurs" @submit.prevent="rechercher">
+                <input type="search" v-model="filtres.recherche" :placeholder="$t('admin.utilisateurs.rechercher')"
+                    :aria-label="$t('admin.utilisateurs.rechercher')">
+                <select v-model="filtres.role_id" :aria-label="$t('commun.role')" @change="rechercher">
+                    <option value="">{{ $t('admin.utilisateurs.tous_roles') }}</option>
+                    <option v-for="id in [1, 2, 3, 4]" :key="id" :value="id">{{ $t('role.' + id) }}</option>
+                </select>
+                <select v-model="filtres.statut" :aria-label="$t('commun.statut')" @change="rechercher">
+                    <option value="">{{ $t('admin.utilisateurs.tous_statuts') }}</option>
+                    <option value="actif">{{ $t('admin.utilisateurs.statut_actif') }}</option>
+                    <option value="suspendu">{{ $t('admin.utilisateurs.statut_suspendu') }}</option>
+                </select>
+                <button type="submit" class="button-submit">{{ $t('commun.rechercher') }}</button>
+            </form>
+
             <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
+
+            <div v-if="motDePasseTemporaire" class="carte mot-de-passe-temporaire">
+                <p>{{ $t('admin.utilisateurs.mot_de_passe_temporaire', { personne: motDePasseTemporaire.personne }) }}</p>
+                <p><code>{{ motDePasseTemporaire.valeur }}</code></p>
+                <p class="discret">{{ $t('admin.utilisateurs.mot_de_passe_temporaire_aide') }}</p>
+                <button class="lien-action" @click="motDePasseTemporaire = null">{{ $t('admin.utilisateurs.fermer') }}</button>
+            </div>
 
             <div class="mise-en-page-admin">
 
                 <section class="carte">
+                    <p class="discret">{{ $t('admin.utilisateurs.resultats', { total }) }}</p>
                     <table class="tableau">
                         <thead>
                             <tr>
@@ -56,11 +79,18 @@ $titrePage = "nav.utilisateurs";
                                     <button class="lien-action" @click="changerStatut(u)">
                                         {{ u.statut === 'suspendu' ? $t('admin.utilisateurs.reactiver') : $t('admin.utilisateurs.suspendre') }}
                                     </button>
+                                    <button class="lien-action" @click="reinitialiserMotDePasse(u)">{{ $t('admin.utilisateurs.reinitialiser_mot_de_passe') }}</button>
                                     <button class="lien-action lien-supprimer" @click="supprimer(u.id)">{{ $t('commun.supprimer') }}</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="pagination">
+                        <button class="lien-action" :disabled="page <= 1" @click="changerPage(page - 1)">← {{ $t('commun.precedent') }}</button>
+                        <span>{{ $t('admin.utilisateurs.page', { page, pages: nombrePages }) }}</span>
+                        <button class="lien-action" :disabled="page >= nombrePages" @click="changerPage(page + 1)">{{ $t('commun.suivant') }} →</button>
+                    </div>
                 </section>
 
                 <div class="carte carte-formulaire">
@@ -91,7 +121,9 @@ $titrePage = "nav.utilisateurs";
 
                         <div v-if="!formulaire.id" class="form-group">
                             <label for="mot-de-passe">{{ $t('commun.mot_de_passe') }}</label>
-                            <input id="mot-de-passe" type="password" v-model="formulaire.mot_de_passe" required>
+                            <input id="mot-de-passe" type="password" v-model="formulaire.mot_de_passe"
+                                minlength="12" maxlength="72" required aria-describedby="regle-mot-de-passe">
+                            <small id="regle-mot-de-passe">{{ $t('commun.regle_mot_de_passe') }}</small>
                         </div>
 
                         <p v-if="erreur" class="erreur">{{ erreur }}</p>

@@ -71,7 +71,7 @@ $titrePage = "nav.mes_annonces";
                             <label for="categorie">{{ $t('annonces.categorie_materiau') }}</label>
                             <select id="categorie" v-model="formulaire.categorie_id">
                                 <option :value="null">{{ $t('commun.non_precisee') }}</option>
-                                <option v-for="c in categories" :key="c.id" :value="c.id">{{ $t('categorie.' + c.code, c.code) }}</option>
+                                <option v-for="c in categoriesProposees" :key="c.id" :value="c.id">{{ $t('categorie.' + c.code, c.libelle) }}</option>
                             </select>
                         </div>
 

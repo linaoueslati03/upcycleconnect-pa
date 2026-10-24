@@ -16,8 +16,11 @@
         <?php endforeach; ?>
     </ul>
 
-    <button id="logout-button" onclick="deconnecter()">
-        <img src="../assets/img/logout-svgrepo-com.svg" alt="" data-t-alt="commun.deconnexion">
-    </button>
+    <div class="pied-menu">
+        <select id="selecteur-langue" hidden></select>
+        <button id="logout-button" onclick="deconnecter()">
+            <img src="../assets/img/logout-svgrepo-com.svg" alt="" data-t-alt="commun.deconnexion">
+        </button>
+    </div>
 
 </aside>

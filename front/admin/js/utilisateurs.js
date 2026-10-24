@@ -4,10 +4,21 @@ demarrerApp({
     data() {
         return {
             utilisateurs: [],
+            filtres: { recherche: "", role_id: "", statut: "" },
+            page: 1,
+            total: 0,
+            parPage: 20,
+            motDePasseTemporaire: null,
             formulaire: { ...FORMULAIRE_VIDE },
             erreur: "",
             erreurListe: "",
         };
+    },
+
+    computed: {
+        nombrePages() {
+            return Math.max(1, Math.ceil(this.total / this.parPage));
+        },
     },
 
     mounted() {
@@ -16,12 +27,48 @@ demarrerApp({
 
     methods: {
         async chargerUtilisateurs() {
-            const reponse = await appelerApi("/utilisateurs");
+            const parametres = new URLSearchParams({ page: this.page });
+            for (const [nom, valeur] of Object.entries(this.filtres)) {
+                if (valeur !== "") {
+                    parametres.set(nom, valeur);
+                }
+            }
+            const reponse = await appelerApi(`/utilisateurs?${parametres}`);
             if (!reponse.ok) {
                 this.erreurListe = t("admin.utilisateurs.erreur_chargement");
                 return;
             }
-            this.utilisateurs = await reponse.json();
+            const resultat = await reponse.json();
+            this.utilisateurs = resultat.utilisateurs;
+            this.total = resultat.total;
+            this.parPage = resultat.par_page;
+        },
+
+        rechercher() {
+            this.page = 1;
+            this.chargerUtilisateurs();
+        },
+
+        changerPage(page) {
+            this.page = page;
+            this.chargerUtilisateurs();
+        },
+
+        async reinitialiserMotDePasse(utilisateur) {
+            if (!confirm(t("admin.utilisateurs.confirmer_reinitialisation"))) {
+                return;
+            }
+            this.erreurListe = "";
+            const reponse = await appelerApi(`/utilisateurs/${utilisateur.id}/mot-de-passe`, { method: "PUT" });
+            const resultat = await reponse.json();
+            if (!reponse.ok) {
+                this.erreurListe = resultat.erreur;
+                return;
+            }
+            this.motDePasseTemporaire = {
+                personne: `${utilisateur.prenom} ${utilisateur.nom}`,
+                valeur: resultat.mot_de_passe_temporaire,
+            };
         },
 
         reinitialiserFormulaire() {

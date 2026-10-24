@@ -28,6 +28,15 @@ function afficherMenuDuRole() {
 function oublierConnexion() {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("changer_mot_de_passe");
+}
+
+function pageMonCompte() {
+    return roleConnecte() === "administrateur" ? "/admin/mon-compte.php" : "/espace/mon-compte.php";
+}
+
+function doitChangerMotDePasse() {
+    return localStorage.getItem("changer_mot_de_passe") === "1";
 }
 
 function langueCourante() {
@@ -77,9 +86,38 @@ async function chargerTraductions() {
     }
 }
 
+async function preparerSelecteurLangue() {
+    const selecteur = document.getElementById("selecteur-langue");
+    if (!selecteur) {
+        return;
+    }
+
+    try {
+        const reponse = await fetch(`${API_BASE_URL}/langues`);
+        if (!reponse.ok) {
+            return;
+        }
+        const langues = await reponse.json();
+        selecteur.replaceChildren(...langues.map((langue) => new Option(langue.libelle, langue.code)));
+        selecteur.value = langueCourante();
+        selecteur.setAttribute("aria-label", t("commun.langue"));
+        selecteur.addEventListener("change", () => choisirLangue(selecteur.value));
+        selecteur.hidden = false;
+    } catch (erreur) {
+    }
+}
+
+async function choisirLangue(code) {
+    if (localStorage.getItem("token")) {
+        await appelerApi("/moi/langue", { method: "PUT", body: JSON.stringify({ code }) });
+    }
+    changerLangue(code);
+}
+
 async function demarrerApp(options) {
     afficherMenuDuRole();
     await chargerTraductions();
+    await preparerSelecteurLangue();
     const app = Vue.createApp(options);
     app.use(i18n);
     app.config.globalProperties.langueCourante = langueCourante;
@@ -106,6 +144,10 @@ async function appelerApi(chemin, options = {}) {
 function exigerConnexion(...roles) {
     if (!localStorage.getItem("token") || !roles.includes(roleConnecte())) {
         window.location.href = PAGE_CONNEXION;
+        return;
+    }
+    if (doitChangerMotDePasse() && window.location.pathname !== pageMonCompte()) {
+        window.location.href = pageMonCompte();
     }
 }
 

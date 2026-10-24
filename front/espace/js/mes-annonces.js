@@ -8,12 +8,19 @@ demarrerApp({
         return {
             annonces: [],
             categories: [],
+            categorieInitiale: null,
             statutsAnnonce: STATUTS_ANNONCE,
             formulaire: { ...ANNONCE_VIDE },
             erreur: "",
             erreurListe: "",
             message: "",
         };
+    },
+
+    computed: {
+        categoriesProposees() {
+            return this.categories.filter((c) => c.actif || c.id === this.categorieInitiale);
+        },
     },
 
     async mounted() {
@@ -38,12 +45,14 @@ demarrerApp({
 
         reinitialiserFormulaire() {
             this.formulaire = { ...ANNONCE_VIDE };
+            this.categorieInitiale = null;
             this.erreur = "";
             this.message = "";
         },
 
         modifier(annonce) {
             this.formulaire = { ...annonce };
+            this.categorieInitiale = annonce.categorie_id;
             this.erreur = "";
             this.message = "";
         },

@@ -11,7 +11,8 @@ INSERT INTO utilisateurs (role_id, nom, prenom, email, mot_de_passe_hash, langue
 INSERT INTO salaries (utilisateur_id, est_responsable)
     SELECT id, TRUE FROM utilisateurs WHERE email = 'salarie@upcycleconnect.fr';
 
-INSERT INTO categories_materiaux (code) VALUES ('bois'), ('metal'), ('textile'), ('verre'), ('plastique');
+INSERT INTO categories_materiaux (code, libelle) VALUES
+    ('bois', 'Bois'), ('metal', 'Métal'), ('textile', 'Textile'), ('verre', 'Verre'), ('plastique', 'Plastique');
 
 INSERT INTO conteneurs (site) VALUES ('Paris 11e'), ('Paris 13e'), ('Montreuil');
 
@@ -34,7 +35,31 @@ INSERT INTO conseils (titre, contenu, categorie, statut, auteur_id)
     SELECT 'Bien trier son bois', 'Séparer le bois brut du bois traité avant tout dépôt.', 'conseils', 'publie', utilisateur_id
     FROM salaries LIMIT 1;
 
-INSERT INTO prestations (titre, categorie, tarif, statut) VALUES
-    ('Audit recyclage', 'Conseil', 450.00, 'publie'),
-    ('Collecte de bois', 'Logistique', 250.00, 'publie'),
-    ('Formation de tri', 'Formation', 800.00, 'brouillon');
+INSERT INTO categories_prestations (libelle) VALUES ('Conseil'), ('Logistique'), ('Formation');
+
+INSERT INTO prestations (titre, categorie_id, tarif, statut)
+    SELECT p.titre, c.id, p.tarif, p.statut
+    FROM (VALUES
+        ('Audit recyclage', 'Conseil', 450.00, 'publie'),
+        ('Collecte de bois', 'Logistique', 250.00, 'publie'),
+        ('Formation de tri', 'Formation', 800.00, 'brouillon')
+    ) AS p(titre, categorie, tarif, statut)
+    JOIN categories_prestations c ON c.libelle = p.categorie;
+
+INSERT INTO forum_sujets (titre, auteur_utilisateur_id)
+    SELECT 'Où trouver des palettes à Paris ?', id FROM utilisateurs WHERE email = 'particulier@upcycleconnect.fr';
+
+INSERT INTO forum_messages (sujet_id, auteur_utilisateur_id, contenu)
+    SELECT s.id, u.id, 'Je cherche des palettes pour fabriquer une table basse, vous avez des adresses ?'
+    FROM forum_sujets s, utilisateurs u
+    WHERE s.titre = 'Où trouver des palettes à Paris ?' AND u.email = 'particulier@upcycleconnect.fr';
+
+INSERT INTO forum_messages (sujet_id, auteur_utilisateur_id, contenu)
+    SELECT s.id, u.id, 'Achetez vos palettes neuves sur mon site, livraison gratuite !!!'
+    FROM forum_sujets s, utilisateurs u
+    WHERE s.titre = 'Où trouver des palettes à Paris ?' AND u.email = 'pro@upcycleconnect.fr';
+
+INSERT INTO forum_signalements (message_id, signale_par_utilisateur_id, motif)
+    SELECT m.id, u.id, 'Publicité sans rapport avec l''upcycling'
+    FROM forum_messages m, utilisateurs u
+    WHERE m.contenu LIKE 'Achetez vos palettes%' AND u.email = 'particulier@upcycleconnect.fr';

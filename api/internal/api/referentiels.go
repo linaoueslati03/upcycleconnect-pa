@@ -3,8 +3,10 @@ package api
 import "net/http"
 
 type Categorie struct {
-	ID   int    `json:"id"`
-	Code string `json:"code"`
+	ID      int    `json:"id"`
+	Code    string `json:"code"`
+	Libelle string `json:"libelle"`
+	Actif   bool   `json:"actif"`
 }
 
 type Conteneur struct {
@@ -20,7 +22,7 @@ type Langue struct {
 }
 
 func (s *Serveur) gererListeCategories(w http.ResponseWriter, r *http.Request) {
-	lignes, err := s.db.Query("SELECT id, code FROM categories_materiaux ORDER BY code")
+	lignes, err := s.db.Query("SELECT id, code, libelle, actif FROM categories_materiaux ORDER BY libelle")
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -30,7 +32,7 @@ func (s *Serveur) gererListeCategories(w http.ResponseWriter, r *http.Request) {
 	categories := make([]Categorie, 0)
 	for lignes.Next() {
 		var c Categorie
-		if err := lignes.Scan(&c.ID, &c.Code); err != nil {
+		if err := lignes.Scan(&c.ID, &c.Code, &c.Libelle, &c.Actif); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}

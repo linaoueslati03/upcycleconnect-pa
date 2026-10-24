@@ -50,6 +50,11 @@ demarrerApp({
             if (resultat.langue) {
                 localStorage.setItem("langue", resultat.langue);
             }
+            if (resultat.doit_changer_mot_de_passe) {
+                localStorage.setItem("changer_mot_de_passe", "1");
+                window.location.href = pageMonCompte();
+                return;
+            }
             window.location.href = espace;
         },
     },
