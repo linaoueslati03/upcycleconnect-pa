@@ -139,3 +139,30 @@ label.lien-action {
     font-size: 20px;
     letter-spacing: 1px;
 }
+
+.conteneur-vide {
+    background-color: #d1e7dd;
+    color: #2E7D32;
+}
+
+.conteneur-occupe {
+    background-color: #fff3cd;
+    color: #92720a;
+}
+
+.conteneur-maintenance {
+    background-color: #f8d7da;
+    color: #a33;
+}
+
+.boutons-formulaire {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.code {
+    font-family: monospace;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
