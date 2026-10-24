@@ -31,11 +31,11 @@ services:
   web:
     image: php:8.3-apache
     container_name: upcycleconnect_web
-    restart: unless-stopped 
+    restart: unless-stopped
     ports:
       - "8082:80"
     volumes:
-      - ./front:/var/www/html:ro. // ro pour eviter de modif les fichiers sur l'interface web
+      - ./front:/var/www/html:ro
 
   api:
     build:
