@@ -14,7 +14,7 @@ func Connecter() (*sql.DB, error) {
 		variable("DB_HOST", "localhost"),
 		variable("DB_PORT", "5433"),
 		variable("DB_USER", "postgres"),
-		variable("DB_PASSWORD", "postgres"),
+		variable("DB_PASSWORD", "celsdlta"),
 		variable("DB_NAME", "upcycleconnect"),
 	)
 
