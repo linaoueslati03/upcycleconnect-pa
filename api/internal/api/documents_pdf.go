@@ -511,3 +511,97 @@ func (s *Serveur) gererMesDocuments(
 }
 
 //consulter ou télécharger un PDF avec contrôle des droits
+
+func (s *Serveur) gererTelechargementDocument(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	id, err := idDepuisChemin(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusBadRequest, "id invalide")
+		return
+	}
+
+	utilisateurID, role := s.roleConnecte(r)
+	if utilisateurID == 0 {
+		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+		return
+	}
+
+	var d DocumentArchive
+	var contenu []byte
+	var creePar sql.NullInt64
+
+	err = s.db.QueryRow(`
+		SELECT id, type_document, titre, utilisateur_id,
+		       type_offre, offre_id, inscription_id, cree_par,
+		       date_creation, contenu_pdf
+		FROM documents
+		WHERE id = $1
+	`, id).Scan(
+		&d.ID,
+		&d.TypeDocument,
+		&d.Titre,
+		&d.UtilisateurID,
+		&d.TypeOffre,
+		&d.OffreID,
+		&d.InscriptionID,
+		&creePar,
+		&d.DateCreation,
+		&contenu,
+	)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusNotFound, "document introuvable")
+		return
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
+	autorise := role == roleAdministrateur
+
+	if d.UtilisateurID != nil && *d.UtilisateurID == utilisateurID {
+		autorise = true
+	}
+	if role == roleSalarie && creePar.Valid &&
+		int(creePar.Int64) == utilisateurID {
+		autorise = true
+	}
+
+	// Une fiche d'offre publiée peut être consultée par tout utilisateur connecté.
+	if !autorise &&
+		(d.TypeDocument == "fiche_atelier" ||
+			d.TypeDocument == "fiche_evenement" ||
+			d.TypeDocument == "fiche_formation") &&
+		d.TypeOffre != nil &&
+		d.OffreID != nil {
+		tables := map[string]string{
+			"atelier":   "ateliers",
+			"evenement": "evenements",
+			"formation": "formations",
+		}
+
+		if table, ok := tables[*d.TypeOffre]; ok {
+			var statut string
+			err := s.db.QueryRow(
+				"SELECT statut FROM "+table+" WHERE id = $1",
+				*d.OffreID,
+			).Scan(&statut)
+
+			if err == nil && statut == "publie" {
+				autorise = true
+			}
+		}
+	}
+
+	if !autorise {
+		// Ne pas révéler l'existence d'un document privé.
+		envoyerErreur(w, http.StatusNotFound, "document introuvable")
+		return
+	}
+
+	nomFichier := fmt.Sprintf("document_%d.pdf", d.ID)
+	envoyerPDF(w, contenu, nomFichier)
+}
