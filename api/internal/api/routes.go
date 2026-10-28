@@ -125,5 +125,12 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/admin/finances/charges", s.gererCreationCharge)
 	mux.HandleFunc("DELETE /api/admin/finances/charges/{id}", s.gererSuppressionCharge)
 
+	mux.HandleFunc("GET /api/formations", s.gererListeFormations)
+	mux.HandleFunc("GET /api/formations/{id}", s.gererDetailFormation)
+	mux.HandleFunc("POST /api/formations", s.gererCreationFormation)
+	mux.HandleFunc("PUT /api/formations/{id}", s.gererModificationFormation)
+	mux.HandleFunc("DELETE /api/formations/{id}", s.gererSuppressionFormation)
+	mux.HandleFunc("POST /api/formations/{id}/valider", s.gererValidationFormation)
+
 	return mux
 }

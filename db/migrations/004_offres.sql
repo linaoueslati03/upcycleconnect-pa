@@ -32,9 +32,11 @@ CREATE TABLE formations (
     statut VARCHAR(20) DEFAULT 'brouillon',
     createur_id INT NOT NULL REFERENCES salaries(utilisateur_id),
     valide_par_id INT REFERENCES salaries(utilisateur_id),
+    motif_refus TEXT,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now()
 );
+
 
 CREATE TABLE ateliers (
     id SERIAL PRIMARY KEY,
