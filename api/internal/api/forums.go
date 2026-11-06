@@ -197,6 +197,17 @@ func (s *Serveur) gererReponseSujet(w http.ResponseWriter, r *http.Request) {
 	if !s.sujetVisible(w, sujetID) {
 		return
 	}
+
+	var auteurSujetID int
+	var titreSujet string
+	if err := s.db.QueryRow(
+		"SELECT auteur_utilisateur_id, titre FROM forum_sujets WHERE id = $1",
+		sujetID,
+	).Scan(&auteurSujetID, &titreSujet); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
 	if !s.verifierAntiSpam(utilisateurID) {
 		envoyerErreur(w, http.StatusTooManyRequests, "veuillez patienter avant de publier à nouveau")
 		return
@@ -212,6 +223,10 @@ func (s *Serveur) gererReponseSujet(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		gererErreurPostgres(w, err)
 		return
+	}
+
+	if auteurSujetID != utilisateurID {
+		notifierUtilisateur(auteurSujetID, "Nouvelle réponse sur le forum", "Quelqu'un a répondu à ton sujet « "+titreSujet+" ».")
 	}
 
 	envoyerJSON(w, http.StatusCreated, m)

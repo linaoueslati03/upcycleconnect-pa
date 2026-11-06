@@ -127,12 +127,19 @@ func (s *Serveur) gererDecisionOffre(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var statutActuel string
-	err = s.db.QueryRow("SELECT statut FROM "+offre.table+" WHERE id = $1", id).Scan(&statutActuel)
+	var createurID int
+	var titre string
+
+	err = s.db.QueryRow(
+		"SELECT createur_id, titre FROM "+offre.table+" WHERE id = $1",
+		id,
+	).Scan(&createurID, &titre)
+
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "offre introuvable")
 		return
-	} else if err != nil {
+	}
+	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
@@ -150,6 +157,19 @@ func (s *Serveur) gererDecisionOffre(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusConflict, "cette offre n'est pas en attente de validation")
 		return
 	}
+
+	var titreNotification string
+	var messageNotification string
+
+	if nouveauStatut == "publie" {
+		titreNotification = "Offre publiée !"
+		messageNotification = "Ton offre « " + titre + " » a été validée et publiée."
+	} else {
+		titreNotification = "Offre refusée"
+		messageNotification = "Ton offre « " + titre + " » a été refusée. Motif : " + entree.Motif
+	}
+
+	notifierUtilisateur(createurID, titreNotification, messageNotification)
 
 	envoyerJSON(w, http.StatusOK, map[string]string{"statut": nouveauStatut})
 }

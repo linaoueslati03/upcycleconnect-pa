@@ -23,6 +23,7 @@
     <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.prod.js"></script>
     <script src="assets/js/api.js"></script>
+    <scrip>src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"defer></script>
 </head>
 
 <body class="page-connexion">

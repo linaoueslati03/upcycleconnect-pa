@@ -46,6 +46,7 @@ demarrerApp({
             }
 
             localStorage.setItem("token", resultat.token);
+            localStorage.setItem("user_id", resultat.id);
             localStorage.setItem("role", resultat.role);
             if (resultat.langue) {
                 localStorage.setItem("langue", resultat.langue);

@@ -426,5 +426,11 @@ func (s *Serveur) deciderAnnonce(w http.ResponseWriter, r *http.Request, nouveau
 		return
 	}
 
+	if nouveauStatut == "en_ligne" {
+		notifierUtilisateur(a.UtilisateurID, "Annonce publiée !", "Ton annonce « "+a.Titre+" » a été validée et publiée.")
+	} else {
+		notifierUtilisateur(a.UtilisateurID, "Annonce refusée", "Ton annonce « "+a.Titre+" » a été refusée.")
+	}
+
 	envoyerJSON(w, http.StatusOK, a)
 }

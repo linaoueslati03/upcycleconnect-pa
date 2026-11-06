@@ -376,5 +376,7 @@ func (s *Serveur) gererValidationFormation(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	notifierUtilisateur(f.CreateurID, "Formation publiée !", "Ton offre « "+f.Titre+" » a été validée et publiée.")
+
 	envoyerJSON(w, http.StatusOK, f)
 }

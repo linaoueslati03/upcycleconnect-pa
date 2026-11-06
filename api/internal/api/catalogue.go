@@ -155,6 +155,16 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	var createurOffreID int
+	var titreOffre string
+	if err := tx.QueryRow(
+		"SELECT createur_id, titre FROM "+table+" WHERE id = $1",
+		entree.OffreID,
+	).Scan(&createurOffreID, &titreOffre); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
 	var dejaInscrit bool
 	err = tx.QueryRow(
 		"SELECT EXISTS (SELECT 1 FROM inscriptions WHERE utilisateur_id = $1 AND type_offre = $2 AND offre_id = $3)",
@@ -205,6 +215,10 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 	if err := tx.Commit(); err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
+	}
+
+	if createurOffreID != utilisateurID {
+		notifierUtilisateur(createurOffreID, "Nouvelle inscription", "Une personne vient de s'inscrire à ton offre « "+titreOffre+" ».")
 	}
 
 	envoyerJSON(w, http.StatusCreated, ins)

@@ -334,6 +334,18 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	titresStatut := map[string]string{
+		"validee":   "Dépôt validé",
+		"deposee":   "Objet déposé",
+		"recuperee": "Objet récupéré",
+	}
+	messagesStatut := map[string]string{
+		"validee":   "Ta demande de dépôt a été validée.",
+		"deposee":   "Ton objet a bien été enregistré comme déposé.",
+		"recuperee": "Ton objet a été récupéré. Tes points ont été ajoutés.",
+	}
+	notifierUtilisateur(d.UtilisateurID, titresStatut[entree.Statut], messagesStatut[entree.Statut])
+
 	envoyerJSON(w, http.StatusOK, d)
 }
 

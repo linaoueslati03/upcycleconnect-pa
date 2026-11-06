@@ -125,22 +125,20 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/admin/finances/charges", s.gererCreationCharge)
 	mux.HandleFunc("DELETE /api/admin/finances/charges/{id}", s.gererSuppressionCharge)
 
-<<<<<<< HEAD
-
 	mux.HandleFunc("POST /api/documents/offres/{type}/{id}", s.gererCreationFicheOffrePDF)
 	mux.HandleFunc("POST /api/inscriptions/{id}/attestation", s.gererCreationAttestationPDF)
 	mux.HandleFunc("POST /api/admin/documents", s.gererCreationDocumentAdministratif)
 
 	mux.HandleFunc("GET /api/moi/documents", s.gererMesDocuments)
 	mux.HandleFunc("GET /api/documents/{id}/pdf", s.gererTelechargementDocument)
-=======
 	mux.HandleFunc("GET /api/formations", s.gererListeFormations)
 	mux.HandleFunc("GET /api/formations/{id}", s.gererDetailFormation)
 	mux.HandleFunc("POST /api/formations", s.gererCreationFormation)
 	mux.HandleFunc("PUT /api/formations/{id}", s.gererModificationFormation)
 	mux.HandleFunc("DELETE /api/formations/{id}", s.gererSuppressionFormation)
 	mux.HandleFunc("POST /api/formations/{id}/valider", s.gererValidationFormation)
->>>>>>> develop
+
+	mux.HandleFunc("POST /api/notifications", s.gererEnvoiNotification)
 
 	return mux
 }

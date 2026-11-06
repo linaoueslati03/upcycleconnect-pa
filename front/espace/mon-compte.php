@@ -74,6 +74,14 @@ $titrePage = "nav.mon_compte";
                         </form>
                     </div>
 
+                    <div class="carte section">
+                        <h2>Notifications</h2>
+                        <p>Activez les notifications pour être informé des nouveautés et des activités sur UpcycleConnect.</p>
+                        <button id="activer-notifications" type="button" class="btn-primary">
+                            Activer les notifications
+                        </button>
+                    </div>
+
                     <div v-if="roleConnecte() === 'particulier'" class="carte">
                         <h2>{{ $t('compte.tutoriel') }}</h2>
                         <p>{{ $t('compte.tutoriel_explication') }}</p>

@@ -259,5 +259,7 @@ func (s *Serveur) gererValidationAtelier(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	notifierUtilisateur(a.CreateurID, "Atelier publiée !", "Ton offre « "+a.Titre+" » a été validée et publiée.")
+
 	envoyerJSON(w, http.StatusOK, a)
 }

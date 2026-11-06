@@ -135,7 +135,11 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	envoyerJSON(w, http.StatusOK, map[string]any{
-		"token": token, "role": role, "langue": langue, "doit_changer_mot_de_passe": doitChangerMotDePasse,
+		"id": utilisateurID,
+		"token": token,
+		"role": role,
+		"langue": langue,
+		"doit_changer_mot_de_passe": doitChangerMotDePasse,
 	})
 }
 

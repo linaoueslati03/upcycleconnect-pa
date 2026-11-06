@@ -274,5 +274,7 @@ func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	notifierUtilisateur(e.CreateurID, "Événement publiée !", "Ton offre « "+e.Titre+" » a été validée et publiée.")
+
 	envoyerJSON(w, http.StatusOK, e)
 }

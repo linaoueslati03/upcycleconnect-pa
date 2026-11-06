@@ -74,6 +74,14 @@ $scriptsEspace = ["../espace/js/outils.js"];
                     </form>
                 </div>
 
+                <div class="carte carte-formulaire">
+                    <h2>Notifications</h2>
+                    <p>Active les notifications pour recevoir les informations importantes d'UpcycleConnect.</p>
+                    <button id="activer-notifications" type="button" class="button-submit">
+                        Activer les notifications
+                    </button>
+                </div>
+
             </div>
 
         </main>

@@ -16,3 +16,4 @@
 <?php foreach ($scriptsEspace ?? [] as $script): ?>
 <script src="<?= $script ?>"></script>
 <?php endforeach; ?>
+<?php include __DIR__ . '/onesignal.php'; ?>

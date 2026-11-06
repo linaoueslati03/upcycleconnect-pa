@@ -10,7 +10,7 @@ const ESPACES = {
 function roleConnecte() {
     return localStorage.getItem("role");
 }
-
+a
 function afficherMenuDuRole() {
     const role = roleConnecte();
     const elements = document.querySelectorAll("aside li[data-roles]:not([data-roles=''])");
@@ -27,6 +27,7 @@ function afficherMenuDuRole() {
 
 function oublierConnexion() {
     localStorage.removeItem("token");
+    localStorage.removeItem("user_id");
     localStorage.removeItem("role");
     localStorage.removeItem("changer_mot_de_passe");
 }
@@ -155,6 +156,9 @@ async function deconnecter() {
     try {
         await appelerApi("/logout", { method: "POST" });
     } catch (erreur) {
+    }
+    if (typeof deconnecterOneSignal === "function") {
+        deconnecterOneSignal();
     }
     oublierConnexion();
     window.location.href = PAGE_CONNEXION;
