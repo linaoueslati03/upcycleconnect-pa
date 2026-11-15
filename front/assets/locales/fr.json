@@ -261,9 +261,96 @@
             },
             "onglet": {
                 "acteurs": "Acteurs",
+                "predictions": "Prédictions",
                 "prestations": "Prestations"
             },
             "points": "Points",
+            "predictions": {
+                "aucun": "Aucun acteur ne correspond à ces filtres.",
+                "aucune_demande": "aucune",
+                "calcul_actuel": "Prédictions calculées sur l'historique de chaque acteur à aujourd'hui : le filtre de dates ne s'applique pas à cet onglet.",
+                "chemin": {
+                    "indicateur": {
+                        "non": "{variable} : autre que {valeur}",
+                        "oui": "{variable} : {valeur}"
+                    },
+                    "montant": {
+                        "max": "{variable} : au plus {seuil} ({valeur})",
+                        "plus": "{variable} : plus de {seuil} ({valeur})"
+                    },
+                    "nombre": {
+                        "max": "{variable} : au plus {seuil} ({valeur})",
+                        "max_strict": "{variable} : au plus {seuil} ({valeur})",
+                        "plus": "{variable} : au moins {seuil} ({valeur})",
+                        "plus_strict": "{variable} : plus de {seuil} ({valeur})"
+                    },
+                    "part": {
+                        "max": "{variable} : au plus {seuil} de ses demandes ({valeur})",
+                        "plus": "{variable} : plus de {seuil} de ses demandes ({valeur})"
+                    },
+                    "premium": {
+                        "non": "Abonnement : gratuit (freemium)",
+                        "oui": "Abonnement : premium"
+                    },
+                    "variable": {
+                        "anciennete_jours": "Ancienneté en jours",
+                        "categorie_preferee": "Catégorie de matériaux préférée",
+                        "derniere_demande": "Dernière demande",
+                        "jours_depuis_derniere_demande": "Jours depuis la dernière demande",
+                        "montant_depense": "Montant dépensé",
+                        "nb_achats_annonces": "Achats d'annonces",
+                        "nb_annonces": "Annonces publiées",
+                        "nb_annonces_vente": "Annonces de vente",
+                        "nb_ateliers": "Inscriptions à des ateliers",
+                        "nb_depots": "Dépôts en conteneur",
+                        "nb_evenements": "Inscriptions à des événements",
+                        "nb_formations": "Inscriptions à des formations",
+                        "part_achats_annonces": "Part des achats d'annonces",
+                        "part_ateliers": "Part des ateliers",
+                        "part_depots": "Part des dépôts",
+                        "part_evenements": "Part des événements",
+                        "part_formations": "Part des formations",
+                        "role": "Rôle",
+                        "site_principal": "Site principal",
+                        "upcycling_score": "Upcycling Score"
+                    }
+                },
+                "classe": {
+                    "achat_annonce": "Achat d'annonce",
+                    "atelier": "Atelier",
+                    "depot": "Dépôt en conteneur",
+                    "evenement": "Événement",
+                    "formation": "Formation",
+                    "premium": "Abonnement premium"
+                },
+                "colonne": {
+                    "acteur": "Acteur",
+                    "confiance": "Confiance",
+                    "derniere": "Dernière demande",
+                    "prochaine": "Prochaine demande probable"
+                },
+                "effectif": "Décision fondée sur {nombre} acteurs au profil similaire dans les données d'entraînement.",
+                "expliquer": "Expliquer",
+                "filtre_classe": "Prochaine demande probable",
+                "graphique_detail": "Nombre d'acteurs par prestation que le modèle juge la plus probable pour leur prochaine demande.",
+                "graphique_titre": "Prochaine demande probable des acteurs",
+                "il_y_a": "il y a {jours} j",
+                "liste_detail": "Triés par confiance : les acteurs pour lesquels le modèle est le plus sûr apparaissent en premier.",
+                "liste_titre": "Acteurs et prochaine demande probable",
+                "modele_detail": "Exactitude de {exactitude} sur des données récentes (contre 21 % en répondant toujours la demande la plus fréquente). Les prédictions sont des tendances, pas des certitudes.",
+                "modele_titre": "Arbre de décision entraîné le {date}",
+                "page": "Page {page} sur {pages} · {total} acteurs",
+                "pourquoi": "Pourquoi cette prédiction ?",
+                "probabilites": "Probabilité de chaque demande",
+                "prochaine": "Prochaine demande probable :",
+                "resume_acteur": "inscrit depuis {jours} jours · Upcycling Score {score} · {demandes} demandes",
+                "role": {
+                    "particulier": "Particulier",
+                    "professionnel": "Professionnel"
+                },
+                "tous_roles": "Tous les rôles",
+                "toutes_classes": "Toutes les demandes"
+            },
             "prestations": {
                 "aucune": "Aucune prestation sur cette période.",
                 "colonne": {
@@ -339,6 +426,7 @@
             "mot_de_passe_temporaire_aide": "Transmettez-le à la personne : il ne sera plus affiché. Elle devra le changer à sa prochaine connexion.",
             "nouveau": "Nouvel utilisateur",
             "page": "Page {page} sur {pages}",
+            "prediction": "Prochaine demande probable",
             "reactiver": "Réactiver",
             "rechercher": "Rechercher par nom, prénom ou e-mail",
             "reinitialiser_mot_de_passe": "Réinitialiser le mot de passe",
@@ -349,7 +437,8 @@
             "suspendre": "Suspendre",
             "titre": "Gestion des utilisateurs",
             "tous_roles": "Tous les rôles",
-            "tous_statuts": "Tous les statuts"
+            "tous_statuts": "Tous les statuts",
+            "voir_explication": "Voir l'explication"
         },
         "validations": {
             "ateliers": "Ateliers",

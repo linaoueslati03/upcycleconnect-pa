@@ -19,7 +19,7 @@ $titrePage = "nav.reporting";
                 <h1>{{ $t('admin.reporting.titre') }}</h1>
             </div>
 
-            <form class="filtres-utilisateurs periode-finances" @submit.prevent="appliquerPeriode">
+            <form v-if="onglet !== 'predictions'" class="filtres-utilisateurs periode-finances" @submit.prevent="appliquerPeriode">
                 <div class="form-group">
                     <label for="debut">{{ $t('commun.date_debut') }}</label>
                     <input id="debut" type="date" v-model="periode.debut" required>
@@ -153,6 +153,119 @@ $titrePage = "nav.reporting";
                                 </tr>
                             </tbody>
                         </table>
+                    </section>
+                </template>
+            </template>
+
+            <template v-if="onglet === 'predictions'">
+                <p class="discret">{{ $t('admin.reporting.predictions.calcul_actuel') }}</p>
+
+                <div v-if="predictions" class="carte bandeau-modele">
+                    <strong>{{ $t('admin.reporting.predictions.modele_titre', { date: formaterDateHeure(predictions.modele.version) }) }}</strong>
+                    <p>{{ $t('admin.reporting.predictions.modele_detail', { exactitude: formaterProbabilite(predictions.modele.exactitude_test) }) }}</p>
+                </div>
+
+                <section v-if="detail" id="detail-prediction" class="carte detail-prediction">
+                    <div class="entete-detail">
+                        <h2>{{ detail.utilisateur.prenom }} {{ detail.utilisateur.nom }}</h2>
+                        <button class="lien-action" @click="detail = null">{{ $t('admin.utilisateurs.fermer') }}</button>
+                    </div>
+                    <p class="discret">
+                        {{ $t('admin.reporting.predictions.role.' + detail.utilisateur.role) }} · {{ detail.utilisateur.email }} ·
+                        {{ $t('admin.reporting.predictions.resume_acteur', {
+                            jours: formaterNombre(detail.variables.anciennete_jours),
+                            score: formaterNombre(detail.variables.upcycling_score),
+                            demandes: formaterNombre(nombreDemandes(detail.variables)) }) }}
+                    </p>
+                    <p class="prediction-principale">
+                        {{ $t('admin.reporting.predictions.prochaine') }}
+                        <strong>{{ nomClasse(detail.prediction.classe) }}</strong>
+                        ({{ formaterProbabilite(detail.prediction.probabilites[0].probabilite) }})
+                    </p>
+                    <div class="mise-en-page-detail">
+                        <div>
+                            <h3>{{ $t('admin.reporting.predictions.probabilites') }}</h3>
+                            <div v-for="p in detail.prediction.probabilites" :key="p.classe" class="barre-probabilite">
+                                <span>{{ nomClasse(p.classe) }}</span>
+                                <div class="barre"><div :style="{ width: (p.probabilite * 100) + '%', background: couleurClasse(p.classe) }"></div></div>
+                                <span class="montant">{{ formaterProbabilite(p.probabilite) }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>{{ $t('admin.reporting.predictions.pourquoi') }}</h3>
+                            <ol class="chemin-prediction">
+                                <li v-for="(etape, i) in detail.prediction.chemin" :key="i">{{ phraseEtape(etape) }}</li>
+                            </ol>
+                            <p class="discret">{{ $t('admin.reporting.predictions.effectif', { nombre: formaterNombre(detail.prediction.effectif) }) }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="filtres-utilisateurs periode-finances">
+                    <div class="form-group">
+                        <label for="classe-prediction">{{ $t('admin.reporting.predictions.filtre_classe') }}</label>
+                        <select id="classe-prediction" v-model="filtrePrediction.classe" @change="filtrerPredictions">
+                            <option value="">{{ $t('admin.reporting.predictions.toutes_classes') }}</option>
+                            <option v-for="c in classesPrediction" :key="c" :value="c">{{ nomClasse(c) }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="role-prediction">{{ $t('commun.role') }}</label>
+                        <select id="role-prediction" v-model="filtrePrediction.role" @change="filtrerPredictions">
+                            <option value="">{{ $t('admin.reporting.predictions.tous_roles') }}</option>
+                            <option v-for="r in rolesActeur" :key="r" :value="r">{{ $t('admin.reporting.predictions.role.' + r) }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <template v-if="predictions">
+                    <div class="grille-graphiques">
+                        <section class="carte graphique-large">
+                            <h3>{{ $t('admin.reporting.predictions.graphique_titre') }}</h3>
+                            <p class="discret">{{ $t('admin.reporting.predictions.graphique_detail') }}</p>
+                            <div class="zone-graphique">
+                                <canvas id="graphique-repartition" role="img" :aria-label="$t('admin.reporting.predictions.graphique_titre')"></canvas>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="carte section-categories">
+                        <h2>{{ $t('admin.reporting.predictions.liste_titre') }}</h2>
+                        <p class="discret">{{ $t('admin.reporting.predictions.liste_detail') }}</p>
+                        <p v-if="predictions.predictions.length === 0">{{ $t('admin.reporting.predictions.aucun') }}</p>
+                        <table v-else class="tableau">
+                            <thead>
+                                <tr>
+                                    <th>{{ $t('admin.reporting.predictions.colonne.acteur') }}</th>
+                                    <th>{{ $t('commun.role') }}</th>
+                                    <th>{{ $t('admin.reporting.predictions.colonne.prochaine') }}</th>
+                                    <th>{{ $t('admin.reporting.predictions.colonne.confiance') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.predictions.colonne.derniere') }}</th>
+                                    <th>{{ $t('commun.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="p in predictions.predictions" :key="p.id">
+                                    <td>{{ p.prenom }} {{ p.nom }}<br><span class="discret">{{ p.email }}</span></td>
+                                    <td>{{ $t('admin.reporting.predictions.role.' + p.role) }}</td>
+                                    <td>{{ nomClasse(p.classe) }}</td>
+                                    <td>
+                                        <div class="barre-confiance">
+                                            <div class="barre"><div :style="{ width: (p.probabilite * 100) + '%', background: couleurClasse(p.classe) }"></div></div>
+                                            <span>{{ formaterProbabilite(p.probabilite) }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="montant">{{ p.jours_depuis_derniere_demande >= 999 ? '—' : $t('admin.reporting.predictions.il_y_a', { jours: formaterNombre(p.jours_depuis_derniere_demande) }) }}</td>
+                                    <td><button class="lien-action" @click="expliquer(p.id)">{{ $t('admin.reporting.predictions.expliquer') }}</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="pagination">
+                            <button class="lien-action" :disabled="pagePredictions <= 1" @click="chargerPredictions(pagePredictions - 1)">← {{ $t('commun.precedent') }}</button>
+                            <span>{{ $t('admin.reporting.predictions.page', { page: pagePredictions, pages: nombrePagesPredictions, total: predictions.total }) }}</span>
+                            <button class="lien-action" :disabled="pagePredictions >= nombrePagesPredictions" @click="chargerPredictions(pagePredictions + 1)">{{ $t('commun.suivant') }} →</button>
+                        </div>
                     </section>
                 </template>
             </template>

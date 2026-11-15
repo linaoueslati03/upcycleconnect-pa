@@ -261,9 +261,96 @@
             },
             "onglet": {
                 "acteurs": "Members",
+                "predictions": "Predictions",
                 "prestations": "Services"
             },
             "points": "Points",
+            "predictions": {
+                "aucun": "No member matches these filters.",
+                "aucune_demande": "none",
+                "calcul_actuel": "Predictions computed from each member's history as of today: the date filter does not apply to this tab.",
+                "chemin": {
+                    "indicateur": {
+                        "non": "{variable}: other than {valeur}",
+                        "oui": "{variable}: {valeur}"
+                    },
+                    "montant": {
+                        "max": "{variable}: at most {seuil} ({valeur})",
+                        "plus": "{variable}: more than {seuil} ({valeur})"
+                    },
+                    "nombre": {
+                        "max": "{variable}: at most {seuil} ({valeur})",
+                        "max_strict": "{variable}: at most {seuil} ({valeur})",
+                        "plus": "{variable}: at least {seuil} ({valeur})",
+                        "plus_strict": "{variable}: more than {seuil} ({valeur})"
+                    },
+                    "part": {
+                        "max": "{variable}: at most {seuil} of their requests ({valeur})",
+                        "plus": "{variable}: more than {seuil} of their requests ({valeur})"
+                    },
+                    "premium": {
+                        "non": "Subscription: free (freemium)",
+                        "oui": "Subscription: premium"
+                    },
+                    "variable": {
+                        "anciennete_jours": "Days since sign-up",
+                        "categorie_preferee": "Favourite material category",
+                        "derniere_demande": "Last request",
+                        "jours_depuis_derniere_demande": "Days since last request",
+                        "montant_depense": "Amount spent",
+                        "nb_achats_annonces": "Listing purchases",
+                        "nb_annonces": "Listings posted",
+                        "nb_annonces_vente": "Listings for sale",
+                        "nb_ateliers": "Workshop registrations",
+                        "nb_depots": "Container drop-offs",
+                        "nb_evenements": "Event registrations",
+                        "nb_formations": "Training registrations",
+                        "part_achats_annonces": "Share of listing purchases",
+                        "part_ateliers": "Share of workshops",
+                        "part_depots": "Share of drop-offs",
+                        "part_evenements": "Share of events",
+                        "part_formations": "Share of training courses",
+                        "role": "Role",
+                        "site_principal": "Main site",
+                        "upcycling_score": "Upcycling Score"
+                    }
+                },
+                "classe": {
+                    "achat_annonce": "Listing purchase",
+                    "atelier": "Workshop",
+                    "depot": "Container drop-off",
+                    "evenement": "Event",
+                    "formation": "Training course",
+                    "premium": "Premium subscription"
+                },
+                "colonne": {
+                    "acteur": "Member",
+                    "confiance": "Confidence",
+                    "derniere": "Last request",
+                    "prochaine": "Most likely next request"
+                },
+                "effectif": "Decision based on {nombre} members with a similar profile in the training data.",
+                "expliquer": "Explain",
+                "filtre_classe": "Most likely next request",
+                "graphique_detail": "Number of members per service the model considers most likely for their next request.",
+                "graphique_titre": "Most likely next request of members",
+                "il_y_a": "{jours} d ago",
+                "liste_detail": "Sorted by confidence: the members the model is most sure about come first.",
+                "liste_titre": "Members and most likely next request",
+                "modele_detail": "Accuracy of {exactitude} on recent data (versus 21% when always answering the most frequent request). Predictions are trends, not certainties.",
+                "modele_titre": "Decision tree trained on {date}",
+                "page": "Page {page} of {pages} · {total} members",
+                "pourquoi": "Why this prediction?",
+                "probabilites": "Probability of each request",
+                "prochaine": "Most likely next request:",
+                "resume_acteur": "member for {jours} days · Upcycling Score {score} · {demandes} requests",
+                "role": {
+                    "particulier": "Individual",
+                    "professionnel": "Professional"
+                },
+                "tous_roles": "All roles",
+                "toutes_classes": "All requests"
+            },
             "prestations": {
                 "aucune": "No service over this period.",
                 "colonne": {
@@ -339,6 +426,7 @@
             "mot_de_passe_temporaire_aide": "Give it to the user: it will not be shown again. They will have to change it at their next login.",
             "nouveau": "New user",
             "page": "Page {page} of {pages}",
+            "prediction": "Most likely next request",
             "reactiver": "Reactivate",
             "rechercher": "Search by last name, first name or e-mail",
             "reinitialiser_mot_de_passe": "Reset password",
@@ -349,7 +437,8 @@
             "suspendre": "Suspend",
             "titre": "User management",
             "tous_roles": "All roles",
-            "tous_statuts": "All statuses"
+            "tous_statuts": "All statuses",
+            "voir_explication": "See the explanation"
         },
         "validations": {
             "ateliers": "Workshops",

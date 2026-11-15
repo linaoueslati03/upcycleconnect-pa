@@ -1,3 +1,5 @@
+const ROLE_PARTICULIER = 1;
+const ROLE_PROFESSIONNEL = 2;
 const FORMULAIRE_VIDE = { id: null, nom: "", prenom: "", email: "", role_id: 1, mot_de_passe: "", langue_preferee_id: null };
 
 demarrerApp({
@@ -10,6 +12,7 @@ demarrerApp({
             parPage: 20,
             motDePasseTemporaire: null,
             formulaire: { ...FORMULAIRE_VIDE },
+            prediction: null,
             erreur: "",
             erreurListe: "",
         };
@@ -73,7 +76,24 @@ demarrerApp({
 
         reinitialiserFormulaire() {
             this.formulaire = { ...FORMULAIRE_VIDE };
+            this.prediction = null;
             this.erreur = "";
+        },
+
+        async chargerPrediction(utilisateur) {
+            this.prediction = null;
+            if (![ROLE_PARTICULIER, ROLE_PROFESSIONNEL].includes(utilisateur.role_id)) {
+                return;
+            }
+            const reponse = await appelerApi(`/admin/predictions/${utilisateur.id}`);
+            if (!reponse.ok || this.formulaire.id !== utilisateur.id) {
+                return;
+            }
+            const { prediction } = await reponse.json();
+            this.prediction = {
+                classe: prediction.classe,
+                probabilite: prediction.probabilites.find((p) => p.classe === prediction.classe).probabilite,
+            };
         },
 
         modifier(utilisateur) {
@@ -87,6 +107,7 @@ demarrerApp({
                 langue_preferee_id: utilisateur.langue_preferee_id,
             };
             this.erreur = "";
+            this.chargerPrediction(utilisateur);
         },
 
         async enregistrer() {

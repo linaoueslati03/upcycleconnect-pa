@@ -96,6 +96,15 @@ $titrePage = "nav.utilisateurs";
                 <div class="carte carte-formulaire">
                     <h2>{{ formulaire.id ? $t('admin.utilisateurs.modifier') : $t('admin.utilisateurs.nouveau') }}</h2>
 
+                    <div v-if="prediction" class="bloc-prediction">
+                        <span class="discret">{{ $t('admin.utilisateurs.prediction') }}</span>
+                        <p>
+                            <strong>{{ $t('admin.reporting.predictions.classe.' + prediction.classe) }}</strong>
+                            ({{ (prediction.probabilite).toLocaleString(langueCourante(), { style: 'percent', maximumFractionDigits: 1 }) }})
+                        </p>
+                        <a class="lien-action" :href="'reporting.php?onglet=predictions&acteur=' + formulaire.id">{{ $t('admin.utilisateurs.voir_explication') }}</a>
+                    </div>
+
                     <form @submit.prevent="enregistrer">
                         <div class="form-group">
                             <label for="nom">{{ $t('commun.nom') }}</label>

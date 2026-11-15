@@ -314,3 +314,90 @@ label.lien-action {
 .graphique-large .zone-graphique {
     height: 340px;
 }
+
+.bandeau-modele {
+    margin: 12px 0 20px;
+    border-left: 4px solid #2E7D32;
+}
+
+.bandeau-modele p {
+    margin: 6px 0 0;
+}
+
+.detail-prediction {
+    margin-bottom: 24px;
+    border: 2px solid #2E7D32;
+}
+
+.entete-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.entete-detail h2 {
+    margin: 0;
+}
+
+.prediction-principale {
+    margin: 14px 0 18px;
+    font-size: 18px;
+}
+
+.mise-en-page-detail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+}
+
+.mise-en-page-detail h3 {
+    margin: 0 0 12px;
+    color: #2E7D32;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+}
+
+.barre-probabilite {
+    display: grid;
+    grid-template-columns: 170px 1fr 60px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.barre {
+    height: 10px;
+    border-radius: 5px;
+    background: #e6e3d8;
+    overflow: hidden;
+}
+
+.barre > div {
+    height: 100%;
+    border-radius: 5px;
+}
+
+.barre-confiance {
+    display: grid;
+    grid-template-columns: 90px 50px;
+    align-items: center;
+    gap: 8px;
+}
+
+.chemin-prediction {
+    margin: 0 0 12px;
+    padding-left: 20px;
+    line-height: 1.7;
+}
+
+.bloc-prediction {
+    margin: 0 0 18px;
+    padding: 10px 14px;
+    border-left: 4px solid #2E7D32;
+    background: #eef3ea;
+    border-radius: 6px;
+}
+
+.bloc-prediction p {
+    margin: 4px 0;
+}
