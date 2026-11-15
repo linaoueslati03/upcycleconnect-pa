@@ -6,6 +6,8 @@ const COULEURS = {
     rouge: "#c62828",
 };
 const TOTAUX = ["acteurs", "particuliers", "professionnels", "nouveaux_periode", "actifs_periode"];
+const TYPES_PRESTATION = ["formation", "atelier", "evenement"];
+const COULEUR_TYPE = { formation: COULEURS.vert, atelier: COULEURS.bleuClair, evenement: COULEURS.bleu };
 const graphiques = new Map();
 
 function dessiner(nom, config) {
@@ -42,12 +44,16 @@ demarrerApp({
         return {
             periode: periodeRaccourci("12_mois"),
             raccourcis: ["12_mois", "mois_courant", "annee_courante"],
-            onglets: ["acteurs"],
+            onglets: ["acteurs", "prestations"],
             onglet: "acteurs",
             totaux: TOTAUX,
             graphiquesEtat: ["role", "statut", "abonnement", "score"],
             graphiquesPeriode: ["nouveaux", "sites"],
             acteurs: null,
+            typesPrestation: TYPES_PRESTATION,
+            typePrestation: "",
+            graphiquesPrestations: ["mois", "reinscription", "top"],
+            prestations: null,
             erreur: "",
         };
     },
@@ -75,8 +81,19 @@ demarrerApp({
             });
         },
 
-        parametresPeriode() {
-            return new URLSearchParams({ debut: this.periode.debut, fin: this.periode.fin });
+        formaterPourcentage(valeur) {
+            if (valeur === null || valeur === undefined) {
+                return "—";
+            }
+            return (valeur / 100).toLocaleString(langueCourante(), { style: "percent", maximumFractionDigits: 1 });
+        },
+
+        formaterMontant(montant) {
+            return montant.toLocaleString(langueCourante(), { style: "currency", currency: "EUR" });
+        },
+
+        parametresPeriode(supplement = {}) {
+            return new URLSearchParams({ debut: this.periode.debut, fin: this.periode.fin, ...supplement });
         },
 
         async lireErreur(reponse) {
@@ -178,6 +195,76 @@ demarrerApp({
             });
         },
 
+        async chargerPrestations() {
+            this.erreur = "";
+            const supplement = this.typePrestation ? { type: this.typePrestation } : {};
+            const reponse = await appelerApi(`/admin/reporting/prestations?${this.parametresPeriode(supplement)}`);
+            if (!reponse.ok) {
+                this.erreur = await this.lireErreur(reponse);
+                return;
+            }
+            this.prestations = await reponse.json();
+            await this.$nextTick();
+            this.dessinerPrestations();
+        },
+
+        dessinerPrestations() {
+            const p = this.prestations;
+            const types = p.type ? [p.type] : TYPES_PRESTATION;
+            const nomType = (type) => t(`admin.reporting.prestations.type.${type}`);
+
+            dessiner("mois", {
+                type: "bar",
+                data: {
+                    labels: p.par_mois.map((m) => this.formaterMois(m.mois)),
+                    datasets: types.map((type) => ({
+                        label: nomType(type),
+                        data: p.par_mois.map((m) => m[type]),
+                        backgroundColor: COULEUR_TYPE[type],
+                    })),
+                },
+                options: {
+                    plugins: { legend: { position: "bottom" } },
+                    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } },
+                },
+            });
+
+            const reinscription = barresSimples(
+                p.par_type.map((s) => nomType(s.type)),
+                p.par_type.map((s) => s.taux_reinscription ?? 0),
+                p.par_type.map((s) => COULEUR_TYPE[s.type]),
+            );
+            reinscription.options.scales.y = {
+                beginAtZero: true,
+                ticks: { callback: (valeur) => this.formaterPourcentage(valeur) },
+            };
+            reinscription.options.plugins.tooltip = {
+                callbacks: { label: (contexte) => this.formaterPourcentage(contexte.parsed.y) },
+            };
+            dessiner("reinscription", reinscription);
+
+            const top = p.prestations.slice(0, 10);
+            dessiner("top", {
+                type: "bar",
+                data: {
+                    labels: top.map((s) => s.titre),
+                    datasets: [{
+                        label: t("admin.reporting.prestations.colonne.inscriptions"),
+                        data: top.map((s) => s.inscriptions),
+                        backgroundColor: top.map((s) => COULEUR_TYPE[s.type]),
+                    }],
+                },
+                options: {
+                    indexAxis: "y",
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { afterLabel: (contexte) => nomType(top[contexte.dataIndex].type) } },
+                    },
+                    scales: { x: { beginAtZero: true, ticks: { precision: 0 } } },
+                },
+            });
+        },
+
         appliquerPeriode() {
             this.erreur = "";
             this.chargerOnglet();
@@ -198,6 +285,7 @@ demarrerApp({
         chargerOnglet() {
             const chargements = {
                 acteurs: this.chargerActeurs,
+                prestations: this.chargerPrestations,
             };
             if (chargements[this.onglet]) {
                 chargements[this.onglet]();

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"math"
 	"net/http"
 	"slices"
 )
@@ -222,4 +223,247 @@ func (s *Serveur) activiteParSite(debut, fin string) ([]ActiviteSite, error) {
 		sites = append(sites, autre)
 	}
 	return sites, nil
+}
+
+const ctePrestations = `
+	WITH o AS (
+		SELECT * FROM (
+			SELECT 'formation'::text AS type, id, titre, date_debut, nb_places, statut FROM formations
+			UNION ALL
+			SELECT 'atelier', id, titre, date_debut, NULL::int, statut FROM ateliers
+			UNION ALL
+			SELECT 'evenement', id, titre, date_debut, NULL::int, statut FROM evenements
+		) offres
+		WHERE statut IN ('publie', 'termine') AND ($3::text = '' OR type = $3::text)
+	),
+	ins AS (
+		SELECT o.type, o.titre, i.utilisateur_id, i.date_inscription
+		FROM inscriptions i
+		JOIN o ON o.type = i.type_offre AND o.id = i.offre_id
+		WHERE i.date_inscription >= $1::timestamp AND i.date_inscription < $2::timestamp + interval '1 day'
+	),
+	participants AS (
+		SELECT type, titre, utilisateur_id, count(*) AS nb
+		FROM ins
+		GROUP BY type, titre, utilisateur_id
+	)`
+
+var typesPrestation = []string{"formation", "atelier", "evenement"}
+
+type StatsPrestation struct {
+	Type              string   `json:"type"`
+	Titre             string   `json:"titre,omitempty"`
+	Sessions          int      `json:"sessions"`
+	Inscriptions      int      `json:"inscriptions"`
+	Participants      int      `json:"participants"`
+	Reinscrits        int      `json:"reinscrits"`
+	TauxReinscription *float64 `json:"taux_reinscription"`
+	Places            int      `json:"places"`
+	TauxRemplissage   *float64 `json:"taux_remplissage"`
+	ChiffreAffaires   float64  `json:"chiffre_affaires"`
+	inscritsSessions  int
+}
+
+type MoisPrestations struct {
+	Mois      string `json:"mois"`
+	Formation int    `json:"formation"`
+	Atelier   int    `json:"atelier"`
+	Evenement int    `json:"evenement"`
+}
+
+type ReportingPrestations struct {
+	Debut       string            `json:"debut"`
+	Fin         string            `json:"fin"`
+	Type        string            `json:"type"`
+	Totaux      StatsPrestation   `json:"totaux"`
+	ParType     []StatsPrestation `json:"par_type"`
+	ParMois     []MoisPrestations `json:"par_mois"`
+	Prestations []StatsPrestation `json:"prestations"`
+}
+
+func pourcentage(partie, total int) *float64 {
+	if total == 0 {
+		return nil
+	}
+	valeur := math.Round(float64(partie)*1000/float64(total)) / 10
+	return &valeur
+}
+
+func (p *StatsPrestation) calculerTaux() {
+	p.ChiffreAffaires = arrondirCentimes(p.ChiffreAffaires)
+	p.TauxReinscription = pourcentage(p.Reinscrits, p.Participants)
+	p.TauxRemplissage = pourcentage(p.inscritsSessions, p.Places)
+}
+
+func (s *Serveur) gererReportingPrestations(w http.ResponseWriter, r *http.Request) {
+	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
+		return
+	}
+
+	debut, fin, message := periodeDepuisRequete(r)
+	if message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
+		return
+	}
+	typeOffre := r.URL.Query().Get("type")
+	if typeOffre != "" && !slices.Contains(typesPrestation, typeOffre) {
+		envoyerErreur(w, http.StatusBadRequest, "type invalide (formation, atelier ou evenement attendu)")
+		return
+	}
+
+	reporting := ReportingPrestations{Debut: debut, Fin: fin, Type: typeOffre, Totaux: StatsPrestation{Type: typeOffre}}
+	types := typesPrestation
+	if typeOffre != "" {
+		types = []string{typeOffre}
+	}
+
+	prestations, err := s.statsParPrestation(debut, fin, typeOffre)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	parType := make(map[string]*StatsPrestation)
+	for _, t := range types {
+		parType[t] = &StatsPrestation{Type: t}
+	}
+	for _, p := range prestations {
+		cumul := parType[p.Type]
+		cumul.Sessions += p.Sessions
+		cumul.Places += p.Places
+		cumul.inscritsSessions += p.inscritsSessions
+		cumul.ChiffreAffaires += p.ChiffreAffaires
+		reporting.Totaux.Sessions += p.Sessions
+		reporting.Totaux.Places += p.Places
+		reporting.Totaux.inscritsSessions += p.inscritsSessions
+		reporting.Totaux.ChiffreAffaires += p.ChiffreAffaires
+	}
+
+	if err := s.frequentationParType(debut, fin, typeOffre, parType, &reporting.Totaux); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	reporting.ParMois, err = s.inscriptionsParMois(debut, fin, typeOffre)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
+	reporting.Totaux.calculerTaux()
+	reporting.ParType = make([]StatsPrestation, 0, len(types))
+	for _, t := range types {
+		parType[t].calculerTaux()
+		reporting.ParType = append(reporting.ParType, *parType[t])
+	}
+	reporting.Prestations = prestations
+
+	envoyerJSON(w, http.StatusOK, reporting)
+}
+
+func (s *Serveur) statsParPrestation(debut, fin, typeOffre string) ([]StatsPrestation, error) {
+	lignes, err := s.db.Query(ctePrestations+`,
+		sessions AS (
+			SELECT o.type, o.titre, count(*) AS sessions,
+			       COALESCE(sum(o.nb_places), 0) AS places,
+			       COALESCE(sum(i.nb) FILTER (WHERE o.nb_places IS NOT NULL), 0) AS inscrits_sessions
+			FROM o
+			LEFT JOIN (
+				SELECT type_offre, offre_id, count(*) AS nb FROM inscriptions GROUP BY type_offre, offre_id
+			) i ON i.type_offre = o.type AND i.offre_id = o.id
+			WHERE o.date_debut >= $1::timestamp AND o.date_debut < $2::timestamp + interval '1 day'
+			GROUP BY o.type, o.titre
+		),
+		frequentation AS (
+			SELECT type, titre, sum(nb) AS inscriptions, count(*) AS participants,
+			       count(*) FILTER (WHERE nb >= 2) AS reinscrits
+			FROM participants
+			GROUP BY type, titre
+		),
+		ventes AS (
+			SELECT o.type, o.titre, sum(p.montant) AS chiffre_affaires
+			FROM paiements p
+			JOIN o ON p.source = o.type AND p.reference_id = o.id
+			WHERE p.statut = 'reussi'
+			  AND p.date_paiement >= $1::timestamp AND p.date_paiement < $2::timestamp + interval '1 day'
+			GROUP BY o.type, o.titre
+		)
+		SELECT t.type, t.titre,
+		       COALESCE(s.sessions, 0), COALESCE(f.inscriptions, 0), COALESCE(f.participants, 0),
+		       COALESCE(f.reinscrits, 0), COALESCE(s.places, 0), COALESCE(s.inscrits_sessions, 0),
+		       COALESCE(v.chiffre_affaires, 0)
+		FROM (SELECT DISTINCT type, titre FROM o) t
+		LEFT JOIN sessions s USING (type, titre)
+		LEFT JOIN frequentation f USING (type, titre)
+		LEFT JOIN ventes v USING (type, titre)
+		WHERE s.sessions IS NOT NULL OR f.inscriptions IS NOT NULL
+		ORDER BY COALESCE(f.inscriptions, 0) DESC, t.titre`, debut, fin, typeOffre)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	prestations := make([]StatsPrestation, 0)
+	for lignes.Next() {
+		var p StatsPrestation
+		if err := lignes.Scan(&p.Type, &p.Titre, &p.Sessions, &p.Inscriptions, &p.Participants,
+			&p.Reinscrits, &p.Places, &p.inscritsSessions, &p.ChiffreAffaires); err != nil {
+			return nil, err
+		}
+		p.calculerTaux()
+		prestations = append(prestations, p)
+	}
+	return prestations, lignes.Err()
+}
+
+func (s *Serveur) frequentationParType(debut, fin, typeOffre string, parType map[string]*StatsPrestation, totaux *StatsPrestation) error {
+	lignes, err := s.db.Query(ctePrestations+`
+		SELECT COALESCE(type, ''), COALESCE(sum(nb), 0), count(DISTINCT utilisateur_id),
+		       count(DISTINCT utilisateur_id) FILTER (WHERE nb >= 2)
+		FROM participants
+		GROUP BY GROUPING SETS ((type), ())`, debut, fin, typeOffre)
+	if err != nil {
+		return err
+	}
+	defer lignes.Close()
+
+	for lignes.Next() {
+		var t string
+		var inscriptions, participants, reinscrits int
+		if err := lignes.Scan(&t, &inscriptions, &participants, &reinscrits); err != nil {
+			return err
+		}
+		cible := totaux
+		if t != "" {
+			cible = parType[t]
+		}
+		if cible != nil {
+			cible.Inscriptions, cible.Participants, cible.Reinscrits = inscriptions, participants, reinscrits
+		}
+	}
+	return lignes.Err()
+}
+
+func (s *Serveur) inscriptionsParMois(debut, fin, typeOffre string) ([]MoisPrestations, error) {
+	lignes, err := s.db.Query(ctePrestations+`
+		SELECT to_char(m.debut, 'YYYY-MM'),
+		       count(ins.type) FILTER (WHERE ins.type = 'formation'),
+		       count(ins.type) FILTER (WHERE ins.type = 'atelier'),
+		       count(ins.type) FILTER (WHERE ins.type = 'evenement')
+		FROM generate_series(date_trunc('month', $1::timestamp), $2::timestamp, interval '1 month') AS m(debut)
+		LEFT JOIN ins ON ins.date_inscription >= m.debut AND ins.date_inscription < m.debut + interval '1 month'
+		GROUP BY m.debut
+		ORDER BY m.debut`, debut, fin, typeOffre)
+	if err != nil {
+		return nil, err
+	}
+	defer lignes.Close()
+
+	mois := make([]MoisPrestations, 0)
+	for lignes.Next() {
+		var m MoisPrestations
+		if err := lignes.Scan(&m.Mois, &m.Formation, &m.Atelier, &m.Evenement); err != nil {
+			return nil, err
+		}
+		mois = append(mois, m)
+	}
+	return mois, lignes.Err()
 }

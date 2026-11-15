@@ -76,6 +76,87 @@ $titrePage = "nav.reporting";
                 </div>
             </template>
 
+            <template v-if="onglet === 'prestations'">
+                <div class="filtres-utilisateurs periode-finances">
+                    <div class="form-group">
+                        <label for="type-prestation">{{ $t('admin.reporting.prestations.filtre_type') }}</label>
+                        <select id="type-prestation" v-model="typePrestation" @change="chargerPrestations">
+                            <option value="">{{ $t('admin.reporting.prestations.tous_types') }}</option>
+                            <option v-for="t in typesPrestation" :key="t" :value="t">{{ $t('admin.reporting.prestations.type.' + t) }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <template v-if="prestations">
+                    <div class="grille-finances grille-totaux-reporting">
+                        <div class="carte">
+                            <span class="discret">{{ $t('admin.reporting.prestations.totaux.inscriptions') }}</span>
+                            <p class="chiffre-finances">{{ formaterNombre(prestations.totaux.inscriptions) }}</p>
+                        </div>
+                        <div class="carte">
+                            <span class="discret">{{ $t('admin.reporting.prestations.totaux.participants') }}</span>
+                            <p class="chiffre-finances">{{ formaterNombre(prestations.totaux.participants) }}</p>
+                        </div>
+                        <div class="carte">
+                            <span class="discret">{{ $t('admin.reporting.prestations.totaux.reinscription') }}</span>
+                            <p class="chiffre-finances">{{ formaterPourcentage(prestations.totaux.taux_reinscription) }}</p>
+                        </div>
+                        <div class="carte">
+                            <span class="discret">{{ $t('admin.reporting.prestations.totaux.remplissage') }}</span>
+                            <p class="chiffre-finances">{{ formaterPourcentage(prestations.totaux.taux_remplissage) }}</p>
+                        </div>
+                        <div class="carte">
+                            <span class="discret">{{ $t('admin.reporting.prestations.totaux.chiffre_affaires') }}</span>
+                            <p class="chiffre-finances">{{ formaterMontant(prestations.totaux.chiffre_affaires) }}</p>
+                        </div>
+                    </div>
+                    <p class="discret">{{ $t('admin.reporting.sur_periode_detail', { debut: formaterDate(prestations.debut), fin: formaterDate(prestations.fin) }) }}
+                        {{ $t('admin.reporting.prestations.definition') }}</p>
+
+                    <div class="grille-graphiques">
+                        <section v-for="g in graphiquesPrestations" :key="g" class="carte" :class="{ 'graphique-large': g === 'top' }">
+                            <h3>{{ $t('admin.reporting.prestations.graphique.' + g + '.titre') }}</h3>
+                            <p class="discret">{{ $t('admin.reporting.prestations.graphique.' + g + '.detail') }}</p>
+                            <div class="zone-graphique">
+                                <canvas :id="'graphique-' + g" role="img" :aria-label="$t('admin.reporting.prestations.graphique.' + g + '.titre')"></canvas>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="carte section-categories">
+                        <h2>{{ $t('admin.reporting.prestations.tableau') }}</h2>
+                        <p class="discret">{{ $t('admin.reporting.prestations.tableau_detail') }}</p>
+                        <p v-if="prestations.prestations.length === 0">{{ $t('admin.reporting.prestations.aucune') }}</p>
+                        <table v-else class="tableau">
+                            <thead>
+                                <tr>
+                                    <th>{{ $t('admin.reporting.prestations.colonne.prestation') }}</th>
+                                    <th>{{ $t('admin.reporting.prestations.colonne.type') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.prestations.colonne.sessions') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.prestations.colonne.inscriptions') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.prestations.colonne.participants') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.prestations.colonne.reinscription') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.prestations.colonne.remplissage') }}</th>
+                                    <th class="montant">{{ $t('admin.reporting.prestations.colonne.chiffre_affaires') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="p in prestations.prestations" :key="p.type + p.titre">
+                                    <td>{{ p.titre }}</td>
+                                    <td>{{ $t('admin.reporting.prestations.type.' + p.type) }}</td>
+                                    <td class="montant">{{ formaterNombre(p.sessions) }}</td>
+                                    <td class="montant"><strong>{{ formaterNombre(p.inscriptions) }}</strong></td>
+                                    <td class="montant">{{ formaterNombre(p.participants) }}</td>
+                                    <td class="montant">{{ formaterPourcentage(p.taux_reinscription) }}</td>
+                                    <td class="montant">{{ formaterPourcentage(p.taux_remplissage) }}</td>
+                                    <td class="montant">{{ formaterMontant(p.chiffre_affaires) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </template>
+            </template>
+
         </main>
     </div>
 

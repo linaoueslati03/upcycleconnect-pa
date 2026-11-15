@@ -260,9 +260,54 @@
                 }
             },
             "onglet": {
-                "acteurs": "Members"
+                "acteurs": "Members",
+                "prestations": "Services"
             },
             "points": "Points",
+            "prestations": {
+                "aucune": "No service over this period.",
+                "colonne": {
+                    "chiffre_affaires": "Revenue",
+                    "inscriptions": "Registrations",
+                    "participants": "Participants",
+                    "prestation": "Service",
+                    "reinscription": "Re-registration",
+                    "remplissage": "Fill rate",
+                    "sessions": "Sessions",
+                    "type": "Type"
+                },
+                "definition": "A service groups all the sessions of the same offer; a returning participant came back at least twice to the same service.",
+                "filtre_type": "Service type",
+                "graphique": {
+                    "mois": {
+                        "detail": "Number of registrations each month, by service type.",
+                        "titre": "Registrations per month"
+                    },
+                    "reinscription": {
+                        "detail": "Share of participants who came back at least twice to the same service.",
+                        "titre": "Re-registration rate by type"
+                    },
+                    "top": {
+                        "detail": "Ranked by number of registrations over the period.",
+                        "titre": "Top 10 services"
+                    }
+                },
+                "tableau": "Success of each service",
+                "tableau_detail": "The fill rate is only computed for training courses, the only offers with a number of places.",
+                "totaux": {
+                    "chiffre_affaires": "Revenue",
+                    "inscriptions": "Registrations",
+                    "participants": "Participants",
+                    "reinscription": "Re-registration rate",
+                    "remplissage": "Training fill rate"
+                },
+                "tous_types": "All types",
+                "type": {
+                    "atelier": "Workshops",
+                    "evenement": "Events",
+                    "formation": "Training courses"
+                }
+            },
             "role": {
                 "particulier": "Individuals",
                 "professionnel": "Professionals"

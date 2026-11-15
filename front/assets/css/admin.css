@@ -306,3 +306,11 @@ label.lien-action {
     height: 260px;
     margin-top: 12px;
 }
+
+.graphique-large {
+    grid-column: 1 / -1;
+}
+
+.graphique-large .zone-graphique {
+    height: 340px;
+}

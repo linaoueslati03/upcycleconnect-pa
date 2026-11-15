@@ -260,9 +260,54 @@
                 }
             },
             "onglet": {
-                "acteurs": "Acteurs"
+                "acteurs": "Acteurs",
+                "prestations": "Prestations"
             },
             "points": "Points",
+            "prestations": {
+                "aucune": "Aucune prestation sur cette période.",
+                "colonne": {
+                    "chiffre_affaires": "Chiffre d'affaires",
+                    "inscriptions": "Inscriptions",
+                    "participants": "Participants",
+                    "prestation": "Prestation",
+                    "reinscription": "Réinscription",
+                    "remplissage": "Remplissage",
+                    "sessions": "Sessions",
+                    "type": "Type"
+                },
+                "definition": "Une prestation regroupe toutes les sessions d'une même offre ; un participant réinscrit est revenu au moins deux fois à la même prestation.",
+                "filtre_type": "Type de prestation",
+                "graphique": {
+                    "mois": {
+                        "detail": "Nombre d'inscriptions chaque mois, par type de prestation.",
+                        "titre": "Inscriptions par mois"
+                    },
+                    "reinscription": {
+                        "detail": "Part des participants revenus au moins deux fois à la même prestation.",
+                        "titre": "Taux de réinscription par type"
+                    },
+                    "top": {
+                        "detail": "Classement par nombre d'inscriptions sur la période.",
+                        "titre": "Les 10 prestations les plus suivies"
+                    }
+                },
+                "tableau": "Succès de chaque prestation",
+                "tableau_detail": "Le remplissage n'est calculé que pour les formations, seules offres avec un nombre de places.",
+                "totaux": {
+                    "chiffre_affaires": "Chiffre d'affaires",
+                    "inscriptions": "Inscriptions",
+                    "participants": "Participants",
+                    "reinscription": "Taux de réinscription",
+                    "remplissage": "Remplissage des formations"
+                },
+                "tous_types": "Tous les types",
+                "type": {
+                    "atelier": "Ateliers",
+                    "evenement": "Événements",
+                    "formation": "Formations"
+                }
+            },
             "role": {
                 "particulier": "Particuliers",
                 "professionnel": "Professionnels"
