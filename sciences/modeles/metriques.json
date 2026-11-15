@@ -1,0 +1,415 @@
+{
+  "date_entrainement": "2026-11-15T15:46:27",
+  "dataset": {
+    "lignes": 2319,
+    "entrainement": {
+      "lignes": 1563,
+      "coupures": [
+        "2025-10-16",
+        "2026-07-16"
+      ]
+    },
+    "test": {
+      "lignes": 756,
+      "coupures": [
+        "2026-08-16",
+        "2026-09-16"
+      ]
+    },
+    "repartition_test": {
+      "formation": 175,
+      "depot": 156,
+      "achat_annonce": 151,
+      "evenement": 138,
+      "atelier": 116,
+      "premium": 20
+    }
+  },
+  "variables": {
+    "numeriques": [
+      "premium",
+      "anciennete_jours",
+      "upcycling_score",
+      "nb_annonces",
+      "nb_annonces_vente",
+      "nb_formations",
+      "nb_ateliers",
+      "nb_evenements",
+      "nb_depots",
+      "nb_achats_annonces",
+      "montant_depense",
+      "jours_depuis_derniere_demande"
+    ],
+    "derivees": {
+      "part_formations": "nb_formations / somme des 5 compteurs (0 si aucune demande)",
+      "part_ateliers": "nb_ateliers / somme des 5 compteurs (0 si aucune demande)",
+      "part_evenements": "nb_evenements / somme des 5 compteurs (0 si aucune demande)",
+      "part_depots": "nb_depots / somme des 5 compteurs (0 si aucune demande)",
+      "part_achats_annonces": "nb_achats_annonces / somme des 5 compteurs (0 si aucune demande)"
+    },
+    "categorielles": {
+      "role": [
+        "particulier",
+        "professionnel"
+      ],
+      "derniere_demande": [
+        "formation",
+        "atelier",
+        "evenement",
+        "depot",
+        "achat_annonce",
+        "premium",
+        "aucune"
+      ],
+      "categorie_preferee": [
+        "aucune",
+        "bois",
+        "metal",
+        "plastique",
+        "textile",
+        "verre"
+      ],
+      "site_principal": [
+        "Paris 10e",
+        "Paris 11e",
+        "Paris 13e",
+        "Paris 16e",
+        "Bourg-la-Reine",
+        "Ivry",
+        "Montreuil",
+        "autre",
+        "inconnu"
+      ]
+    }
+  },
+  "modele_retenu": "arbre",
+  "resultats": {
+    "arbre": {
+      "nom": "Arbre de décision",
+      "exactitude": 0.4643,
+      "f1_macro": 0.3704,
+      "par_classe": {
+        "formation": {
+          "precision": 0.4841,
+          "recall": 0.3486,
+          "f1-score": 0.4053,
+          "support": 175.0
+        },
+        "atelier": {
+          "precision": 0.2542,
+          "recall": 0.2586,
+          "f1-score": 0.2564,
+          "support": 116.0
+        },
+        "evenement": {
+          "precision": 0.3578,
+          "recall": 0.2826,
+          "f1-score": 0.3158,
+          "support": 138.0
+        },
+        "depot": {
+          "precision": 0.5075,
+          "recall": 0.6474,
+          "f1-score": 0.569,
+          "support": 156.0
+        },
+        "achat_annonce": {
+          "precision": 0.5882,
+          "recall": 0.7947,
+          "f1-score": 0.6761,
+          "support": 151.0
+        },
+        "premium": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 20.0
+        }
+      },
+      "reglage": {
+        "max_depth": 6,
+        "min_samples_leaf": 40
+      }
+    },
+    "foret": {
+      "nom": "Random forest",
+      "exactitude": 0.4735,
+      "f1_macro": 0.4069,
+      "par_classe": {
+        "formation": {
+          "precision": 0.4375,
+          "recall": 0.36,
+          "f1-score": 0.395,
+          "support": 175.0
+        },
+        "atelier": {
+          "precision": 0.2541,
+          "recall": 0.2672,
+          "f1-score": 0.2605,
+          "support": 116.0
+        },
+        "evenement": {
+          "precision": 0.4052,
+          "recall": 0.3406,
+          "f1-score": 0.3701,
+          "support": 138.0
+        },
+        "depot": {
+          "precision": 0.5714,
+          "recall": 0.6923,
+          "f1-score": 0.6261,
+          "support": 156.0
+        },
+        "achat_annonce": {
+          "precision": 0.6114,
+          "recall": 0.7086,
+          "f1-score": 0.6564,
+          "support": 151.0
+        },
+        "premium": {
+          "precision": 0.2,
+          "recall": 0.1,
+          "f1-score": 0.1333,
+          "support": 20.0
+        }
+      },
+      "reglage": {
+        "max_depth": null,
+        "min_samples_leaf": 1
+      }
+    },
+    "logistique": {
+      "nom": "Régression logistique",
+      "exactitude": 0.4762,
+      "f1_macro": 0.3932,
+      "par_classe": {
+        "formation": {
+          "precision": 0.4615,
+          "recall": 0.48,
+          "f1-score": 0.4706,
+          "support": 175.0
+        },
+        "atelier": {
+          "precision": 0.1923,
+          "recall": 0.1724,
+          "f1-score": 0.1818,
+          "support": 116.0
+        },
+        "evenement": {
+          "precision": 0.3894,
+          "recall": 0.3188,
+          "f1-score": 0.3506,
+          "support": 138.0
+        },
+        "depot": {
+          "precision": 0.6098,
+          "recall": 0.641,
+          "f1-score": 0.625,
+          "support": 156.0
+        },
+        "achat_annonce": {
+          "precision": 0.6066,
+          "recall": 0.7351,
+          "f1-score": 0.6647,
+          "support": 151.0
+        },
+        "premium": {
+          "precision": 0.1,
+          "recall": 0.05,
+          "f1-score": 0.0667,
+          "support": 20.0
+        }
+      },
+      "reglage": {
+        "logisticregression__C": 1.0
+      }
+    },
+    "reference_majorite": {
+      "nom": "Référence : classe la plus fréquente",
+      "exactitude": 0.2063,
+      "f1_macro": 0.057,
+      "par_classe": {
+        "formation": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 175.0
+        },
+        "atelier": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 116.0
+        },
+        "evenement": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 138.0
+        },
+        "depot": {
+          "precision": 0.2063,
+          "recall": 1.0,
+          "f1-score": 0.3421,
+          "support": 156.0
+        },
+        "achat_annonce": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 151.0
+        },
+        "premium": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 20.0
+        }
+      }
+    },
+    "reference_derniere": {
+      "nom": "Référence : même chose que la dernière demande",
+      "exactitude": 0.4101,
+      "f1_macro": 0.3386,
+      "par_classe": {
+        "formation": {
+          "precision": 0.4429,
+          "recall": 0.3543,
+          "f1-score": 0.3937,
+          "support": 175.0
+        },
+        "atelier": {
+          "precision": 0.2688,
+          "recall": 0.2155,
+          "f1-score": 0.2392,
+          "support": 116.0
+        },
+        "evenement": {
+          "precision": 0.3401,
+          "recall": 0.3623,
+          "f1-score": 0.3509,
+          "support": 138.0
+        },
+        "depot": {
+          "precision": 0.3945,
+          "recall": 0.5513,
+          "f1-score": 0.4599,
+          "support": 156.0
+        },
+        "achat_annonce": {
+          "precision": 0.6,
+          "recall": 0.5762,
+          "f1-score": 0.5878,
+          "support": 151.0
+        },
+        "premium": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 20.0
+        }
+      }
+    }
+  },
+  "arbre": {
+    "profondeur": 6,
+    "feuilles": 27,
+    "importance_variables": {
+      "role=professionnel": 0.3751,
+      "part_depots": 0.2231,
+      "part_achats_annonces": 0.1111,
+      "part_ateliers": 0.0563,
+      "anciennete_jours": 0.0439,
+      "part_evenements": 0.0383,
+      "montant_depense": 0.0335,
+      "upcycling_score": 0.0306,
+      "jours_depuis_derniere_demande": 0.0163,
+      "nb_achats_annonces": 0.0157,
+      "categorie_preferee=aucune": 0.0105,
+      "premium": 0.0099,
+      "derniere_demande=formation": 0.0087,
+      "part_formations": 0.0082,
+      "categorie_preferee=metal": 0.0067
+    },
+    "matrice_confusion": {
+      "classes": [
+        "formation",
+        "atelier",
+        "evenement",
+        "depot",
+        "achat_annonce",
+        "premium"
+      ],
+      "valeurs": [
+        [
+          61,
+          30,
+          24,
+          34,
+          26,
+          0
+        ],
+        [
+          25,
+          30,
+          25,
+          23,
+          13,
+          0
+        ],
+        [
+          15,
+          37,
+          39,
+          25,
+          22,
+          0
+        ],
+        [
+          17,
+          19,
+          13,
+          101,
+          6,
+          0
+        ],
+        [
+          8,
+          2,
+          5,
+          16,
+          120,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          17,
+          0
+        ]
+      ]
+    },
+    "premium_predit_pour_des_particuliers": 0
+  },
+  "foret": {
+    "importance_variables": {
+      "anciennete_jours": 0.1774,
+      "jours_depuis_derniere_demande": 0.0755,
+      "montant_depense": 0.0624,
+      "upcycling_score": 0.0584,
+      "nb_annonces": 0.0423,
+      "part_depots": 0.0397,
+      "nb_annonces_vente": 0.0358,
+      "part_achats_annonces": 0.0333,
+      "role=particulier": 0.0309,
+      "part_formations": 0.0305,
+      "part_ateliers": 0.0297,
+      "part_evenements": 0.0291,
+      "role=professionnel": 0.0288,
+      "nb_achats_annonces": 0.0256,
+      "nb_depots": 0.0244
+    }
+  }
+}

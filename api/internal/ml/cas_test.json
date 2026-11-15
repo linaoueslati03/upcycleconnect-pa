@@ -1,0 +1,1742 @@
+[
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 25,
+   "upcycling_score": 25,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 1,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 10,
+   "derniere_demande": "depot",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 16e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.014084507042253521,
+   0.23943661971830985,
+   0.5633802816901409,
+   0.11267605633802817,
+   0.07042253521126761,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 106,
+   "upcycling_score": 10,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 9,
+   "derniere_demande": "atelier",
+   "categorie_preferee": "aucune",
+   "site_principal": "Ivry"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.28888888888888886,
+   0.13333333333333333,
+   0.4222222222222222,
+   0.1111111111111111,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 73,
+   "upcycling_score": 5,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 1,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 270.0,
+   "jours_depuis_derniere_demande": 13,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5853658536585367,
+   0.07317073170731708,
+   0.02439024390243903,
+   0.0,
+   0.21951219512195125,
+   0.09756097560975611
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 120,
+   "upcycling_score": 15,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 2,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 16,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "aucune",
+   "site_principal": "Montreuil"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.28888888888888886,
+   0.13333333333333333,
+   0.4222222222222222,
+   0.1111111111111111,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 222,
+   "upcycling_score": 40,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 1,
+   "nb_ateliers": 1,
+   "nb_evenements": 4,
+   "nb_depots": 1,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 20,
+   "derniere_demande": "depot",
+   "categorie_preferee": "aucune",
+   "site_principal": "Bourg-la-Reine"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.0847457627118644,
+   0.06779661016949153,
+   0.03389830508474576,
+   0.3898305084745763,
+   0.288135593220339,
+   0.13559322033898305
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 9,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5,
+   0.016129032258064516,
+   0.03225806451612903,
+   0.14516129032258066,
+   0.22580645161290322,
+   0.08064516129032258
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 288,
+   "upcycling_score": 120,
+   "nb_annonces": 9,
+   "nb_annonces_vente": 5,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 3,
+   "nb_achats_annonces": 2,
+   "montant_depense": 80.0,
+   "jours_depuis_derniere_demande": 3,
+   "derniere_demande": "depot",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.030303030303030304,
+   0.030303030303030304,
+   0.8787878787878788,
+   0.030303030303030304,
+   0.030303030303030304,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 184,
+   "upcycling_score": 105,
+   "nb_annonces": 9,
+   "nb_annonces_vente": 3,
+   "nb_formations": 1,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 2,
+   "nb_achats_annonces": 0,
+   "montant_depense": 95.0,
+   "jours_depuis_derniere_demande": 50,
+   "derniere_demande": "depot",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.04081632653061224,
+   0.08163265306122448,
+   0.6326530612244898,
+   0.20408163265306123,
+   0.04081632653061224,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 10,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.05185185185185185,
+   0.26666666666666666,
+   0.2222222222222222,
+   0.16296296296296298,
+   0.2962962962962963,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 10,
+   "upcycling_score": 0,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "verre",
+   "site_principal": "inconnu"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.07142857142857142,
+   0.14285714285714285,
+   0.3469387755102041,
+   0.20408163265306123,
+   0.23469387755102042,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 98,
+   "upcycling_score": 20,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 1,
+   "nb_ateliers": 1,
+   "nb_evenements": 2,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 185.0,
+   "jours_depuis_derniere_demande": 6,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "atelier",
+  "probabilites": [
+   0.06521739130434782,
+   0.41304347826086957,
+   0.15217391304347827,
+   0.08695652173913043,
+   0.2826086956521739,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 125,
+   "upcycling_score": 35,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 2,
+   "nb_evenements": 2,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 75,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "plastique",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.26666666666666666,
+   0.044444444444444446,
+   0.6222222222222222,
+   0.022222222222222223,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 112,
+   "upcycling_score": 10,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 80.0,
+   "jours_depuis_derniere_demande": 30,
+   "derniere_demande": "formation",
+   "categorie_preferee": "aucune",
+   "site_principal": "Montreuil"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.1,
+   0.06,
+   0.0,
+   0.26,
+   0.54,
+   0.04
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 108,
+   "upcycling_score": 15,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 125.0,
+   "jours_depuis_derniere_demande": 3,
+   "derniere_demande": "formation",
+   "categorie_preferee": "textile",
+   "site_principal": "Paris 16e"
+  },
+  "classe": "atelier",
+  "probabilites": [
+   0.06521739130434782,
+   0.41304347826086957,
+   0.15217391304347827,
+   0.08695652173913043,
+   0.2826086956521739,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 38,
+   "upcycling_score": 0,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "bois",
+   "site_principal": "inconnu"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.07142857142857142,
+   0.14285714285714285,
+   0.3469387755102041,
+   0.20408163265306123,
+   0.23469387755102042,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 69,
+   "upcycling_score": 15,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 1,
+   "nb_achats_annonces": 5,
+   "montant_depense": 1140.0,
+   "jours_depuis_derniere_demande": 3,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.6666666666666666,
+   0.11764705882352941,
+   0.0392156862745098,
+   0.058823529411764705,
+   0.0392156862745098,
+   0.0784313725490196
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 1,
+   "anciennete_jours": 76,
+   "upcycling_score": 10,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 2,
+   "nb_depots": 0,
+   "nb_achats_annonces": 2,
+   "montant_depense": 305.0,
+   "jours_depuis_derniere_demande": 28,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.6666666666666666,
+   0.05128205128205128,
+   0.1282051282051282,
+   0.10256410256410256,
+   0.05128205128205128,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 13,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.05185185185185185,
+   0.26666666666666666,
+   0.2222222222222222,
+   0.16296296296296298,
+   0.2962962962962963,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 1,
+   "anciennete_jours": 217,
+   "upcycling_score": 30,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 5,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 2,
+   "montant_depense": 740.0,
+   "jours_depuis_derniere_demande": 11,
+   "derniere_demande": "atelier",
+   "categorie_preferee": "metal",
+   "site_principal": "Bourg-la-Reine"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.0847457627118644,
+   0.06779661016949153,
+   0.03389830508474576,
+   0.3898305084745763,
+   0.288135593220339,
+   0.13559322033898305
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 128,
+   "upcycling_score": 20,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 3,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 1,
+   "nb_achats_annonces": 0,
+   "montant_depense": 155.0,
+   "jours_depuis_derniere_demande": 3,
+   "derniere_demande": "depot",
+   "categorie_preferee": "aucune",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.030303030303030304,
+   0.21212121212121213,
+   0.10606060606060606,
+   0.06060606060606061,
+   0.5909090909090909,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 38,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.3380281690140845,
+   0.07042253521126761,
+   0.07042253521126761,
+   0.09859154929577464,
+   0.3380281690140845,
+   0.08450704225352113
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 155,
+   "upcycling_score": 15,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 2,
+   "montant_depense": 370.0,
+   "jours_depuis_derniere_demande": 39,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "metal",
+   "site_principal": "Bourg-la-Reine"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.022222222222222227,
+   0.33333333333333337,
+   0.022222222222222227,
+   0.1777777777777778,
+   0.4444444444444445,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 217,
+   "upcycling_score": 35,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 1,
+   "nb_formations": 3,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 170.0,
+   "jours_depuis_derniere_demande": 124,
+   "derniere_demande": "atelier",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.030303030303030304,
+   0.21212121212121213,
+   0.10606060606060606,
+   0.06060606060606061,
+   0.5909090909090909,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 29,
+   "upcycling_score": 0,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 85.0,
+   "jours_depuis_derniere_demande": 6,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.4634146341463415,
+   0.024390243902439025,
+   0.12195121951219512,
+   0.07317073170731707,
+   0.07317073170731707,
+   0.24390243902439024
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 142,
+   "upcycling_score": 55,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 2,
+   "nb_evenements": 3,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 13,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "bois",
+   "site_principal": "Montreuil"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.26666666666666666,
+   0.044444444444444446,
+   0.6222222222222222,
+   0.022222222222222223,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 119,
+   "upcycling_score": 35,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 84,
+   "derniere_demande": "atelier",
+   "categorie_preferee": "textile",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "atelier",
+  "probabilites": [
+   0.0,
+   0.4,
+   0.17777777777777778,
+   0.3333333333333333,
+   0.08888888888888889,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 37,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.3380281690140845,
+   0.07042253521126761,
+   0.07042253521126761,
+   0.09859154929577464,
+   0.3380281690140845,
+   0.08450704225352113
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 118,
+   "upcycling_score": 20,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 2,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 370.0,
+   "jours_depuis_derniere_demande": 16,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "plastique",
+   "site_principal": "Ivry"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.0847457627118644,
+   0.06779661016949153,
+   0.03389830508474576,
+   0.3898305084745763,
+   0.288135593220339,
+   0.13559322033898305
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 45,
+   "upcycling_score": 5,
+   "nb_annonces": 2,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 290.0,
+   "jours_depuis_derniere_demande": 14,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 10e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5853658536585367,
+   0.07317073170731708,
+   0.02439024390243903,
+   0.0,
+   0.21951219512195125,
+   0.09756097560975611
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 101,
+   "upcycling_score": 50,
+   "nb_annonces": 6,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 2,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 34,
+   "derniere_demande": "depot",
+   "categorie_preferee": "verre",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.014084507042253521,
+   0.23943661971830985,
+   0.5633802816901409,
+   0.11267605633802817,
+   0.07042253521126761,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 189,
+   "upcycling_score": 175,
+   "nb_annonces": 14,
+   "nb_annonces_vente": 12,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 2,
+   "nb_depots": 2,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 10,
+   "derniere_demande": "depot",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.04081632653061224,
+   0.08163265306122448,
+   0.6326530612244898,
+   0.20408163265306123,
+   0.04081632653061224,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 49,
+   "upcycling_score": 5,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 34,
+   "derniere_demande": "atelier",
+   "categorie_preferee": "textile",
+   "site_principal": "Montreuil"
+  },
+  "classe": "atelier",
+  "probabilites": [
+   0.0,
+   0.4,
+   0.17777777777777778,
+   0.3333333333333333,
+   0.08888888888888889,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 52,
+   "upcycling_score": 5,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 4,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "metal",
+   "site_principal": "Montreuil"
+  },
+  "classe": "atelier",
+  "probabilites": [
+   0.04878048780487806,
+   0.39024390243902446,
+   0.14634146341463417,
+   0.3414634146341464,
+   0.07317073170731708,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 179,
+   "upcycling_score": 30,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 5,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 285.0,
+   "jours_depuis_derniere_demande": 14,
+   "derniere_demande": "atelier",
+   "categorie_preferee": "aucune",
+   "site_principal": "Paris 10e"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.022222222222222227,
+   0.33333333333333337,
+   0.022222222222222227,
+   0.1777777777777778,
+   0.4444444444444445,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 33,
+   "upcycling_score": 5,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 2,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "aucune",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.3380281690140845,
+   0.07042253521126761,
+   0.07042253521126761,
+   0.09859154929577464,
+   0.3380281690140845,
+   0.08450704225352113
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 19,
+   "upcycling_score": 15,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "metal",
+   "site_principal": "inconnu"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.07142857142857142,
+   0.14285714285714285,
+   0.3469387755102041,
+   0.20408163265306123,
+   0.23469387755102042,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 361,
+   "upcycling_score": 115,
+   "nb_annonces": 3,
+   "nb_annonces_vente": 3,
+   "nb_formations": 1,
+   "nb_ateliers": 5,
+   "nb_evenements": 8,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 45.0,
+   "jours_depuis_derniere_demande": 23,
+   "derniere_demande": "formation",
+   "categorie_preferee": "bois",
+   "site_principal": "Ivry"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.26666666666666666,
+   0.044444444444444446,
+   0.6222222222222222,
+   0.022222222222222223,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 28,
+   "upcycling_score": 15,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "metal",
+   "site_principal": "inconnu"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.07142857142857142,
+   0.14285714285714285,
+   0.3469387755102041,
+   0.20408163265306123,
+   0.23469387755102042,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 45,
+   "upcycling_score": 5,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 1,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 27,
+   "derniere_demande": "formation",
+   "categorie_preferee": "aucune",
+   "site_principal": "Ivry"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.02040816326530612,
+   0.20408163265306123,
+   0.16326530612244897,
+   0.16326530612244897,
+   0.4489795918367347,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 8,
+   "upcycling_score": 0,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 1,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 3,
+   "derniere_demande": "depot",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5,
+   0.016129032258064516,
+   0.03225806451612903,
+   0.14516129032258066,
+   0.22580645161290322,
+   0.08064516129032258
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 13,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.05185185185185185,
+   0.26666666666666666,
+   0.2222222222222222,
+   0.16296296296296298,
+   0.2962962962962963,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 6,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5,
+   0.016129032258064516,
+   0.03225806451612903,
+   0.14516129032258066,
+   0.22580645161290322,
+   0.08064516129032258
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 174,
+   "upcycling_score": 25,
+   "nb_annonces": 4,
+   "nb_annonces_vente": 4,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 96,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "verre",
+   "site_principal": "Paris 10e"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.28888888888888886,
+   0.13333333333333333,
+   0.4222222222222222,
+   0.1111111111111111,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 1,
+   "anciennete_jours": 143,
+   "upcycling_score": 5,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 1,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 5,
+   "montant_depense": 1115.0,
+   "jours_depuis_derniere_demande": 3,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.6666666666666666,
+   0.11764705882352941,
+   0.0392156862745098,
+   0.058823529411764705,
+   0.0392156862745098,
+   0.0784313725490196
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 80,
+   "upcycling_score": 10,
+   "nb_annonces": 1,
+   "nb_annonces_vente": 0,
+   "nb_formations": 1,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 40.0,
+   "jours_depuis_derniere_demande": 31,
+   "derniere_demande": "formation",
+   "categorie_preferee": "bois",
+   "site_principal": "Montreuil"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.07142857142857142,
+   0.14285714285714285,
+   0.3469387755102041,
+   0.20408163265306123,
+   0.23469387755102042,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 174,
+   "upcycling_score": 15,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 1,
+   "nb_evenements": 0,
+   "nb_depots": 1,
+   "nb_achats_annonces": 8,
+   "montant_depense": 1560.0,
+   "jours_depuis_derniere_demande": 8,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "bois",
+   "site_principal": "Montreuil"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.6666666666666666,
+   0.11764705882352941,
+   0.0392156862745098,
+   0.058823529411764705,
+   0.0392156862745098,
+   0.0784313725490196
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 286,
+   "upcycling_score": 60,
+   "nb_annonces": 3,
+   "nb_annonces_vente": 2,
+   "nb_formations": 1,
+   "nb_ateliers": 2,
+   "nb_evenements": 3,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 55.0,
+   "jours_depuis_derniere_demande": 83,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.044444444444444446,
+   0.26666666666666666,
+   0.044444444444444446,
+   0.6222222222222222,
+   0.022222222222222223,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 162,
+   "upcycling_score": 95,
+   "nb_annonces": 6,
+   "nb_annonces_vente": 4,
+   "nb_formations": 0,
+   "nb_ateliers": 3,
+   "nb_evenements": 0,
+   "nb_depots": 2,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 12,
+   "derniere_demande": "depot",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 16e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.04081632653061224,
+   0.08163265306122448,
+   0.6326530612244898,
+   0.20408163265306123,
+   0.04081632653061224,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 126,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 7,
+   "montant_depense": 1315.0,
+   "jours_depuis_derniere_demande": 10,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 16e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.6666666666666666,
+   0.11764705882352941,
+   0.0392156862745098,
+   0.058823529411764705,
+   0.0392156862745098,
+   0.0784313725490196
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 1,
+   "anciennete_jours": 293,
+   "upcycling_score": 10,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 2,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 100.0,
+   "jours_depuis_derniere_demande": 61,
+   "derniere_demande": "evenement",
+   "categorie_preferee": "aucune",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.0847457627118644,
+   0.06779661016949153,
+   0.03389830508474576,
+   0.3898305084745763,
+   0.288135593220339,
+   0.13559322033898305
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 194,
+   "upcycling_score": 10,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 95.0,
+   "jours_depuis_derniere_demande": 29,
+   "derniere_demande": "formation",
+   "categorie_preferee": "aucune",
+   "site_principal": "Ivry"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.030303030303030304,
+   0.21212121212121213,
+   0.10606060606060606,
+   0.06060606060606061,
+   0.5909090909090909,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 71,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "aucune",
+   "site_principal": "inconnu"
+  },
+  "classe": "evenement",
+  "probabilites": [
+   0.0847457627118644,
+   0.06779661016949153,
+   0.03389830508474576,
+   0.3898305084745763,
+   0.288135593220339,
+   0.13559322033898305
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 38,
+   "upcycling_score": 65,
+   "nb_annonces": 4,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 2,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 13,
+   "derniere_demande": "depot",
+   "categorie_preferee": "bois",
+   "site_principal": "Montreuil"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.17073170731707318,
+   0.04878048780487805,
+   0.7317073170731707,
+   0.0,
+   0.04878048780487805,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 86,
+   "upcycling_score": 45,
+   "nb_annonces": 3,
+   "nb_annonces_vente": 2,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 999,
+   "derniere_demande": "aucune",
+   "categorie_preferee": "bois",
+   "site_principal": "inconnu"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.07142857142857142,
+   0.14285714285714285,
+   0.3469387755102041,
+   0.20408163265306123,
+   0.23469387755102042,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 173,
+   "upcycling_score": 110,
+   "nb_annonces": 10,
+   "nb_annonces_vente": 8,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 2,
+   "nb_achats_annonces": 0,
+   "montant_depense": 0.0,
+   "jours_depuis_derniere_demande": 109,
+   "derniere_demande": "depot",
+   "categorie_preferee": "verre",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.17073170731707318,
+   0.04878048780487805,
+   0.7317073170731707,
+   0.0,
+   0.04878048780487805,
+   0.0
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 71,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 330.0,
+   "jours_depuis_derniere_demande": 21,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "plastique",
+   "site_principal": "Montreuil"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5272727272727272,
+   0.01818181818181818,
+   0.01818181818181818,
+   0.21818181818181817,
+   0.07272727272727272,
+   0.14545454545454545
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 311,
+   "upcycling_score": 50,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 3,
+   "nb_ateliers": 1,
+   "nb_evenements": 4,
+   "nb_depots": 1,
+   "nb_achats_annonces": 0,
+   "montant_depense": 75.0,
+   "jours_depuis_derniere_demande": 41,
+   "derniere_demande": "formation",
+   "categorie_preferee": "aucune",
+   "site_principal": "Bourg-la-Reine"
+  },
+  "classe": "formation",
+  "probabilites": [
+   0.1,
+   0.06,
+   0.0,
+   0.26,
+   0.54,
+   0.04
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 53,
+   "upcycling_score": 15,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 2,
+   "nb_ateliers": 0,
+   "nb_evenements": 1,
+   "nb_depots": 0,
+   "nb_achats_annonces": 0,
+   "montant_depense": 105.0,
+   "jours_depuis_derniere_demande": 12,
+   "derniere_demande": "formation",
+   "categorie_preferee": "aucune",
+   "site_principal": "Ivry"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.3380281690140845,
+   0.07042253521126761,
+   0.07042253521126761,
+   0.09859154929577464,
+   0.3380281690140845,
+   0.08450704225352113
+  ]
+ },
+ {
+  "variables": {
+   "role": "professionnel",
+   "premium": 0,
+   "anciennete_jours": 49,
+   "upcycling_score": 0,
+   "nb_annonces": 0,
+   "nb_annonces_vente": 0,
+   "nb_formations": 0,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 0,
+   "nb_achats_annonces": 1,
+   "montant_depense": 245.0,
+   "jours_depuis_derniere_demande": 5,
+   "derniere_demande": "achat_annonce",
+   "categorie_preferee": "bois",
+   "site_principal": "Paris 11e"
+  },
+  "classe": "achat_annonce",
+  "probabilites": [
+   0.5272727272727272,
+   0.01818181818181818,
+   0.01818181818181818,
+   0.21818181818181817,
+   0.07272727272727272,
+   0.14545454545454545
+  ]
+ },
+ {
+  "variables": {
+   "role": "particulier",
+   "premium": 0,
+   "anciennete_jours": 202,
+   "upcycling_score": 325,
+   "nb_annonces": 15,
+   "nb_annonces_vente": 11,
+   "nb_formations": 1,
+   "nb_ateliers": 0,
+   "nb_evenements": 0,
+   "nb_depots": 11,
+   "nb_achats_annonces": 0,
+   "montant_depense": 25.0,
+   "jours_depuis_derniere_demande": 14,
+   "derniere_demande": "depot",
+   "categorie_preferee": "metal",
+   "site_principal": "Paris 13e"
+  },
+  "classe": "depot",
+  "probabilites": [
+   0.030303030303030304,
+   0.030303030303030304,
+   0.8787878787878788,
+   0.030303030303030304,
+   0.030303030303030304,
+   0.0
+  ]
+ }
+]

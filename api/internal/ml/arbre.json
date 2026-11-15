@@ -1,0 +1,569 @@
+{
+ "version": "2026-11-15T15:46:27",
+ "exactitude_test": 0.4643,
+ "f1_macro_test": 0.3704,
+ "profondeur": 6,
+ "classes": [
+  "achat_annonce",
+  "atelier",
+  "depot",
+  "evenement",
+  "formation",
+  "premium"
+ ],
+ "encodage": {
+  "numeriques": [
+   "premium",
+   "anciennete_jours",
+   "upcycling_score",
+   "nb_annonces",
+   "nb_annonces_vente",
+   "nb_formations",
+   "nb_ateliers",
+   "nb_evenements",
+   "nb_depots",
+   "nb_achats_annonces",
+   "montant_depense",
+   "jours_depuis_derniere_demande"
+  ],
+  "parts": [
+   "nb_formations",
+   "nb_ateliers",
+   "nb_evenements",
+   "nb_depots",
+   "nb_achats_annonces"
+  ],
+  "categorielles": {
+   "role": [
+    "particulier",
+    "professionnel"
+   ],
+   "derniere_demande": [
+    "formation",
+    "atelier",
+    "evenement",
+    "depot",
+    "achat_annonce",
+    "premium",
+    "aucune"
+   ],
+   "categorie_preferee": [
+    "aucune",
+    "bois",
+    "metal",
+    "plastique",
+    "textile",
+    "verre"
+   ],
+   "site_principal": [
+    "Paris 10e",
+    "Paris 11e",
+    "Paris 13e",
+    "Paris 16e",
+    "Bourg-la-Reine",
+    "Ivry",
+    "Montreuil",
+    "autre",
+    "inconnu"
+   ]
+  }
+ },
+ "colonnes": [
+  "premium",
+  "anciennete_jours",
+  "upcycling_score",
+  "nb_annonces",
+  "nb_annonces_vente",
+  "nb_formations",
+  "nb_ateliers",
+  "nb_evenements",
+  "nb_depots",
+  "nb_achats_annonces",
+  "montant_depense",
+  "jours_depuis_derniere_demande",
+  "part_formations",
+  "part_ateliers",
+  "part_evenements",
+  "part_depots",
+  "part_achats_annonces",
+  "role=particulier",
+  "role=professionnel",
+  "derniere_demande=formation",
+  "derniere_demande=atelier",
+  "derniere_demande=evenement",
+  "derniere_demande=depot",
+  "derniere_demande=achat_annonce",
+  "derniere_demande=premium",
+  "derniere_demande=aucune",
+  "categorie_preferee=aucune",
+  "categorie_preferee=bois",
+  "categorie_preferee=metal",
+  "categorie_preferee=plastique",
+  "categorie_preferee=textile",
+  "categorie_preferee=verre",
+  "site_principal=Paris 10e",
+  "site_principal=Paris 11e",
+  "site_principal=Paris 13e",
+  "site_principal=Paris 16e",
+  "site_principal=Bourg-la-Reine",
+  "site_principal=Ivry",
+  "site_principal=Montreuil",
+  "site_principal=autre",
+  "site_principal=inconnu"
+ ],
+ "noeuds": [
+  {
+   "variable": 18,
+   "seuil": 0.5,
+   "gauche": 1,
+   "droite": 34
+  },
+  {
+   "variable": 15,
+   "seuil": 0.2792207896709442,
+   "gauche": 2,
+   "droite": 25
+  },
+  {
+   "variable": 14,
+   "seuil": 0.2321428582072258,
+   "gauche": 3,
+   "droite": 16
+  },
+  {
+   "variable": 10,
+   "seuil": 82.5,
+   "gauche": 4,
+   "droite": 11
+  },
+  {
+   "variable": 26,
+   "seuil": 0.5,
+   "gauche": 5,
+   "droite": 8
+  },
+  {
+   "variable": 13,
+   "seuil": 0.7321428656578064,
+   "gauche": 6,
+   "droite": 7
+  },
+  {
+   "probabilites": [
+    0.07142857142857142,
+    0.14285714285714285,
+    0.3469387755102041,
+    0.20408163265306123,
+    0.23469387755102042,
+    0.0
+   ],
+   "effectif": 98
+  },
+  {
+   "probabilites": [
+    0.0,
+    0.4,
+    0.17777777777777778,
+    0.3333333333333333,
+    0.08888888888888889,
+    0.0
+   ],
+   "effectif": 45
+  },
+  {
+   "variable": 1,
+   "seuil": 36.5,
+   "gauche": 9,
+   "droite": 10
+  },
+  {
+   "probabilites": [
+    0.05185185185185185,
+    0.26666666666666666,
+    0.2222222222222222,
+    0.16296296296296298,
+    0.2962962962962963,
+    0.0
+   ],
+   "effectif": 135
+  },
+  {
+   "probabilites": [
+    0.02040816326530612,
+    0.20408163265306123,
+    0.16326530612244897,
+    0.16326530612244897,
+    0.4489795918367347,
+    0.0
+   ],
+   "effectif": 49
+  },
+  {
+   "variable": 13,
+   "seuil": 0.2928571552038193,
+   "gauche": 12,
+   "droite": 15
+  },
+  {
+   "variable": 10,
+   "seuil": 222.5,
+   "gauche": 13,
+   "droite": 14
+  },
+  {
+   "probabilites": [
+    0.030303030303030304,
+    0.21212121212121213,
+    0.10606060606060606,
+    0.06060606060606061,
+    0.5909090909090909,
+    0.0
+   ],
+   "effectif": 66
+  },
+  {
+   "probabilites": [
+    0.022222222222222227,
+    0.33333333333333337,
+    0.022222222222222227,
+    0.1777777777777778,
+    0.4444444444444445,
+    0.0
+   ],
+   "effectif": 45
+  },
+  {
+   "probabilites": [
+    0.06451612903225806,
+    0.4032258064516129,
+    0.11290322580645161,
+    0.11290322580645161,
+    0.3064516129032258,
+    0.0
+   ],
+   "effectif": 62
+  },
+  {
+   "variable": 13,
+   "seuil": 0.2928571552038193,
+   "gauche": 17,
+   "droite": 22
+  },
+  {
+   "variable": 12,
+   "seuil": 0.18333333730697632,
+   "gauche": 18,
+   "droite": 21
+  },
+  {
+   "variable": 11,
+   "seuil": 19.5,
+   "gauche": 19,
+   "droite": 20
+  },
+  {
+   "probabilites": [
+    0.04878048780487806,
+    0.39024390243902446,
+    0.14634146341463417,
+    0.3414634146341464,
+    0.07317073170731708,
+    0.0
+   ],
+   "effectif": 41
+  },
+  {
+   "probabilites": [
+    0.11904761904761904,
+    0.16666666666666666,
+    0.19047619047619047,
+    0.2619047619047619,
+    0.2619047619047619,
+    0.0
+   ],
+   "effectif": 42
+  },
+  {
+   "probabilites": [
+    0.06521739130434782,
+    0.41304347826086957,
+    0.15217391304347827,
+    0.08695652173913043,
+    0.2826086956521739,
+    0.0
+   ],
+   "effectif": 46
+  },
+  {
+   "variable": 6,
+   "seuil": 1.5,
+   "gauche": 23,
+   "droite": 24
+  },
+  {
+   "probabilites": [
+    0.044444444444444446,
+    0.28888888888888886,
+    0.13333333333333333,
+    0.4222222222222222,
+    0.1111111111111111,
+    0.0
+   ],
+   "effectif": 45
+  },
+  {
+   "probabilites": [
+    0.044444444444444446,
+    0.26666666666666666,
+    0.044444444444444446,
+    0.6222222222222222,
+    0.022222222222222223,
+    0.0
+   ],
+   "effectif": 45
+  },
+  {
+   "variable": 2,
+   "seuil": 62.5,
+   "gauche": 26,
+   "droite": 29
+  },
+  {
+   "variable": 15,
+   "seuil": 0.7083333432674408,
+   "gauche": 27,
+   "droite": 28
+  },
+  {
+   "probabilites": [
+    0.015625,
+    0.21875,
+    0.4375,
+    0.046875,
+    0.28125,
+    0.0
+   ],
+   "effectif": 64
+  },
+  {
+   "probabilites": [
+    0.014084507042253521,
+    0.23943661971830985,
+    0.5633802816901409,
+    0.11267605633802817,
+    0.07042253521126761,
+    0.0
+   ],
+   "effectif": 71
+  },
+  {
+   "variable": 13,
+   "seuil": 0.09545454755425453,
+   "gauche": 30,
+   "droite": 33
+  },
+  {
+   "variable": 8,
+   "seuil": 2.5,
+   "gauche": 31,
+   "droite": 32
+  },
+  {
+   "probabilites": [
+    0.17073170731707318,
+    0.04878048780487805,
+    0.7317073170731707,
+    0.0,
+    0.04878048780487805,
+    0.0
+   ],
+   "effectif": 41
+  },
+  {
+   "probabilites": [
+    0.030303030303030304,
+    0.030303030303030304,
+    0.8787878787878788,
+    0.030303030303030304,
+    0.030303030303030304,
+    0.0
+   ],
+   "effectif": 66
+  },
+  {
+   "probabilites": [
+    0.04081632653061224,
+    0.08163265306122448,
+    0.6326530612244898,
+    0.20408163265306123,
+    0.04081632653061224,
+    0.0
+   ],
+   "effectif": 49
+  },
+  {
+   "variable": 16,
+   "seuil": 0.3095238208770752,
+   "gauche": 35,
+   "droite": 42
+  },
+  {
+   "variable": 1,
+   "seuil": 66.5,
+   "gauche": 36,
+   "droite": 39
+  },
+  {
+   "variable": 1,
+   "seuil": 19.0,
+   "gauche": 37,
+   "droite": 38
+  },
+  {
+   "probabilites": [
+    0.5,
+    0.016129032258064516,
+    0.03225806451612903,
+    0.14516129032258066,
+    0.22580645161290322,
+    0.08064516129032258
+   ],
+   "effectif": 62
+  },
+  {
+   "probabilites": [
+    0.3380281690140845,
+    0.07042253521126761,
+    0.07042253521126761,
+    0.09859154929577464,
+    0.3380281690140845,
+    0.08450704225352113
+   ],
+   "effectif": 71
+  },
+  {
+   "variable": 19,
+   "seuil": 0.5,
+   "gauche": 40,
+   "droite": 41
+  },
+  {
+   "probabilites": [
+    0.0847457627118644,
+    0.06779661016949153,
+    0.03389830508474576,
+    0.3898305084745763,
+    0.288135593220339,
+    0.13559322033898305
+   ],
+   "effectif": 59
+  },
+  {
+   "probabilites": [
+    0.1,
+    0.06,
+    0.0,
+    0.26,
+    0.54,
+    0.04
+   ],
+   "effectif": 50
+  },
+  {
+   "variable": 9,
+   "seuil": 4.5,
+   "gauche": 43,
+   "droite": 50
+  },
+  {
+   "variable": 0,
+   "seuil": 0.5,
+   "gauche": 44,
+   "droite": 49
+  },
+  {
+   "variable": 28,
+   "seuil": 0.5,
+   "gauche": 45,
+   "droite": 48
+  },
+  {
+   "variable": 3,
+   "seuil": 0.5,
+   "gauche": 46,
+   "droite": 47
+  },
+  {
+   "probabilites": [
+    0.5272727272727272,
+    0.01818181818181818,
+    0.01818181818181818,
+    0.21818181818181817,
+    0.07272727272727272,
+    0.14545454545454545
+   ],
+   "effectif": 55
+  },
+  {
+   "probabilites": [
+    0.4634146341463415,
+    0.024390243902439025,
+    0.12195121951219512,
+    0.07317073170731707,
+    0.07317073170731707,
+    0.24390243902439024
+   ],
+   "effectif": 41
+  },
+  {
+   "probabilites": [
+    0.5853658536585367,
+    0.07317073170731708,
+    0.02439024390243903,
+    0.0,
+    0.21951219512195125,
+    0.09756097560975611
+   ],
+   "effectif": 41
+  },
+  {
+   "probabilites": [
+    0.6666666666666666,
+    0.05128205128205128,
+    0.1282051282051282,
+    0.10256410256410256,
+    0.05128205128205128,
+    0.0
+   ],
+   "effectif": 78
+  },
+  {
+   "variable": 11,
+   "seuil": 13.5,
+   "gauche": 51,
+   "droite": 52
+  },
+  {
+   "probabilites": [
+    0.6666666666666666,
+    0.11764705882352941,
+    0.0392156862745098,
+    0.058823529411764705,
+    0.0392156862745098,
+    0.0784313725490196
+   ],
+   "effectif": 51
+  },
+  {
+   "probabilites": [
+    0.9555555555555556,
+    0.0,
+    0.022222222222222223,
+    0.0,
+    0.022222222222222223,
+    0.0
+   ],
+   "effectif": 45
+  }
+ ]
+}
