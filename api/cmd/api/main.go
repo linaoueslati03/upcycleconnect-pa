@@ -9,6 +9,7 @@ import (
 	"github.com/linaoueslati03/upcycleconnect-pa/api/internal/api"
 	"github.com/linaoueslati03/upcycleconnect-pa/api/internal/database"
 	"github.com/linaoueslati03/upcycleconnect-pa/api/internal/middleware"
+	"github.com/linaoueslati03/upcycleconnect-pa/api/internal/ml"
 )
 
 func main() {
@@ -19,7 +20,13 @@ func main() {
 	defer db.Close()
 	log.Println("connexion à la base de données réussie")
 
-	serveur := api.NouveauServeur(db)
+	modele, err := ml.Charger()
+	if err != nil {
+		log.Fatalf("modèle de prédiction inutilisable : %v", err)
+	}
+	log.Printf("modèle de prédiction chargé (version %s)", modele.Version)
+
+	serveur := api.NouveauServeur(db, modele)
 
 	if len(os.Args) == 3 && os.Args[1] == "reinitialiser-mot-de-passe" {
 		motDePasse, err := serveur.ReinitialiserMotDePasseParEmail(os.Args[2])

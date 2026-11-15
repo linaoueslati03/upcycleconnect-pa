@@ -127,6 +127,8 @@ func (s *Serveur) Routes() http.Handler {
 
 	mux.HandleFunc("GET /api/admin/reporting/acteurs", s.gererReportingActeurs)
 	mux.HandleFunc("GET /api/admin/reporting/prestations", s.gererReportingPrestations)
+	mux.HandleFunc("GET /api/admin/predictions", s.gererListePredictions)
+	mux.HandleFunc("GET /api/admin/predictions/{id}", s.gererPredictionActeur)
 
 	mux.HandleFunc("POST /api/documents/offres/{type}/{id}", s.gererCreationFicheOffrePDF)
 	mux.HandleFunc("POST /api/inscriptions/{id}/attestation", s.gererCreationAttestationPDF)

@@ -4,14 +4,17 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+
+	"github.com/linaoueslati03/upcycleconnect-pa/api/internal/ml"
 )
 
 type Serveur struct {
-	db *sql.DB
+	db     *sql.DB
+	modele *ml.Modele
 }
 
-func NouveauServeur(db *sql.DB) *Serveur {
-	return &Serveur{db: db}
+func NouveauServeur(db *sql.DB, modele *ml.Modele) *Serveur {
+	return &Serveur{db: db, modele: modele}
 }
 
 func (s *Serveur) gererSante(w http.ResponseWriter, r *http.Request) {
