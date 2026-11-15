@@ -10,7 +10,7 @@ const ESPACES = {
 function roleConnecte() {
     return localStorage.getItem("role");
 }
-a
+
 function afficherMenuDuRole() {
     const role = roleConnecte();
     const elements = document.querySelectorAll("aside li[data-roles]:not([data-roles=''])");
