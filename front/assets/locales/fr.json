@@ -206,6 +206,48 @@
             "traites": "Traités",
             "valides": "Validés"
         },
+        "notifications": {
+            "anglais": "Anglais",
+            "apercu": "Cette notification sera envoyée à {nombre} compte(s) actif(s).",
+            "apercu_attente": "Choisissez les destinataires pour voir combien de comptes seront concernés.",
+            "aucune": "Aucune notification envoyée pour le moment.",
+            "changer": "Changer",
+            "cible": "Destinataires",
+            "cibles": {
+                "particuliers": "Particuliers",
+                "prediction": "Selon la prochaine demande probable",
+                "professionnels": "Professionnels",
+                "tous": "Tous les particuliers et professionnels",
+                "utilisateur": "Un utilisateur"
+            },
+            "classe": "Prochaine demande probable",
+            "colonne": {
+                "auteur": "Envoyée par",
+                "cible": "Cible",
+                "date": "Date",
+                "destinataires": "Comptes",
+                "notification": "Notification"
+            },
+            "confirmer": "Envoyer cette notification à {nombre} compte(s) ?",
+            "destinataire": "Utilisateur",
+            "echec": "La notification n'a pas pu être envoyée : {erreur}",
+            "envoi_en_cours": "Envoi en cours…",
+            "envoyee": "Notification envoyée à {nombre} compte(s).",
+            "envoyer": "Envoyer la notification",
+            "francais": "Français",
+            "historique": "Historique des envois",
+            "introduction": "Envoyez une notification push aux particuliers et aux professionnels. Seuls les comptes actifs ayant autorisé les notifications dans leur navigateur la reçoivent.",
+            "message": "Message",
+            "nouvelle": "Nouvelle notification",
+            "page": "Page {page} sur {pages} · {total} notification(s)",
+            "rechercher": "Rechercher par nom, prénom ou e-mail",
+            "repris_du_francais": "Si vide, le texte français est repris",
+            "statut": {
+                "echec": "Échec",
+                "envoyee": "Envoyée"
+            },
+            "titre": "Notifications"
+        },
         "plannings": {
             "a_venir": "À venir uniquement",
             "anime": "Anime",
@@ -662,6 +704,7 @@
         "moderation": "Modération",
         "mon_compte": "Mon compte",
         "mon_planning": "Mon planning",
+        "notifications": "Notifications",
         "plannings": "Plannings",
         "prestations": "Prestations",
         "reporting": "Reporting",

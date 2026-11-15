@@ -243,6 +243,7 @@ label.lien-action {
 }
 
 .paiement-reussi,
+.notif-envoyee,
 .contrat-actif,
 .contrat-active {
     background-color: #d1e7dd;
@@ -254,7 +255,8 @@ label.lien-action {
     color: #92720a;
 }
 
-.paiement-echoue {
+.paiement-echoue,
+.notif-echec {
     background-color: #f8d7da;
     color: #a33;
 }
@@ -400,4 +402,63 @@ label.lien-action {
 
 .bloc-prediction p {
     margin: 4px 0;
+}
+
+.formulaire-notification {
+    max-width: 900px;
+}
+
+.champs-langues {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.champs-langues fieldset {
+    margin: 0;
+    padding: 12px 16px 4px;
+    border: 1px solid #d9dde3;
+    border-radius: 8px;
+}
+
+.champs-langues legend {
+    padding: 0 6px;
+    color: #2E7D32;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+}
+
+.apercu-destinataires {
+    margin: 4px 0 16px;
+    padding: 8px 12px;
+    border-left: 4px solid #2E7D32;
+    background: #eef3ea;
+    border-radius: 6px;
+}
+
+.apercu-destinataires.vide {
+    border-left-color: #c62828;
+    background: #f8d7da;
+}
+
+.resultats-recherche {
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #d9dde3;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.resultats-recherche li {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.resultats-recherche li:last-child {
+    border-bottom: none;
+}
+
+.destinataire-choisi {
+    margin: 4px 0 0;
 }

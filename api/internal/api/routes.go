@@ -144,6 +144,9 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/formations/{id}/valider", s.gererValidationFormation)
 
 	mux.HandleFunc("POST /api/notifications", s.gererEnvoiNotification)
+	mux.HandleFunc("GET /api/admin/notifications", s.gererHistoriqueNotifications)
+	mux.HandleFunc("POST /api/admin/notifications", s.gererEnvoiNotificationAdmin)
+	mux.HandleFunc("GET /api/admin/notifications/destinataires", s.gererApercuDestinataires)
 
 	return mux
 }

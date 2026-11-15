@@ -1,14 +1,9 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
-	"io"
 	"log"
 	"net/http"
-	"os"
-	"time"
 )
 
 type RequeteNotification struct {
@@ -18,58 +13,10 @@ type RequeteNotification struct {
 }
 
 func envoyerNotification(utilisateurID int, titre, message string) error {
-	appID := os.Getenv("ONESIGNAL_APP_ID")
-	cleREST := os.Getenv("ONESIGNAL_REST_API_KEY")
-
-	if appID == "" || cleREST == "" {
-		return fmt.Errorf("configuration OneSignal manquante")
-	}
-
-	donnees := map[string]interface{}{
-		"app_id": appID,
-		"include_aliases": map[string][]string{
-			"external_id": {fmt.Sprintf("%d", utilisateurID)},
-		},
-		"target_channel": "push",
-		"headings": map[string]string{
-			"fr": titre,
-		},
-		"contents": map[string]string{
-			"fr": message,
-		},
-	}
-
-	corps, err := json.Marshal(donnees)
-	if err != nil {
-		return fmt.Errorf("erreur préparation notification : %w", err)
-	}
-
-	req, err := http.NewRequest(
-		http.MethodPost,
-		"https://api.onesignal.com/notifications",
-		bytes.NewBuffer(corps),
-	)
-	if err != nil {
-		return fmt.Errorf("erreur création requête : %w", err)
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Key "+cleREST)
-
-	client := &http.Client{Timeout: 10 * time.Second}
-
-	reponse, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("erreur envoi OneSignal : %w", err)
-	}
-	defer reponse.Body.Close()
-
-	if reponse.StatusCode < 200 || reponse.StatusCode >= 300 {
-		details, _ := io.ReadAll(reponse.Body)
-		return fmt.Errorf("OneSignal HTTP %d : %s", reponse.StatusCode, string(details))
-	}
-
-	return nil
+	_, err := envoyerOneSignal([]int{utilisateurID}, ContenuNotification{
+		TitreFR: titre, MessageFR: message, TitreEN: titre, MessageEN: message,
+	})
+	return err
 }
 
 func notifierUtilisateur(utilisateurID int, titre, message string) {

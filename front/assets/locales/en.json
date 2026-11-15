@@ -206,6 +206,48 @@
             "traites": "Handled",
             "valides": "Approved"
         },
+        "notifications": {
+            "anglais": "English",
+            "apercu": "This notification will be sent to {nombre} active account(s).",
+            "apercu_attente": "Choose the recipients to see how many accounts are concerned.",
+            "aucune": "No notification sent yet.",
+            "changer": "Change",
+            "cible": "Recipients",
+            "cibles": {
+                "particuliers": "Individuals",
+                "prediction": "By most likely next request",
+                "professionnels": "Professionals",
+                "tous": "All individuals and professionals",
+                "utilisateur": "One user"
+            },
+            "classe": "Most likely next request",
+            "colonne": {
+                "auteur": "Sent by",
+                "cible": "Target",
+                "date": "Date",
+                "destinataires": "Accounts",
+                "notification": "Notification"
+            },
+            "confirmer": "Send this notification to {nombre} account(s)?",
+            "destinataire": "User",
+            "echec": "The notification could not be sent: {erreur}",
+            "envoi_en_cours": "Sending…",
+            "envoyee": "Notification sent to {nombre} account(s).",
+            "envoyer": "Send the notification",
+            "francais": "French",
+            "historique": "Sending history",
+            "introduction": "Send a push notification to individuals and professionals. Only active accounts that allowed notifications in their browser receive it.",
+            "message": "Message",
+            "nouvelle": "New notification",
+            "page": "Page {page} of {pages} · {total} notification(s)",
+            "rechercher": "Search by last name, first name or e-mail",
+            "repris_du_francais": "If empty, the French text is used",
+            "statut": {
+                "echec": "Failed",
+                "envoyee": "Sent"
+            },
+            "titre": "Notifications"
+        },
         "plannings": {
             "a_venir": "Upcoming only",
             "anime": "Hosts",
@@ -662,6 +704,7 @@
         "moderation": "Moderation",
         "mon_compte": "My account",
         "mon_planning": "My schedule",
+        "notifications": "Notifications",
         "plannings": "Schedules",
         "prestations": "Services",
         "reporting": "Reporting",
