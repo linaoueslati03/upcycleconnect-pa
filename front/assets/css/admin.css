@@ -271,3 +271,38 @@ label.lien-action {
 .formulaire-parametres {
     max-width: 420px;
 }
+
+.titre-bloc-reporting {
+    margin: 32px 0 4px;
+    color: #080341;
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+}
+
+.grille-totaux-reporting {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.grille-graphiques {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.grille-graphiques-larges {
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+}
+
+.grille-graphiques .carte h3 {
+    margin: 0 0 4px;
+    color: #2E7D32;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+}
+
+.zone-graphique {
+    position: relative;
+    height: 260px;
+    margin-top: 12px;
+}

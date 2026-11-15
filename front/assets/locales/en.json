@@ -224,6 +224,65 @@
             "nouvelle": "New service",
             "titre": "Service management"
         },
+        "reporting": {
+            "abonnement": {
+                "freemium": "Freemium",
+                "premium": "Premium"
+            },
+            "acteurs_distincts": "Members",
+            "demandes": "Requests",
+            "etat_actuel": "Current state",
+            "etat_actuel_detail": "Members as of today, whatever the selected period.",
+            "graphique": {
+                "abonnement": {
+                    "detail": "Professionals on the free plan (freemium) or premium subscribers.",
+                    "titre": "Professional subscriptions"
+                },
+                "nouveaux": {
+                    "detail": "Accounts created each month, by member type.",
+                    "titre": "New members per month"
+                },
+                "role": {
+                    "detail": "Individuals and professionals registered on the platform.",
+                    "titre": "Members by type"
+                },
+                "score": {
+                    "detail": "Number of members per range of points earned.",
+                    "titre": "Upcycling Score distribution"
+                },
+                "sites": {
+                    "detail": "Service requests (registrations, drop-offs, purchases) and number of members involved, by site.",
+                    "titre": "Activity by site"
+                },
+                "statut": {
+                    "detail": "Active accounts and accounts suspended by the administration.",
+                    "titre": "Account status"
+                }
+            },
+            "onglet": {
+                "acteurs": "Members"
+            },
+            "points": "Points",
+            "role": {
+                "particulier": "Individuals",
+                "professionnel": "Professionals"
+            },
+            "site_autre": "Other location",
+            "statut": {
+                "actif": "Active",
+                "suspendu": "Suspended"
+            },
+            "sur_periode": "Over the period",
+            "sur_periode_detail": "From {debut} to {fin}.",
+            "titre": "Activity reporting",
+            "totaux": {
+                "acteurs": "Registered members",
+                "actifs_periode": "Active in the period",
+                "nouveaux_periode": "New in the period",
+                "particuliers": "Individuals",
+                "professionnels": "Professionals"
+            }
+        },
         "utilisateurs": {
             "confirmer_reinitialisation": "Reset this account's password? The user will be logged out.",
             "confirmer_suppression": "Delete this user?",
@@ -471,6 +530,7 @@
         "mon_planning": "My schedule",
         "plannings": "Schedules",
         "prestations": "Services",
+        "reporting": "Reporting",
         "score": "Upcycling Score",
         "statistiques": "Advanced Statistics",
         "utilisateurs": "Users",

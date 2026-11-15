@@ -9,6 +9,7 @@ $liens = [
     "conteneurs.php"   => ["nav.conteneurs", "box-conteneur.svg"],
     "validations.php"  => ["nav.validations", "validation-offres.svg"],
     "finances.php"     => ["nav.finances", "finances.svg"],
+    "reporting.php"    => ["nav.reporting", "reporting.svg"],
     "plannings.php"    => ["nav.plannings", "party-horn-svgrepo-com.svg"],
     "moderation.php"   => ["nav.moderation", "message-square-shield-svgrepo-com.svg"],
     "langues.php"      => ["nav.langues", "news-svgrepo-com.svg"],

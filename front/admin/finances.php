@@ -298,6 +298,7 @@ $titrePage = "nav.finances";
         </main>
     </div>
 
+    <script src="js/periode.js"></script>
     <script src="js/finances.js"></script>
 </body>
 

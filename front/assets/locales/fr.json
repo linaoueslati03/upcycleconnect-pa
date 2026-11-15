@@ -224,6 +224,65 @@
             "nouvelle": "Nouvelle prestation",
             "titre": "Gestion des prestations"
         },
+        "reporting": {
+            "abonnement": {
+                "freemium": "Freemium",
+                "premium": "Premium"
+            },
+            "acteurs_distincts": "Acteurs",
+            "demandes": "Demandes",
+            "etat_actuel": "État actuel",
+            "etat_actuel_detail": "Situation des acteurs aujourd'hui, quelle que soit la période choisie.",
+            "graphique": {
+                "abonnement": {
+                    "detail": "Professionnels en offre gratuite (freemium) ou abonnés premium.",
+                    "titre": "Abonnement des professionnels"
+                },
+                "nouveaux": {
+                    "detail": "Comptes créés chaque mois, par type d'acteur.",
+                    "titre": "Nouveaux inscrits par mois"
+                },
+                "role": {
+                    "detail": "Particuliers et professionnels inscrits sur la plateforme.",
+                    "titre": "Répartition par type d'acteur"
+                },
+                "score": {
+                    "detail": "Nombre d'acteurs par tranche de points gagnés.",
+                    "titre": "Distribution de l'Upcycling Score"
+                },
+                "sites": {
+                    "detail": "Demandes de prestations (inscriptions, dépôts, achats) et nombre d'acteurs concernés, par site.",
+                    "titre": "Activité par site"
+                },
+                "statut": {
+                    "detail": "Comptes actifs et comptes suspendus par l'administration.",
+                    "titre": "Statut des comptes"
+                }
+            },
+            "onglet": {
+                "acteurs": "Acteurs"
+            },
+            "points": "Points",
+            "role": {
+                "particulier": "Particuliers",
+                "professionnel": "Professionnels"
+            },
+            "site_autre": "Autre lieu",
+            "statut": {
+                "actif": "Actifs",
+                "suspendu": "Suspendus"
+            },
+            "sur_periode": "Sur la période",
+            "sur_periode_detail": "Du {debut} au {fin}.",
+            "titre": "Reporting de l'activité",
+            "totaux": {
+                "acteurs": "Acteurs inscrits",
+                "actifs_periode": "Actifs sur la période",
+                "nouveaux_periode": "Nouveaux sur la période",
+                "particuliers": "Particuliers",
+                "professionnels": "Professionnels"
+            }
+        },
         "utilisateurs": {
             "confirmer_reinitialisation": "Réinitialiser le mot de passe de ce compte ? La personne sera déconnectée.",
             "confirmer_suppression": "Supprimer cet utilisateur ?",
@@ -471,6 +530,7 @@
         "mon_planning": "Mon planning",
         "plannings": "Plannings",
         "prestations": "Prestations",
+        "reporting": "Reporting",
         "score": "Upcycling Score",
         "statistiques": "Statistiques avancées",
         "utilisateurs": "Utilisateurs",
