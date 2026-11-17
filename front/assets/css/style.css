@@ -1181,42 +1181,12 @@ body.modale-ouverte {
     }
 }
 
-@keyframes glisser-titre {
-    from {
-        opacity: 0;
-        transform: translateX(-18px);
-    }
+/* Tant que Vue n'a pas affiché la page (traductions en cours de chargement), on la cache :
+   sinon le navigateur montre une fraction de seconde le code brut ({{ $t(...) }}).
+   Vue ajoute l'attribut data-v-app sur #app dès que la page est prête. */
+:where(body:not(.page-connexion)) #app:not([data-v-app]) {
+    visibility: hidden;
 }
-
-@keyframes bandeau {
-    from {
-        background-position: 0 0;
-    }
-    to {
-        background-position: 200% 0;
-    }
-}
-
-/* Titre de page qui glisse, cartes et lignes qui apparaissent en cascade */
-:where(body.app-prete) :is(.page-header, .planning-header) h1,
-:where(body.app-prete) main > h1:first-child {
-    animation: glisser-titre 0.5s ease-out backwards;
-}
-
-:where(body.app-prete) :is(.page-header, .planning-header) > :not(h1) {
-    animation: apparaitre 0.5s 0.1s ease-out backwards;
-}
-
-:where(body.app-prete) :is(.carte, .evenement-row, .atelier-row, .filtres, .barre-filtres, .filtres-utilisateurs) {
-    animation: apparaitre 0.45s ease-out backwards;
-}
-
-:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(2) { animation-delay: 0.05s; }
-:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(3) { animation-delay: 0.1s; }
-:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(4) { animation-delay: 0.15s; }
-:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(5) { animation-delay: 0.2s; }
-:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(6) { animation-delay: 0.25s; }
-:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(n+7) { animation-delay: 0.3s; }
 
 /* Menu : barre verte sur la page courante, icône qui glisse au survol */
 .nav-button {
