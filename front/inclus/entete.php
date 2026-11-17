@@ -24,6 +24,7 @@ if (!function_exists("ressource")) {
 <script src="https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.prod.js"></script>
 <script src="<?= ressource("../assets/js/api.js") ?>"></script>
 <script src="<?= ressource("../assets/js/fenetre-modale.js") ?>"></script>
+<script src="<?= ressource("../assets/js/tutoriel.js") ?>"></script>
 <script>exigerConnexion(...<?= json_encode($rolesAutorises) ?>);</script>
 <?php foreach ($scriptsEspace ?? [] as $script): ?>
 <script src="<?= ressource($script) ?>"></script>

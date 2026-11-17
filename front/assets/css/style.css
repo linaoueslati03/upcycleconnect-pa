@@ -1390,3 +1390,144 @@ a.carte:hover,
         transition-duration: 0.01ms !important;
     }
 }
+
+/* =========================================================
+   Tutoriel de première connexion (overlays bloquants)
+   ========================================================= */
+
+/* Couche transparente au-dessus de toute la page : intercepte les clics pendant la visite */
+.tuto-fond {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    cursor: not-allowed;
+}
+
+/* Découpe lumineuse : l'ombre géante assombrit tout sauf l'élément mis en avant */
+.tuto-decoupe {
+    position: fixed;
+    z-index: 301;
+    border-radius: 8px;
+    box-shadow: 0 0 0 9999px rgba(20, 26, 38, 0.66);
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 2px;
+    pointer-events: none;
+    transition: top 0.35s cubic-bezier(0.3, 0.9, 0.3, 1), left 0.35s cubic-bezier(0.3, 0.9, 0.3, 1),
+        width 0.35s cubic-bezier(0.3, 0.9, 0.3, 1), height 0.35s cubic-bezier(0.3, 0.9, 0.3, 1),
+        outline-color 0.2s ease;
+    animation: tuto-halo 1.8s ease-in-out infinite;
+}
+
+.tuto-decoupe.sans-cible {
+    outline-color: transparent;
+    animation: none;
+}
+
+@keyframes tuto-halo {
+    50% {
+        outline-offset: 6px;
+        outline-color: rgba(111, 191, 115, 0.9);
+    }
+}
+
+/* Bulle d'explication */
+.tuto-bulle {
+    position: fixed;
+    z-index: 302;
+    width: min(360px, calc(100vw - 32px));
+    padding: 22px 24px 20px;
+    border-top: 4px solid var(--vert);
+    border-radius: 8px;
+    background: var(--fond);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    transition: top 0.35s cubic-bezier(0.3, 0.9, 0.3, 1), left 0.35s cubic-bezier(0.3, 0.9, 0.3, 1);
+}
+
+.tuto-bulle.tuto-apparition {
+    animation: tuto-bulle 0.3s ease-out;
+}
+
+@keyframes tuto-bulle {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+}
+
+/* Petite flèche vers l'élément quand la bulle est à sa droite */
+.tuto-bulle[data-cote="droite"]::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    width: 16px;
+    height: 16px;
+    background: var(--fond);
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.tuto-compteur {
+    margin: 0 0 6px;
+    color: var(--vert);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.tuto-bulle h2 {
+    margin: 0 0 8px;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.tuto-texte {
+    margin: 0 0 16px;
+    color: var(--texte);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.tuto-points {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 6px;
+}
+
+.tuto-points span {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--beige-fonce);
+    transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.tuto-points span.actif {
+    width: 22px;
+    background: var(--vert);
+}
+
+.tuto-boutons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.tuto-boutons [hidden] {
+    display: none;
+}
+
+.tuto-sortie {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tuto-decoupe,
+    .tuto-bulle {
+        transition: none;
+        animation: none;
+    }
+}

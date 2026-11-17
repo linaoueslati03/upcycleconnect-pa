@@ -170,8 +170,12 @@ async function demarrerApp(options) {
     if (typeof FenetreModale !== "undefined") {
         app.component("fenetre-modale", FenetreModale);
     }
+    app.config.globalProperties.lienTutoriel = () => (typeof lienTutoriel === "function" ? lienTutoriel() : "");
     app.mount("#app");
     document.body.classList.add("app-prete");
+    if (typeof lancerTutorielSiBesoin === "function") {
+        lancerTutorielSiBesoin();
+    }
 }
 
 async function appelerApi(chemin, options = {}) {

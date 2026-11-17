@@ -54,20 +54,6 @@ $titrePage = "nav.accueil";
             </div>
 
         </main>
-
-        <div v-if="tutorielVisible" class="fond-modal">
-            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="titre-tutoriel">
-                <h2 id="titre-tutoriel">{{ $t(etapeCourante + '.titre') }}</h2>
-                <p>{{ $t(etapeCourante + '.texte') }}</p>
-                <p class="points-etapes">{{ $t('tutoriel.etape_sur', { numero: indexEtape + 1, total: etapesTutoriel.length }) }}</p>
-
-                <div class="form-buttons">
-                    <button v-if="indexEtape > 0" class="button-draft" @click="indexEtape--">{{ $t('commun.precedent') }}</button>
-                    <button v-if="!derniereEtape" class="button-submit" @click="indexEtape++">{{ $t('commun.suivant') }}</button>
-                    <button v-else class="button-submit" @click="terminerTutoriel">{{ $t('commun.terminer') }}</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="<?= ressource("js/tableau-de-bord.js") ?>"></script>

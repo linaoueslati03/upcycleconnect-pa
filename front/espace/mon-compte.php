@@ -52,10 +52,10 @@ $titrePage = "nav.mon_compte";
                         </button>
                     </div>
 
-                    <div v-if="roleConnecte() === 'particulier'" class="carte">
+                    <div class="carte section">
                         <h2>{{ $t('compte.tutoriel') }}</h2>
                         <p>{{ $t('compte.tutoriel_explication') }}</p>
-                        <a class="btn-primary" href="tableau-de-bord.php?tutoriel=1">{{ $t('compte.revoir_tutoriel') }}</a>
+                        <a class="btn-primary" :href="lienTutoriel()">{{ $t('compte.revoir_tutoriel') }}</a>
                     </div>
 
                     <div v-if="roleConnecte() === 'professionnel'" class="carte section">

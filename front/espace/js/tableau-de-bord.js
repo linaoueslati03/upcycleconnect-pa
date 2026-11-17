@@ -4,19 +4,7 @@ demarrerApp({
             prenom: "",
             resume: null,
             erreur: "",
-            tutorielVisible: false,
-            indexEtape: 0,
-            etapesTutoriel: ["tutoriel.1", "tutoriel.2", "tutoriel.3", "tutoriel.4", "tutoriel.5", "tutoriel.6"],
         };
-    },
-
-    computed: {
-        etapeCourante() {
-            return this.etapesTutoriel[this.indexEtape];
-        },
-        derniereEtape() {
-            return this.indexEtape === this.etapesTutoriel.length - 1;
-        },
     },
 
     mounted() {
@@ -49,15 +37,6 @@ demarrerApp({
                 return;
             }
             this.resume = await reponseResume.json();
-
-            const revoir = new URLSearchParams(window.location.search).has("tutoriel");
-            this.tutorielVisible = !compte.tutoriel_vu || revoir;
-        },
-
-        async terminerTutoriel() {
-            await appelerApi("/moi/tutoriel", { method: "PUT" });
-            this.tutorielVisible = false;
-            this.indexEtape = 0;
         },
     },
 });

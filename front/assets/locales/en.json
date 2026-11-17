@@ -832,30 +832,142 @@
         "termine": "Finished"
     },
     "tutoriel": {
-        "1": {
-            "texte": "Here is a quick tour of your area's features.",
-            "titre": "Welcome to UpcycleConnect!"
+        "administrateur": {
+            "bienvenue": {
+                "texte": "Here is a quick tour of UpcycleConnect's management tools. The menu on the left gives you access to everything.",
+                "titre": "Welcome to the back office!"
+            },
+            "conteneurs": {
+                "texte": "Track the state of each box and change its status if there is a problem.",
+                "titre": "Containers"
+            },
+            "finances": {
+                "texte": "Revenue, commissions, subscriptions, advertising and expenses, over the period of your choice.",
+                "titre": "Financial management"
+            },
+            "langues": {
+                "texte": "Add a language to the website by simply importing a translation file.",
+                "titre": "Languages"
+            },
+            "notifications": {
+                "texte": "Send push notifications to individuals and professionals.",
+                "titre": "Notifications"
+            },
+            "prestations": {
+                "texte": "Manage the services offered, their prices and their PDF sheets.",
+                "titre": "Service catalogue"
+            },
+            "reporting": {
+                "texte": "Charts on actors and services, and a prediction of each actor's next request.",
+                "titre": "Reporting"
+            },
+            "utilisateurs": {
+                "texte": "Create, edit or suspend the accounts of every actor on the platform.",
+                "titre": "Users"
+            },
+            "validations": {
+                "texte": "Approve or reject the training courses, workshops and events proposed by employees.",
+                "titre": "Approvals"
+            }
         },
-        "2": {
-            "texte": "Give away or sell your items and materials from “My listings”, and browse those of other members.",
-            "titre": "Your listings"
+        "etape_sur": "Step {numero} of {total}",
+        "particulier": {
+            "annonces": {
+                "texte": "Give away or sell your items and materials from “My listings”. Each listing is checked by the team before it is published.",
+                "titre": "Your listings"
+            },
+            "bienvenue": {
+                "texte": "Here is a quick tour of your space. Follow the steps: the menu on the left gives you access to everything.",
+                "titre": "Welcome to UpcycleConnect!"
+            },
+            "catalogue": {
+                "texte": "Training courses, workshops and events: sign up and pay online directly from the catalogue.",
+                "titre": "The catalogue"
+            },
+            "communaute": {
+                "texte": "Talk with other members on the forums and share your upcycling projects.",
+                "titre": "The community"
+            },
+            "compte": {
+                "texte": "Edit your details, your language and your password. You can also replay this tutorial at any time.",
+                "titre": "Your account"
+            },
+            "depots": {
+                "texte": "No time to handle a sale? Ask to drop your item in a container: you receive an opening code once the request is approved.",
+                "titre": "Container drop-off"
+            },
+            "planning": {
+                "texte": "Everything you signed up for appears here, week by week.",
+                "titre": "Your schedule"
+            },
+            "score": {
+                "texte": "Each drop-off, donation or registration earns you points. Track the impact of your actions.",
+                "titre": "Your Upcycling Score"
+            }
         },
-        "3": {
-            "texte": "No time to handle a sale? Drop your item in an UpcycleConnect container: you receive an opening code once your request is approved.",
-            "titre": "Container drop-off"
+        "professionnel": {
+            "annonces": {
+                "texte": "Find items and materials to upcycle, filter by type and location, and buy them directly.",
+                "titre": "Listings"
+            },
+            "bienvenue": {
+                "texte": "Here is a quick tour of the tools available to you. The menu on the left gives you access to everything.",
+                "titre": "Welcome to your professional space!"
+            },
+            "compte": {
+                "texte": "Edit your details, your language and your password. You can also replay this tutorial at any time.",
+                "titre": "Your account"
+            },
+            "contrats": {
+                "texte": "Find your subscription and advertising contracts and your invoices as PDF.",
+                "titre": "Contracts and billing"
+            },
+            "depots": {
+                "texte": "Scan or enter the code of an item dropped in a container to pick it up.",
+                "titre": "Container pick-up"
+            },
+            "projets": {
+                "texte": "Document each step of your creations and showcase them to the community.",
+                "titre": "Your projects"
+            },
+            "statistiques": {
+                "texte": "With the Premium plan: environmental impact, stock levels and prioritised collection alerts.",
+                "titre": "Advanced statistics"
+            }
         },
-        "4": {
-            "texte": "Sign up for training sessions, workshops and events: they then appear in “My schedule”.",
-            "titre": "The catalogue"
-        },
-        "5": {
-            "texte": "Every drop-off, donation or sign-up earns you points. Track them in “Upcycling Score”.",
-            "titre": "Your Upcycling Score"
-        },
-        "6": {
-            "texte": "Share your upcycling projects and chat with other members on the forums.",
-            "titre": "The community"
-        },
-        "etape_sur": "Step {numero} of {total}"
+        "salarie": {
+            "ateliers": {
+                "texte": "Offer workshops, save them as drafts, then submit them for approval.",
+                "titre": "Your workshops"
+            },
+            "bienvenue": {
+                "texte": "Here is a quick tour of the tools to create and run your activities. The menu on the left gives you access to everything.",
+                "titre": "Welcome to your employee space!"
+            },
+            "compte": {
+                "texte": "Edit your details, your language and your password. You can also replay this tutorial at any time.",
+                "titre": "Your account"
+            },
+            "conseils": {
+                "texte": "Write and publish the advice and news shown on the website.",
+                "titre": "Advice"
+            },
+            "depots": {
+                "texte": "Approve drop-off requests from individuals and confirm dropped items.",
+                "titre": "Container drop-offs"
+            },
+            "evenements": {
+                "texte": "Organise events at the different UpcycleConnect sites.",
+                "titre": "Your events"
+            },
+            "formations": {
+                "texte": "Create your training courses: they are published once a manager approves them.",
+                "titre": "Your training courses"
+            },
+            "planning": {
+                "texte": "Your training courses, workshops and events of the week, all in one place.",
+                "titre": "Your schedule"
+            }
+        }
     }
 }

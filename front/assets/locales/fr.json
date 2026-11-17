@@ -832,30 +832,142 @@
         "termine": "Terminé"
     },
     "tutoriel": {
-        "1": {
-            "texte": "Voici un rapide tour des fonctionnalités de votre espace.",
-            "titre": "Bienvenue sur UpcycleConnect !"
+        "administrateur": {
+            "bienvenue": {
+                "texte": "Voici un rapide tour des outils de gestion d'UpcycleConnect. Le menu de gauche vous donne accès à tout.",
+                "titre": "Bienvenue dans le back-office !"
+            },
+            "conteneurs": {
+                "texte": "Suivez l'état de chaque box et changez son statut en cas de problème.",
+                "titre": "Les conteneurs"
+            },
+            "finances": {
+                "texte": "Revenus, commissions, abonnements, publicités et charges, sur la période de votre choix.",
+                "titre": "La gestion financière"
+            },
+            "langues": {
+                "texte": "Ajoutez une langue au site en important simplement un fichier de traduction.",
+                "titre": "Les langues"
+            },
+            "notifications": {
+                "texte": "Envoyez des notifications push aux particuliers et aux professionnels.",
+                "titre": "Les notifications"
+            },
+            "prestations": {
+                "texte": "Gérez les prestations proposées, leurs tarifs et leurs fiches PDF.",
+                "titre": "Le catalogue des prestations"
+            },
+            "reporting": {
+                "texte": "Graphiques sur les acteurs et les prestations, et prédiction de la prochaine demande de chaque acteur.",
+                "titre": "Le reporting"
+            },
+            "utilisateurs": {
+                "texte": "Créez, modifiez ou suspendez les comptes de tous les acteurs de la plateforme.",
+                "titre": "Les utilisateurs"
+            },
+            "validations": {
+                "texte": "Validez ou refusez les formations, ateliers et événements proposés par les salariés.",
+                "titre": "Les validations"
+            }
         },
-        "2": {
-            "texte": "Donnez ou vendez vos objets et matériaux depuis « Mes annonces », et parcourez celles des autres membres.",
-            "titre": "Vos annonces"
+        "etape_sur": "Étape {numero} sur {total}",
+        "particulier": {
+            "annonces": {
+                "texte": "Donnez ou vendez vos objets et matériaux depuis « Mes annonces ». Chaque annonce est vérifiée par l'équipe avant d'être publiée.",
+                "titre": "Vos annonces"
+            },
+            "bienvenue": {
+                "texte": "Voici un rapide tour de votre espace. Suivez les étapes : le menu de gauche vous donne accès à tout.",
+                "titre": "Bienvenue sur UpcycleConnect !"
+            },
+            "catalogue": {
+                "texte": "Formations, ateliers et événements : inscrivez-vous et réglez en ligne directement depuis le catalogue.",
+                "titre": "Le catalogue"
+            },
+            "communaute": {
+                "texte": "Échangez avec les autres membres sur les forums et partagez vos projets d'upcycling.",
+                "titre": "La communauté"
+            },
+            "compte": {
+                "texte": "Modifiez vos informations, votre langue et votre mot de passe. Vous pourrez aussi revoir ce tutoriel à tout moment.",
+                "titre": "Votre compte"
+            },
+            "depots": {
+                "texte": "Pas le temps de gérer une vente ? Demandez à déposer votre objet dans un conteneur : vous recevez un code d'ouverture une fois la demande validée.",
+                "titre": "Le dépôt en conteneur"
+            },
+            "planning": {
+                "texte": "Tout ce à quoi vous êtes inscrit apparaît ici, semaine par semaine.",
+                "titre": "Votre planning"
+            },
+            "score": {
+                "texte": "Chaque dépôt, don ou inscription vous rapporte des points. Suivez l'impact de vos gestes.",
+                "titre": "Votre Upcycling Score"
+            }
         },
-        "3": {
-            "texte": "Pas le temps de gérer une vente ? Déposez votre objet dans un conteneur UpcycleConnect : vous recevez un code d'ouverture une fois la demande validée.",
-            "titre": "Le dépôt en conteneur"
+        "professionnel": {
+            "annonces": {
+                "texte": "Trouvez des objets et matériaux à upcycler, filtrez par type et par localisation, et achetez-les directement.",
+                "titre": "Les annonces"
+            },
+            "bienvenue": {
+                "texte": "Voici un rapide tour des outils mis à votre disposition. Le menu de gauche vous donne accès à tout.",
+                "titre": "Bienvenue sur votre espace professionnel !"
+            },
+            "compte": {
+                "texte": "Modifiez vos informations, votre langue et votre mot de passe. Vous pourrez aussi revoir ce tutoriel à tout moment.",
+                "titre": "Votre compte"
+            },
+            "contrats": {
+                "texte": "Retrouvez vos contrats d'abonnement et de publicité ainsi que vos factures en PDF.",
+                "titre": "Contrats et facturation"
+            },
+            "depots": {
+                "texte": "Scannez ou saisissez le code d'un objet déposé dans un conteneur pour le récupérer.",
+                "titre": "Récupération en conteneur"
+            },
+            "projets": {
+                "texte": "Documentez chaque étape de vos créations et mettez-les en avant auprès de la communauté.",
+                "titre": "Vos projets"
+            },
+            "statistiques": {
+                "texte": "Avec l'offre Premium : impact écologique, état des stocks et alertes de collecte priorisées.",
+                "titre": "Statistiques avancées"
+            }
         },
-        "4": {
-            "texte": "Inscrivez-vous aux formations, ateliers et événements : ils apparaissent ensuite dans « Mon planning ».",
-            "titre": "Le catalogue"
-        },
-        "5": {
-            "texte": "Chaque dépôt, don ou inscription vous rapporte des points. Suivez leur évolution dans « Upcycling Score ».",
-            "titre": "Votre Upcycling Score"
-        },
-        "6": {
-            "texte": "Partagez vos projets d'upcycling et échangez avec les autres membres sur les forums.",
-            "titre": "La communauté"
-        },
-        "etape_sur": "Étape {numero} sur {total}"
+        "salarie": {
+            "ateliers": {
+                "texte": "Proposez des ateliers, enregistrez-les en brouillon puis soumettez-les à validation.",
+                "titre": "Vos ateliers"
+            },
+            "bienvenue": {
+                "texte": "Voici un rapide tour des outils pour créer et animer vos activités. Le menu de gauche vous donne accès à tout.",
+                "titre": "Bienvenue dans votre espace salarié !"
+            },
+            "compte": {
+                "texte": "Modifiez vos informations, votre langue et votre mot de passe. Vous pourrez aussi revoir ce tutoriel à tout moment.",
+                "titre": "Votre compte"
+            },
+            "conseils": {
+                "texte": "Rédigez et publiez les conseils et actualités affichés sur le site.",
+                "titre": "Les conseils"
+            },
+            "depots": {
+                "texte": "Validez les demandes de dépôt des particuliers et confirmez les objets déposés.",
+                "titre": "Les dépôts en conteneur"
+            },
+            "evenements": {
+                "texte": "Organisez des événements sur les différents sites d'UpcycleConnect.",
+                "titre": "Vos événements"
+            },
+            "formations": {
+                "texte": "Créez vos formations : elles sont publiées après validation par un responsable.",
+                "titre": "Vos formations"
+            },
+            "planning": {
+                "texte": "Vos formations, ateliers et événements de la semaine, au même endroit.",
+                "titre": "Votre planning"
+            }
+        }
     }
 }
