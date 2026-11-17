@@ -57,6 +57,14 @@ $titrePage = "nav.statistiques";
                         <h2>Alertes priorisées de collecte</h2>
                         <p>Configurez vos critères pour recevoir une notification dès qu'un matériau spécifique est déposé.</p>
                         
+                        <button class="btn-primary" @click="alerteOuverte = true">Configurer une alerte</button>
+                        <p v-if="messageAlerte" class="succes">{{ messageAlerte }}</p>
+                    </section>
+                </div>
+
+            </div>
+
+            <fenetre-modale :ouverte="alerteOuverte" titre="Alertes priorisées de collecte" @fermer="alerteOuverte = false">
                         <form @submit.prevent="enregistrerAlerte">
                             <div class="form-group">
                                 <label for="materiau">Type de matériau recherché</label>
@@ -72,15 +80,14 @@ $titrePage = "nav.statistiques";
                                 <label for="localisation">Secteur / Agence</label>
                                 <input id="localisation" type="text" v-model="filtreAlerte.localisation" placeholder="Paris 11ème" required>
                             </div>
-                            <button type="submit" class="btn-primary">M'avertir</button>
-                            <p v-if="messageAlerte" style="color: green; margin-top: 10px; font-weight: bold;">{{ messageAlerte }}</p>
+                            <div class="form-buttons">
+                                <button type="submit" class="button-submit">M'avertir</button>
+                                <button type="button" class="button-draft" @click="alerteOuverte = false">{{ $t('commun.annuler') }}</button>
+                            </div>
                         </form>
-                    </section>
-                </div>
-
-            </div>
+            </fenetre-modale>
         </main>
     </div>
-    <script src="js/statistiques.js"></script>
+    <script src="<?= ressource("js/statistiques.js") ?>"></script>
 </body>
 </html>

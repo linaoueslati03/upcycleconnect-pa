@@ -47,6 +47,6 @@ $titrePage = "nav.contrats";
             </div>
         </main>
     </div>
-    <script src="js/contrats.js"></script>
+    <script src="<?= ressource("js/contrats.js") ?>"></script>
 </body>
 </html>

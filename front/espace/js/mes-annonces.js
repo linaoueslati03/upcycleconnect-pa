@@ -11,6 +11,7 @@ demarrerApp({
             categorieInitiale: null,
             statutsAnnonce: STATUTS_ANNONCE,
             formulaire: { ...ANNONCE_VIDE },
+            formulaireOuvert: false,
             erreur: "",
             erreurListe: "",
             message: "",
@@ -50,11 +51,17 @@ demarrerApp({
             this.message = "";
         },
 
+        ouvrirNouveau() {
+            this.reinitialiserFormulaire();
+            this.formulaireOuvert = true;
+        },
+
         modifier(annonce) {
             this.formulaire = { ...annonce };
             this.categorieInitiale = annonce.categorie_id;
             this.erreur = "";
             this.message = "";
+            this.formulaireOuvert = true;
         },
 
         corpsAnnonce(annonce) {
@@ -80,7 +87,7 @@ demarrerApp({
                 return;
             }
             const annonce = await reponse.json();
-            this.reinitialiserFormulaire();
+            this.formulaireOuvert = false;
             if (annonce.statut === "en_attente") {
                 this.message = t("annonces.envoyee_validation");
             }

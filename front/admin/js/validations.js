@@ -9,7 +9,7 @@ demarrerApp({
                 { nom: "admin.validations.ateliers", valeur: "atelier" },
                 { nom: "admin.validations.evenements", valeur: "evenement" },
             ],
-            refus: { cle: "", motif: "" },
+            refus: { ouvert: false, offre: null, motif: "" },
             erreur: "",
             succes: "",
         };
@@ -56,11 +56,12 @@ demarrerApp({
         },
 
         commencerRefus(offre) {
-            this.refus = { cle: offre.type + offre.id, motif: "" };
+            this.erreur = "";
+            this.refus = { ouvert: true, offre, motif: "" };
         },
 
         annulerRefus() {
-            this.refus = { cle: "", motif: "" };
+            this.refus.ouvert = false;
         },
 
         async decider(offre, decision) {

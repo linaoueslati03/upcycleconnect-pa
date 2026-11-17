@@ -17,7 +17,7 @@ $titrePage = "nav.prestations";
 
             <div class="page-header">
                 <h1>{{ $t('admin.prestations.titre') }}</h1>
-                <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ $t('admin.prestations.nouvelle') }}</button>
+                <button class="btn-primary" @click="ouvrirNouveau">+ {{ $t('admin.prestations.nouvelle') }}</button>
             </div>
 
             <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
@@ -51,8 +51,7 @@ $titrePage = "nav.prestations";
                     </table>
                 </section>
 
-                <div class="carte carte-formulaire">
-                    <h2>{{ formulaire.id ? $t('admin.prestations.modifier') : $t('admin.prestations.nouvelle') }}</h2>
+                <fenetre-modale :ouverte="formulaireOuvert" :titre="formulaire.id ? $t('admin.prestations.modifier') : $t('admin.prestations.nouvelle')" @fermer="formulaireOuvert = false">
 
                     <form @submit.prevent="enregistrer">
                         <div class="form-group">
@@ -85,17 +84,17 @@ $titrePage = "nav.prestations";
 
                         <div class="form-buttons">
                             <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
-                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">{{ $t('commun.annuler') }}</button>
+                            <button type="button" class="button-draft" @click="formulaireOuvert = false">{{ $t('commun.annuler') }}</button>
                         </div>
                     </form>
-                </div>
+                </fenetre-modale>
 
             </div>
 
         </main>
     </div>
 
-    <script src="js/prestations.js"></script>
+    <script src="<?= ressource("js/prestations.js") ?>"></script>
 </body>
 
 </html>

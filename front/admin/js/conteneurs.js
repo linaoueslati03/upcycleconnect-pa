@@ -13,6 +13,8 @@ demarrerApp({
                 { nom: "admin.conteneurs.statut.maintenance", valeur: "maintenance" },
             ],
             nouveauSite: "",
+            ajoutOuvert: false,
+            changementOuvert: false,
             changement: { conteneur: null, statut: "", motif: "" },
             historique: { conteneur: null, lignes: [] },
             erreur: "",
@@ -55,6 +57,12 @@ demarrerApp({
             this.conteneurs = await reponse.json();
         },
 
+        ouvrirAjout() {
+            this.nouveauSite = "";
+            this.erreur = "";
+            this.ajoutOuvert = true;
+        },
+
         async ajouter() {
             this.erreur = "";
             const reponse = await appelerApi("/admin/conteneurs", {
@@ -66,16 +74,19 @@ demarrerApp({
                 return;
             }
             this.nouveauSite = "";
+            this.ajoutOuvert = false;
             this.charger();
         },
 
         ouvrirChangement(conteneur) {
             const autreStatut = STATUTS_CONTENEUR.find((s) => s !== conteneur.statut);
             this.changement = { conteneur, statut: autreStatut, motif: "" };
+            this.erreur = "";
+            this.changementOuvert = true;
         },
 
         fermerChangement() {
-            this.changement = { conteneur: null, statut: "", motif: "" };
+            this.changementOuvert = false;
         },
 
         async enregistrerStatut() {

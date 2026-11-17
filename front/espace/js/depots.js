@@ -8,6 +8,8 @@ demarrerApp({
             erreur: "",
             erreurListe: "",
             confirmation: false,
+            demandeOuverte: false,
+            scannerOuvert: false,
 
             statutSelectionne: "demande",
             filtres: [
@@ -59,6 +61,21 @@ demarrerApp({
             this.depots = await reponse.json();
         },
 
+        ouvrirDemande() {
+            this.formulaire = { description_objet: "", conteneur_id: null };
+            this.erreur = "";
+            this.confirmation = false;
+            this.demandeOuverte = true;
+        },
+
+        ouvrirScanner() {
+            this.codeObjet = "";
+            this.objetTrouve = null;
+            this.erreur = "";
+            this.succes = "";
+            this.scannerOuvert = true;
+        },
+
         async demanderDepot() {
             this.erreur = "";
             this.confirmation = false;
@@ -73,6 +90,7 @@ demarrerApp({
             }
 
             this.confirmation = true;
+            this.demandeOuverte = false;
             this.formulaire = { description_objet: "", conteneur_id: null };
             this.chargerDepots();
         },

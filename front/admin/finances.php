@@ -227,7 +227,10 @@ $titrePage = "nav.finances";
 
             <div v-if="onglet === 'charges'" class="mise-en-page-admin">
                 <section class="carte">
-                    <h2>{{ $t('admin.finances.charges_periode') }}</h2>
+                    <div class="entete-carte">
+                        <h2>{{ $t('admin.finances.charges_periode') }}</h2>
+                        <button class="btn-primary" @click="ouvrirCharge">+ {{ $t('admin.finances.ajouter_charge') }}</button>
+                    </div>
                     <p v-if="charges.length === 0">{{ $t('admin.finances.aucune_charge') }}</p>
                     <table v-else class="tableau">
                         <thead>
@@ -251,8 +254,9 @@ $titrePage = "nav.finances";
                     </table>
                 </section>
 
-                <section class="carte carte-formulaire">
-                    <h2>{{ $t('admin.finances.ajouter_charge') }}</h2>
+            </div>
+
+            <fenetre-modale :ouverte="chargeOuverte" :titre="$t('admin.finances.ajouter_charge')" @fermer="chargeOuverte = false">
                     <form @submit.prevent="ajouterCharge">
                         <div class="form-group">
                             <label for="libelle">{{ $t('admin.finances.libelle') }}</label>
@@ -272,34 +276,49 @@ $titrePage = "nav.finances";
                             <label for="date-charge">{{ $t('admin.finances.date') }}</label>
                             <input id="date-charge" type="date" v-model="nouvelleCharge.date_charge" required>
                         </div>
-                        <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                        <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                        <div class="form-buttons">
+                            <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                            <button type="button" class="button-draft" @click="chargeOuverte = false">{{ $t('commun.annuler') }}</button>
+                        </div>
                     </form>
-                </section>
-            </div>
+            </fenetre-modale>
 
             <section v-if="onglet === 'parametres' && parametres" class="carte section-categories">
                 <h2>{{ $t('admin.finances.onglet.parametres') }}</h2>
                 <p class="discret">{{ $t('admin.finances.explication_parametres') }}</p>
                 <p v-if="messageParametres" class="succes">{{ messageParametres }}</p>
-                <form class="formulaire-parametres" @submit.prevent="enregistrerParametres">
+                <ul class="details-offre">
+                    <li><strong>{{ $t('admin.finances.taux_commission') }} :</strong> {{ parametres.taux_commission }}</li>
+                    <li><strong>{{ $t('admin.finances.prix_premium') }} :</strong> {{ parametres.prix_premium_mensuel }}</li>
+                </ul>
+                <button class="btn-primary" @click="ouvrirParametres">{{ $t('commun.modifier') }}</button>
+                <p class="discret">{{ $t('admin.finances.derniere_modification', { date: formaterDate(parametres.date_modification) }) }}</p>
+            </section>
+
+            <fenetre-modale :ouverte="parametresOuverts" :titre="$t('admin.finances.onglet.parametres')" @fermer="parametresOuverts = false">
+                <form @submit.prevent="enregistrerParametres">
                     <div class="form-group">
                         <label for="taux">{{ $t('admin.finances.taux_commission') }}</label>
-                        <input id="taux" type="number" min="5" max="10" step="0.5" v-model.number="parametres.taux_commission" required>
+                        <input id="taux" type="number" min="5" max="10" step="0.5" v-model.number="brouillonParametres.taux_commission" required>
                     </div>
                     <div class="form-group">
                         <label for="prix-premium">{{ $t('admin.finances.prix_premium') }}</label>
-                        <input id="prix-premium" type="number" min="15" max="30" step="0.5" v-model.number="parametres.prix_premium_mensuel" required>
+                        <input id="prix-premium" type="number" min="15" max="30" step="0.5" v-model.number="brouillonParametres.prix_premium_mensuel" required>
                     </div>
-                    <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                        <button type="button" class="button-draft" @click="parametresOuverts = false">{{ $t('commun.annuler') }}</button>
+                    </div>
                 </form>
-                <p class="discret">{{ $t('admin.finances.derniere_modification', { date: formaterDate(parametres.date_modification) }) }}</p>
-            </section>
+            </fenetre-modale>
 
         </main>
     </div>
 
-    <script src="js/periode.js"></script>
-    <script src="js/finances.js"></script>
+    <script src="<?= ressource("js/periode.js") ?>"></script>
+    <script src="<?= ressource("js/finances.js") ?>"></script>
 </body>
 
 </html>

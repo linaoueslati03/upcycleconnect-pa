@@ -7,6 +7,9 @@ demarrerApp({
             nouveauSujet: { titre: "", contenu: "" },
             reponse: "",
             signalementOuvert: null,
+            signalementVisible: false,
+            nouveauSujetOuvert: false,
+            reponseOuverte: false,
             motif: "",
             message: "",
             erreur: "",
@@ -42,6 +45,26 @@ demarrerApp({
             this.messages = await reponse.json();
         },
 
+        ouvrirNouveauSujet() {
+            this.nouveauSujet = { titre: "", contenu: "" };
+            this.erreur = "";
+            this.nouveauSujetOuvert = true;
+        },
+
+        ouvrirReponse() {
+            this.reponse = "";
+            this.erreur = "";
+            this.reponseOuverte = true;
+        },
+
+        ouvrirSignalement(messageID) {
+            this.signalementOuvert = messageID;
+            this.motif = "";
+            this.erreur = "";
+            this.message = "";
+            this.signalementVisible = true;
+        },
+
         async creerSujet() {
             this.erreur = "";
             const reponse = await appelerApi("/forums/sujets", {
@@ -52,7 +75,7 @@ demarrerApp({
                 this.erreur = await messageErreur(reponse);
                 return;
             }
-            this.nouveauSujet = { titre: "", contenu: "" };
+            this.nouveauSujetOuvert = false;
             this.chargerSujets();
         },
 
@@ -67,6 +90,7 @@ demarrerApp({
                 return;
             }
             this.reponse = "";
+            this.reponseOuverte = false;
             this.ouvrirSujet(this.sujet);
         },
 
@@ -79,7 +103,7 @@ demarrerApp({
                 this.erreur = await messageErreur(reponse);
                 return;
             }
-            this.signalementOuvert = null;
+            this.signalementVisible = false;
             this.motif = "";
             this.message = t("forums.signalement_envoye");
         },

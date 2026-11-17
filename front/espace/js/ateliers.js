@@ -5,6 +5,11 @@ demarrerApp({
             filtres: FILTRES_STATUT,
             statutSelectionne: "tous",
             erreur: "",
+            formulaireOuvert: false,
+            editionId: null,
+            formulaire: { titre: "", description: "", date_debut: "", date_fin: "", lieu: "" },
+            erreurFormulaire: "",
+            confirmation: false,
         };
     },
 
@@ -19,6 +24,10 @@ demarrerApp({
 
     mounted() {
         this.chargerAteliers();
+        const aModifier = new URLSearchParams(window.location.search).get("modifier");
+        if (aModifier) {
+            this.modifierAtelier(aModifier);
+        }
     },
 
     methods: {
@@ -34,8 +43,65 @@ demarrerApp({
             this.ateliers = await reponse.json();
         },
 
-        modifierAtelier(id) {
-            window.location.href = `creer-atelier.php?id=${id}`;
+        ouvrirCreation() {
+            this.editionId = null;
+            this.formulaire = { titre: "", description: "", date_debut: "", date_fin: "", lieu: "" };
+            this.erreurFormulaire = "";
+            this.confirmation = false;
+            this.formulaireOuvert = true;
+        },
+
+        async modifierAtelier(id) {
+            this.erreur = "";
+            this.confirmation = false;
+            const reponse = await appelerApi(`/ateliers/${id}`);
+            if (!reponse.ok) {
+                this.erreur = t("salaries.ateliers.introuvable");
+                return;
+            }
+            const atelier = await reponse.json();
+            this.editionId = atelier.id ?? id;
+            this.formulaire = {
+                titre: atelier.titre || "",
+                description: atelier.description || "",
+                lieu: atelier.lieu || "",
+                date_debut: versChampDate(atelier.date_debut),
+                date_fin: versChampDate(atelier.date_fin),
+            };
+            this.erreurFormulaire = "";
+            this.formulaireOuvert = true;
+        },
+
+        async envoyerAtelier(statut) {
+            this.erreurFormulaire = "";
+            this.confirmation = false;
+
+            if (!this.formulaire.titre || !this.formulaire.date_debut) {
+                this.erreurFormulaire = t("salaries.titre_date_obligatoires");
+                return;
+            }
+
+            const id = this.editionId;
+            const reponse = await appelerApi(id ? `/ateliers/${id}` : "/ateliers", {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify({
+                    titre: this.formulaire.titre,
+                    description: this.formulaire.description,
+                    date_debut: versDateAPI(this.formulaire.date_debut),
+                    date_fin: versDateAPI(this.formulaire.date_fin),
+                    lieu: this.formulaire.lieu,
+                    statut: statut,
+                }),
+            });
+
+            if (!reponse.ok) {
+                this.erreurFormulaire = (await reponse.json()).erreur;
+                return;
+            }
+
+            this.formulaireOuvert = false;
+            this.confirmation = true;
+            this.chargerAteliers();
         },
 
         async valider(id) {

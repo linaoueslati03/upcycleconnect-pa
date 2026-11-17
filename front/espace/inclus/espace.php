@@ -12,6 +12,7 @@ $pages = [
     "catalogue.php"       => ["nav.catalogue", "party-horn-svgrepo-com.svg", [PARTICULIER]],
     "evenements.php"      => ["nav.evenements", "party-horn-svgrepo-com.svg", [SALARIE]],
     "ateliers.php"        => ["nav.ateliers", "pencil-square-svgrepo-com.svg", [SALARIE]],
+    "formations.php"      => ["nav.formations", "book-svgrepo-com.svg", [SALARIE]],
     "projets.php"         => ["nav.mes_projets", "pencil-square-svgrepo-com.svg", [PARTICULIER, PROFESSIONNEL]],
     "conseils.php"        => ["nav.conseils", "news-svgrepo-com.svg", [PARTICULIER, SALARIE]],
     "forums.php"          => ["nav.forums", "message-square-shield-svgrepo-com.svg", [PARTICULIER]],
@@ -21,10 +22,7 @@ $pages = [
     "mon-compte.php"      => ["nav.mon_compte", "people-svgrepo-com.svg", [PARTICULIER, PROFESSIONNEL, SALARIE]],
 ];
 
-$pagesHorsMenu = [
-    "creer-evenement.php" => [SALARIE],
-    "creer-atelier.php"   => [SALARIE],
-];
+$pagesHorsMenu = [];
 
 $pageCourante = basename($_SERVER["SCRIPT_NAME"]);
 $rolesAutorises = $pages[$pageCourante][2] ?? $pagesHorsMenu[$pageCourante];

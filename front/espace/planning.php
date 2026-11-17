@@ -55,7 +55,7 @@ $titrePage = "nav.mon_planning";
                     <div class="evenements">
                         <template v-for="e in entreesDuJour(index)" :key="e.type + (e.id || e.inscription_id)">
                             <a v-if="roleConnecte() === 'salarie'" class="evenement"
-                                :href="(e.type === 'atelier' ? 'creer-atelier.php' : 'creer-evenement.php') + '?id=' + e.id">
+                                :href="(e.type === 'atelier' ? 'ateliers.php' : 'evenements.php') + '?modifier=' + e.id">
                                 <span class="evenement-titre">{{ e.titre }}</span>
                                 <span class="evenement-heure">{{ formaterHeure(e.date_debut) }} · {{ formaterStatut(e.statut) }}</span>
                             </a>
@@ -71,7 +71,7 @@ $titrePage = "nav.mon_planning";
         </main>
     </div>
 
-    <script src="js/planning.js"></script>
+    <script src="<?= ressource("js/planning.js") ?>"></script>
 </body>
 
 </html>

@@ -697,6 +697,7 @@
         "depots": "Container drop-offs",
         "evenements": "Events",
         "finances": "Finances",
+        "formations": "Training courses",
         "forums": "Forums",
         "langues": "Languages",
         "mes_annonces": "My listings",
@@ -787,6 +788,15 @@
             "modifier": "Edit event",
             "retour": "Back to my events",
             "titre": "My events"
+        },
+        "formations": {
+            "aucune": "No training course yet.",
+            "creer": "Create a training course",
+            "erreur_chargement": "Error while loading training courses",
+            "materiel": "Required equipment",
+            "modifier": "Edit the training course",
+            "places": "Number of seats",
+            "titre": "My training courses"
         },
         "planning": {
             "annee": "Year",

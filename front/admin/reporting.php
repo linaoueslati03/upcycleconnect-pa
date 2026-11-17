@@ -274,8 +274,8 @@ $titrePage = "nav.reporting";
     </div>
 
     <script src="https://unpkg.com/chart.js@4.4.7/dist/chart.umd.js"></script>
-    <script src="js/periode.js"></script>
-    <script src="js/reporting.js"></script>
+    <script src="<?= ressource("js/periode.js") ?>"></script>
+    <script src="<?= ressource("js/reporting.js") ?>"></script>
 </body>
 
 </html>

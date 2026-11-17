@@ -70,7 +70,7 @@ $titrePage = "nav.accueil";
         </div>
     </div>
 
-    <script src="js/tableau-de-bord.js"></script>
+    <script src="<?= ressource("js/tableau-de-bord.js") ?>"></script>
 </body>
 
 </html>

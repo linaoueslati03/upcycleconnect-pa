@@ -17,6 +17,7 @@ $titrePage = "nav.conteneurs";
 
             <div class="page-header">
                 <h1>{{ $t('admin.conteneurs.titre') }}</h1>
+                <button class="btn-primary" @click="ouvrirAjout">+ {{ $t('admin.conteneurs.ajouter') }}</button>
             </div>
 
             <p class="discret">{{ $t('admin.conteneurs.explication') }}</p>
@@ -31,12 +32,6 @@ $titrePage = "nav.conteneurs";
             </div>
 
             <section class="carte section-categories">
-                <form class="ajout-categorie" @submit.prevent="ajouter">
-                    <input type="text" v-model="nouveauSite" :placeholder="$t('admin.conteneurs.nouveau_site')"
-                        :aria-label="$t('admin.conteneurs.nouveau_site')" required>
-                    <button type="submit" class="button-submit">{{ $t('admin.conteneurs.ajouter') }}</button>
-                </form>
-
                 <p v-if="conteneursFiltres.length === 0">{{ $t('admin.conteneurs.aucun') }}</p>
                 <table v-else class="tableau">
                     <thead>
@@ -73,8 +68,22 @@ $titrePage = "nav.conteneurs";
                 </table>
             </section>
 
-            <section v-if="changement.conteneur" class="carte section-categories">
-                <h2>{{ $t('admin.conteneurs.changer_statut_de', { site: changement.conteneur.site, id: changement.conteneur.id }) }}</h2>
+            <fenetre-modale :ouverte="ajoutOuvert" :titre="$t('admin.conteneurs.ajouter')" @fermer="ajoutOuvert = false">
+                <form @submit.prevent="ajouter">
+                    <div class="form-group">
+                        <label for="nouveau-site">{{ $t('commun.site') }}</label>
+                        <input id="nouveau-site" type="text" v-model="nouveauSite" :placeholder="$t('admin.conteneurs.nouveau_site')" required>
+                    </div>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('admin.conteneurs.ajouter') }}</button>
+                        <button type="button" class="button-draft" @click="ajoutOuvert = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
+            </fenetre-modale>
+
+            <fenetre-modale :ouverte="changementOuvert" @fermer="fermerChangement"
+                :titre="changement.conteneur ? $t('admin.conteneurs.changer_statut_de', { site: changement.conteneur.site, id: changement.conteneur.id }) : ''">
                 <p v-if="changement.conteneur.depot_id" class="erreur">{{ $t('admin.conteneurs.alerte_depot_en_cours') }}</p>
 
                 <form @submit.prevent="enregistrerStatut">
@@ -91,12 +100,13 @@ $titrePage = "nav.conteneurs";
                         <input id="motif" type="text" v-model="changement.motif" required
                             :placeholder="$t('admin.conteneurs.motif_exemple')">
                     </div>
-                    <div class="boutons-formulaire">
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
                         <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
-                        <button type="button" class="lien-action" @click="fermerChangement">{{ $t('commun.annuler') }}</button>
+                        <button type="button" class="button-draft" @click="fermerChangement">{{ $t('commun.annuler') }}</button>
                     </div>
                 </form>
-            </section>
+            </fenetre-modale>
 
             <section v-if="historique.conteneur" class="carte section-categories">
                 <h2>{{ $t('admin.conteneurs.historique_de', { site: historique.conteneur.site, id: historique.conteneur.id }) }}</h2>
@@ -132,7 +142,7 @@ $titrePage = "nav.conteneurs";
         </main>
     </div>
 
-    <script src="js/conteneurs.js"></script>
+    <script src="<?= ressource("js/conteneurs.js") ?>"></script>
 </body>
 
 </html>

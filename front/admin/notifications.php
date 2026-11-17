@@ -17,11 +17,12 @@ $titrePage = "nav.notifications";
 
             <div class="page-header">
                 <h1>{{ $t('admin.notifications.titre') }}</h1>
+                <button class="btn-primary" @click="ouvrirFormulaire">+ {{ $t('admin.notifications.nouvelle') }}</button>
             </div>
             <p class="discret">{{ $t('admin.notifications.introduction') }}</p>
+            <p v-if="resultat && !formulaireOuvert" :class="resultat.statut === 'envoyee' ? 'succes' : 'erreur'">{{ messageResultat }}</p>
 
-            <section class="carte section-categories">
-                <h2>{{ $t('admin.notifications.nouvelle') }}</h2>
+            <fenetre-modale :ouverte="formulaireOuvert" :titre="$t('admin.notifications.nouvelle')" @fermer="formulaireOuvert = false" large>
                 <form class="formulaire-notification" @submit.prevent="envoyer">
                     <div class="form-group">
                         <label for="cible">{{ $t('admin.notifications.cible') }}</label>
@@ -97,7 +98,7 @@ $titrePage = "nav.notifications";
                         </button>
                     </div>
                 </form>
-            </section>
+            </fenetre-modale>
 
             <section class="carte section-categories">
                 <h2>{{ $t('admin.notifications.historique') }}</h2>
@@ -138,7 +139,7 @@ $titrePage = "nav.notifications";
         </main>
     </div>
 
-    <script src="js/notifications.js"></script>
+    <script src="<?= ressource("js/notifications.js") ?>"></script>
 </body>
 
 </html>

@@ -56,7 +56,7 @@ $titrePage = "nav.score";
         </main>
     </div>
 
-    <script src="js/score.js"></script>
+    <script src="<?= ressource("js/score.js") ?>"></script>
 </body>
 
 </html>

@@ -12,6 +12,7 @@ demarrerApp({
             parPage: 20,
             motDePasseTemporaire: null,
             formulaire: { ...FORMULAIRE_VIDE },
+            formulaireOuvert: false,
             prediction: null,
             erreur: "",
             erreurListe: "",
@@ -96,6 +97,11 @@ demarrerApp({
             };
         },
 
+        ouvrirNouveau() {
+            this.reinitialiserFormulaire();
+            this.formulaireOuvert = true;
+        },
+
         modifier(utilisateur) {
             this.formulaire = {
                 id: utilisateur.id,
@@ -107,6 +113,7 @@ demarrerApp({
                 langue_preferee_id: utilisateur.langue_preferee_id,
             };
             this.erreur = "";
+            this.formulaireOuvert = true;
             this.chargerPrediction(utilisateur);
         },
 
@@ -135,7 +142,7 @@ demarrerApp({
                 return;
             }
 
-            this.reinitialiserFormulaire();
+            this.formulaireOuvert = false;
             this.chargerUtilisateurs();
         },
 

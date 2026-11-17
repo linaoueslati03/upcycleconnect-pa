@@ -65,7 +65,7 @@ $titrePage = "nav.plannings";
         </main>
     </div>
 
-    <script src="js/plannings.js"></script>
+    <script src="<?= ressource("js/plannings.js") ?>"></script>
 </body>
 
 </html>

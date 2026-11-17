@@ -3,7 +3,8 @@ demarrerApp({
         return {
             profil: { abonnement: "Freemium" },
             filtreAlerte: { materiau: "", localisation: "" },
-            messageAlerte: ""
+            messageAlerte: "",
+            alerteOuverte: false,
         };
     },
     mounted() {
@@ -22,6 +23,7 @@ demarrerApp({
             this.profil.abonnement = "Premium";
         },
         enregistrerAlerte() {
+            this.alerteOuverte = false;
             this.messageAlerte = "Alerte priorisée configurée avec succès !";
             setTimeout(() => {
                 this.messageAlerte = "";

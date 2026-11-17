@@ -17,6 +17,7 @@ $titrePage = "nav.langues";
 
             <div class="page-header">
                 <h1>{{ $t('admin.langues.titre') }}</h1>
+                <button class="btn-primary" @click="ouvrirAjout">+ {{ $t('admin.langues.ajouter') }}</button>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
@@ -60,8 +61,20 @@ $titrePage = "nav.langues";
                 </section>
 
                 <div class="carte carte-formulaire">
-                    <h2>{{ $t('admin.langues.ajouter') }}</h2>
+                    <h2>{{ $t('admin.langues.procedure_titre') }}</h2>
+                    <ol>
+                        <li>{{ $t('admin.langues.etape_1') }}</li>
+                        <li>
+                            {{ $t('admin.langues.etape_2') }}
+                            <a href="../assets/locales/fr.json" download="modele-traduction.json">{{ $t('admin.langues.telecharger_modele') }}</a>
+                        </li>
+                        <li>{{ $t('admin.langues.etape_3') }}</li>
+                    </ol>
+                </div>
 
+            </div>
+
+            <fenetre-modale :ouverte="ajoutOuvert" :titre="$t('admin.langues.ajouter')" @fermer="ajoutOuvert = false">
                     <form @submit.prevent="ajouter">
                         <div class="form-group">
                             <label for="code">{{ $t('admin.langues.code') }}</label>
@@ -76,26 +89,15 @@ $titrePage = "nav.langues";
 
                         <div class="form-buttons">
                             <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                            <button type="button" class="button-draft" @click="ajoutOuvert = false">{{ $t('commun.annuler') }}</button>
                         </div>
                     </form>
-
-                    <h2>{{ $t('admin.langues.procedure_titre') }}</h2>
-                    <ol>
-                        <li>{{ $t('admin.langues.etape_1') }}</li>
-                        <li>
-                            {{ $t('admin.langues.etape_2') }}
-                            <a href="../assets/locales/fr.json" download="modele-traduction.json">{{ $t('admin.langues.telecharger_modele') }}</a>
-                        </li>
-                        <li>{{ $t('admin.langues.etape_3') }}</li>
-                    </ol>
-                </div>
-
-            </div>
+            </fenetre-modale>
 
         </main>
     </div>
 
-    <script src="js/langues.js"></script>
+    <script src="<?= ressource("js/langues.js") ?>"></script>
 </body>
 
 </html>

@@ -22,10 +22,9 @@ $titrePage = "nav.conseils";
 
             <section v-if="roleConnecte() === 'salarie'" class="section">
                 <h2>{{ $t('salaries.articles.titre') }}</h2>
-                <p v-if="erreurArticle" class="erreur">{{ erreurArticle }}</p>
+                <p v-if="erreurArticle && !formulaireVisible" class="erreur">{{ erreurArticle }}</p>
 
-                <div v-if="formulaireVisible" class="form-article">
-                    <h2>{{ formulaire.id ? $t('salaries.articles.modifier') : $t('salaries.articles.nouveau') }}</h2>
+                <fenetre-modale :ouverte="formulaireVisible" :titre="formulaire.id ? $t('salaries.articles.modifier') : $t('salaries.articles.nouveau')" @fermer="formulaireVisible = false" large>
 
                     <div class="form-group">
                         <label for="titre">{{ $t('commun.titre') }}</label>
@@ -48,11 +47,14 @@ $titrePage = "nav.conseils";
                         <textarea id="texte" :placeholder="$t('salaries.articles.placeholder_texte')" v-model="formulaire.contenu"></textarea>
                     </div>
 
+                    <p v-if="erreurArticle" class="erreur">{{ erreurArticle }}</p>
+
                     <div class="form-buttons">
                         <button type="button" class="button-draft" @click="enregistrer('brouillon')">{{ $t('commun.enregistrer_brouillon') }}</button>
                         <button type="button" class="button-submit" @click="enregistrer('publie')">{{ $t('commun.publier') }}</button>
+                        <button type="button" class="button-draft" @click="formulaireVisible = false">{{ $t('commun.annuler') }}</button>
                     </div>
-                </div>
+                </fenetre-modale>
 
                 <div class="evenements">
                     <div v-for="a in articles" :key="a.id" class="evenement-row">
@@ -102,7 +104,7 @@ $titrePage = "nav.conseils";
         </main>
     </div>
 
-    <script src="js/conseils.js"></script>
+    <script src="<?= ressource("js/conseils.js") ?>"></script>
 </body>
 
 </html>

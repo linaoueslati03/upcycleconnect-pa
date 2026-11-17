@@ -5,6 +5,7 @@ demarrerApp({
             fichiers: {},
             langueParDefaut: LANGUE_PAR_DEFAUT,
             formulaire: { code: "", libelle: "" },
+            ajoutOuvert: false,
             erreur: "",
             succes: "",
             erreurFormulaire: "",
@@ -37,6 +38,12 @@ demarrerApp({
             }
         },
 
+        ouvrirAjout() {
+            this.formulaire = { code: "", libelle: "" };
+            this.erreurFormulaire = "";
+            this.ajoutOuvert = true;
+        },
+
         async ajouter() {
             this.erreurFormulaire = "";
             const reponse = await appelerApi("/admin/langues", {
@@ -47,7 +54,7 @@ demarrerApp({
                 this.erreurFormulaire = (await reponse.json()).erreur;
                 return;
             }
-            this.formulaire = { code: "", libelle: "" };
+            this.ajoutOuvert = false;
             this.chargerLangues();
         },
 

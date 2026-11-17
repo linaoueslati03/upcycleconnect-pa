@@ -1,4 +1,4 @@
-const EDITION_VIDE = { type: null, id: null, libelle: "" };
+const EDITION_VIDE = { ouvert: false, type: null, categorie: null, libelle: "" };
 
 demarrerApp({
     data() {
@@ -8,6 +8,8 @@ demarrerApp({
                 materiaux: { liste: [], nouvelle: "", lecture: "/categories", ecriture: "/admin/categories/materiaux" },
             },
             edition: { ...EDITION_VIDE },
+            ajoutOuvert: false,
+            ajoutType: "prestations",
             erreur: "",
         };
     },
@@ -28,6 +30,13 @@ demarrerApp({
             groupe.liste = await reponse.json();
         },
 
+        ouvrirAjout(type) {
+            this.ajoutType = type;
+            this.groupes[type].nouvelle = "";
+            this.erreur = "";
+            this.ajoutOuvert = true;
+        },
+
         async ajouter(type) {
             this.erreur = "";
             const groupe = this.groupes[type];
@@ -40,15 +49,17 @@ demarrerApp({
                 return;
             }
             groupe.nouvelle = "";
+            this.ajoutOuvert = false;
             this.charger(type);
         },
 
         commencerEdition(type, categorie) {
-            this.edition = { type, id: categorie.id, libelle: categorie.libelle };
+            this.erreur = "";
+            this.edition = { ouvert: true, type, categorie, libelle: categorie.libelle };
         },
 
         annulerEdition() {
-            this.edition = { ...EDITION_VIDE };
+            this.edition.ouvert = false;
         },
 
         async enregistrer(type, categorie, libelle, actif) {

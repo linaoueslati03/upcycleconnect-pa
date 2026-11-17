@@ -52,7 +52,7 @@ $titrePage = "nav.catalogue";
         </main>
     </div>
 
-    <script src="js/catalogue.js"></script>
+    <script src="<?= ressource("js/catalogue.js") ?>"></script>
 </body>
 
 </html>

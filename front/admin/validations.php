@@ -48,27 +48,31 @@ $titrePage = "nav.validations";
 
                 <p class="description-offre">{{ o.description || '—' }}</p>
 
-                <form v-if="refus.cle === o.type + o.id" @submit.prevent="decider(o, 'refuser')">
-                    <div class="form-group">
-                        <label :for="'motif-' + o.type + o.id">{{ $t('admin.validations.motif_refus') }}</label>
-                        <input :id="'motif-' + o.type + o.id" type="text" v-model="refus.motif" required
-                            :placeholder="$t('admin.validations.motif_exemple')">
-                    </div>
-                    <div class="boutons-formulaire">
-                        <button type="submit" class="button-submit bouton-refus">{{ $t('admin.validations.confirmer_refus') }}</button>
-                        <button type="button" class="lien-action" @click="annulerRefus">{{ $t('commun.annuler') }}</button>
-                    </div>
-                </form>
-                <div v-else class="boutons-formulaire">
+                <div class="boutons-formulaire">
                     <button class="button-submit" @click="decider(o, 'valider')">{{ $t('commun.valider') }}</button>
                     <button class="lien-action lien-supprimer" @click="commencerRefus(o)">{{ $t('commun.refuser') }}</button>
                 </div>
             </section>
 
+            <fenetre-modale :ouverte="refus.ouvert" :titre="$t('commun.refuser') + (refus.offre ? ' · ' + refus.offre.titre : '')" @fermer="annulerRefus">
+                <form @submit.prevent="decider(refus.offre, 'refuser')">
+                    <div class="form-group">
+                        <label for="motif-refus">{{ $t('admin.validations.motif_refus') }}</label>
+                        <input id="motif-refus" type="text" v-model="refus.motif" required
+                            :placeholder="$t('admin.validations.motif_exemple')">
+                    </div>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit bouton-refus">{{ $t('admin.validations.confirmer_refus') }}</button>
+                        <button type="button" class="button-draft" @click="annulerRefus">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
+            </fenetre-modale>
+
         </main>
     </div>
 
-    <script src="js/validations.js"></script>
+    <script src="<?= ressource("js/validations.js") ?>"></script>
 </body>
 
 </html>

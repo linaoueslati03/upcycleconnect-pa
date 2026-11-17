@@ -17,7 +17,7 @@ $titrePage = "nav.utilisateurs";
 
             <div class="page-header">
                 <h1>{{ $t('admin.utilisateurs.titre') }}</h1>
-                <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ $t('admin.utilisateurs.nouveau') }}</button>
+                <button class="btn-primary" @click="ouvrirNouveau">+ {{ $t('admin.utilisateurs.nouveau') }}</button>
             </div>
 
             <form class="filtres-utilisateurs" @submit.prevent="rechercher">
@@ -93,8 +93,7 @@ $titrePage = "nav.utilisateurs";
                     </div>
                 </section>
 
-                <div class="carte carte-formulaire">
-                    <h2>{{ formulaire.id ? $t('admin.utilisateurs.modifier') : $t('admin.utilisateurs.nouveau') }}</h2>
+                <fenetre-modale :ouverte="formulaireOuvert" :titre="formulaire.id ? $t('admin.utilisateurs.modifier') : $t('admin.utilisateurs.nouveau')" @fermer="formulaireOuvert = false">
 
                     <div v-if="prediction" class="bloc-prediction">
                         <span class="discret">{{ $t('admin.utilisateurs.prediction') }}</span>
@@ -139,17 +138,17 @@ $titrePage = "nav.utilisateurs";
 
                         <div class="form-buttons">
                             <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
-                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">{{ $t('commun.annuler') }}</button>
+                            <button type="button" class="button-draft" @click="formulaireOuvert = false">{{ $t('commun.annuler') }}</button>
                         </div>
                     </form>
-                </div>
+                </fenetre-modale>
 
             </div>
 
         </main>
     </div>
 
-    <script src="js/utilisateurs.js"></script>
+    <script src="<?= ressource("js/utilisateurs.js") ?>"></script>
 </body>
 
 </html>

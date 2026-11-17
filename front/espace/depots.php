@@ -17,10 +17,13 @@ $titrePage = "nav.depots";
 
             <div class="page-header">
                 <h1>{{ $t('depots.titre') }}</h1>
+                <button v-if="roleConnecte() === 'particulier'" class="btn-primary" @click="ouvrirDemande">+ {{ $t('depots.demander') }}</button>
+                <button v-if="roleConnecte() === 'professionnel'" class="btn-primary" @click="ouvrirScanner">Scanner un objet</button>
             </div>
 
             <div v-if="roleConnecte() === 'particulier'">
-                <div class="deux-colonnes">
+                <p v-if="confirmation && !demandeOuverte" class="succes">{{ $t('depots.demande_envoyee') }}</p>
+                <div>
 
                     <section>
                         <h2>{{ $t('depots.suivi') }}</h2>
@@ -46,8 +49,7 @@ $titrePage = "nav.depots";
                         </div>
                     </section>
 
-                    <div class="carte">
-                        <h2>{{ $t('depots.demander') }}</h2>
+                    <fenetre-modale :ouverte="demandeOuverte" :titre="$t('depots.demander')" @fermer="demandeOuverte = false">
                         <p class="discret">{{ $t('depots.explication') }}</p>
 
                         <form @submit.prevent="demanderDepot">
@@ -68,11 +70,12 @@ $titrePage = "nav.depots";
                             </div>
 
                             <p v-if="erreur" class="erreur">{{ erreur }}</p>
-                            <p v-if="confirmation" class="succes">{{ $t('depots.demande_envoyee') }}</p>
-
-                            <button type="submit" class="button-submit">{{ $t('depots.envoyer') }}</button>
+                            <div class="form-buttons">
+                                <button type="submit" class="button-submit">{{ $t('depots.envoyer') }}</button>
+                                <button type="button" class="button-draft" @click="demandeOuverte = false">{{ $t('commun.annuler') }}</button>
+                            </div>
                         </form>
-                    </div>
+                    </fenetre-modale>
 
                 </div>
             </div>
@@ -103,38 +106,41 @@ $titrePage = "nav.depots";
             </div>
 
             <div v-if="roleConnecte() === 'professionnel'">
-                <div class="mise-en-page-admin">
-                    <section class="carte">
-                        <h2>Scanner un objet en conteneur</h2>
-                        <p>Entrez le code de l'objet pour vérifier sa disponibilité et le récupérer.</p>
-                    
-                        <form @submit.prevent="verifierCode">
-                            <div class="form-group">
-                                <label for="code_objet">Code de l'objet (Scan ou manuel)</label>
-                                <input id="code_objet" type="text" v-model="codeObjet" required placeholder="Ex: OBJ-12345">
-                            </div>
-                            <button type="submit" class="btn-primary">Vérifier le code</button>
-                        </form>
+                <section class="carte">
+                    <h2>Scanner un objet en conteneur</h2>
+                    <p>Entrez le code de l'objet pour vérifier sa disponibilité et le récupérer.</p>
+                    <button class="btn-primary" @click="ouvrirScanner">Scanner un objet</button>
+                    <p v-if="succes && !scannerOuvert" class="succes">{{ succes }}</p>
+                </section>
 
-                        <p v-if="erreur" class="erreur" style="margin-top: 15px;">{{ erreur }}</p>
-                    </section>
+                <fenetre-modale :ouverte="scannerOuvert" titre="Scanner un objet en conteneur" @fermer="scannerOuvert = false">
+                    <form @submit.prevent="verifierCode">
+                        <div class="form-group">
+                            <label for="code_objet">Code de l'objet (Scan ou manuel)</label>
+                            <input id="code_objet" type="text" v-model="codeObjet" required placeholder="Ex: OBJ-12345">
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="button-submit">Vérifier le code</button>
+                        </div>
+                    </form>
 
-                    <section v-if="objetTrouve" class="carte" style="margin-top: 20px; background-color: #f9f9f9; border-left: 4px solid #4CAF50;">
-                        <h2>Objet trouvé</h2>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+
+                    <div v-if="objetTrouve" class="objet-trouve">
+                        <h3>Objet trouvé</h3>
                         <p><strong>Type :</strong> {{ objetTrouve.type }}</p>
                         <p><strong>Description :</strong> {{ objetTrouve.description }}</p>
                         <p><strong>Conteneur / Box :</strong> {{ objetTrouve.conteneur }}</p>
-                    
-                        <button @click="confirmerRecuperation" class="btn-primary" style="margin-top: 15px; background-color: #4CAF50;">Confirmer la récupération</button>
-                        <p v-if="succes" style="color: green; margin-top: 10px; font-weight: bold;">{{ succes }}</p>
-                    </section>
-                </div>
+                        <button @click="confirmerRecuperation" class="button-submit">Confirmer la récupération</button>
+                    </div>
+                    <p v-if="succes" class="succes">{{ succes }}</p>
+                </fenetre-modale>
             </div>
 
         </main>
     </div>
 
-    <script src="js/depots.js"></script>
+    <script src="<?= ressource("js/depots.js") ?>"></script>
 </body>
 
 </html>

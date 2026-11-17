@@ -1,3 +1,34 @@
+/* =========================================================
+   Charte UpcycleConnect
+   - bleu nuit du panneau de la page de connexion pour le menu
+   - vert de la charte pour les boutons d'action
+   - fonds clairs, bandeau de titre et panneaux beiges inspirés des maquettes
+   ========================================================= */
+
+:root {
+    --vert: #2E7D32;
+    --vert-fonce: #256628;
+    --vert-clair: #eaf2e8;
+    --nuit: #222b3c;
+    --nuit-clair: #36435a;
+    --bleu: #1F3864;
+    --brun: #8D6E63;
+    --texte: #292d32;
+    --texte-doux: #6f6a62;
+    --fond: #ffffff;
+    --fond-clair: #f7f6f4;
+    --beige: #e8e4dc;
+    --beige-fonce: #dcd6ca;
+    --bordure: #e6e3dd;
+    --rouge: #c62828;
+    --ombre-carte: 0 4px 15px rgba(0, 0, 0, 0.07);
+    --ombre-champ: 0 2px 7px rgba(0, 0, 0, 0.10);
+    --rayon: 5px;
+    --police-titres: "Poppins", sans-serif;
+    --police-texte: "Inter", sans-serif;
+    --largeur-menu: 270px;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -9,422 +40,603 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: "Inter", sans-serif;
-    background: #e0dbcc;
+    font-family: var(--police-texte);
+}
+
+/* La page de connexion et l'inscription gardent leur propre feuille (connexion.css) */
+:where(body:not(.page-connexion)) {
+    background: var(--fond);
+    color: var(--texte);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+:where(body:not(.page-connexion)) :is(h1, h2, h3) {
+    font-family: var(--police-titres);
+    line-height: 1.25;
+}
+
+:where(body:not(.page-connexion)) a {
+    color: var(--vert);
+}
+
+/* Règles communes dont héritaient la connexion et l'inscription avant la refonte :
+   conservées à l'identique pour que ces deux pages ne changent pas. */
+:where(.page-connexion) {
     color: #1F3864;
 }
-h1,
-h2,
-h3 {
+
+:where(.page-connexion) :is(h1, h2, h3) {
     font-family: "Merriweather", serif;
 }
+
+:where(.page-connexion) .form-group label {
+    color: #1F3864;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+:where(.page-connexion) .form-group :is(input, textarea, select) {
+    padding: 12px 14px;
+    border: 1px solid rgba(31, 56, 100, 0.18);
+    border-radius: 7px;
+    background: #f7f5ef;
+    color: #1F3864;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+:where(.page-connexion) .form-group :is(input, textarea, select):focus {
+    border-color: #2E7D32;
+}
+
+:where(.page-connexion) .button-submit {
+    padding: 11px 18px;
+    border: 1px solid #2E7D32;
+    border-radius: 7px;
+    background: #2E7D32;
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+:where(.page-connexion) .button-submit:hover {
+    background: #256628;
+    border-color: #256628;
+}
+
+/* ---------- Menu latéral (même bleu nuit que la page de connexion) ---------- */
+
 aside {
     position: fixed;
     left: 0;
     top: 0;
-
-    width: 270px;
+    z-index: 50;
+    width: var(--largeur-menu);
     height: 100vh;
-
-    padding: 35px 25px 25px;
-
-    background: #f7f5ef;
-
-    border-right: 1px solid rgba(31, 56, 100, 0.08);
-
+    padding: 32px 22px 22px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: radial-gradient(ellipse 120% 60% at 50% 45%, var(--nuit-clair) 0%, var(--nuit) 100%);
+    color: #fff;
 }
 
 #toggle-button {
     flex-shrink: 0;
     width: 100%;
     padding: 0;
-
-    border: none;
-    background: transparent;
-
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    border: none;
+    background: transparent;
     cursor: pointer;
 }
 
 #toggle-button img {
-    width: 115px;
-    height: auto;
     display: block;
+    width: 96px;
+    height: auto;
+}
+
+#toggle-button::after {
+    content: "UpcycleConnect";
+    margin-top: 10px;
+    color: #fff;
+    font-family: var(--police-titres);
+    font-size: 18px;
+    font-weight: 700;
 }
 
 aside ul {
     width: 100%;
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
-
-    list-style: none;
-
+    margin: 36px 0 0;
     padding: 0;
-    margin: 70px 0 0;
+    overflow-y: auto;
+    list-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }
 
 aside li {
     width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
 }
 
 .nav-button {
     width: 100%;
-
-    padding: 12px 15px;
-
-    border: none;
-    border-radius: 8px;
-
-    background: transparent;
-
+    padding: 9px 14px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    color: #1F3864;
-
-    font-family: "Inter", sans-serif;
+    justify-content: flex-start;
+    gap: 14px;
+    border: none;
+    border-radius: var(--rayon);
+    background: transparent;
+    color: #fff;
+    font-family: var(--police-texte);
     font-size: 14px;
     font-weight: 500;
-
     cursor: pointer;
-
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 .nav-button img {
-    width: 30px;
-    height: 30px;
-
+    flex-shrink: 0;
+    width: 21px;
+    height: 21px;
     object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
 }
 
 .nav-button span {
-    color: #2E7D32;
-
-    font-family: "Poppins", sans-serif;
+    color: rgba(255, 255, 255, 0.88);
+    font-family: var(--police-texte);
     font-size: 14px;
-    font-weight: 600;
-
-    text-align: center;
+    font-weight: 500;
+    text-align: left;
 }
 
-.nav-button:hover {
-    background: rgba(46, 125, 50, 0.07);
+.nav-button:hover,
+.nav-button:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
 }
 
-.nav-button:hover span {
-    color: #1F3864;
+.nav-button:hover span,
+.nav-button:focus-visible span {
+    color: #fff;
+}
+
+.nav-button:hover img {
+    opacity: 1;
 }
 
 .pied-menu {
     flex-shrink: 0;
+    width: 100%;
     padding-top: 16px;
-
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     gap: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 #selecteur-langue {
-    padding: 6px 10px;
-
-    border: 1px solid rgba(31, 56, 100, 0.15);
-    border-radius: 6px;
-    background: #fff;
-
-    color: #1F3864;
-    font-family: "Inter", sans-serif;
+    padding: 6px 4px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-family: var(--police-texte);
     font-size: 14px;
-
     cursor: pointer;
+}
+
+#selecteur-langue option {
+    color: var(--texte);
 }
 
 #logout-button {
     padding: 8px;
-
-    border: none;
-    background: transparent;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
+    border: none;
+    border-radius: var(--rayon);
+    background: transparent;
     cursor: pointer;
 }
 
 #logout-button img {
-    width: 28px;
-    height: 28px;
-
     display: block;
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
 }
 
 #logout-button:hover {
-    opacity: 0.65;
+    background: rgba(255, 255, 255, 0.08);
 }
 
+/* ---------- Zone de contenu ---------- */
+
+main,
 #main-content {
-    margin-left: 270px;
-
     min-height: 100vh;
-
-    padding: 60px 80px;
+    margin-left: var(--largeur-menu);
+    padding: 0 56px 56px;
 }
 
-#main-content h1 {
-    margin: 0 0 40px;
+/* Bandeau de titre clair, en capitales, comme « Nos publications » */
+.page-header,
+.planning-header {
+    margin: 0 -56px 40px;
+    padding: 46px 56px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    background: var(--fond-clair);
+}
 
-    color: #1F3864;
+main h1,
+#main-content h1,
+.page-header h1,
+.planning-header h1 {
+    margin: 0;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
 
-    font-family: "Poppins", sans-serif;
+/* Titre posé directement dans la page, sans bandeau */
+main > h1:first-child,
+#main-content > h1:first-child {
+    margin: 0 -56px 40px;
+    padding: 46px 56px 40px;
+    background: var(--fond-clair);
+}
 
-    font-size: 32px;
-    font-weight: 600;
+/* ---------- Cartes ---------- */
+
+.carte {
+    padding: 26px 28px;
+    border-radius: var(--rayon);
+    background: var(--fond);
+    box-shadow: var(--ombre-carte);
+}
+
+:where(main, #main-content) h2 {
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+a.carte {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.carte h2,
+.carte h3 {
+    margin-top: 0;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-weight: 500;
+}
+
+.carte h2 {
+    margin-bottom: 18px;
+    font-size: 17px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.carte h3 {
+    font-size: 16px;
+}
+
+/* Panneau latéral beige, comme « Alerte mail » sur la maquette */
+.carte-formulaire {
+    background: var(--beige);
+    box-shadow: none;
+}
+
+.mise-en-page-admin {
+    display: flex;
+    gap: 36px;
+    align-items: flex-start;
+}
+
+.mise-en-page-admin > section {
+    flex: 7;
+    min-width: 0;
+    overflow-x: auto;
+}
+
+.mise-en-page-admin > .carte-formulaire {
+    flex: 3;
+    min-width: 0;
+}
+
+.section {
+    margin-bottom: 35px;
+}
+
+/* ---------- Formulaires (champs comme la page de connexion) ---------- */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+:where(body:not(.page-connexion)) .form-group {
+    margin-bottom: 16px;
+}
+
+:where(body:not(.page-connexion)) .form-group label {
+    color: var(--texte);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+:where(body:not(.page-connexion)) :where(input:not([type="checkbox"], [type="radio"], [type="file"], [type="range"], [type="color"]), textarea, select) {
+    max-width: 100%;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #eee;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: var(--ombre-champ);
+    color: var(--texte);
+    font-family: var(--police-texte);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:where(.form-group) :where(input:not([type="checkbox"], [type="radio"]), textarea, select) {
+    width: 100%;
+}
+
+/* Case à cocher et son libellé sur la même ligne */
+.form-group label:has(> input[type="checkbox"]),
+.form-group label:has(> input[type="radio"]) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+:where(body:not(.page-connexion)) :where(input, textarea)::placeholder {
+    color: #b8b8b8;
+}
+
+:where(body:not(.page-connexion)) :where(input, textarea, select):focus {
+    border-color: var(--vert);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--vert);
+}
+
+:where(body:not(.page-connexion)) textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+fieldset {
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+legend {
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-weight: 500;
 }
 
 #form-evenement {
     width: 100%;
     max-width: 700px;
-
     display: flex;
     flex-direction: column;
-
-    gap: 22px;
+    gap: 6px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-
-    gap: 8px;
+.form-article {
+    max-width: 800px;
 }
 
-.form-group label {
-    color: #1F3864;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-
-    padding: 12px 14px;
-
-    border: 1px solid rgba(31, 56, 100, 0.18);
-    border-radius: 7px;
-
-    background: #f7f5ef;
-
-    color: #1F3864;
-
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-
-    outline: none;
-
-    transition: border-color 0.2s ease;
-}
-
-.form-group textarea {
-    min-height: 120px;
-
-    resize: vertical;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    border-color: #2E7D32;
+.form-article textarea {
+    min-height: 300px;
 }
 
 .form-buttons {
+    margin-top: 12px;
     display: flex;
-
+    flex-wrap: wrap;
     gap: 12px;
-
-    margin-top: 10px;
 }
 
-.button-draft,
-.button-submit {
-    padding: 11px 18px;
+/* ---------- Boutons (vert de la charte) ---------- */
 
-    border-radius: 7px;
-
-    font-family: "Inter", sans-serif;
-
-    font-size: 13px;
+:where(body:not(.page-connexion)) :is(.button-draft, .button-submit, .btn-primary) {
+    min-height: 44px;
+    padding: 10px 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-family: var(--police-texte);
+    font-size: 15px;
     font-weight: 500;
-
+    line-height: 1.2;
+    text-decoration: none;
     cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
 
-    transition: all 0.2s ease;
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary) {
+    border: 1px solid var(--vert);
+    background: var(--vert);
+    color: #fff;
+}
+
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary):hover {
+    border-color: var(--vert-fonce);
+    background: var(--vert-fonce);
 }
 
 .button-draft {
-    border: 1px solid #1F3864;
-
+    border: 1px solid var(--nuit);
     background: transparent;
-
-    color: #1F3864;
+    color: var(--nuit);
 }
 
 .button-draft:hover {
-    background: #1F3864;
-
-    color: white;
+    background: var(--nuit);
+    color: #fff;
 }
 
-.button-submit {
-    border: 1px solid #2E7D32;
-
-    background: #2E7D32;
-
-    color: white;
+.button-submit:disabled,
+.button-draft:disabled {
+    opacity: 0.5;
+    cursor: default;
 }
 
-.button-submit:hover {
-    background: #256628;
-
-    border-color: #256628;
-}
-
-#confirmation {
-    margin-top: 20px;
-
-    color: #2E7D32;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-main {
-    margin-left: 270px;
-    padding: 50px 60px;
-}
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 35px;
-}
-
-.page-header h1 {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    font-size: 32px;
-    font-weight: 600;
-    color: #1F3864;
-}
-
-.btn-primary {
-    padding: 11px 18px;
-    border-radius: 8px;
-
-    background-color: #2E7D32;
-    color: white;
-
+a.nav-button,
+a#toggle-button,
+a.btn-primary {
+    color: inherit;
     text-decoration: none;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    transition: 0.2s ease;
 }
 
-.btn-primary:hover {
-    background-color: #256628;
+a.btn-primary {
+    color: #fff;
 }
 
-.filtres {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.pill {
-    padding: 8px 15px;
-
-    border: 1px solid rgba(31, 56, 100, 0.15);
-    border-radius: 20px;
-
-    background: transparent;
-
-    color: #1F3864;
-
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-
+.lien-action {
+    margin-right: 12px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--vert);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
 }
 
+.lien-action:hover {
+    text-decoration: underline;
+}
+
+.tableau .lien-action {
+    white-space: nowrap;
+}
+
+.lien-action:disabled {
+    opacity: 0.4;
+    cursor: default;
+    text-decoration: none;
+}
+
+.lien-supprimer {
+    color: var(--rouge);
+}
+
+/* ---------- Pastilles (onglets et filtres), beiges comme sur la maquette ---------- */
+
+.filtres {
+    margin-bottom: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pill {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 999px;
+    background: var(--beige);
+    color: var(--texte);
+    font-family: var(--police-texte);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 .pill:hover {
-    border-color: #2E7D32;
-    color: #2E7D32;
+    background: var(--beige-fonce);
 }
 
 .pill.active {
-    background-color: #2E7D32;
-    border-color: #2E7D32;
-    color: white;
+    background: var(--vert);
+    color: #fff;
 }
 
-.evenements {
+/* ---------- Tableaux ---------- */
+
+.tableau {
     width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
-.evenement-row {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-
-    padding: 18px 20px;
-
-    background-color: #f7f5ef;
-
-    border: 1px solid rgba(31, 56, 100, 0.08);
-    border-radius: 10px;
+.tableau th,
+.tableau td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--bordure);
+    vertical-align: middle;
 }
 
-.evenement-titre {
-    flex: 1;
-
-    font-family: "Poppins", sans-serif;
-    font-size: 14px;
+.tableau th {
+    color: var(--texte-doux);
+    font-family: var(--police-texte);
+    font-size: 12px;
     font-weight: 600;
-
-    color: #2E7D32;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
 }
 
-.evenement-date {
-    font-size: 13px;
-    color: #8D6E63;
+.tableau tbody tr:hover {
+    background: var(--fond-clair);
 }
+
+/* ---------- Badges et textes ---------- */
 
 .badge-statut {
-    padding: 5px 10px;
-
-    border-radius: 15px;
-
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 999px;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .statut-brouillon {
@@ -439,7 +651,7 @@ main {
 
 .statut-publie {
     background-color: #d1e7dd;
-    color: #2E7D32;
+    color: var(--vert);
 }
 
 .statut-annule {
@@ -452,42 +664,80 @@ main {
     color: #555;
 }
 
-.btn-modifier {
-    color: #2E7D32;
-
+.discret {
+    color: var(--texte-doux);
     font-size: 13px;
-    font-weight: 500;
+}
 
+.succes {
+    color: var(--vert);
+    font-weight: 600;
+}
+
+.erreur {
+    color: #c62828;
+}
+
+#confirmation {
+    margin-top: 20px;
+    color: var(--vert);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ---------- Listes d'événements ---------- */
+
+.evenements,
+.ateliers {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.evenement-row,
+.atelier-row {
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    border-radius: var(--rayon);
+    background-color: var(--fond);
+    box-shadow: var(--ombre-carte);
+}
+
+.evenement-titre,
+.atelier-titre {
+    flex: 1;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.evenement-date,
+.atelier-date {
+    color: var(--brun);
+    font-size: 13px;
+}
+
+.btn-modifier {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--vert);
+    font-family: var(--police-texte);
+    font-size: 13px;
+    font-weight: 600;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .btn-modifier:hover {
     text-decoration: underline;
 }
 
-main {
-    margin-left: 270px;
-    padding: 50px 60px;
-}
-
-.planning-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 35px;
-}
-
-.planning-header h1 {
-    margin: 0;
-
-    font-family: "Inter", sans-serif;
-
-    font-size: 32px;
-    font-weight: 600;
-
-    color: #1F3864;
-}
+/* ---------- Planning ---------- */
 
 .planning-filtres {
     display: flex;
@@ -501,72 +751,54 @@ main {
 }
 
 .planning-filtres label {
-    font-size: 11px;
-    color: #8D6E63;
-}
-
-.planning-filtres select {
-    padding: 8px 12px;
-
-    border: 1px solid rgba(31, 56, 100, 0.15);
-    border-radius: 6px;
-
-    background: #f7f5ef;
-
-    color: #1F3864;
-
-    font-family: "Inter", sans-serif;
+    color: var(--texte-doux);
+    font-size: 12px;
 }
 
 .semaine-titre {
+    margin-bottom: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
-
-    margin-bottom: 25px;
 }
 
 .semaine-titre h2 {
     margin: 0;
-
-    font-family: "Inter", sans-serif;
-
+    color: var(--texte);
+    font-family: var(--police-titres);
     font-size: 20px;
     font-weight: 500;
-
-    color: #1F3864;
 }
 
 .semaine-titre button {
+    width: 38px;
+    height: 38px;
     border: none;
-
-    background: transparent;
-
-    color: #2E7D32;
-
-    font-size: 20px;
-
+    border-radius: 50%;
+    background: var(--beige);
+    color: var(--texte);
+    font-size: 18px;
     cursor: pointer;
+}
+
+.semaine-titre button:hover {
+    background: var(--beige-fonce);
 }
 
 .planning {
     display: grid;
-
     grid-template-columns: repeat(7, 1fr);
-
-    border: 1px solid rgba(31, 56, 100, 0.10);
-
-    background: #f7f5ef;
+    border-radius: var(--rayon);
+    background: var(--fond);
+    box-shadow: var(--ombre-carte);
+    overflow: hidden;
 }
 
 .jour {
     min-height: 180px;
-
     padding: 15px;
-
-    border-right: 1px solid rgba(31, 56, 100, 0.10);
+    border-right: 1px solid var(--bordure);
 }
 
 .jour:last-child {
@@ -575,69 +807,616 @@ main {
 
 .jour h3 {
     margin: 0 0 15px;
-
     padding-bottom: 10px;
-
-    border-bottom: 1px solid rgba(31, 56, 100, 0.10);
-
-    font-family: "Merriweather", serif;
-
+    border-bottom: 1px solid var(--bordure);
+    color: var(--texte);
+    font-family: var(--police-titres);
     font-size: 13px;
-    font-weight: 600;
-
-    color: #1F3864;
-
+    font-weight: 500;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .evenement {
-    padding: 10px;
-
     margin-bottom: 8px;
-
-    background: rgba(46, 125, 50, 0.08);
-
-    border-left: 3px solid #2E7D32;
-
-    border-radius: 5px;
-
-    text-decoration: none;
-
+    padding: 10px;
     display: block;
+    border-left: 3px solid var(--vert);
+    border-radius: 4px;
+    background: var(--vert-clair);
+    text-decoration: none;
 }
 
-.evenement-titre {
+.evenement .evenement-titre {
     display: block;
-
     margin-bottom: 4px;
-
-    color: #1F3864;
-
+    color: var(--texte);
     font-size: 12px;
-    font-weight: 600;
 }
 
 .evenement-heure {
-    color: #8D6E63;
-
+    color: var(--brun);
     font-size: 11px;
 }
-.form-article {
-    max-width: 800px;
+
+/* ---------- Écrans étroits ---------- */
+
+@media (max-width: 1000px) {
+    .mise-en-page-admin {
+        flex-direction: column;
+    }
+
+    .mise-en-page-admin > section,
+    .mise-en-page-admin > .carte-formulaire {
+        width: 100%;
+    }
 }
 
-.form-article textarea {
-    min-height: 300px;
-    resize: vertical;
+@media (max-width: 900px) {
+    :root {
+        --largeur-menu: 0px;
+    }
+
+    aside {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 16px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    #toggle-button {
+        width: auto;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    #toggle-button img {
+        width: 44px;
+    }
+
+    #toggle-button::after {
+        margin-top: 0;
+    }
+
+    aside ul {
+        order: 3;
+        flex-basis: 100%;
+        margin: 0;
+        display: flex;
+        overflow-x: auto;
+        gap: 4px;
+    }
+
+    aside li {
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .pied-menu {
+        width: auto;
+        margin-left: auto;
+        padding-top: 0;
+        border-top: none;
+    }
+
+    main,
+    #main-content {
+        padding: 0 16px 40px;
+    }
+
+    .page-header,
+    .planning-header,
+    main > h1:first-child,
+    #main-content > h1:first-child {
+        margin: 0 -16px 28px;
+        padding: 28px 16px;
+    }
+
+    main h1,
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .tableau {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .planning {
+        grid-template-columns: 1fr;
+    }
+
+    .jour {
+        min-height: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--bordure);
+    }
 }
 
-a.nav-button,
-a#toggle-button,
-a.btn-primary {
+/* En-tête de carte : titre à gauche, bouton d'ajout à droite */
+.entete-carte {
+    margin-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.entete-carte h2 {
+    margin: 0;
+}
+
+/* Profil en lecture seule (Mon compte) */
+.fiche-profil {
+    margin: 0 0 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+}
+
+.fiche-profil dd + dt {
+    margin-top: 12px;
+}
+
+.fiche-profil dt {
+    color: var(--texte-doux);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.fiche-profil dd {
+    margin: 0;
+    color: var(--texte);
+    font-weight: 500;
+    overflow-wrap: break-word;
+}
+
+.carte > .btn-primary,
+.carte > .button-submit {
+    margin-top: 6px;
+}
+
+/* Résultat du scan d'un objet (espace pro) */
+.objet-trouve {
+    margin-top: 20px;
+    padding: 18px 20px;
+    border-left: 4px solid var(--vert);
+    border-radius: var(--rayon);
+    background: var(--vert-clair);
+    animation: apparaitre 0.35s ease-out backwards;
+}
+
+.objet-trouve h3 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+.objet-trouve p {
+    margin: 4px 0;
+}
+
+.objet-trouve .button-submit {
+    margin-top: 12px;
+}
+
+/* Messages de réussite qui apparaissent en douceur */
+.succes {
+    animation: apparaitre 0.35s ease-out backwards;
+}
+
+/* =========================================================
+   Fenêtres modales des formulaires
+   ========================================================= */
+
+body.modale-ouverte {
+    overflow: hidden;
+}
+
+.modale-fond {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: rgba(34, 43, 60, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.modale-boite {
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    background: var(--fond);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    overflow: hidden;
+    outline: none;
+}
+
+.modale-large {
+    max-width: 860px;
+}
+
+/* En-tête bleu nuit, comme le panneau de la page de connexion */
+.modale-entete {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 20px 20px 30px;
+    background: radial-gradient(ellipse 120% 180% at 30% 50%, var(--nuit-clair) 0%, var(--nuit) 100%);
+}
+
+.modale-entete h2 {
+    margin: 0;
+    color: #fff;
+    font-family: var(--police-titres);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.modale-fermer {
+    position: relative;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.3s ease;
+}
+
+.modale-fermer span::before,
+.modale-fermer span::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    border-radius: 2px;
+    background: #fff;
+}
+
+.modale-fermer span::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.modale-fermer span::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.modale-fermer:hover,
+.modale-fermer:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+    outline: none;
+}
+
+.modale-corps {
+    padding: 28px 30px 30px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.modale-corps > form > .form-buttons:last-child,
+.modale-corps .form-buttons:last-child {
+    margin-bottom: 0;
+}
+
+/* Ouverture : le fond apparaît, la fenêtre monte et grandit légèrement */
+.modale-enter-active,
+.modale-leave-active {
+    transition: opacity 0.25s ease;
+}
+
+.modale-enter-active .modale-boite {
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.25s ease;
+}
+
+.modale-leave-active .modale-boite {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.modale-enter-from,
+.modale-leave-to {
+    opacity: 0;
+}
+
+.modale-enter-from .modale-boite {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+}
+
+.modale-leave-to .modale-boite {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+}
+
+@media (max-width: 600px) {
+    .modale-fond {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modale-boite {
+        max-width: none;
+        max-height: 92vh;
+        border-radius: 14px 14px 0 0;
+    }
+
+    .modale-enter-from .modale-boite {
+        transform: translateY(100%);
+    }
+
+    .modale-corps {
+        padding: 22px 18px 26px;
+    }
+}
+
+/* =========================================================
+   Mouvements et réactions (pages internes uniquement)
+   ========================================================= */
+
+@keyframes apparaitre {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+}
+
+@keyframes glisser-titre {
+    from {
+        opacity: 0;
+        transform: translateX(-18px);
+    }
+}
+
+@keyframes bandeau {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 200% 0;
+    }
+}
+
+/* Titre de page qui glisse, cartes et lignes qui apparaissent en cascade */
+:where(body.app-prete) :is(.page-header, .planning-header) h1,
+:where(body.app-prete) main > h1:first-child {
+    animation: glisser-titre 0.5s ease-out backwards;
+}
+
+:where(body.app-prete) :is(.page-header, .planning-header) > :not(h1) {
+    animation: apparaitre 0.5s 0.1s ease-out backwards;
+}
+
+:where(body.app-prete) :is(.carte, .evenement-row, .atelier-row, .filtres, .barre-filtres, .filtres-utilisateurs) {
+    animation: apparaitre 0.45s ease-out backwards;
+}
+
+:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(2) { animation-delay: 0.05s; }
+:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(3) { animation-delay: 0.1s; }
+:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(4) { animation-delay: 0.15s; }
+:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(5) { animation-delay: 0.2s; }
+:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(6) { animation-delay: 0.25s; }
+:where(body.app-prete) :is(.grille, .grille-finances, .grille-graphiques, .evenements, .ateliers, .mise-en-page-admin) > :nth-child(n+7) { animation-delay: 0.3s; }
+
+/* Menu : barre verte sur la page courante, icône qui glisse au survol */
+.nav-button {
+    position: relative;
+}
+
+.nav-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: #6fbf73;
+    transform: scaleY(0);
+    transition: transform 0.25s ease;
+}
+
+.nav-button img {
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.nav-button:hover img {
+    transform: translateX(3px);
+}
+
+.nav-button.actif {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-button.actif::before {
+    transform: scaleY(1);
+}
+
+.nav-button.actif span {
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-button.actif img {
+    opacity: 1;
+}
+
+#toggle-button img {
+    transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+#toggle-button:hover img {
+    transform: rotate(-8deg) scale(1.06);
+}
+
+/* Boutons : légère montée, ombre et reflet qui traverse le bouton vert */
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary, .button-draft) {
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+}
+
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary, .button-draft):hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(46, 125, 50, 0.28);
+}
+
+:where(body:not(.page-connexion)) .button-draft:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(34, 43, 60, 0.22);
+}
+
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary):hover:not(:disabled)::after {
+    left: 130%;
+    transition: left 0.6s ease;
+}
+
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary, .button-draft):active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+    box-shadow: none;
+}
+
+:where(body:not(.page-connexion)) :is(.button-submit, .btn-primary, .button-draft):focus-visible {
+    outline: 3px solid rgba(46, 125, 50, 0.35);
+    outline-offset: 2px;
+}
+
+/* Pastilles : petit rebond quand elles deviennent actives */
+.pill {
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.pill:hover {
+    transform: translateY(-1px);
+}
+
+.pill.active {
+    animation: rebond 0.35s ease;
+}
+
+@keyframes rebond {
+    40% {
+        transform: scale(1.08);
+    }
+}
+
+/* Liens d'action soulignés progressivement */
+.lien-action,
+.btn-modifier {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    transition: background-size 0.25s ease, opacity 0.2s ease;
+}
+
+.lien-action:hover:not(:disabled),
+.btn-modifier:hover {
+    background-size: 100% 1px;
     text-decoration: none;
-    color: inherit;
 }
 
-.erreur {
-    color: #c62828;
+/* Cartes et lignes qui se soulèvent au survol */
+.carte,
+.evenement-row,
+.atelier-row {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.carte-cliquable:hover,
+a.carte:hover,
+.evenement-row:hover,
+.atelier-row:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+}
+
+.tableau tbody tr {
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tableau tbody tr:hover {
+    box-shadow: inset 3px 0 0 var(--vert);
+}
+
+/* Champs : halo vert à la saisie, libellé qui passe au vert */
+:where(body:not(.page-connexion)) :where(input:not([type="checkbox"], [type="radio"], [type="file"], [type="range"], [type="color"]), textarea, select):focus {
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15), var(--ombre-champ);
+}
+
+:where(body:not(.page-connexion)) .form-group label {
+    transition: color 0.2s ease;
+}
+
+:where(body:not(.page-connexion)) .form-group:focus-within > label {
+    color: var(--vert);
+}
+
+/* Chiffres clés : léger effet de lueur au survol de la carte */
+.chiffre-cle,
+.chiffre-finances {
+    transition: transform 0.3s ease;
+    transform-origin: left center;
+}
+
+.carte:hover .chiffre-cle,
+.carte:hover .chiffre-finances {
+    transform: scale(1.05);
+}
+
+/* Tutoriel (fenêtre existante de l'accueil) */
+.fond-modal {
+    animation: fondu 0.25s ease backwards;
+    backdrop-filter: blur(4px);
+}
+
+.fond-modal .modal {
+    animation: apparaitre 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards;
+}
+
+@keyframes fondu {
+    from {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
+    }
 }

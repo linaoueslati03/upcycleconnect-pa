@@ -17,14 +17,15 @@ $titrePage = "nav.mes_annonces";
 
             <div class="page-header">
                 <h1>{{ $t('nav.mes_annonces') }}</h1>
-                <button class="btn-primary" @click="reinitialiserFormulaire">+ {{ $t('annonces.nouvelle') }}</button>
+                <button class="btn-primary" @click="ouvrirNouveau">+ {{ $t('annonces.nouvelle') }}</button>
             </div>
 
             <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>
+            <p v-if="message" class="succes">{{ message }}</p>
 
-            <div class="deux-colonnes">
+            <div>
 
-                <section>
+                <section class="liste-cartes">
                     <p v-if="annonces.length === 0" class="discret">{{ $t('annonces.aucune_mienne') }}</p>
                     <div v-for="a in annonces" :key="a.id" class="carte section">
                         <span class="badge" :class="{ 'badge-attente': a.statut !== 'en_ligne' }">{{ $t('annonce.' + a.statut) }}</span>
@@ -40,8 +41,7 @@ $titrePage = "nav.mes_annonces";
                     </div>
                 </section>
 
-                <div class="carte">
-                    <h2>{{ formulaire.id ? $t('annonces.modifier') : $t('annonces.deposer') }}</h2>
+                <fenetre-modale :ouverte="formulaireOuvert" :titre="formulaire.id ? $t('annonces.modifier') : $t('annonces.deposer')" @fermer="formulaireOuvert = false">
 
                     <form @submit.prevent="enregistrer">
                         <div class="form-group">
@@ -88,21 +88,20 @@ $titrePage = "nav.mes_annonces";
                         </div>
 
                         <p v-if="erreur" class="erreur">{{ erreur }}</p>
-                        <p v-if="message" class="succes">{{ message }}</p>
 
                         <div class="form-buttons">
                             <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
-                            <button type="button" class="button-draft" @click="reinitialiserFormulaire">{{ $t('commun.annuler') }}</button>
+                            <button type="button" class="button-draft" @click="formulaireOuvert = false">{{ $t('commun.annuler') }}</button>
                         </div>
                     </form>
-                </div>
+                </fenetre-modale>
 
             </div>
 
         </main>
     </div>
 
-    <script src="js/mes-annonces.js"></script>
+    <script src="<?= ressource("js/mes-annonces.js") ?>"></script>
 </body>
 
 </html>

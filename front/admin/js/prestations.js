@@ -7,6 +7,7 @@ demarrerApp({
             categories: [],
             categorieInitiale: null,
             formulaire: { ...FORMULAIRE_VIDE },
+            formulaireOuvert: false,
             erreur: "",
             erreurListe: "",
         };
@@ -54,6 +55,11 @@ demarrerApp({
             this.erreur = "";
         },
 
+        ouvrirNouveau() {
+            this.reinitialiserFormulaire();
+            this.formulaireOuvert = true;
+        },
+
         modifier(prestation) {
             this.formulaire = {
                 id: prestation.id,
@@ -64,6 +70,7 @@ demarrerApp({
             };
             this.categorieInitiale = prestation.categorie_id;
             this.erreur = "";
+            this.formulaireOuvert = true;
         },
 
         async enregistrer() {
@@ -78,7 +85,7 @@ demarrerApp({
                 return;
             }
 
-            this.reinitialiserFormulaire();
+            this.formulaireOuvert = false;
             this.chargerPrestations();
         },
 

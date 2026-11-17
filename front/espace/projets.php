@@ -17,11 +17,12 @@ $titrePage = "nav.mes_projets";
 
             <div class="page-header">
                 <h1>{{ $t('projets.titre') }}</h1>
+                <button class="btn-primary" @click="ouvrirNouveauProjet">+ {{ $t('projets.nouveau') }}</button>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
-            <div class="deux-colonnes">
+            <div>
 
                 <section>
                     <p v-if="projets.length === 0" class="discret">{{ $t('projets.aucun') }}</p>
@@ -57,22 +58,31 @@ $titrePage = "nav.mes_projets";
                             </li>
                         </ol>
 
-                        <form @submit.prevent="ajouterEtape">
-                            <div class="form-group">
-                                <label for="etape">{{ $t('projets.nouvelle_etape') }}</label>
-                                <textarea id="etape" v-model="nouvelleEtape.description" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="photo">{{ $t('projets.lien_photo') }}</label>
-                                <input id="photo" type="url" v-model="nouvelleEtape.photo_url">
-                            </div>
-                            <button type="submit" class="button-submit">{{ $t('projets.ajouter_etape') }}</button>
-                        </form>
+                        <button class="btn-primary" @click="ouvrirEtape">+ {{ $t('projets.ajouter_etape') }}</button>
                     </div>
                 </section>
 
-                <div class="carte">
-                    <h2>{{ $t('projets.nouveau') }}</h2>
+            </div>
+
+            <fenetre-modale :ouverte="etapeOuverte" :titre="$t('projets.ajouter_etape') + (projet ? ' · ' + projet.titre : '')" @fermer="etapeOuverte = false">
+                <form @submit.prevent="ajouterEtape">
+                    <div class="form-group">
+                        <label for="etape">{{ $t('projets.nouvelle_etape') }}</label>
+                        <textarea id="etape" v-model="nouvelleEtape.description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">{{ $t('projets.lien_photo') }}</label>
+                        <input id="photo" type="url" v-model="nouvelleEtape.photo_url">
+                    </div>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('projets.ajouter_etape') }}</button>
+                        <button type="button" class="button-draft" @click="etapeOuverte = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
+            </fenetre-modale>
+
+            <fenetre-modale :ouverte="nouveauProjetOuvert" :titre="$t('projets.nouveau')" @fermer="nouveauProjetOuvert = false">
                     <form @submit.prevent="creerProjet">
                         <div class="form-group">
                             <label for="titre">{{ $t('commun.titre') }}</label>
@@ -85,16 +95,18 @@ $titrePage = "nav.mes_projets";
                         <div class="form-group">
                             <label><input type="checkbox" v-model="formulaire.partage_public"> {{ $t('projets.partager') }}</label>
                         </div>
-                        <button type="submit" class="button-submit">{{ $t('projets.creer') }}</button>
+                        <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                        <div class="form-buttons">
+                            <button type="submit" class="button-submit">{{ $t('projets.creer') }}</button>
+                            <button type="button" class="button-draft" @click="nouveauProjetOuvert = false">{{ $t('commun.annuler') }}</button>
+                        </div>
                     </form>
-                </div>
-
-            </div>
+            </fenetre-modale>
 
         </main>
     </div>
 
-    <script src="js/projets.js"></script>
+    <script src="<?= ressource("js/projets.js") ?>"></script>
 </body>
 
 </html>

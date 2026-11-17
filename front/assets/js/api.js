@@ -18,6 +18,15 @@ function afficherMenuDuRole() {
         element.hidden = !element.dataset.roles.split(" ").includes(role);
     });
 
+    const pageCourante = location.pathname.split("/").pop();
+    document.querySelectorAll("aside a.nav-button").forEach((lien) => {
+        const actif = lien.getAttribute("href") === pageCourante;
+        lien.classList.toggle("actif", actif);
+        if (actif) {
+            lien.setAttribute("aria-current", "page");
+        }
+    });
+
     const premierLien = document.querySelector("aside li:not([hidden]) a");
     const logo = document.getElementById("toggle-button");
     if (premierLien && logo) {
@@ -123,7 +132,11 @@ async function demarrerApp(options) {
     app.use(i18n);
     app.config.globalProperties.langueCourante = langueCourante;
     app.config.globalProperties.roleConnecte = roleConnecte;
+    if (typeof FenetreModale !== "undefined") {
+        app.component("fenetre-modale", FenetreModale);
+    }
     app.mount("#app");
+    document.body.classList.add("app-prete");
 }
 
 async function appelerApi(chemin, options = {}) {

@@ -6,36 +6,10 @@ aside li {
     margin-bottom: 4px;
 }
 
-.nav-button {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 12px;
-    padding: 8px 12px;
-}
-
-.nav-button img {
-    width: 22px;
-    height: 22px;
-}
-
 .grille {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 20px;
-}
-
-.carte {
-    padding: 22px;
-    border-radius: 10px;
-    background: #f7f5ef;
-    box-shadow: 0 4px 6px rgba(31, 56, 100, 0.05);
-}
-
-.carte h2,
-.carte h3 {
-    margin-top: 0;
-    color: #1F3864;
-    font-family: "Poppins", sans-serif;
 }
 
 .carte-cliquable {
@@ -45,28 +19,23 @@ aside li {
 
 .carte-cliquable:hover,
 .carte-selectionnee {
-    box-shadow: 0 0 0 2px #2E7D32;
+    box-shadow: var(--ombre-carte), 0 0 0 2px var(--vert);
 }
 
 .chiffre-cle {
     margin: 8px 0 0;
-    color: #2E7D32;
-    font-family: "Poppins", sans-serif;
+    color: var(--vert);
+    font-family: var(--police-titres);
     font-size: 32px;
     font-weight: 600;
 }
 
-.discret {
-    color: #8D6E63;
-    font-size: 13px;
-}
-
 .badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 4px 11px;
     border-radius: 999px;
-    background: rgba(46, 125, 50, 0.12);
-    color: #2E7D32;
+    background: var(--vert-clair);
+    color: var(--vert);
     font-size: 12px;
     font-weight: 600;
 }
@@ -74,11 +43,6 @@ aside li {
 .badge-attente {
     background: rgba(141, 110, 99, 0.15);
     color: #8D6E63;
-}
-
-.succes {
-    color: #2E7D32;
-    font-weight: 600;
 }
 
 .barre-filtres {
@@ -100,10 +64,6 @@ aside li {
     align-items: start;
 }
 
-.section {
-    margin-bottom: 35px;
-}
-
 .liste-simple {
     margin: 0;
     padding: 0;
@@ -111,8 +71,8 @@ aside li {
 }
 
 .liste-simple li {
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(31, 56, 100, 0.1);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--bordure);
 }
 
 .suivi-etapes {
@@ -126,15 +86,15 @@ aside li {
 .suivi-etapes li {
     flex: 1;
     padding: 8px;
-    border-radius: 6px;
-    background: rgba(31, 56, 100, 0.06);
-    color: #8D6E63;
+    border-radius: 999px;
+    background: var(--beige);
+    color: var(--texte-doux);
     font-size: 12px;
     text-align: center;
 }
 
 .suivi-etapes li.atteinte {
-    background: #2E7D32;
+    background: var(--vert);
     color: white;
 }
 
@@ -153,25 +113,32 @@ aside li {
     align-items: center;
     justify-content: center;
     padding: 16px;
-    background: rgba(31, 56, 100, 0.55);
+    background: rgba(34, 43, 60, 0.6);
 }
 
 .modal {
     width: 100%;
     max-width: 520px;
-    padding: 35px;
-    border-radius: 14px;
-    background: #f7f5ef;
+    padding: 0 36px 32px;
+    border-radius: var(--rayon);
+    background: var(--fond);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
 }
 
 .modal h2 {
-    margin-top: 0;
-    font-family: "Poppins", sans-serif;
+    margin: 0 -36px 24px;
+    padding: 22px 36px;
+    background: radial-gradient(ellipse 120% 160% at 50% 50%, var(--nuit-clair) 0%, var(--nuit) 100%);
+    color: #fff;
+    font-family: var(--police-titres);
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .points-etapes {
     margin: 20px 0;
-    color: #8D6E63;
+    color: var(--texte-doux);
     font-size: 13px;
 }
 
@@ -181,62 +148,3 @@ aside li {
     }
 }
 
-.mise-en-page-admin {
-    display: flex;
-    gap: 40px;
-    align-items: flex-start;
-}
-
-.mise-en-page-admin > section {
-    flex: 7;
-}
-
-.mise-en-page-admin > .carte-formulaire {
-    flex: 3;
-}
-
-.tableau {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.tableau th,
-.tableau td {
-    padding: 14px 10px;
-    border-bottom: 1px solid rgba(31, 56, 100, 0.1);
-}
-
-.tableau th {
-    color: #2E7D32;
-    font-family: "Poppins", sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.lien-action {
-    margin-right: 12px;
-    padding: 0;
-    border: none;
-    background: none;
-    color: #2E7D32;
-    font: inherit;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.lien-action:hover {
-    text-decoration: underline;
-}
-
-.lien-supprimer {
-    color: #c62828;
-}
-
-@media (max-width: 1000px) {
-    .mise-en-page-admin {
-        flex-direction: column;
-    }
-}

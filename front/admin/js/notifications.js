@@ -15,6 +15,7 @@ demarrerApp({
             cibles: CIBLES,
             classes: CLASSES,
             formulaire: formulaireVide(),
+            formulaireOuvert: false,
             destinataire: null,
             recherche: "",
             resultatsRecherche: [],
@@ -97,6 +98,12 @@ demarrerApp({
             }
         },
 
+        ouvrirFormulaire() {
+            this.resultat = null;
+            this.erreur = "";
+            this.formulaireOuvert = true;
+        },
+
         changerCible() {
             this.resultat = null;
             this.erreur = "";
@@ -156,6 +163,7 @@ demarrerApp({
                     const { cible, classe_predite: classe } = this.formulaire;
                     this.formulaire = { ...formulaireVide(), cible, classe_predite: classe };
                     this.retirerDestinataire();
+                    this.formulaireOuvert = false;
                 }
                 this.chargerHistorique(1);
             } finally {

@@ -2,6 +2,9 @@ demarrerApp({
     data() {
         return {
             profil: { nom: "", prenom: "", email: "", langue_preferee_id: null },
+            brouillonProfil: { nom: "", prenom: "", email: "", langue_preferee_id: null },
+            profilOuvert: false,
+            motDePasseOuvert: false,
             langues: [],
             motsDePasse: { ancien_mot_de_passe: "", nouveau_mot_de_passe: "" },
             erreurProfil: "",
@@ -10,6 +13,8 @@ demarrerApp({
             messageMotDePasse: "",
             motDePasseObligatoire: doitChangerMotDePasse(),
             entreprise: { siret: "", adresse: "", abonnement: "Freemium" },
+            brouillonEntreprise: { siret: "", adresse: "" },
+            entrepriseOuverte: false,
         };
     },
 
@@ -33,17 +38,42 @@ demarrerApp({
             abonnement: compte.abonnement || "Freemium",
         };
         this.langues = await reponseLangues.json();
+        if (this.motDePasseObligatoire) {
+            this.ouvrirMotDePasse();
+        }
+    },
+
+    computed: {
+        libelleLangue() {
+            return this.langues.find((l) => l.id === this.profil.langue_preferee_id)?.libelle;
+        },
     },
 
     methods: {
+        ouvrirProfil() {
+            this.brouillonProfil = { ...this.profil };
+            this.erreurProfil = "";
+            this.messageProfil = "";
+            this.profilOuvert = true;
+        },
+
+        ouvrirMotDePasse() {
+            this.motsDePasse = { ancien_mot_de_passe: "", nouveau_mot_de_passe: "" };
+            this.erreurMotDePasse = "";
+            this.messageMotDePasse = "";
+            this.motDePasseOuvert = true;
+        },
+
         async enregistrerProfil() {
             this.erreurProfil = "";
             this.messageProfil = "";
-            const reponse = await appelerApi("/moi", { method: "PUT", body: JSON.stringify(this.profil) });
+            const reponse = await appelerApi("/moi", { method: "PUT", body: JSON.stringify(this.brouillonProfil) });
             if (!reponse.ok) {
                 this.erreurProfil = await messageErreur(reponse);
                 return;
             }
+            this.profil = { ...this.brouillonProfil };
+            this.profilOuvert = false;
             this.messageProfil = t("compte.profil_enregistre");
 
             const langue = this.langues.find((l) => l.id === this.profil.langue_preferee_id);
@@ -64,9 +94,22 @@ demarrerApp({
                 return;
             }
             this.motsDePasse = { ancien_mot_de_passe: "", nouveau_mot_de_passe: "" };
+            this.motDePasseOuvert = false;
             this.messageMotDePasse = t("compte.mot_de_passe_modifie");
             this.motDePasseObligatoire = false;
             localStorage.removeItem("changer_mot_de_passe");
+        },
+
+        ouvrirEntreprise() {
+            this.brouillonEntreprise = { siret: this.entreprise.siret, adresse: this.entreprise.adresse };
+            this.entrepriseOuverte = true;
+        },
+
+        // Comme avant : ces deux champs ne sont pas encore enregistrés par l'API, seul l'affichage change.
+        validerEntreprise() {
+            this.entreprise.siret = this.brouillonEntreprise.siret;
+            this.entreprise.adresse = this.brouillonEntreprise.adresse;
+            this.entrepriseOuverte = false;
         },
 
         passerPremium() {

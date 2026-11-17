@@ -114,7 +114,7 @@ $titrePage = "nav.moderation";
         </main>
     </div>
 
-    <script src="js/moderation.js"></script>
+    <script src="<?= ressource("js/moderation.js") ?>"></script>
 </body>
 
 </html>

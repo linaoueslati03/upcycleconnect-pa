@@ -5,6 +5,11 @@ demarrerApp({
             filtres: FILTRES_STATUT,
             statutSelectionne: "tous",
             erreur: "",
+            formulaireOuvert: false,
+            editionId: null,
+            formulaire: { titre: "", description: "", date_debut: "", date_fin: "", lieu: "", site: "" },
+            erreurFormulaire: "",
+            confirmation: false,
         };
     },
 
@@ -19,6 +24,10 @@ demarrerApp({
 
     mounted() {
         this.chargerEvenements();
+        const aModifier = new URLSearchParams(window.location.search).get("modifier");
+        if (aModifier) {
+            this.modifierEvenement(aModifier);
+        }
     },
 
     methods: {
@@ -34,8 +43,67 @@ demarrerApp({
             this.evenements = await reponse.json();
         },
 
-        modifierEvenement(id) {
-            window.location.href = `creer-evenement.php?id=${id}`;
+        ouvrirCreation() {
+            this.editionId = null;
+            this.formulaire = { titre: "", description: "", date_debut: "", date_fin: "", lieu: "", site: "" };
+            this.erreurFormulaire = "";
+            this.confirmation = false;
+            this.formulaireOuvert = true;
+        },
+
+        async modifierEvenement(id) {
+            this.erreur = "";
+            this.confirmation = false;
+            const reponse = await appelerApi(`/evenements/${id}`);
+            if (!reponse.ok) {
+                this.erreur = t("salaries.evenements.introuvable");
+                return;
+            }
+            const evenement = await reponse.json();
+            this.editionId = evenement.id ?? id;
+            this.formulaire = {
+                titre: evenement.titre || "",
+                description: evenement.description || "",
+                lieu: evenement.lieu || "",
+                site: evenement.site || "",
+                date_debut: versChampDate(evenement.date_debut),
+                date_fin: versChampDate(evenement.date_fin),
+            };
+            this.erreurFormulaire = "";
+            this.formulaireOuvert = true;
+        },
+
+        async envoyerEvenement(statut) {
+            this.erreurFormulaire = "";
+            this.confirmation = false;
+
+            if (!this.formulaire.titre || !this.formulaire.date_debut) {
+                this.erreurFormulaire = t("salaries.titre_date_obligatoires");
+                return;
+            }
+
+            const id = this.editionId;
+            const reponse = await appelerApi(id ? `/evenements/${id}` : "/evenements", {
+                method: id ? "PUT" : "POST",
+                body: JSON.stringify({
+                    titre: this.formulaire.titre,
+                    description: this.formulaire.description,
+                    date_debut: versDateAPI(this.formulaire.date_debut),
+                    date_fin: versDateAPI(this.formulaire.date_fin),
+                    lieu: this.formulaire.lieu,
+                    site: this.formulaire.site,
+                    statut: statut,
+                }),
+            });
+
+            if (!reponse.ok) {
+                this.erreurFormulaire = (await reponse.json()).erreur;
+                return;
+            }
+
+            this.formulaireOuvert = false;
+            this.confirmation = true;
+            this.chargerEvenements();
         },
 
         async valider(id) {

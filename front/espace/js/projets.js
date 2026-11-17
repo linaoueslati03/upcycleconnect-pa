@@ -5,6 +5,8 @@ demarrerApp({
             projet: null,
             formulaire: { titre: "", description: "", partage_public: false },
             nouvelleEtape: { description: "", photo_url: "" },
+            nouveauProjetOuvert: false,
+            etapeOuverte: false,
             erreur: "",
         };
     },
@@ -37,6 +39,18 @@ demarrerApp({
             this.projet = projet;
         },
 
+        ouvrirNouveauProjet() {
+            this.formulaire = { titre: "", description: "", partage_public: false };
+            this.erreur = "";
+            this.nouveauProjetOuvert = true;
+        },
+
+        ouvrirEtape() {
+            this.nouvelleEtape = { description: "", photo_url: "" };
+            this.erreur = "";
+            this.etapeOuverte = true;
+        },
+
         async creerProjet() {
             this.erreur = "";
             const reponse = await appelerApi("/projets", { method: "POST", body: JSON.stringify(this.formulaire) });
@@ -45,7 +59,7 @@ demarrerApp({
                 return;
             }
             const projet = await reponse.json();
-            this.formulaire = { titre: "", description: "", partage_public: false };
+            this.nouveauProjetOuvert = false;
             await this.chargerProjets();
             this.ouvrirProjet(projet.id);
         },
@@ -82,7 +96,7 @@ demarrerApp({
                 this.erreur = await messageErreur(reponse);
                 return;
             }
-            this.nouvelleEtape = { description: "", photo_url: "" };
+            this.etapeOuverte = false;
             this.ouvrirProjet(this.projet.id);
         },
 

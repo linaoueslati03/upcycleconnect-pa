@@ -26,7 +26,10 @@ demarrerApp({
             campagnes: [],
             charges: [],
             nouvelleCharge: chargeVide(),
+            chargeOuverte: false,
             parametres: null,
+            brouillonParametres: { taux_commission: null, prix_premium_mensuel: null },
+            parametresOuverts: false,
             messageParametres: "",
             erreur: "",
         };
@@ -177,6 +180,12 @@ demarrerApp({
             this.charges = await reponse.json();
         },
 
+        ouvrirCharge() {
+            this.nouvelleCharge = chargeVide();
+            this.erreur = "";
+            this.chargeOuverte = true;
+        },
+
         async ajouterCharge() {
             this.erreur = "";
             const reponse = await appelerApi("/admin/finances/charges", {
@@ -187,7 +196,7 @@ demarrerApp({
                 this.erreur = await this.lireErreur(reponse);
                 return;
             }
-            this.nouvelleCharge = chargeVide();
+            this.chargeOuverte = false;
             this.chargerCharges();
             this.chargerResume();
         },
@@ -215,14 +224,24 @@ demarrerApp({
             this.parametres = await reponse.json();
         },
 
+        ouvrirParametres() {
+            this.brouillonParametres = {
+                taux_commission: this.parametres.taux_commission,
+                prix_premium_mensuel: this.parametres.prix_premium_mensuel,
+            };
+            this.erreur = "";
+            this.messageParametres = "";
+            this.parametresOuverts = true;
+        },
+
         async enregistrerParametres() {
             this.erreur = "";
             this.messageParametres = "";
             const reponse = await appelerApi("/admin/finances/parametres", {
                 method: "PUT",
                 body: JSON.stringify({
-                    taux_commission: this.parametres.taux_commission,
-                    prix_premium_mensuel: this.parametres.prix_premium_mensuel,
+                    taux_commission: this.brouillonParametres.taux_commission,
+                    prix_premium_mensuel: this.brouillonParametres.prix_premium_mensuel,
                 }),
             });
             if (!reponse.ok) {
@@ -230,6 +249,7 @@ demarrerApp({
                 return;
             }
             this.parametres = await reponse.json();
+            this.parametresOuverts = false;
             this.messageParametres = t("admin.finances.parametres_enregistres");
         },
     },

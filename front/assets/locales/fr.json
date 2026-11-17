@@ -697,6 +697,7 @@
         "depots": "Dépôts en conteneur",
         "evenements": "Événements",
         "finances": "Finances",
+        "formations": "Formations",
         "forums": "Forums",
         "langues": "Langues",
         "mes_annonces": "Mes annonces",
@@ -787,6 +788,15 @@
             "modifier": "Modifier l'événement",
             "retour": "Retour à mes événements",
             "titre": "Mes événements"
+        },
+        "formations": {
+            "aucune": "Aucune formation pour le moment.",
+            "creer": "Créer une formation",
+            "erreur_chargement": "Erreur lors du chargement des formations",
+            "materiel": "Matériel nécessaire",
+            "modifier": "Modifier la formation",
+            "places": "Nombre de places",
+            "titre": "Mes formations"
         },
         "planning": {
             "annee": "Année",

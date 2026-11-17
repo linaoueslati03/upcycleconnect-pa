@@ -17,11 +17,12 @@ $titrePage = "nav.forums";
 
             <div class="page-header">
                 <h1>{{ $t('nav.forums') }}</h1>
+                <button class="btn-primary" @click="ouvrirNouveauSujet">+ {{ $t('forums.nouveau') }}</button>
             </div>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
-            <div class="deux-colonnes">
+            <div>
 
                 <section>
                     <div v-if="sujet" class="carte section">
@@ -34,26 +35,13 @@ $titrePage = "nav.forums";
                                 <span class="discret"> · {{ formaterDateHeure(m.created_at) }}</span>
                                 <p>{{ m.contenu }}</p>
 
-                                <form v-if="signalementOuvert === m.id" @submit.prevent="signaler(m.id)">
-                                    <div class="form-group">
-                                        <label :for="'motif-' + m.id">{{ $t('forums.motif') }}</label>
-                                        <input :id="'motif-' + m.id" type="text" v-model="motif" required>
-                                    </div>
-                                    <button type="submit" class="button-submit">{{ $t('forums.envoyer_signalement') }}</button>
-                                </form>
-                                <button v-else class="button-draft" @click="signalementOuvert = m.id">{{ $t('forums.signaler') }}</button>
+                                <button class="button-draft" @click="ouvrirSignalement(m.id)">{{ $t('forums.signaler') }}</button>
                             </li>
                         </ul>
 
                         <p v-if="message" class="succes">{{ message }}</p>
 
-                        <form @submit.prevent="repondre">
-                            <div class="form-group">
-                                <label for="reponse">{{ $t('forums.votre_reponse') }}</label>
-                                <textarea id="reponse" v-model="reponse" required></textarea>
-                            </div>
-                            <button type="submit" class="button-submit">{{ $t('forums.repondre') }}</button>
-                        </form>
+                        <button class="btn-primary" @click="ouvrirReponse">{{ $t('forums.repondre') }}</button>
                     </div>
 
                     <div v-else>
@@ -66,8 +54,9 @@ $titrePage = "nav.forums";
                     </div>
                 </section>
 
-                <div class="carte">
-                    <h2>{{ $t('forums.nouveau') }}</h2>
+            </div>
+
+            <fenetre-modale :ouverte="nouveauSujetOuvert" :titre="$t('forums.nouveau')" @fermer="nouveauSujetOuvert = false">
                     <form @submit.prevent="creerSujet">
                         <div class="form-group">
                             <label for="titre">{{ $t('commun.titre') }}</label>
@@ -77,16 +66,46 @@ $titrePage = "nav.forums";
                             <label for="contenu">{{ $t('forums.message') }}</label>
                             <textarea id="contenu" v-model="nouveauSujet.contenu" required></textarea>
                         </div>
-                        <button type="submit" class="button-submit">{{ $t('commun.publier') }}</button>
+                        <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                        <div class="form-buttons">
+                            <button type="submit" class="button-submit">{{ $t('commun.publier') }}</button>
+                            <button type="button" class="button-draft" @click="nouveauSujetOuvert = false">{{ $t('commun.annuler') }}</button>
+                        </div>
                     </form>
-                </div>
+            </fenetre-modale>
 
-            </div>
+            <fenetre-modale :ouverte="reponseOuverte" :titre="$t('forums.repondre') + (sujet ? ' · ' + sujet.titre : '')" @fermer="reponseOuverte = false">
+                <form @submit.prevent="repondre">
+                    <div class="form-group">
+                        <label for="reponse">{{ $t('forums.votre_reponse') }}</label>
+                        <textarea id="reponse" v-model="reponse" required></textarea>
+                    </div>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('forums.repondre') }}</button>
+                        <button type="button" class="button-draft" @click="reponseOuverte = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
+            </fenetre-modale>
+
+            <fenetre-modale :ouverte="signalementVisible" :titre="$t('forums.signaler')" @fermer="signalementVisible = false">
+                <form @submit.prevent="signaler(signalementOuvert)">
+                    <div class="form-group">
+                        <label for="motif-signalement">{{ $t('forums.motif') }}</label>
+                        <input id="motif-signalement" type="text" v-model="motif" required>
+                    </div>
+                    <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('forums.envoyer_signalement') }}</button>
+                        <button type="button" class="button-draft" @click="signalementVisible = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
+            </fenetre-modale>
 
         </main>
     </div>
 
-    <script src="js/forums.js"></script>
+    <script src="<?= ressource("js/forums.js") ?>"></script>
 </body>
 
 </html>
