@@ -1,3 +1,45 @@
+/* Transition douce entre deux pages des espaces (Chrome, Edge) : l'ancienne page se fond dans la nouvelle,
+   le menu latéral reste immobile au lieu d'être redessiné. Sans effet sur les navigateurs qui ne le gèrent pas. */
+@view-transition {
+    navigation: auto;
+}
+
+aside {
+    view-transition-name: menu-lateral;
+}
+
+::view-transition-group(menu-lateral) {
+    animation: none;
+}
+
+::view-transition-old(root) {
+    animation: 0.1s ease-out both sortie-page;
+}
+
+::view-transition-new(root) {
+    animation: 0.2s 0.03s ease-out both entree-page;
+}
+
+@keyframes sortie-page {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes entree-page {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}
+
 .statut-suspendu {
     color: #b91c1c;
     font-weight: 600;

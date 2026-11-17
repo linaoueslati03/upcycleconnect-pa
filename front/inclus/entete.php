@@ -29,3 +29,8 @@ if (!function_exists("ressource")) {
 <script src="<?= ressource($script) ?>"></script>
 <?php endforeach; ?>
 <?php include __DIR__ . '/onesignal.php'; ?>
+<?php /* Chrome prépare en arrière-plan la page d'un lien du menu dès que la souris s'y attarde :
+         au clic, elle s'affiche presque instantanément, avec ses données déjà chargées. */ ?>
+<script type="speculationrules">
+{"prerender": [{"where": {"selector_matches": "aside a.nav-button"}, "eagerness": "moderate"}]}
+</script>

@@ -69,20 +69,55 @@ const i18n = VueI18n.createI18n({
 
 const { t } = i18n.global;
 
-async function chargerMessages(code) {
+function traductionsEnCache(code) {
     try {
-        const reponse = await fetch(`${LOCALES_URL}/${code}.json`);
-        if (reponse.ok) {
-            i18n.global.setLocaleMessage(code, await reponse.json());
-        }
+        return JSON.parse(localStorage.getItem(`traductions_${code}`));
     } catch (erreur) {
+        return null;
     }
+}
+
+async function telechargerMessages(code) {
+    try {
+        const reponse = await fetch(`${LOCALES_URL}/${code}.json`, { cache: "no-cache" });
+        if (!reponse.ok) {
+            return false;
+        }
+        const messages = await reponse.json();
+        i18n.global.setLocaleMessage(code, messages);
+        try {
+            localStorage.setItem(`traductions_${code}`, JSON.stringify(messages));
+        } catch (erreur) {
+        }
+        return true;
+    } catch (erreur) {
+        return false;
+    }
+}
+
+// Les traductions déjà connues sont utilisées tout de suite (la page s'affiche sans attendre le réseau),
+// puis rafraîchies en arrière-plan : une traduction modifiée apparaît dès qu'elle est téléchargée.
+async function chargerMessages(code) {
+    const enCache = traductionsEnCache(code);
+    if (enCache) {
+        i18n.global.setLocaleMessage(code, enCache);
+        telechargerMessages(code).then((misAJour) => {
+            if (misAJour) {
+                traduireElementsStatiques();
+            }
+        });
+        return;
+    }
+    await telechargerMessages(code);
 }
 
 async function chargerTraductions() {
     const codes = new Set([LANGUE_PAR_DEFAUT, langueCourante()]);
     await Promise.all([...codes].map(chargerMessages));
+    traduireElementsStatiques();
+}
 
+function traduireElementsStatiques() {
     document.documentElement.lang = langueCourante();
     document.querySelectorAll("[data-t]").forEach((element) => {
         element.textContent = t(element.dataset.t);
@@ -127,7 +162,7 @@ async function choisirLangue(code) {
 async function demarrerApp(options) {
     afficherMenuDuRole();
     await chargerTraductions();
-    await preparerSelecteurLangue();
+    preparerSelecteurLangue();
     const app = Vue.createApp(options);
     app.use(i18n);
     app.config.globalProperties.langueCourante = langueCourante;
