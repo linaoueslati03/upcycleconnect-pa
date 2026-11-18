@@ -850,6 +850,7 @@
         "choisir_conteneur": "Choose a container",
         "choisir_materiau": "Choose the material",
         "code_barre": "Item barcode",
+        "code_barre_aide": "Collection barcode: the professional scans it to take the item out.",
         "code_ouverture": "Container opening code",
         "codes_apres_validation": "Your codes will be sent as soon as the request is approved.",
         "conteneur_demande_le": "Container: {conteneur} · requested on {date}",

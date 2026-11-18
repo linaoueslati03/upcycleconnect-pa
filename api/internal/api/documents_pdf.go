@@ -27,6 +27,11 @@ type DocumentArchive struct {
 }
 
 func genererPDF(titre string, lignes []string) ([]byte, error) {
+	return genererPDFAvecAjout(titre, lignes, nil)
+}
+
+// Même mise en page, avec un bloc dessiné après les lignes (par exemple un code-barre).
+func genererPDFAvecAjout(titre string, lignes []string, ajout func(pdf *fpdf.Fpdf, texte func(string) string)) ([]byte, error) {
 	pdf := fpdf.New("P", "mm", "A4", "")
 	texte := pdf.UnicodeTranslatorFromDescriptor("")
 
@@ -41,6 +46,10 @@ func genererPDF(titre string, lignes []string) ([]byte, error) {
 	for _, ligne := range lignes {
 		pdf.MultiCell(0, 8, texte(ligne), "", "L", false)
 		pdf.Ln(2)
+	}
+
+	if ajout != nil {
+		ajout(pdf, texte)
 	}
 
 	pdf.Ln(10)

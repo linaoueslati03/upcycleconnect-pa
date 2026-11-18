@@ -44,10 +44,14 @@ $titrePage = "nav.depots";
                                 </li>
                             </ol>
 
-                            <p v-if="d.code_ouverture">
-                                {{ $t('depots.code_ouverture') }} : <span class="code">{{ d.code_ouverture }}</span><br>
-                                {{ $t('depots.code_barre') }} : <span class="code">{{ d.code_barre }}</span>
-                            </p>
+                            <template v-if="d.code_ouverture">
+                                <p>{{ $t('depots.code_ouverture') }} : <span class="code">{{ d.code_ouverture }}</span></p>
+                                <figure v-if="d.code_barre && d.statut !== 'recuperee'" class="code-barre">
+                                    <svg v-code-barre="d.code_barre" role="img" :aria-label="$t('depots.code_barre') + ' ' + d.code_barre"></svg>
+                                    <figcaption>{{ $t('depots.code_barre_aide') }}</figcaption>
+                                </figure>
+                                <p v-else>{{ $t('depots.code_barre') }} : <span class="code">{{ d.code_barre }}</span></p>
+                            </template>
                             <p v-else class="discret">{{ $t('depots.codes_apres_validation') }}</p>
                         </div>
                     </section>
@@ -171,6 +175,7 @@ $titrePage = "nav.depots";
         </main>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
     <script src="<?= ressource("js/depots.js") ?>"></script>
 </body>
 

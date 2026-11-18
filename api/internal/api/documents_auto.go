@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/go-pdf/fpdf"
+	"github.com/go-pdf/fpdf/contrib/barcode"
 )
 
 // Génération automatique des documents PDF (« générés automatiquement… un double sera conservé »).
@@ -174,7 +177,9 @@ func (s *Serveur) genererBonDepot(depotID, auteurID int) (int, error) {
 		"Saisissez le code d'ouverture sur le conteneur pour y déposer l'objet.",
 		"Le code-barre permet au professionnel qui récupère l'objet de le retirer du conteneur.",
 	)
-	contenu, err := genererPDF("Bon de dépôt", lignes)
+	contenu, err := genererPDFAvecAjout("Bon de dépôt", lignes, func(pdf *fpdf.Fpdf, texte func(string) string) {
+		dessinerCodeBarre(pdf, texte, codeBarre.String)
+	})
 	if err != nil {
 		return 0, err
 	}
@@ -187,6 +192,24 @@ func (s *Serveur) genererBonDepot(depotID, auteurID int) (int, error) {
 		"Bon de dépôt : "+description, deposantID, depotID, auteurID, contenu,
 	).Scan(&id)
 	return id, err
+}
+
+// Code-barre Code 128 centré, avec le code en clair dessous : c'est lui que le professionnel scanne
+// (caméra du téléphone ou douchette) pour retirer l'objet du conteneur.
+func dessinerCodeBarre(pdf *fpdf.Fpdf, texte func(string) string, code string) {
+	const largeur, hauteur = 110.0, 28.0
+	gauche, _, droite, _ := pdf.GetMargins()
+	largeurPage, _ := pdf.GetPageSize()
+	x := gauche + (largeurPage-gauche-droite-largeur)/2
+	pdf.Ln(6)
+	y := pdf.GetY()
+	cle := barcode.RegisterCode128(pdf, code)
+	barcode.Barcode(pdf, cle, x, y, largeur, hauteur, false)
+	pdf.SetY(y + hauteur + 2)
+	pdf.SetFont("Courier", "B", 14)
+	pdf.CellFormat(0, 8, code, "", 1, "C", false, 0, "")
+	pdf.SetFont("Arial", "", 10)
+	pdf.CellFormat(0, 6, texte("Code-barre à présenter au professionnel qui récupère l'objet"), "", 1, "C", false, 0, "")
 }
 
 // Lance une génération automatique sans jamais bloquer l'action qui l'a déclenchée.

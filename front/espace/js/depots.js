@@ -3,9 +3,30 @@
 //  - salarié : validation des demandes (avec correction du poids) puis confirmation du dépôt ;
 //  - professionnel : récupération d'un objet déposé grâce à son code-barre.
 
+// Dessine un code-barre Code 128 (même format que celui du bon de dépôt PDF).
+const directiveCodeBarre = {
+    mounted(element, { value }) {
+        dessinerCodeBarre(element, value);
+    },
+    updated(element, { value, oldValue }) {
+        if (value !== oldValue) {
+            dessinerCodeBarre(element, value);
+        }
+    },
+};
+
+function dessinerCodeBarre(element, code) {
+    if (!code || typeof JsBarcode === "undefined") {
+        return;
+    }
+    JsBarcode(element, code, { format: "CODE128", width: 2, height: 70, fontSize: 16, font: "monospace", margin: 8 });
+}
+
 const formulaireDepotVide = () => ({ description_objet: "", conteneur_id: null, categorie_id: null, poids_kg: null });
 
 demarrerApp({
+    directives: { codeBarre: directiveCodeBarre },
+
     data() {
         return {
             depots: [],

@@ -850,6 +850,7 @@
         "choisir_conteneur": "Choisir un conteneur",
         "choisir_materiau": "Choisir le matériau",
         "code_barre": "Code-barre de l'objet",
+        "code_barre_aide": "Code-barre de récupération : le professionnel le scanne pour retirer l'objet.",
         "code_ouverture": "Code d'ouverture du conteneur",
         "codes_apres_validation": "Les codes vous seront communiqués dès que la demande sera validée.",
         "conteneur_demande_le": "Conteneur : {conteneur} · demandé le {date}",
