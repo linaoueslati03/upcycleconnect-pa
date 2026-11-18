@@ -59,6 +59,54 @@
             },
             "titre": "Conteneurs"
         },
+        "documents": {
+            "aucun": "Aucun document archivé pour ces critères.",
+            "aucun_beneficiaire": "Aucun utilisateur trouvé.",
+            "beneficiaire_obligatoire": "Choisissez le bénéficiaire du document.",
+            "chercher_beneficiaire": "Tapez un nom ou un e-mail…",
+            "codes": {
+                "deposant": "Déposant",
+                "explication": "Codes envoyés après validation d'un dépôt : le code d'ouverture permet au particulier d'ouvrir le conteneur, le code-barre permet au professionnel de récupérer l'objet.",
+                "objet": "Objet",
+                "rechercher": "Rechercher un code, un objet, une personne, un site…",
+                "recuperateur": "Récupéré par",
+                "resultats": "{total} dépôt(s) avec un code",
+                "statut": {
+                    "deposee": "Déposé",
+                    "recuperee": "Récupéré",
+                    "validee": "Validé"
+                }
+            },
+            "colonne": {
+                "auteur": "Créé par",
+                "beneficiaire": "Bénéficiaire",
+                "date": "Date",
+                "taille": "Taille"
+            },
+            "contenu": "Contenu",
+            "contenu_aide": "Une ligne par paragraphe : parties, objet, durée, montant, conditions…",
+            "cree": "« {titre} » a été généré et archivé pour {personne}.",
+            "explication": "Chaque PDF généré par la plateforme (contrats, attestations, fiches de prestation, documents administratifs) est archivé ici en double et reste consultable.",
+            "generer": "Générer le PDF",
+            "nouveau": "Nouveau document",
+            "onglet": {
+                "codes": "Codes de dépôt",
+                "documents": "PDF archivés"
+            },
+            "ouvrir": "Ouvrir",
+            "rechercher": "Rechercher par titre ou bénéficiaire…",
+            "resultats": "{total} document(s)",
+            "telecharger": "Télécharger",
+            "titre": "Documents et codes",
+            "type": {
+                "attestation_inscription": "Attestation d'inscription",
+                "contrat": "Contrat",
+                "document_administratif": "Document administratif",
+                "fiche_atelier": "Fiche atelier",
+                "fiche_evenement": "Fiche événement",
+                "fiche_formation": "Fiche formation"
+            }
+        },
         "finances": {
             "abonnements_premium": "Abonnements premium des professionnels",
             "ajouter_charge": "Ajouter une charge",
@@ -658,6 +706,11 @@
     "compte": {
         "changement_obligatoire": "Votre mot de passe a été réinitialisé : choisissez-en un nouveau pour continuer.",
         "changer_mot_de_passe": "Changer le mot de passe",
+        "documents": {
+            "aucun": "Vous n'avez encore aucun document.",
+            "explication": "Vos contrats, attestations et documents administratifs, archivés par UpcycleConnect.",
+            "titre": "Mes documents"
+        },
         "erreur_chargement": "Erreur lors du chargement de votre compte",
         "langue_affichage": "Langue d'affichage",
         "mot_de_passe_actuel": "Mot de passe actuel",
@@ -749,6 +802,7 @@
         "conteneurs": "Conteneurs",
         "contrats": "Contrats & Facturation",
         "depots": "Dépôts en conteneur",
+        "documents": "Documents",
         "evenements": "Événements",
         "finances": "Finances",
         "formations": "Formations",

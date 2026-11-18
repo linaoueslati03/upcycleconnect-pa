@@ -1531,3 +1531,142 @@ a.carte:hover,
         animation: none;
     }
 }
+
+/* Documents PDF archivés (admin > Documents, espace > Mon compte) */
+.nombre-pill {
+    display: inline-block;
+    min-width: 20px;
+    margin-left: 4px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+    font-size: 12px;
+    text-align: center;
+}
+
+.pill.active .nombre-pill {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.badge-document {
+    white-space: nowrap;
+    background: var(--beige);
+    color: var(--texte);
+}
+
+.document-contrat {
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+}
+
+.document-attestation_inscription {
+    background: #e3e8f3;
+    color: var(--bleu);
+}
+
+.actions-document {
+    white-space: nowrap;
+}
+
+.date-code {
+    display: block;
+    font-size: 12px;
+}
+
+.vide-documents {
+    margin: 18px 0 6px;
+    color: var(--texte-doux);
+}
+
+.choix-beneficiaire {
+    position: relative;
+}
+
+.beneficiaire-choisi {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--vert);
+    border-radius: var(--rayon);
+    background: var(--vert-clair);
+}
+
+.propositions-beneficiaire {
+    margin: 6px 0 0;
+    padding: 4px;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: var(--fond);
+    box-shadow: var(--ombre-carte);
+    list-style: none;
+}
+
+.propositions-beneficiaire button {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--texte);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.propositions-beneficiaire button:hover,
+.propositions-beneficiaire button:focus-visible {
+    background: var(--vert-clair);
+}
+
+.mes-documents {
+    margin-top: 24px;
+}
+
+.liste-documents {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.liste-documents li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 4px;
+}
+
+.liste-documents li + li {
+    border-top: 1px solid var(--bordure);
+}
+
+.liste-documents img {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    opacity: 0.7;
+}
+
+.infos-document {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+@media (max-width: 600px) {
+    .liste-documents li {
+        flex-wrap: wrap;
+    }
+
+    .liste-documents .actions-document {
+        width: 100%;
+        padding-left: 40px;
+    }
+}

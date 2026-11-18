@@ -188,6 +188,37 @@ function differer(fonction, delai = 300) {
     };
 }
 
+// PDF archivés : l'API exige le jeton dans l'en-tête, un simple lien <a href> ne suffit donc pas.
+// On récupère le fichier avec le jeton, puis on l'ouvre dans un onglet ou on le télécharge.
+// L'onglet est ouvert tout de suite (pendant le clic) pour ne pas être bloqué par le navigateur.
+async function recupererPdf(chemin, { nomFichier = "document.pdf", telecharger = false } = {}) {
+    const onglet = telecharger ? null : window.open("", "_blank");
+    try {
+        const reponse = await appelerApi(chemin);
+        if (!reponse.ok) {
+            let message = t("commun.erreur");
+            try {
+                message = (await reponse.json()).erreur || message;
+            } catch (erreur) {
+            }
+            throw new Error(message);
+        }
+        const adresse = URL.createObjectURL(new Blob([await reponse.blob()], { type: "application/pdf" }));
+        if (onglet) {
+            onglet.location.href = adresse;
+        } else {
+            const lien = Object.assign(document.createElement("a"), { href: adresse, download: nomFichier });
+            document.body.append(lien);
+            lien.click();
+            lien.remove();
+        }
+        setTimeout(() => URL.revokeObjectURL(adresse), 60000);
+    } catch (erreur) {
+        onglet?.close();
+        throw erreur;
+    }
+}
+
 async function appelerApi(chemin, options = {}) {
     const entetes = { "Content-Type": "application/json" };
     const token = localStorage.getItem("token");

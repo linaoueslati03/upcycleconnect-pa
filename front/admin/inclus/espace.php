@@ -11,6 +11,7 @@ $liens = [
     "validations.php"  => ["nav.validations", "validation-offres.svg"],
     "finances.php"     => ["nav.finances", "finances.svg"],
     "reporting.php"    => ["nav.reporting", "reporting.svg"],
+    "documents.php"    => ["nav.documents", "documents.svg"],
     "notifications.php" => ["nav.notifications", "notifications.svg"],
     "plannings.php"    => ["nav.plannings", "party-horn-svgrepo-com.svg"],
     "moderation.php"   => ["nav.moderation", "message-square-shield-svgrepo-com.svg"],

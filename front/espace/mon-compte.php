@@ -76,6 +76,26 @@ $titrePage = "nav.mon_compte";
 
             </div>
 
+            <section class="carte mes-documents" id="mes-documents">
+                <h2>{{ $t('compte.documents.titre') }}</h2>
+                <p class="discret">{{ $t('compte.documents.explication') }}</p>
+                <p v-if="erreurDocuments" class="erreur">{{ erreurDocuments }}</p>
+                <p v-else-if="documents.length === 0" class="discret">{{ $t('compte.documents.aucun') }}</p>
+                <ul v-else class="liste-documents">
+                    <li v-for="d in documents" :key="d.id">
+                        <img src="../assets/img/documents.svg" alt="" aria-hidden="true">
+                        <div class="infos-document">
+                            <strong>{{ d.titre }}</strong>
+                            <span class="discret">{{ $t('admin.documents.type.' + d.type_document) }} · {{ formaterDateDocument(d.date_creation) }}</span>
+                        </div>
+                        <div class="actions-document">
+                            <button class="lien-action" @click="ouvrirDocument(d)">{{ $t('admin.documents.ouvrir') }}</button>
+                            <button class="lien-action" @click="telechargerDocument(d)">{{ $t('admin.documents.telecharger') }}</button>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
             <fenetre-modale :ouverte="profilOuvert" :titre="$t('compte.profil')" @fermer="profilOuvert = false">
                 <form @submit.prevent="enregistrerProfil">
                     <div class="form-group">

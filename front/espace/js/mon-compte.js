@@ -15,10 +15,13 @@ demarrerApp({
             entreprise: { siret: "", adresse: "", abonnement: "Freemium" },
             brouillonEntreprise: { siret: "", adresse: "" },
             entrepriseOuverte: false,
+            documents: [],
+            erreurDocuments: "",
         };
     },
 
     async mounted() {
+        this.chargerDocuments();
         const [reponseCompte, reponseLangues] = await Promise.all([appelerApi("/moi"), appelerApi("/langues")]);
         if (!reponseCompte.ok || !reponseLangues.ok) {
             this.erreurProfil = t("compte.erreur_chargement");
@@ -50,6 +53,40 @@ demarrerApp({
     },
 
     methods: {
+        // PDF archivés à mon nom (contrats, attestations, documents administratifs)
+        async chargerDocuments() {
+            try {
+                const reponse = await appelerApi("/moi/documents");
+                if (!reponse.ok) {
+                    this.erreurDocuments = t("commun.erreur_chargement");
+                    return;
+                }
+                this.documents = await reponse.json();
+            } catch (erreur) {
+                this.erreurDocuments = t("commun.erreur_chargement");
+            }
+        },
+
+        formaterDateDocument(date) {
+            return new Date(date).toLocaleDateString(langueCourante(), { day: "numeric", month: "long", year: "numeric" });
+        },
+
+        async ouvrirDocument(d) {
+            try {
+                await recupererPdf(`/documents/${d.id}/pdf`);
+            } catch (erreur) {
+                this.erreurDocuments = erreur.message;
+            }
+        },
+
+        async telechargerDocument(d) {
+            try {
+                await recupererPdf(`/documents/${d.id}/pdf`, { nomFichier: `document-${d.id}.pdf`, telecharger: true });
+            } catch (erreur) {
+                this.erreurDocuments = erreur.message;
+            }
+        },
+
         ouvrirProfil() {
             this.brouillonProfil = { ...this.profil };
             this.erreurProfil = "";
