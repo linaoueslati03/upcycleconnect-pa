@@ -12,7 +12,8 @@ INSERT INTO salaries (utilisateur_id, est_responsable)
     SELECT id, TRUE FROM utilisateurs WHERE email = 'salarie@upcycleconnect.fr';
 
 INSERT INTO categories_materiaux (code, libelle) VALUES
-    ('bois', 'Bois'), ('metal', 'Métal'), ('textile', 'Textile'), ('verre', 'Verre'), ('plastique', 'Plastique');
+    ('bois', 'Bois'), ('metal', 'Métal'), ('textile', 'Textile'), ('verre', 'Verre'), ('plastique', 'Plastique')
+ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO conteneurs (site) VALUES ('Paris 11e'), ('Paris 13e'), ('Montreuil');
 

@@ -75,6 +75,17 @@ docker compose exec postgres sh /db/migrer.sh
 La table `schema_migrations` liste les migrations déjà appliquées. Pour repartir d'une base vide :
 `docker compose down -v && docker compose up -d` (efface toutes les données locales).
 
+### Base vide (déploiement)
+
+Pour un vrai déploiement, sans aucune donnée de test, `db/creer_base_vide.sh` crée une base à côté de la base de travail :
+
+```bash
+sh db/creer_base_vide.sh                        # base « upcycleconnect_vide »
+sh db/creer_base_vide.sh ma_base --remplacer    # recrée une base existante
+```
+
+Elle contient toutes les migrations et les référentiels (rôles, langues, matériaux avec leurs facteurs CO2, paramètres financiers), un conteneur par site de collecte et **un seul compte administrateur**. Le script demande son e-mail, son nom et son mot de passe au clavier (même règle que l'application, jamais écrit dans un fichier). Pour que l'API l'utilise : `DB_NAME=upcycleconnect_vide` dans `.env`, puis `docker compose up -d api`. Retirer la ligne pour revenir à la base de travail.
+
 ## Une application, un affichage par rôle
 
 Particuliers, professionnels et salariés utilisent la même application (`front/espace/`). Le fichier
