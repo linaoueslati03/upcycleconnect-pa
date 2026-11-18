@@ -765,8 +765,23 @@
         "mot_de_passe_actuel": "Current password",
         "mot_de_passe_modifie": "Password changed.",
         "notifications": {
+            "activees_message": "Done: you will receive notifications on this device.",
             "activer": "Turn on notifications",
+            "aide_bloquees": "To unblock them: click the icon left of the site address, set “Notifications” to “Allow”, then reload the page.",
+            "desactivees_message": "Notifications turned off: no more push notifications on this device (they stay in the bell).",
+            "desactiver": "Turn off",
+            "etat": {
+                "activees": "Notifications turned on for this device",
+                "bloquees": "Notifications blocked by the browser",
+                "desactivees": "Notifications turned off for this device",
+                "indisponibles": "Push notifications are not available in this browser",
+                "verification": "Checking…"
+            },
             "explication": "Turn on notifications to hear about news and activity on your account.",
+            "non_activees": "Notifications were not turned on: allow them when the browser asks.",
+            "test_echec": "Sending failed on the server: the notification is only in the bell.",
+            "test_envoye": "Test notification sent: it should show up in a few seconds (it is also in the bell).",
+            "tester": "Send me a test notification",
             "titre": "Notifications"
         },
         "nouveau_mot_de_passe": "New password (at least 8 characters)",

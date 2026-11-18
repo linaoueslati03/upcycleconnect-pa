@@ -23,12 +23,17 @@ demarrerApp({
             messageAbonnement: "",
             erreurAbonnement: "",
             documents: [],
+            etatPush: "verification",
+            pushEnCours: false,
+            messagePush: "",
+            erreurPush: false,
             erreurDocuments: "",
         };
     },
 
     async mounted() {
         this.chargerDocuments();
+        this.chargerEtatPush();
         const [reponseCompte, reponseLangues] = await Promise.all([appelerApi("/moi"), appelerApi("/langues")]);
         if (!reponseCompte.ok || !reponseLangues.ok) {
             this.erreurProfil = t("compte.erreur_chargement");
@@ -62,6 +67,61 @@ demarrerApp({
     },
 
     methods: {
+        // Notifications push : l'état affiché est celui du navigateur et de OneSignal, pas une simple préférence
+        async chargerEtatPush() {
+            if (typeof notificationsPush === "undefined") {
+                this.etatPush = "indisponibles";
+                return;
+            }
+            this.etatPush = await notificationsPush.etat();
+            notificationsPush.surChangement((etat) => {
+                this.etatPush = etat;
+            });
+        },
+
+        async activerPush() {
+            this.pushEnCours = true;
+            this.messagePush = "";
+            try {
+                this.etatPush = await notificationsPush.activer();
+                this.erreurPush = this.etatPush !== "activees";
+                this.messagePush = t(this.erreurPush ? "compte.notifications.non_activees" : "compte.notifications.activees_message");
+            } catch (erreur) {
+                this.erreurPush = true;
+                this.messagePush = t("compte.notifications.non_activees");
+            }
+            this.pushEnCours = false;
+        },
+
+        async desactiverPush() {
+            this.pushEnCours = true;
+            this.messagePush = "";
+            try {
+                this.etatPush = await notificationsPush.desactiver();
+                this.erreurPush = false;
+                this.messagePush = t("compte.notifications.desactivees_message");
+            } catch (erreur) {
+                this.erreurPush = true;
+                this.messagePush = t("commun.erreur");
+            }
+            this.pushEnCours = false;
+        },
+
+        async testerPush() {
+            this.pushEnCours = true;
+            this.messagePush = "";
+            try {
+                const reponse = await appelerApi("/moi/notifications/test", { method: "POST" });
+                const resultat = reponse.ok ? await reponse.json() : null;
+                this.erreurPush = !resultat || resultat.push !== "envoyee";
+                this.messagePush = t(this.erreurPush ? "compte.notifications.test_echec" : "compte.notifications.test_envoye");
+            } catch (erreur) {
+                this.erreurPush = true;
+                this.messagePush = t("compte.notifications.test_echec");
+            }
+            this.pushEnCours = false;
+        },
+
         // PDF archivés à mon nom (contrats, attestations, documents administratifs)
         async chargerDocuments() {
             try {

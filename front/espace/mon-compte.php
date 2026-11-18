@@ -47,9 +47,21 @@ $titrePage = "nav.mon_compte";
                     <div class="carte section">
                         <h2>{{ $t('compte.notifications.titre') }}</h2>
                         <p>{{ $t('compte.notifications.explication') }}</p>
-                        <button id="activer-notifications" type="button" class="btn-primary">
-                            {{ $t('compte.notifications.activer') }}
-                        </button>
+                        <p class="etat-notifications" :class="'etat-' + etatPush" role="status">
+                            <span class="pastille-etat" aria-hidden="true"></span>
+                            {{ $t('compte.notifications.etat.' + etatPush) }}
+                        </p>
+                        <p v-if="etatPush === 'bloquees'" class="discret">{{ $t('compte.notifications.aide_bloquees') }}</p>
+                        <p v-if="messagePush" :class="erreurPush ? 'erreur' : 'succes'">{{ messagePush }}</p>
+                        <div class="form-buttons">
+                            <button v-if="etatPush === 'desactivees'" type="button" class="btn-primary" :disabled="pushEnCours" @click="activerPush">
+                                {{ $t('compte.notifications.activer') }}
+                            </button>
+                            <template v-if="etatPush === 'activees'">
+                                <button type="button" class="btn-primary" :disabled="pushEnCours" @click="testerPush">{{ $t('compte.notifications.tester') }}</button>
+                                <button type="button" class="button-draft" :disabled="pushEnCours" @click="desactiverPush">{{ $t('compte.notifications.desactiver') }}</button>
+                            </template>
+                        </div>
                     </div>
 
                     <div class="carte section">

@@ -100,6 +100,25 @@ func (s *Serveur) gererNotificationLue(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// Notification de test envoyée à soi-même depuis Mon compte : elle arrive dans la cloche du site
+// et, si le navigateur est abonné, en push. La réponse dit si l'envoi à OneSignal a réussi.
+func (s *Serveur) gererNotificationTest(w http.ResponseWriter, r *http.Request) {
+	utilisateurID, err := s.utilisateurConnecte(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusUnauthorized, "non authentifié")
+		return
+	}
+	const titre = "Notification de test"
+	const message = "Bravo, les notifications UpcycleConnect fonctionnent sur cet appareil."
+	enregistrerNotificationSite(utilisateurID, titre, message, "mon-compte.php")
+	resultat := map[string]string{"push": "envoyee"}
+	if err := envoyerNotification(utilisateurID, titre, message); err != nil {
+		log.Printf("notification de test OneSignal impossible pour l'utilisateur %d : %v", utilisateurID, err)
+		resultat["push"] = "echec"
+	}
+	envoyerJSON(w, http.StatusOK, resultat)
+}
+
 func (s *Serveur) gererToutesNotificationsLues(w http.ResponseWriter, r *http.Request) {
 	utilisateurID, err := s.utilisateurConnecte(r)
 	if err != nil {

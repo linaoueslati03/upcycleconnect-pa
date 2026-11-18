@@ -765,8 +765,23 @@
         "mot_de_passe_actuel": "Mot de passe actuel",
         "mot_de_passe_modifie": "Mot de passe modifié.",
         "notifications": {
+            "activees_message": "C'est fait : vous recevrez les notifications sur cet appareil.",
             "activer": "Activer les notifications",
+            "aide_bloquees": "Pour les débloquer : cliquez sur l'icône à gauche de l'adresse du site, mettez « Notifications » sur « Autoriser », puis rechargez la page.",
+            "desactivees_message": "Notifications désactivées : vous ne recevrez plus de notifications push sur cet appareil (elles restent dans la cloche).",
+            "desactiver": "Désactiver",
+            "etat": {
+                "activees": "Notifications activées sur cet appareil",
+                "bloquees": "Notifications bloquées par le navigateur",
+                "desactivees": "Notifications désactivées sur cet appareil",
+                "indisponibles": "Notifications push indisponibles sur ce navigateur",
+                "verification": "Vérification…"
+            },
             "explication": "Activez les notifications pour être informé des nouveautés et de l'activité de votre compte.",
+            "non_activees": "Les notifications n'ont pas été activées : autorisez-les quand le navigateur le demande.",
+            "test_echec": "L'envoi a échoué côté serveur : la notification est seulement dans la cloche.",
+            "test_envoye": "Notification de test envoyée : elle doit s'afficher dans quelques secondes (et apparaît aussi dans la cloche).",
+            "tester": "M'envoyer une notification de test",
             "titre": "Notifications"
         },
         "nouveau_mot_de_passe": "Nouveau mot de passe (8 caractères minimum)",

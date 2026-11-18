@@ -2140,3 +2140,40 @@ input[type="range"] {
 #objets-disponibles {
     scroll-margin-top: 20px;
 }
+
+/* État des notifications push (Mon compte) */
+.etat-notifications {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--beige);
+    color: var(--texte);
+    font-weight: 600;
+}
+
+.pastille-etat {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--texte-doux);
+}
+
+.etat-activees {
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+}
+
+.etat-activees .pastille-etat {
+    background: var(--vert);
+}
+
+.etat-bloquees {
+    background: #fbe4e4;
+    color: var(--rouge);
+}
+
+.etat-bloquees .pastille-etat {
+    background: var(--rouge);
+}

@@ -17,6 +17,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/moi/dashboard", s.gererDashboard)
 	mux.HandleFunc("GET /api/moi/notifications", s.gererMesNotifications)
 	mux.HandleFunc("PUT /api/moi/notifications/lues", s.gererToutesNotificationsLues)
+	mux.HandleFunc("POST /api/moi/notifications/test", s.gererNotificationTest)
 	mux.HandleFunc("PUT /api/moi/notifications/{id}/lue", s.gererNotificationLue)
 	mux.HandleFunc("GET /api/moi/paiements", s.gererMesPaiements)
 	mux.HandleFunc("GET /api/a-la-une", s.gererALaUne)
