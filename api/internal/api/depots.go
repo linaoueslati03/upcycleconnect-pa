@@ -22,16 +22,29 @@ type Depot struct {
 	DateDemande                 time.Time  `json:"date_demande"`
 	DateValidation              *time.Time `json:"date_validation"`
 	DateRecuperation            *time.Time `json:"date_recuperation"`
+	CategorieID                 *int       `json:"categorie_id"`
+	PoidsKg                     *float64   `json:"poids_kg"`
+	PoidsEstime                 bool       `json:"poids_estime"`
 }
 
 type DepotEntree struct {
-	ConteneurID      *int   `json:"conteneur_id"`
-	DescriptionObjet string `json:"description_objet"`
+	ConteneurID      *int     `json:"conteneur_id"`
+	DescriptionObjet string   `json:"description_objet"`
+	CategorieID      *int     `json:"categorie_id"`
+	PoidsKg          *float64 `json:"poids_kg"`
 }
 
 type DepotChangementStatut struct {
 	Statut                      string `json:"statut"`
 	ProfessionnelRecuperateurID *int   `json:"professionnel_recuperateur_id"`
+	// À la validation, le salarié peut corriger le poids annoncé par le particulier
+	PoidsKg *float64 `json:"poids_kg"`
+}
+
+const poidsMaximumDepot = 1000
+
+func poidsValide(poids *float64) bool {
+	return poids == nil || (*poids > 0 && *poids <= poidsMaximumDepot)
 }
 
 var ordreStatutsDepot = map[string]int{
@@ -50,6 +63,7 @@ func scannerDepot(ligne interface{ Scan(...any) error }, d *Depot) error {
 		&d.ID, &d.UtilisateurID, &conteneurID, &d.DescriptionObjet,
 		&codeOuverture, &codeBarre, &d.Statut, &professionnelID,
 		&d.DateDemande, &dateValidation, &dateRecuperation,
+		&d.CategorieID, &d.PoidsKg, &d.PoidsEstime,
 	)
 	if err != nil {
 		return err
@@ -78,7 +92,8 @@ func scannerDepot(ligne interface{ Scan(...any) error }, d *Depot) error {
 }
 
 const colonnesDepot = `id, utilisateur_id, conteneur_id, description_objet, code_ouverture, code_barre,
-	statut, professionnel_recuperateur_id, date_demande, date_validation, date_recuperation`
+	statut, professionnel_recuperateur_id, date_demande, date_validation, date_recuperation,
+	categorie_id, poids_kg, poids_estime`
 
 func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
 	utilisateurID, ok := s.exigerRole(w, r, roleParticulier, roleAdministrateur)
@@ -93,6 +108,21 @@ func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
 	}
 	if entree.DescriptionObjet == "" {
 		envoyerErreur(w, http.StatusBadRequest, "description_objet obligatoire")
+		return
+	}
+	if entree.CategorieID == nil {
+		envoyerErreur(w, http.StatusBadRequest, "matériau obligatoire")
+		return
+	}
+	if _, message, err := s.verifierCategorie(tableCategoriesMateriaux, *entree.CategorieID, 0); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	} else if message != "" {
+		envoyerErreur(w, http.StatusBadRequest, message)
+		return
+	}
+	if !poidsValide(entree.PoidsKg) {
+		envoyerErreur(w, http.StatusBadRequest, "le poids doit être compris entre 0 et 1000 kg")
 		return
 	}
 	if entree.ConteneurID != nil {
@@ -113,10 +143,10 @@ func (s *Serveur) gererCreationDepot(w http.ResponseWriter, r *http.Request) {
 
 	var d Depot
 	ligne := s.db.QueryRow(`
-		INSERT INTO depots (utilisateur_id, conteneur_id, description_objet)
-		VALUES ($1, $2, $3)
+		INSERT INTO depots (utilisateur_id, conteneur_id, description_objet, categorie_id, poids_kg)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING `+colonnesDepot,
-		utilisateurID, entree.ConteneurID, entree.DescriptionObjet,
+		utilisateurID, entree.ConteneurID, entree.DescriptionObjet, entree.CategorieID, entree.PoidsKg,
 	)
 	if err := scannerDepot(ligne, &d); err != nil {
 		gererErreurPostgres(w, err)
@@ -274,11 +304,16 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
+		if !poidsValide(entree.PoidsKg) {
+			envoyerErreur(w, http.StatusBadRequest, "le poids doit être compris entre 0 et 1000 kg")
+			return
+		}
 		ligne = tx.QueryRow(`
-			UPDATE depots SET statut = 'validee', code_ouverture = $1, code_barre = $2, date_validation = now()
+			UPDATE depots SET statut = 'validee', code_ouverture = $1, code_barre = $2, date_validation = now(),
+			    poids_kg = COALESCE($4, poids_kg), poids_estime = CASE WHEN $4::numeric IS NULL THEN poids_estime ELSE false END
 			WHERE id = $3 AND statut = 'demande'
 			RETURNING `+colonnesDepot,
-			codeOuverture, codeBarre, id,
+			codeOuverture, codeBarre, id, entree.PoidsKg,
 		)
 	case "deposee":
 		ligne = tx.QueryRow(`
@@ -334,6 +369,9 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	if entree.Statut == "deposee" {
+		s.declencherAlertesCollecte(d)
+	}
 	if entree.Statut == "validee" {
 		archiverAutomatiquement(fmt.Sprintf("bon du dépôt %d", d.ID), func() (int, error) {
 			return s.genererBonDepot(d.ID, appelantID)
@@ -350,7 +388,7 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		"deposee":   "Ton objet a bien été enregistré comme déposé.",
 		"recuperee": "Ton objet a été récupéré. Tes points ont été ajoutés.",
 	}
-	notifierUtilisateur(d.UtilisateurID, titresStatut[entree.Statut], messagesStatut[entree.Statut])
+	notifierAvecLien(d.UtilisateurID, titresStatut[entree.Statut], messagesStatut[entree.Statut], "depots.php")
 
 	envoyerJSON(w, http.StatusOK, d)
 }

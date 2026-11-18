@@ -10,6 +10,7 @@ demarrerApp({
             edition: { ...EDITION_VIDE },
             ajoutOuvert: false,
             ajoutType: "prestations",
+            impact: { ouvert: false, categorie: null, facteur: null, source: "", erreur: "" },
             erreur: "",
         };
     },
@@ -51,6 +52,27 @@ demarrerApp({
             groupe.nouvelle = "";
             this.ajoutOuvert = false;
             this.charger(type);
+        },
+
+        // Facteur de CO2 évité par kg réemployé (statistiques des professionnels), avec sa source
+        ouvrirImpact(categorie) {
+            this.impact = {
+                ouvert: true, categorie, facteur: categorie.co2_evite_par_kg, source: categorie.source_facteur || "", erreur: "",
+            };
+        },
+
+        async enregistrerImpact() {
+            this.impact.erreur = "";
+            const reponse = await appelerApi(`/admin/categories/materiaux/${this.impact.categorie.id}/impact`, {
+                method: "PUT",
+                body: JSON.stringify({ co2_evite_par_kg: this.impact.facteur, source_facteur: this.impact.source }),
+            });
+            if (!reponse.ok) {
+                this.impact.erreur = (await reponse.json()).erreur;
+                return;
+            }
+            this.impact.ouvert = false;
+            this.charger("materiaux");
         },
 
         commencerEdition(type, categorie) {

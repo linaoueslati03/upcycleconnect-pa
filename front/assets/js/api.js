@@ -176,6 +176,9 @@ async function demarrerApp(options) {
     if (typeof lancerTutorielSiBesoin === "function") {
         lancerTutorielSiBesoin();
     }
+    if (typeof clocheNotifications !== "undefined") {
+        clocheNotifications.demarrer();
+    }
 }
 
 // Recherche au fil de la frappe : n'appelle fonction qu'une fois que l'utilisateur

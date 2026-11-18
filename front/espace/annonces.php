@@ -41,7 +41,8 @@ $titrePage = "nav.annonces";
             <div class="deux-colonnes">
                 <div class="grille">
                     <div v-for="a in annonces" :key="a.id" class="carte carte-cliquable"
-                        :class="{ 'carte-selectionnee': selection && selection.id === a.id }" @click="selection = a">
+                        :class="{ 'carte-selectionnee': selection && selection.id === a.id, 'carte-a-la-une': a.a_la_une }" @click="selection = a">
+                        <span v-if="a.a_la_une" class="badge-a-la-une">{{ $t('a_la_une.badge') }}</span>
                         <span class="badge">{{ $t('annonce.type.' + a.type) }}</span>
                         <h3>{{ a.titre }}</h3>
                         <p class="discret">{{ a.localisation }} · {{ formaterDate(a.date_creation) }}</p>

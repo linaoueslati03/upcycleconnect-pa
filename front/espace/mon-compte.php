@@ -45,10 +45,10 @@ $titrePage = "nav.mon_compte";
                     </div>
 
                     <div class="carte section">
-                        <h2>Notifications</h2>
-                        <p>Activez les notifications pour être informé des nouveautés et des activités sur UpcycleConnect.</p>
+                        <h2>{{ $t('compte.notifications.titre') }}</h2>
+                        <p>{{ $t('compte.notifications.explication') }}</p>
                         <button id="activer-notifications" type="button" class="btn-primary">
-                            Activer les notifications
+                            {{ $t('compte.notifications.activer') }}
                         </button>
                     </div>
 
@@ -59,18 +59,37 @@ $titrePage = "nav.mon_compte";
                     </div>
 
                     <div v-if="roleConnecte() === 'professionnel'" class="carte section">
-                        <h2>Profil de l'entreprise</h2>
+                        <h2>{{ $t('compte.entreprise.titre') }}</h2>
                         <dl class="fiche-profil">
-                            <dt>SIRET</dt><dd>{{ entreprise.siret || '—' }}</dd>
-                            <dt>Adresse de l'entreprise</dt><dd>{{ entreprise.adresse || '—' }}</dd>
+                            <dt>{{ $t('compte.entreprise.siret') }}</dt><dd>{{ entreprise.siret || '—' }}</dd>
+                            <dt>{{ $t('compte.entreprise.adresse') }}</dt><dd>{{ entreprise.adresse || '—' }}</dd>
                         </dl>
+                        <p v-if="messageEntreprise" class="succes">{{ messageEntreprise }}</p>
                         <button class="btn-primary" @click="ouvrirEntreprise">{{ $t('commun.modifier') }}</button>
                     </div>
 
-                    <div v-if="roleConnecte() === 'professionnel'" class="carte">
-                        <h2>Abonnement</h2>
-                        <p>Votre abonnement actuel : <strong>{{ entreprise.abonnement }}</strong></p>
-                        <button v-if="entreprise.abonnement !== 'Premium'" class="btn-primary" @click="passerPremium">Passer Premium</button>
+                    <div v-if="roleConnecte() === 'professionnel' && abonnement" class="carte section carte-abonnement" :class="{ premium: abonnement.abonnement === 'premium' }">
+                        <h2>{{ $t('compte.abonnement.titre') }}</h2>
+                        <template v-if="abonnement.abonnement === 'premium'">
+                            <p><span class="badge-premium">Premium</span></p>
+                            <dl v-if="abonnement.date_debut" class="fiche-profil">
+                                <dt>{{ $t('compte.abonnement.depuis') }}</dt><dd>{{ formaterDateDocument(abonnement.date_debut) }}</dd>
+                                <dt>{{ $t('compte.abonnement.montant') }}</dt><dd>{{ formaterPrix(abonnement.montant_mensuel) }} / {{ $t('compte.abonnement.mois') }}</dd>
+                                <dt>{{ $t('compte.abonnement.echeance') }}</dt><dd>{{ formaterDateDocument(abonnement.prochaine_echeance) }}</dd>
+                            </dl>
+                            <button class="button-draft" @click="resiliationOuverte = true">{{ $t('compte.abonnement.resilier') }}</button>
+                        </template>
+                        <template v-else>
+                            <p>{{ $t('compte.abonnement.freemium') }}</p>
+                            <ul class="avantages-premium">
+                                <li v-for="a in ['statistiques', 'stocks', 'alertes']" :key="a">{{ $t('compte.abonnement.avantage.' + a) }}</li>
+                            </ul>
+                            <button class="btn-primary" :disabled="achatEnCours" @click="passerPremium">
+                                {{ $t('compte.abonnement.passer', { prix: formaterPrix(abonnement.prix_mensuel) }) }}
+                            </button>
+                        </template>
+                        <p v-if="messageAbonnement" class="succes">{{ messageAbonnement }}</p>
+                        <p v-if="erreurAbonnement" class="erreur">{{ erreurAbonnement }}</p>
                     </div>
                 </div>
 
@@ -124,21 +143,31 @@ $titrePage = "nav.mon_compte";
                 </form>
             </fenetre-modale>
 
-            <fenetre-modale :ouverte="entrepriseOuverte" titre="Profil de l'entreprise" @fermer="entrepriseOuverte = false">
-                <form @submit.prevent="validerEntreprise">
+            <fenetre-modale :ouverte="entrepriseOuverte" :titre="$t('compte.entreprise.titre')" @fermer="entrepriseOuverte = false">
+                <form @submit.prevent="enregistrerEntreprise">
                     <div class="form-group">
-                        <label for="siret">SIRET</label>
-                        <input id="siret" type="text" v-model="brouillonEntreprise.siret">
+                        <label for="siret">{{ $t('compte.entreprise.siret') }}</label>
+                        <input id="siret" type="text" v-model="brouillonEntreprise.siret" required inputmode="numeric"
+                            pattern="[0-9 ]{14,17}" maxlength="17" :placeholder="$t('compte.entreprise.siret_exemple')">
                     </div>
                     <div class="form-group">
-                        <label for="adresse">Adresse de l'entreprise</label>
-                        <input id="adresse" type="text" v-model="brouillonEntreprise.adresse">
+                        <label for="adresse">{{ $t('compte.entreprise.adresse') }}</label>
+                        <input id="adresse" type="text" v-model="brouillonEntreprise.adresse" required maxlength="255" autocomplete="street-address">
                     </div>
+                    <p v-if="erreurEntreprise" class="erreur">{{ erreurEntreprise }}</p>
                     <div class="form-buttons">
-                        <button type="submit" class="button-submit">{{ $t('commun.valider') }}</button>
+                        <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
                         <button type="button" class="button-draft" @click="entrepriseOuverte = false">{{ $t('commun.annuler') }}</button>
                     </div>
                 </form>
+            </fenetre-modale>
+
+            <fenetre-modale :ouverte="resiliationOuverte" :titre="$t('compte.abonnement.resilier')" @fermer="resiliationOuverte = false">
+                <p>{{ $t('compte.abonnement.resilier_confirmation') }}</p>
+                <div class="form-buttons">
+                    <button type="button" class="button-submit bouton-refus" @click="resilier">{{ $t('compte.abonnement.resilier_valider') }}</button>
+                    <button type="button" class="button-draft" @click="resiliationOuverte = false">{{ $t('commun.annuler') }}</button>
+                </div>
             </fenetre-modale>
 
             <fenetre-modale :ouverte="motDePasseOuvert" :titre="$t('compte.changer_mot_de_passe')" @fermer="motDePasseOuvert = false">

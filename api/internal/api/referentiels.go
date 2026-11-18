@@ -7,6 +7,9 @@ type Categorie struct {
 	Code    string `json:"code"`
 	Libelle string `json:"libelle"`
 	Actif   bool   `json:"actif"`
+	// Facteur d'impact : kg de CO2e évités par kg réemployé, avec sa source
+	Co2EviteParKg *float64 `json:"co2_evite_par_kg"`
+	SourceFacteur *string  `json:"source_facteur"`
 }
 
 type Conteneur struct {
@@ -22,7 +25,7 @@ type Langue struct {
 }
 
 func (s *Serveur) gererListeCategories(w http.ResponseWriter, r *http.Request) {
-	lignes, err := s.db.Query("SELECT id, code, libelle, actif FROM categories_materiaux ORDER BY libelle")
+	lignes, err := s.db.Query("SELECT id, code, libelle, actif, co2_evite_par_kg, source_facteur FROM categories_materiaux ORDER BY libelle")
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -32,7 +35,7 @@ func (s *Serveur) gererListeCategories(w http.ResponseWriter, r *http.Request) {
 	categories := make([]Categorie, 0)
 	for lignes.Next() {
 		var c Categorie
-		if err := lignes.Scan(&c.ID, &c.Code, &c.Libelle, &c.Actif); err != nil {
+		if err := lignes.Scan(&c.ID, &c.Code, &c.Libelle, &c.Actif, &c.Co2EviteParKg, &c.SourceFacteur); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}

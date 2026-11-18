@@ -58,11 +58,12 @@ function versDateAPI(valeurChamp) {
 
 // Achat d'une formation payante ou d'un objet : crée la commande puis envoie vers la page de paiement
 // (page de démonstration aujourd'hui, Stripe Checkout une fois branché). Renvoie un message d'erreur sinon.
-async function demarrerAchat(type, referenceId) {
+// « details » complète la commande (campagne publicitaire : cible_type, cible_id, montant).
+async function demarrerAchat(type, referenceId, details = {}) {
     try {
         const reponse = await appelerApi("/commandes", {
             method: "POST",
-            body: JSON.stringify({ type, reference_id: referenceId }),
+            body: JSON.stringify({ type, reference_id: referenceId, ...details }),
         });
         if (!reponse.ok) {
             return await messageErreur(reponse);

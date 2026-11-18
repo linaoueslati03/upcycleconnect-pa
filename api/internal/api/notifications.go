@@ -20,9 +20,16 @@ func envoyerNotification(utilisateurID int, titre, message string) error {
 }
 
 func notifierUtilisateur(utilisateurID int, titre, message string) {
+	notifierAvecLien(utilisateurID, titre, message, "")
+}
+
+// Notification enregistrée dans le site (cloche de l'espace), puis envoyée en push OneSignal.
+// Le lien (facultatif) est la page de l'espace à ouvrir depuis la notification.
+func notifierAvecLien(utilisateurID int, titre, message, lien string) {
 	if utilisateurID <= 0 {
 		return
 	}
+	enregistrerNotificationSite(utilisateurID, titre, message, lien)
 	if err := envoyerNotification(utilisateurID, titre, message); err != nil {
 		log.Printf("notification OneSignal impossible pour l'utilisateur %d : %v", utilisateurID, err)
 	}

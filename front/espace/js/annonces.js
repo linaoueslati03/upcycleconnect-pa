@@ -7,6 +7,7 @@ demarrerApp({
             selection: null,
             erreur: "",
             erreurAchat: "",
+            idsALaUne: new Set(),
             achatEnCours: false,
         };
     },
@@ -31,6 +32,10 @@ demarrerApp({
         const reponse = await appelerApi("/categories");
         if (reponse.ok) {
             this.categories = await reponse.json();
+        }
+        const aLaUne = await appelerApi("/a-la-une");
+        if (aLaUne.ok) {
+            this.idsALaUne = new Set((await aLaUne.json()).annonces);
         }
         this.chargerAnnonces();
     },
@@ -79,7 +84,10 @@ demarrerApp({
                 return;
             }
             this.erreur = "";
-            this.annonces = await reponse.json();
+            const annonces = await reponse.json();
+            // Les annonces mises en avant par une campagne publicitaire passent en premier
+            annonces.forEach((a) => { a.a_la_une = this.idsALaUne.has(a.id); });
+            this.annonces = [...annonces.filter((a) => a.a_la_une), ...annonces.filter((a) => !a.a_la_une)];
             this.selection = null;
         },
     },

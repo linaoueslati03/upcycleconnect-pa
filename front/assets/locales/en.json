@@ -1,4 +1,9 @@
 {
+    "a_la_une": {
+        "badge": "Featured",
+        "par": "by {nom}",
+        "projets": "Featured projects"
+    },
     "accueil": {
         "annonces_en_ligne": "Online listings",
         "aucun_depot": "None",
@@ -6,6 +11,13 @@
         "demander_depot": "Request a container drop-off",
         "dernier_depot": "Latest container drop-off",
         "erreur_chargement": "Error while loading the dashboard",
+        "pro": {
+            "campagnes_actives": "Active campaigns",
+            "recuperer": "Collect an item",
+            "recuperer_detail": "Scan the barcode of a dropped-off item",
+            "stats_freemium": "Available with Premium",
+            "stats_premium": "Your impact and real-time stock"
+        },
         "prochain_rdv": "Next appointment"
     },
     "admin": {
@@ -24,6 +36,13 @@
             "desactiver": "Deactivate",
             "erreur_chargement": "Error while loading categories",
             "explication": "A deactivated category is no longer offered, but services and listings using it keep it. For items, the displayed name comes from the translation files when it exists; otherwise it is the name entered here.",
+            "impact": {
+                "explication": "Factor used to estimate the CO2 saved in professionals' statistics (kg CO2e saved per kg reused). Always give the source.",
+                "facteur": "Factor (kg CO2e/kg)",
+                "sans_source": "Not set",
+                "source": "Source",
+                "titre": "CO2 impact of materials"
+            },
             "inactive": "Inactive",
             "materiaux": "Item categories (listings)",
             "nouvelle": "New category name",
@@ -709,6 +728,24 @@
         "valider": "Approve"
     },
     "compte": {
+        "abonnement": {
+            "avantage": {
+                "alertes": "Alerts as soon as an item you want is dropped off",
+                "statistiques": "Impact statistics: items collected, weight reused, CO2 saved",
+                "stocks": "Real-time view of items available in containers"
+            },
+            "depuis": "Subscribed since",
+            "echeance": "Next renewal",
+            "freemium": "You are on the Freemium plan.",
+            "mois": "month",
+            "montant": "Amount",
+            "passer": "Go Premium ({prix} / month)",
+            "resilie": "Subscription cancelled: you are back on Freemium.",
+            "resilier": "Cancel subscription",
+            "resilier_confirmation": "Your Premium subscription will be cancelled right away and you will go back to Freemium. Continue?",
+            "resilier_valider": "Cancel",
+            "titre": "Subscription"
+        },
         "changement_obligatoire": "Your password has been reset: choose a new one to continue.",
         "changer_mot_de_passe": "Change password",
         "documents": {
@@ -716,10 +753,22 @@
             "explication": "Your registration certificates, drop-off slips, contracts and administrative documents, archived by UpcycleConnect.",
             "titre": "My documents"
         },
+        "entreprise": {
+            "adresse": "Company address",
+            "enregistree": "Company profile saved.",
+            "siret": "SIRET",
+            "siret_exemple": "14 digits",
+            "titre": "Company profile"
+        },
         "erreur_chargement": "Error while loading your account",
         "langue_affichage": "Display language",
         "mot_de_passe_actuel": "Current password",
         "mot_de_passe_modifie": "Password changed.",
+        "notifications": {
+            "activer": "Turn on notifications",
+            "explication": "Turn on notifications to hear about news and activity on your account.",
+            "titre": "Notifications"
+        },
         "nouveau_mot_de_passe": "New password (at least 8 characters)",
         "profil": "Profile",
         "profil_enregistre": "Profile saved.",
@@ -740,6 +789,56 @@
         "mot_cle": "Keyword",
         "publie_le": "Published on {date}"
     },
+    "contrats": {
+        "abonnement_freemium": "Freemium plan (free).",
+        "abonnement_premium": "{montant} per month · next renewal on {date}",
+        "campagnes": {
+            "aide": "A campaign lasts one month. Budget ranges from €100 to €500 per month.",
+            "arretee": "Campaign stopped.",
+            "arreter": "Stop the campaign",
+            "arreter_confirmation": "Promotion of “{element}” will stop right away. Continue?",
+            "aucun_element": {
+                "annonce": "No listing online.",
+                "projet": "No public project available: make a project public in “My projects”."
+            },
+            "aucune": "No campaigns yet.",
+            "budget": "Budget",
+            "budget_mensuel": "Monthly budget: {budget}",
+            "choisir": "Choose",
+            "cible": {
+                "annonce": "Listing",
+                "projet": "Project"
+            },
+            "element": "Promoted item",
+            "explication": "Promote one of your public projects or one of your listings: it is shown as “Featured” to members and professionals.",
+            "nouvelle": "New campaign",
+            "payer": "Pay {montant}",
+            "statut": {
+                "active": "Active",
+                "annulee": "Cancelled",
+                "terminee": "Ended"
+            },
+            "titre": "Advertising campaigns",
+            "type_element": "What do you want to promote?"
+        },
+        "documents": {
+            "aucun": "No invoices or contracts yet.",
+            "titre": "Invoices and contracts"
+        },
+        "gerer_abonnement": "Manage my subscription",
+        "paiements": {
+            "aucun": "No payments yet.",
+            "facture": "Invoice",
+            "libelle": "Description",
+            "titre": "Payment history"
+        },
+        "prestations": {
+            "aucune": "No services yet.",
+            "fiche_pdf": "PDF sheet",
+            "titre": "Service catalogue"
+        },
+        "titre": "Contracts and billing"
+    },
     "depot": {
         "demande": "Request sent",
         "deposee": "Item dropped off",
@@ -749,6 +848,7 @@
     "depots": {
         "aucun": "No drop-off request yet.",
         "choisir_conteneur": "Choose a container",
+        "choisir_materiau": "Choose the material",
         "code_barre": "Item barcode",
         "code_ouverture": "Container opening code",
         "codes_apres_validation": "Your codes will be sent as soon as the request is approved.",
@@ -761,7 +861,25 @@
         "envoyer": "Send request",
         "erreur_chargement": "Error while loading your drop-offs",
         "explication": "Our team approves your request, then you receive a code to open the container.",
+        "materiau": "Material",
         "placeholder_objet": "Type of item, condition, size…",
+        "poids": "Approximate weight (kg)",
+        "poids_aide": "The weight is used to estimate the CO2 saved. An estimate is fine: staff will check it at drop-off.",
+        "poids_estime": "estimated weight",
+        "poids_exemple": "e.g. 12",
+        "poids_verifie": "Checked weight (kg)",
+        "pro": {
+            "code_barre": "Item barcode",
+            "code_exemple": "e.g. ad125a76ba15059b",
+            "confirmer": "Confirm collection",
+            "conteneur": "Container",
+            "explication": "Type or scan the item's barcode to check it has been dropped off, then confirm the collection.",
+            "objet_trouve": "Item available",
+            "recuperation_confirmee": "Collection confirmed: “{objet}”. The container is available again.",
+            "scanner": "Scan an item",
+            "titre": "Collect an item from a container",
+            "verifier": "Check the code"
+        },
         "suivi": "My drop-offs",
         "titre": "Container drop-offs"
     },
@@ -828,6 +946,12 @@
         "utilisateurs": "Users",
         "validations": "Approvals"
     },
+    "notifications_site": {
+        "aucune": "No notifications yet.",
+        "non_lues": "{nombre} unread",
+        "titre": "Notifications",
+        "tout_lu": "Mark all as read"
+    },
     "offre": {
         "atelier": "Workshop",
         "evenement": "Event",
@@ -838,25 +962,41 @@
         "article": "Item",
         "aucun_debit": "No payment was made.",
         "confirmation_en_cours": "Confirming your payment…",
-        "continuer": "Continue shopping",
+        "continuer": {
+            "abonnement": "See my statistics",
+            "formation": "Continue shopping",
+            "publicite": "See my campaigns",
+            "vente": "Continue shopping"
+        },
         "demo_texte": "payment is simulated, no card is requested or charged. This step will be replaced by Stripe's secure payment page.",
         "demo_titre": "Demo mode:",
         "en_cours": "Processing payment…",
         "expiree_titre": "Payment time expired",
+        "facture_contrat_disponibles": "Your invoice and contract have been generated and archived in “My documents”.",
         "facture_disponible": "Your invoice has been generated and archived in “My documents”.",
         "introuvable": "Order not found.",
         "montant": "Amount due",
         "payer": "Pay {montant}",
         "recapitulatif": "Summary",
-        "reserve_objet": "The item is reserved for you for another {temps}.",
-        "reserve_place": "Your seat is held for another {temps}.",
+        "reserve": {
+            "abonnement": "This offer is valid for another {temps}.",
+            "formation": "Your seat is held for another {temps}.",
+            "publicite": "This campaign is reserved for another {temps}.",
+            "vente": "The item is reserved for you for another {temps}."
+        },
         "retour": "Back",
-        "reussi_formation": "Your registration is confirmed ({libelle}).",
-        "reussi_objet": "Purchase confirmed ({libelle}). The seller has been notified.",
+        "reussi": {
+            "abonnement": "You are now a Premium subscriber: statistics, real-time stock and alerts are unlocked.",
+            "formation": "Your registration is confirmed ({libelle}).",
+            "publicite": "Your campaign is live: “{libelle}” is now featured.",
+            "vente": "Purchase confirmed ({libelle}). The seller has been notified."
+        },
         "reussi_titre": "Payment accepted",
         "titre": "Payment",
         "type": {
+            "abonnement": "Subscription",
             "formation": "Training",
+            "publicite": "Advertising campaign",
             "vente": "Item"
         },
         "voir_facture": "View invoice"
@@ -964,6 +1104,61 @@
     },
     "site": {
         "suisse": "Switzerland"
+    },
+    "statistiques": {
+        "alertes": {
+            "aide": "Choose at least one criterion.",
+            "aucune": "No alerts set up.",
+            "contenant": "containing “{mot}”",
+            "enregistree": "Alert saved.",
+            "mot_cle": "Keyword (optional)",
+            "mot_cle_exemple": "e.g. oak, cast iron, linen…",
+            "nouvelle": "New alert",
+            "texte": "Get a notification as soon as a matching item is dropped in a container.",
+            "titre": "Collection alerts",
+            "tous_materiaux": "All materials",
+            "tous_sites": "All sites"
+        },
+        "aucune_recuperation": "No collections yet.",
+        "graphique": {
+            "co2": "CO2 saved",
+            "materiaux": "CO2 saved by material",
+            "materiaux_detail": "Since the start",
+            "mois": "Collections and CO2 saved per month",
+            "mois_detail": "Over the last 12 months",
+            "objets": "Items collected"
+        },
+        "kpi": {
+            "achats": "Items bought",
+            "campagnes": "Active campaigns",
+            "co2": "CO2 saved (estimate)",
+            "co2_detail": "weight × material factor",
+            "depenses": "{montant} spent",
+            "poids": "Weight reused",
+            "recuperes": "Items collected",
+            "voir_campagnes": "See my campaigns"
+        },
+        "methode": {
+            "co2": "CO2 saved",
+            "facteur": "Factor (kg CO2e/kg)",
+            "objets": "Items",
+            "poids": "Weight",
+            "poids_estimes": "{nombre} item(s) had no weight entered: a typical weight was used.",
+            "sans_source": "No factor set",
+            "source": "Factor source",
+            "texte": "CO2 saved = weight of each collected item × its material factor (kg CO2e saved per kg reused). It is an order of magnitude, not a certified carbon footprint.",
+            "titre": "How it is calculated"
+        },
+        "stocks": {
+            "aucun": "No items waiting to be collected right now.",
+            "texte": "Items dropped in containers and not collected yet, by site and material.",
+            "titre": "Items available now"
+        },
+        "titre": "Statistics and impact",
+        "verrou": {
+            "texte": "Impact statistics, real-time stock and collection alerts are available to Premium subscribers.",
+            "titre": "Premium feature"
+        }
     },
     "statut": {
         "annule": "Cancelled",

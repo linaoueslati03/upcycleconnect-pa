@@ -11,8 +11,11 @@ import (
 
 type MonCompte struct {
 	Utilisateur
-	TutorielVu            bool `json:"tutoriel_vu"`
-	DoitChangerMotDePasse bool `json:"doit_changer_mot_de_passe"`
+	TutorielVu            bool    `json:"tutoriel_vu"`
+	DoitChangerMotDePasse bool    `json:"doit_changer_mot_de_passe"`
+	Abonnement            string  `json:"abonnement"`
+	Siret                 *string `json:"siret"`
+	AdresseEntreprise     *string `json:"adresse_entreprise"`
 }
 
 type MotDePasseEntree struct {
@@ -38,10 +41,10 @@ func (s *Serveur) gererMonCompte(w http.ResponseWriter, r *http.Request) {
 	var langueID sql.NullInt64
 	err = s.db.QueryRow(`
 		SELECT id, role_id, nom, prenom, email, statut, langue_preferee_id, upcycling_score, date_creation, tutoriel_vu,
-		       doit_changer_mot_de_passe
+		       doit_changer_mot_de_passe, abonnement, siret, adresse_entreprise
 		FROM utilisateurs WHERE id = $1`, utilisateurID,
 	).Scan(&u.ID, &u.RoleID, &u.Nom, &u.Prenom, &u.Email, &u.Statut, &langueID, &u.UpcyclingScore, &u.DateCreation, &u.TutorielVu,
-		&u.DoitChangerMotDePasse)
+		&u.DoitChangerMotDePasse, &u.Abonnement, &u.Siret, &u.AdresseEntreprise)
 
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")

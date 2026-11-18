@@ -1,4 +1,9 @@
 {
+    "a_la_une": {
+        "badge": "À la une",
+        "par": "par {nom}",
+        "projets": "Projets à la une"
+    },
     "accueil": {
         "annonces_en_ligne": "Annonces en ligne",
         "aucun_depot": "Aucun",
@@ -6,6 +11,13 @@
         "demander_depot": "Demander un dépôt en conteneur",
         "dernier_depot": "Dernier dépôt en conteneur",
         "erreur_chargement": "Erreur lors du chargement du tableau de bord",
+        "pro": {
+            "campagnes_actives": "Campagnes actives",
+            "recuperer": "Récupérer un objet",
+            "recuperer_detail": "Scanner le code-barre d'un objet déposé",
+            "stats_freemium": "Disponible avec Premium",
+            "stats_premium": "Votre impact et les stocks en temps réel"
+        },
         "prochain_rdv": "Prochain rendez-vous"
     },
     "admin": {
@@ -24,6 +36,13 @@
             "desactiver": "Désactiver",
             "erreur_chargement": "Erreur lors du chargement des catégories",
             "explication": "Une catégorie désactivée n'est plus proposée, mais les prestations et annonces qui l'utilisent la gardent. Pour les objets, le nom affiché vient des fichiers de traduction quand il existe ; sinon, c'est le nom saisi ici.",
+            "impact": {
+                "explication": "Facteur utilisé pour estimer le CO2 évité dans les statistiques des professionnels (kg de CO2e évités par kg réemployé). Indiquez toujours la source.",
+                "facteur": "Facteur (kg CO2e/kg)",
+                "sans_source": "Non renseignée",
+                "source": "Source",
+                "titre": "Impact CO2 des matériaux"
+            },
             "inactive": "Inactive",
             "materiaux": "Catégories des objets (annonces)",
             "nouvelle": "Nom de la nouvelle catégorie",
@@ -709,6 +728,24 @@
         "valider": "Valider"
     },
     "compte": {
+        "abonnement": {
+            "avantage": {
+                "alertes": "Alertes dès qu'un objet qui vous intéresse est déposé",
+                "statistiques": "Statistiques d'impact : objets récupérés, poids réemployé, CO2 évité",
+                "stocks": "Objets disponibles dans les conteneurs en temps réel"
+            },
+            "depuis": "Abonné depuis",
+            "echeance": "Prochaine échéance",
+            "freemium": "Vous utilisez l'offre Freemium.",
+            "mois": "mois",
+            "montant": "Montant",
+            "passer": "Passer Premium ({prix} / mois)",
+            "resilie": "Abonnement résilié : vous êtes repassé en Freemium.",
+            "resilier": "Résilier l'abonnement",
+            "resilier_confirmation": "Votre abonnement Premium sera résilié immédiatement et vous repasserez en Freemium. Continuer ?",
+            "resilier_valider": "Résilier",
+            "titre": "Abonnement"
+        },
         "changement_obligatoire": "Votre mot de passe a été réinitialisé : choisissez-en un nouveau pour continuer.",
         "changer_mot_de_passe": "Changer le mot de passe",
         "documents": {
@@ -716,10 +753,22 @@
             "explication": "Vos attestations d'inscription, bons de dépôt, contrats et documents administratifs, archivés par UpcycleConnect.",
             "titre": "Mes documents"
         },
+        "entreprise": {
+            "adresse": "Adresse de l'entreprise",
+            "enregistree": "Profil de l'entreprise enregistré.",
+            "siret": "SIRET",
+            "siret_exemple": "14 chiffres",
+            "titre": "Profil de l'entreprise"
+        },
         "erreur_chargement": "Erreur lors du chargement de votre compte",
         "langue_affichage": "Langue d'affichage",
         "mot_de_passe_actuel": "Mot de passe actuel",
         "mot_de_passe_modifie": "Mot de passe modifié.",
+        "notifications": {
+            "activer": "Activer les notifications",
+            "explication": "Activez les notifications pour être informé des nouveautés et de l'activité de votre compte.",
+            "titre": "Notifications"
+        },
         "nouveau_mot_de_passe": "Nouveau mot de passe (8 caractères minimum)",
         "profil": "Profil",
         "profil_enregistre": "Profil enregistré.",
@@ -740,6 +789,56 @@
         "mot_cle": "Mot-clé",
         "publie_le": "Publié le {date}"
     },
+    "contrats": {
+        "abonnement_freemium": "Offre Freemium (gratuite).",
+        "abonnement_premium": "{montant} par mois · prochaine échéance le {date}",
+        "campagnes": {
+            "aide": "La campagne dure un mois. Le budget va de 100 à 500 € par mois.",
+            "arretee": "Campagne arrêtée.",
+            "arreter": "Arrêter la campagne",
+            "arreter_confirmation": "La mise en avant de « {element} » s'arrêtera immédiatement. Continuer ?",
+            "aucun_element": {
+                "annonce": "Aucune annonce en ligne disponible.",
+                "projet": "Aucun projet public disponible : rendez un projet public dans « Mes projets »."
+            },
+            "aucune": "Aucune campagne pour le moment.",
+            "budget": "Budget",
+            "budget_mensuel": "Budget mensuel : {budget}",
+            "choisir": "Choisir",
+            "cible": {
+                "annonce": "Annonce",
+                "projet": "Projet"
+            },
+            "element": "Élément mis en avant",
+            "explication": "Mettez en avant un de vos projets publics ou une de vos annonces : il apparaît « À la une » chez les particuliers et les professionnels.",
+            "nouvelle": "Nouvelle campagne",
+            "payer": "Payer {montant}",
+            "statut": {
+                "active": "Active",
+                "annulee": "Annulée",
+                "terminee": "Terminée"
+            },
+            "titre": "Campagnes publicitaires",
+            "type_element": "Que voulez-vous mettre en avant ?"
+        },
+        "documents": {
+            "aucun": "Aucune facture ni aucun contrat pour le moment.",
+            "titre": "Factures et contrats"
+        },
+        "gerer_abonnement": "Gérer mon abonnement",
+        "paiements": {
+            "aucun": "Aucun paiement pour le moment.",
+            "facture": "Facture",
+            "libelle": "Libellé",
+            "titre": "Historique des paiements"
+        },
+        "prestations": {
+            "aucune": "Aucune prestation pour le moment.",
+            "fiche_pdf": "Fiche PDF",
+            "titre": "Catalogue des prestations"
+        },
+        "titre": "Contrats et facturation"
+    },
     "depot": {
         "demande": "Demande envoyée",
         "deposee": "Objet déposé",
@@ -749,6 +848,7 @@
     "depots": {
         "aucun": "Aucune demande de dépôt pour le moment.",
         "choisir_conteneur": "Choisir un conteneur",
+        "choisir_materiau": "Choisir le matériau",
         "code_barre": "Code-barre de l'objet",
         "code_ouverture": "Code d'ouverture du conteneur",
         "codes_apres_validation": "Les codes vous seront communiqués dès que la demande sera validée.",
@@ -761,7 +861,25 @@
         "envoyer": "Envoyer la demande",
         "erreur_chargement": "Erreur lors du chargement de vos dépôts",
         "explication": "Votre demande est validée par notre équipe, puis vous recevez un code pour ouvrir le conteneur.",
+        "materiau": "Matériau",
         "placeholder_objet": "Type d'objet, état, dimensions…",
+        "poids": "Poids approximatif (kg)",
+        "poids_aide": "Le poids sert à estimer le CO2 évité. Une estimation suffit : le salarié le vérifiera au dépôt.",
+        "poids_estime": "poids estimé",
+        "poids_exemple": "Ex. 12",
+        "poids_verifie": "Poids vérifié (kg)",
+        "pro": {
+            "code_barre": "Code-barre de l'objet",
+            "code_exemple": "Ex. ad125a76ba15059b",
+            "confirmer": "Confirmer la récupération",
+            "conteneur": "Conteneur",
+            "explication": "Saisissez ou scannez le code-barre de l'objet pour vérifier qu'il est bien déposé, puis confirmez sa récupération.",
+            "objet_trouve": "Objet disponible",
+            "recuperation_confirmee": "Récupération confirmée : « {objet} ». Le conteneur est de nouveau disponible.",
+            "scanner": "Scanner un objet",
+            "titre": "Récupérer un objet en conteneur",
+            "verifier": "Vérifier le code"
+        },
         "suivi": "Suivi de mes dépôts",
         "titre": "Dépôts en conteneur"
     },
@@ -828,6 +946,12 @@
         "utilisateurs": "Utilisateurs",
         "validations": "Validations"
     },
+    "notifications_site": {
+        "aucune": "Aucune notification pour le moment.",
+        "non_lues": "{nombre} non lue(s)",
+        "titre": "Notifications",
+        "tout_lu": "Tout marquer comme lu"
+    },
     "offre": {
         "atelier": "Atelier",
         "evenement": "Événement",
@@ -838,25 +962,41 @@
         "article": "Article",
         "aucun_debit": "Aucun paiement n'a été effectué.",
         "confirmation_en_cours": "Paiement en cours de confirmation…",
-        "continuer": "Continuer mes achats",
+        "continuer": {
+            "abonnement": "Voir mes statistiques",
+            "formation": "Continuer mes achats",
+            "publicite": "Voir mes campagnes",
+            "vente": "Continuer mes achats"
+        },
         "demo_texte": "le paiement est simulé, aucune carte n'est demandée ni débitée. Cette étape sera remplacée par la page de paiement sécurisée Stripe.",
         "demo_titre": "Mode démonstration :",
         "en_cours": "Paiement en cours…",
         "expiree_titre": "Délai de paiement dépassé",
+        "facture_contrat_disponibles": "Votre facture et votre contrat ont été générés et archivés dans « Mes documents ».",
         "facture_disponible": "Votre facture a été générée et archivée dans « Mes documents ».",
         "introuvable": "Commande introuvable.",
         "montant": "Montant à payer",
         "payer": "Payer {montant}",
         "recapitulatif": "Récapitulatif",
-        "reserve_objet": "L'objet vous est réservé pendant encore {temps}.",
-        "reserve_place": "Votre place est retenue pendant encore {temps}.",
+        "reserve": {
+            "abonnement": "Cette offre est valable encore {temps}.",
+            "formation": "Votre place est retenue pendant encore {temps}.",
+            "publicite": "Cette campagne est réservée pendant encore {temps}.",
+            "vente": "L'objet vous est réservé pendant encore {temps}."
+        },
         "retour": "Retour",
-        "reussi_formation": "Votre inscription est confirmée ({libelle}).",
-        "reussi_objet": "Achat confirmé ({libelle}). Le vendeur a été prévenu.",
+        "reussi": {
+            "abonnement": "Vous êtes maintenant abonné Premium : statistiques, stocks en temps réel et alertes sont débloqués.",
+            "formation": "Votre inscription est confirmée ({libelle}).",
+            "publicite": "Votre campagne est active : « {libelle} » apparaît maintenant à la une.",
+            "vente": "Achat confirmé ({libelle}). Le vendeur a été prévenu."
+        },
         "reussi_titre": "Paiement accepté",
         "titre": "Paiement",
         "type": {
+            "abonnement": "Abonnement",
             "formation": "Formation",
+            "publicite": "Campagne publicitaire",
             "vente": "Objet"
         },
         "voir_facture": "Voir la facture"
@@ -964,6 +1104,61 @@
     },
     "site": {
         "suisse": "Suisse"
+    },
+    "statistiques": {
+        "alertes": {
+            "aide": "Choisissez au moins un critère.",
+            "aucune": "Aucune alerte configurée.",
+            "contenant": "contenant « {mot} »",
+            "enregistree": "Alerte enregistrée.",
+            "mot_cle": "Mot-clé (facultatif)",
+            "mot_cle_exemple": "Ex. chêne, fonte, lin…",
+            "nouvelle": "Nouvelle alerte",
+            "texte": "Recevez une notification dès qu'un objet correspondant est déposé dans un conteneur.",
+            "titre": "Alertes de collecte",
+            "tous_materiaux": "Tous les matériaux",
+            "tous_sites": "Tous les sites"
+        },
+        "aucune_recuperation": "Aucune récupération pour le moment.",
+        "graphique": {
+            "co2": "CO2 évité",
+            "materiaux": "CO2 évité par matériau",
+            "materiaux_detail": "Depuis le début",
+            "mois": "Récupérations et CO2 évité par mois",
+            "mois_detail": "Sur les 12 derniers mois",
+            "objets": "Objets récupérés"
+        },
+        "kpi": {
+            "achats": "Objets achetés",
+            "campagnes": "Campagnes actives",
+            "co2": "CO2 évité (estimation)",
+            "co2_detail": "poids × facteur du matériau",
+            "depenses": "{montant} dépensés",
+            "poids": "Poids réemployé",
+            "recuperes": "Objets récupérés",
+            "voir_campagnes": "Voir mes campagnes"
+        },
+        "methode": {
+            "co2": "CO2 évité",
+            "facteur": "Facteur (kg CO2e/kg)",
+            "objets": "Objets",
+            "poids": "Poids",
+            "poids_estimes": "{nombre} objet(s) n'avaient pas de poids saisi : un poids type a été utilisé.",
+            "sans_source": "Facteur non renseigné",
+            "source": "Source du facteur",
+            "texte": "CO2 évité = poids de chaque objet récupéré × facteur de son matériau (kg de CO2e évités par kg réemployé). C'est un ordre de grandeur, pas un bilan carbone certifié.",
+            "titre": "Méthode de calcul"
+        },
+        "stocks": {
+            "aucun": "Aucun objet en attente de récupération pour le moment.",
+            "texte": "Objets déposés dans les conteneurs et pas encore récupérés, par site et par matériau.",
+            "titre": "Objets disponibles maintenant"
+        },
+        "titre": "Statistiques et impact",
+        "verrou": {
+            "texte": "Les statistiques d'impact, l'état des stocks en temps réel et les alertes de collecte sont réservés aux abonnés Premium.",
+            "titre": "Fonctionnalité Premium"
+        }
     },
     "statut": {
         "annule": "Annulé",

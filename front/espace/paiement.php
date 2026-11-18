@@ -38,9 +38,7 @@ $titrePage = "paiement.titre";
                         <dt>{{ $t('paiement.article') }}</dt><dd>{{ $t('paiement.type.' + commande.type) }} : {{ commande.libelle }}</dd>
                         <dt>{{ $t('paiement.montant') }}</dt><dd class="montant-paiement">{{ formaterPrix(commande.montant) }}</dd>
                     </dl>
-                    <p class="discret">
-                        {{ commande.type === 'vente' ? $t('paiement.reserve_objet', { temps: tempsRestant }) : $t('paiement.reserve_place', { temps: tempsRestant }) }}
-                    </p>
+                    <p class="discret">{{ $t('paiement.reserve.' + commande.type, { temps: tempsRestant }) }}</p>
                     <div class="form-buttons">
                         <button class="button-submit bouton-payer" :disabled="enCours" @click="payer">
                             {{ enCours ? $t('paiement.en_cours') : $t('paiement.payer', { montant: formaterPrix(commande.montant) }) }}
@@ -54,12 +52,12 @@ $titrePage = "paiement.titre";
                     <div class="resultat-paiement">
                         <span class="pastille-resultat succes-paiement" aria-hidden="true">✓</span>
                         <h2>{{ $t('paiement.reussi_titre') }}</h2>
-                        <p>{{ commande.type === 'vente' ? $t('paiement.reussi_objet', { libelle: commande.libelle }) : $t('paiement.reussi_formation', { libelle: commande.libelle }) }}</p>
-                        <p class="discret">{{ $t('paiement.facture_disponible') }}</p>
+                        <p>{{ $t('paiement.reussi.' + commande.type, { libelle: commande.libelle }) }}</p>
+                        <p class="discret">{{ commande.type === 'abonnement' || commande.type === 'publicite' ? $t('paiement.facture_contrat_disponibles') : $t('paiement.facture_disponible') }}</p>
                         <div class="form-buttons">
                             <button v-if="commande.facture_id" class="btn-primary" @click="ouvrirFacture">{{ $t('paiement.voir_facture') }}</button>
                             <a class="button-draft" href="mon-compte.php#mes-documents">{{ $t('compte.documents.titre') }}</a>
-                            <a class="lien-action" :href="commande.type === 'vente' ? 'annonces.php' : 'catalogue.php'">{{ $t('paiement.continuer') }}</a>
+                            <a class="lien-action" :href="pageRetour">{{ $t('paiement.continuer.' + commande.type) }}</a>
                         </div>
                     </div>
                 </template>
@@ -70,7 +68,7 @@ $titrePage = "paiement.titre";
                         <span class="pastille-resultat" aria-hidden="true">✕</span>
                         <h2>{{ $t('paiement.' + commande.statut + '_titre') }}</h2>
                         <p>{{ $t('paiement.aucun_debit') }}</p>
-                        <a class="btn-primary" :href="commande.type === 'vente' ? 'annonces.php' : 'catalogue.php'">{{ $t('paiement.retour') }}</a>
+                        <a class="btn-primary" :href="pageRetour">{{ $t('paiement.retour') }}</a>
                     </div>
                 </template>
 

@@ -50,10 +50,6 @@ label.lien-action {
     cursor: pointer;
 }
 
-.section-categories {
-    margin-bottom: 24px;
-}
-
 .ajout-categorie {
     display: flex;
     gap: 12px;
@@ -174,35 +170,6 @@ label.lien-action {
     margin-bottom: 0;
 }
 
-.grille-finances {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
-}
-
-.chiffre-finances {
-    margin: 8px 0 4px;
-    color: var(--vert);
-    font-family: var(--police-titres);
-    font-size: 26px;
-    font-weight: 600;
-}
-
-.negatif,
-.chiffre-finances.negatif {
-    color: #c62828;
-}
-
-.tableau .montant {
-    text-align: right;
-    white-space: nowrap;
-}
-
-.tableau .date {
-    white-space: nowrap;
-}
-
 .paiement-reussi,
 .notif-envoyee,
 .contrat-actif,
@@ -235,43 +202,8 @@ label.lien-action {
     max-width: 420px;
 }
 
-.titre-bloc-reporting {
-    margin: 36px 0 4px;
-    color: var(--texte);
-    font-family: var(--police-titres);
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-}
-
 .grille-totaux-reporting {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-}
-
-.grille-graphiques {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-    gap: 20px;
-    margin-top: 16px;
-}
-
-.grille-graphiques-larges {
-    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
-}
-
-.grille-graphiques .carte h3 {
-    margin: 0 0 4px;
-    color: var(--texte);
-    font-family: var(--police-titres);
-    font-size: 15px;
-    font-weight: 500;
-}
-
-.zone-graphique {
-    position: relative;
-    height: 260px;
-    margin-top: 12px;
 }
 
 .graphique-large {
@@ -436,20 +368,8 @@ label.lien-action {
     margin: -6px 0 0;
 }
 
-.grille-kpi {
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    margin-top: 14px;
-}
-
 .grille-kpi-activite {
     grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-}
-
-.carte-kpi {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    border-top: 3px solid var(--vert);
 }
 
 .grille-kpi-activite .carte-kpi {

@@ -13,6 +13,10 @@ demarrerApp({
     },
 
     computed: {
+        pageRetour() {
+            return { formation: "catalogue.php", vente: "annonces.php", abonnement: "statistiques.php", publicite: "contrats.php" }[this.commande.type];
+        },
+
         tempsRestant() {
             const secondes = Math.max(0, Math.floor((new Date(this.commande.date_expiration) - this.maintenant) / 1000));
             return `${Math.floor(secondes / 60)} min ${String(secondes % 60).padStart(2, "0")} s`;

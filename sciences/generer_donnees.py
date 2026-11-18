@@ -81,6 +81,18 @@ OBJETS = {
     "plastique": ["Bidons propres", "Caisses en plastique", "Bouchons triés", "Bâches", "Jouets à réparer"],
 }
 
+# Poids type de chaque objet (kg), utilisé pour estimer le CO2 évité dans l'espace professionnel.
+# Les dépôts générés sont marqués « poids estimé ». Même table que la migration 026.
+POIDS_OBJETS = {
+    "Lot de planches en chêne": 25, "Chaises bistrot à restaurer": 10, "Palettes": 20, "Portes anciennes": 25,
+    "Caisses de vin": 4, "Radiateur en fonte": 40, "Tôles de zinc": 10, "Pieds de table en acier": 8,
+    "Jantes de vélo": 3, "Chutes de cuivre": 5, "Rouleaux de tissu ancien": 6, "Chutes de cuir": 3, "Jeans usés": 3,
+    "Rideaux en lin": 3, "Sacs de laine": 5, "Bocaux en verre": 5, "Portes vitrées": 20, "Bouteilles colorées": 6,
+    "Miroirs anciens": 8, "Vitraux": 10, "Bidons propres": 3, "Caisses en plastique": 4, "Bouchons triés": 2,
+    "Bâches": 4, "Jouets à réparer": 3,
+}
+MATERIAU_OBJET = {objet: code for code, objets in OBJETS.items() for objet in objets}
+
 
 def sans_accents(texte):
     texte = unicodedata.normalize("NFKD", texte)
@@ -614,10 +626,13 @@ def ecrire(cur, gen, roles, langue, categories):
              i["montant"]] for i in gen.inscriptions))
     copier(cur, "depots",
            ["utilisateur_id", "conteneur_id", "description_objet", "code_ouverture", "code_barre", "statut",
-            "professionnel_recuperateur_id", "date_demande", "date_validation", "date_recuperation"],
+            "professionnel_recuperateur_id", "date_demande", "date_validation", "date_recuperation",
+            "categorie_id", "poids_kg", "poids_estime"],
            ([d["utilisateur"]["id"], d["conteneur"], d["description"], d["code_ouverture"], d["code_barre"],
              d["statut"], d["recuperateur"]["id"] if d["recuperateur"] else None, d["date_demande"],
-             d["date_validation"], d["date_recuperation"]] for d in gen.depots))
+             d["date_validation"], d["date_recuperation"],
+             categories.get(MATERIAU_OBJET.get(d["description"])), POIDS_OBJETS.get(d["description"]), True]
+            for d in gen.depots))
     copier(cur, "paiements",
            ["utilisateur_id", "source", "reference_id", "montant", "taux_commission", "montant_commission", "statut",
             "stripe_id", "date_paiement"],

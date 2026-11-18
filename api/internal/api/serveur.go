@@ -14,6 +14,7 @@ type Serveur struct {
 }
 
 func NouveauServeur(db *sql.DB, modele *ml.Modele) *Serveur {
+	baseNotifications = db
 	return &Serveur{db: db, modele: modele}
 }
 

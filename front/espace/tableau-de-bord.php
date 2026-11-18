@@ -46,12 +46,39 @@ $titrePage = "nav.accueil";
                 </a>
             </div>
 
-            <div v-if="roleConnecte() === 'professionnel'" class="mise-en-page-admin">
-                <section class="carte">
-                    <h2>Résumé de votre activité</h2>
-                    <p>Bienvenue sur votre espace.</p>
-                </section>
+            <div v-if="roleConnecte() === 'professionnel'" class="grille">
+                <a class="carte carte-cliquable" href="mon-compte.php">
+                    <span class="discret">{{ $t('compte.abonnement.titre') }}</span>
+                    <p class="chiffre-cle">
+                        <span v-if="abonnement === 'premium'" class="badge-premium">Premium</span>
+                        <template v-else>Freemium</template>
+                    </p>
+                </a>
+                <a class="carte carte-cliquable" href="contrats.php">
+                    <span class="discret">{{ $t('accueil.pro.campagnes_actives') }}</span>
+                    <p class="chiffre-cle">{{ campagnesActives }}</p>
+                </a>
+                <a class="carte carte-cliquable" href="depots.php">
+                    <span class="discret">{{ $t('accueil.pro.recuperer') }}</span>
+                    <p class="discret">{{ $t('accueil.pro.recuperer_detail') }}</p>
+                </a>
+                <a class="carte carte-cliquable" href="statistiques.php">
+                    <span class="discret">{{ $t('nav.statistiques') }}</span>
+                    <p class="discret">{{ abonnement === 'premium' ? $t('accueil.pro.stats_premium') : $t('accueil.pro.stats_freemium') }}</p>
+                </a>
             </div>
+
+            <section v-if="projetsALaUne.length" class="a-la-une">
+                <h2 class="titre-bloc-reporting">{{ $t('a_la_une.projets') }}</h2>
+                <div class="grille">
+                    <article v-for="p in projetsALaUne" :key="p.id" class="carte carte-a-la-une">
+                        <span class="badge-a-la-une">{{ $t('a_la_une.badge') }}</span>
+                        <h3>{{ p.titre }}</h3>
+                        <p v-if="p.description">{{ p.description }}</p>
+                        <p class="discret">{{ $t('a_la_une.par', { nom: p.professionnel }) }}</p>
+                    </article>
+                </div>
+            </section>
 
         </main>
     </div>

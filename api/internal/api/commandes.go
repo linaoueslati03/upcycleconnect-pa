@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -28,6 +29,22 @@ import (
 // Rien d'autre n'est à changer.
 
 const dureeReservation = 30 * time.Minute
+
+var designationsCommande = map[string]string{
+	"formation":  "Formation",
+	"vente":      "Achat de l'objet",
+	"abonnement": "Abonnement",
+	"publicite":  "Campagne publicitaire (1 mois) pour",
+}
+
+// Préfixe chaque colonne d'une liste « a, b, c » (pour les requêtes avec jointure).
+func prefixer(colonnes, prefixe string) string {
+	morceaux := strings.Split(colonnes, ",")
+	for i, m := range morceaux {
+		morceaux[i] = prefixe + strings.TrimSpace(m)
+	}
+	return strings.Join(morceaux, ", ")
+}
 
 var (
 	errCommandeIntrouvable = errors.New("commande introuvable")
@@ -53,6 +70,10 @@ type Commande struct {
 type CommandeEntree struct {
 	Type        string `json:"type"`
 	ReferenceID int    `json:"reference_id"`
+	// Campagne publicitaire : élément mis en avant (projet ou annonce) et budget mensuel
+	CibleType string  `json:"cible_type"`
+	CibleID   int     `json:"cible_id"`
+	Montant   float64 `json:"montant"`
 }
 
 const colonnesCommande = `id, utilisateur_id, type, reference_id, libelle, montant, statut, fournisseur,
@@ -89,6 +110,13 @@ func libererCommandesExpirees(ex executeur) error {
 		  AND c.date_expiration < now() AND a.statut = 'reservee' AND a.acheteur_id IS NULL`); err != nil {
 		return err
 	}
+	if _, err := ex.Exec(`
+		UPDATE campagnes_publicitaires cp SET statut = 'annulee'
+		FROM commandes c
+		WHERE c.type = 'publicite' AND c.reference_id = cp.id AND c.statut = 'en_attente'
+		  AND c.date_expiration < now() AND cp.statut = 'en_attente'`); err != nil {
+		return err
+	}
 	_, err := ex.Exec("UPDATE commandes SET statut = 'expiree' WHERE statut = 'en_attente' AND date_expiration < now()")
 	return err
 }
@@ -112,9 +140,19 @@ func (s *Serveur) gererCreationCommande(w http.ResponseWriter, r *http.Request) 
 	case entree.Type == "vente" && role != roleParticulier && role != roleProfessionnel:
 		envoyerErreur(w, http.StatusForbidden, "seuls les particuliers et les professionnels peuvent acheter un objet")
 		return
-	case entree.Type != "formation" && entree.Type != "vente":
-		envoyerErreur(w, http.StatusBadRequest, "type invalide (formation ou vente attendu)")
+	case (entree.Type == "abonnement" || entree.Type == "publicite") && role != roleProfessionnel:
+		envoyerErreur(w, http.StatusForbidden, "réservé aux professionnels")
 		return
+	case entree.Type != "formation" && entree.Type != "vente" && entree.Type != "abonnement" && entree.Type != "publicite":
+		envoyerErreur(w, http.StatusBadRequest, "type invalide (formation, vente, abonnement ou publicite attendu)")
+		return
+	}
+	switch entree.Type {
+	case "abonnement":
+		// Un abonnement par professionnel : la référence est le professionnel lui-même
+		entree.ReferenceID = utilisateurID
+	case "publicite":
+		entree.ReferenceID = 0
 	}
 
 	tx, err := s.db.Begin()
@@ -131,9 +169,17 @@ func (s *Serveur) gererCreationCommande(w http.ResponseWriter, r *http.Request) 
 
 	// Une commande déjà en cours pour le même achat est reprise telle quelle (double clic, retour arrière…)
 	var c Commande
-	err = scannerCommande(tx.QueryRow(`SELECT `+colonnesCommande+` FROM commandes
-		WHERE utilisateur_id = $1 AND type = $2 AND reference_id = $3 AND statut = 'en_attente'`,
-		utilisateurID, entree.Type, entree.ReferenceID), &c)
+	if entree.Type == "publicite" {
+		err = scannerCommande(tx.QueryRow(`SELECT `+prefixer(colonnesCommande, "c.")+` FROM commandes c
+			JOIN campagnes_publicitaires cp ON cp.id = c.reference_id
+			WHERE c.utilisateur_id = $1 AND c.type = 'publicite' AND c.statut = 'en_attente'
+			  AND cp.cible_type = $2 AND cp.cible_id = $3 AND cp.montant_mensuel = $4`,
+			utilisateurID, entree.CibleType, entree.CibleID, entree.Montant), &c)
+	} else {
+		err = scannerCommande(tx.QueryRow(`SELECT `+colonnesCommande+` FROM commandes
+			WHERE utilisateur_id = $1 AND type = $2 AND reference_id = $3 AND statut = 'en_attente'`,
+			utilisateurID, entree.Type, entree.ReferenceID), &c)
+	}
 	if err == nil {
 		s.repondreCommande(w, http.StatusOK, c)
 		return
@@ -147,10 +193,15 @@ func (s *Serveur) gererCreationCommande(w http.ResponseWriter, r *http.Request) 
 	var montant float64
 	var code int
 	var message string
-	if entree.Type == "formation" {
+	switch entree.Type {
+	case "formation":
 		libelle, montant, code, message = verifierAchatFormation(tx, utilisateurID, entree.ReferenceID)
-	} else {
+	case "vente":
 		libelle, montant, code, message = verifierAchatObjet(tx, utilisateurID, entree.ReferenceID)
+	case "abonnement":
+		libelle, montant, code, message = verifierAchatAbonnement(tx, utilisateurID)
+	case "publicite":
+		entree.ReferenceID, libelle, montant, code, message = verifierAchatPublicite(tx, utilisateurID, entree)
 	}
 	if code != 0 {
 		envoyerErreur(w, code, message)
@@ -369,7 +420,8 @@ func (s *Serveur) confirmerCommande(id int, referenceExterne string) (Commande, 
 
 	var inscriptionID int
 	var destinataireID int
-	var titreNotification, messageNotification string
+	referencePaiement := c.ReferenceID
+	var titreNotification, messageNotification, lienNotification string
 	if c.Type == "formation" {
 		err = tx.QueryRow(`
 			INSERT INTO inscriptions (utilisateur_id, type_offre, offre_id, statut_paiement, montant_paye)
@@ -383,6 +435,26 @@ func (s *Serveur) confirmerCommande(id int, referenceExterne string) (Commande, 
 		}
 		titreNotification = "Nouvelle inscription"
 		messageNotification = "Une personne vient de s'inscrire et de payer ta formation « " + c.Libelle + " »."
+		lienNotification = "formations.php"
+	} else if c.Type == "abonnement" {
+		var abonnementID int
+		err = tx.QueryRow(`
+			INSERT INTO abonnements (utilisateur_id, montant_mensuel, statut, stripe_abonnement_id)
+			VALUES ($1, $2, 'actif', $3) RETURNING id`, c.UtilisateurID, c.Montant, referenceExterne).Scan(&abonnementID)
+		if err == nil {
+			_, err = tx.Exec("UPDATE utilisateurs SET abonnement = 'premium' WHERE id = $1", c.UtilisateurID)
+		}
+		// Le paiement d'abonnement référence l'abonnement (même convention que les données existantes)
+		referencePaiement = abonnementID
+	} else if c.Type == "publicite" {
+		var resultat sql.Result
+		resultat, err = tx.Exec(`UPDATE campagnes_publicitaires SET statut = 'active', date_debut = CURRENT_DATE
+			WHERE id = $1 AND statut = 'en_attente'`, c.ReferenceID)
+		if err == nil {
+			if n, _ := resultat.RowsAffected(); n == 0 {
+				return c, errCommandeTerminee
+			}
+		}
 	} else {
 		err = tx.QueryRow(`
 			UPDATE annonces SET statut = 'cedee', acheteur_id = $1
@@ -396,12 +468,13 @@ func (s *Serveur) confirmerCommande(id int, referenceExterne string) (Commande, 
 		}
 		titreNotification = "Objet vendu !"
 		messageNotification = "Ton objet « " + c.Libelle + " » a été acheté et payé."
+		lienNotification = "mes-annonces.php"
 	}
 	if err != nil {
 		return c, err
 	}
 
-	paiementID, err := enregistrerPaiement(tx, c.UtilisateurID, c.Type, &c.ReferenceID, c.Montant, referenceExterne)
+	paiementID, err := enregistrerPaiement(tx, c.UtilisateurID, c.Type, &referencePaiement, c.Montant, referenceExterne)
 	if err != nil {
 		return c, err
 	}
@@ -425,8 +498,13 @@ func (s *Serveur) confirmerCommande(id int, referenceExterne string) (Commande, 
 	archiverAutomatiquement(fmt.Sprintf("facture de la commande %d", c.ID), func() (int, error) {
 		return s.genererFacture(c.ID)
 	})
+	if c.Type == "abonnement" || c.Type == "publicite" {
+		archiverAutomatiquement(fmt.Sprintf("contrat de la commande %d", c.ID), func() (int, error) {
+			return s.genererContratCommande(c.ID)
+		})
+	}
 	if destinataireID != 0 && destinataireID != c.UtilisateurID {
-		notifierUtilisateur(destinataireID, titreNotification, messageNotification)
+		notifierAvecLien(destinataireID, titreNotification, messageNotification, lienNotification)
 	}
 	return c, nil
 }
@@ -459,6 +537,12 @@ func (s *Serveur) annulerCommande(id int, statutFinal string) error {
 	if c.Type == "vente" {
 		if _, err := tx.Exec(`UPDATE annonces SET statut = 'en_ligne'
 			WHERE id = $1 AND statut = 'reservee' AND acheteur_id IS NULL`, c.ReferenceID); err != nil {
+			return err
+		}
+	}
+	if c.Type == "publicite" {
+		if _, err := tx.Exec(`UPDATE campagnes_publicitaires SET statut = 'annulee'
+			WHERE id = $1 AND statut = 'en_attente'`, c.ReferenceID); err != nil {
 			return err
 		}
 	}
@@ -506,7 +590,7 @@ func (s *Serveur) genererFacture(commandeID int) (int, error) {
 		"Facture n° " + numero,
 		"Date : " + c.DatePaiement.Format("02/01/2006 15:04"),
 		"Client : " + prenom + " " + nom + " (" + email + ")",
-		"Désignation : " + map[string]string{"formation": "Formation", "vente": "Achat de l'objet"}[c.Type] + " « " + c.Libelle + " »",
+		"Désignation : " + designationsCommande[c.Type] + " « " + c.Libelle + " »",
 	}
 	if c.Type == "vente" {
 		var vendeurPrenom, vendeurNom string

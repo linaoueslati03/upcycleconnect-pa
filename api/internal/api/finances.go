@@ -446,6 +446,7 @@ func (s *Serveur) gererListeCampagnesAdmin(w http.ResponseWriter, r *http.Reques
 		        WHERE p.source = 'publicite' AND p.reference_id = c.id AND p.statut = 'reussi')
 		FROM campagnes_publicitaires c
 		JOIN utilisateurs u ON u.id = c.utilisateur_id
+		WHERE c.statut <> 'en_attente'
 		ORDER BY c.statut = 'active' DESC, c.date_debut DESC, c.id DESC`)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")

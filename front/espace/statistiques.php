@@ -4,90 +4,171 @@ $titrePage = "nav.statistiques";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <?php include "../inclus/entete.php"; ?>
-    <style>
-        .graph-placeholder {
-            background-color: #f1f8e9;
-            border: 2px dashed #8bc34a;
-            border-radius: 8px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #558b2f;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .lock-banner {
-            background-color: #ffebee;
-            border-left: 4px solid #f44336;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
+
 <body>
     <?php include "../inclus/navigation.php"; ?>
 
     <div id="app">
         <main>
             <div class="page-header">
-                <h1>Statistiques & Impact (Premium)</h1>
+                <h1>{{ $t('statistiques.titre') }}</h1>
             </div>
 
-            <div class="mise-en-page-admin">
-                
-                <section v-if="profil.abonnement !== 'Premium'" class="carte lock-banner">
-                    <h2 style="color: #d32f2f;">Fonctionnalité Premium</h2>
-                    <p>Votre compte actuel est en mode <strong>Freemium</strong>. Les statistiques d'impact écologique, l'état des stocks en temps réel et les alertes de collecte priorisées sont réservés aux abonnés Premium.</p>
-                    <button class="btn-primary" @click="passerPremium" style="background-color: #d32f2f; margin-top: 10px;">Souscrire à l'offre Premium</button>
-                </section>
+            <p v-if="erreur" class="erreur">{{ erreur }}</p>
 
-                <div v-else>
+            <!-- Freemium : présentation de l'offre -->
+            <section v-if="estFreemium" class="carte offre-premium">
+                <span class="badge-premium">Premium</span>
+                <h2>{{ $t('statistiques.verrou.titre') }}</h2>
+                <p>{{ $t('statistiques.verrou.texte') }}</p>
+                <ul class="avantages-premium">
+                    <li v-for="a in ['statistiques', 'stocks', 'alertes']" :key="a">{{ $t('compte.abonnement.avantage.' + a) }}</li>
+                </ul>
+                <button class="btn-primary" :disabled="achatEnCours" @click="passerPremium">
+                    {{ $t('compte.abonnement.passer', { prix: formaterPrix(prixPremium) }) }}
+                </button>
+            </section>
+
+            <template v-if="stats">
+                <div class="grille-finances grille-kpi">
+                    <div class="carte carte-kpi">
+                        <span class="discret">{{ $t('statistiques.kpi.recuperes') }}</span>
+                        <p class="chiffre-finances">{{ formaterNombre(stats.recuperations.nombre) }}</p>
+                    </div>
+                    <div class="carte carte-kpi">
+                        <span class="discret">{{ $t('statistiques.kpi.poids') }}</span>
+                        <p class="chiffre-finances">{{ formaterKg(stats.recuperations.poids_kg) }}</p>
+                    </div>
+                    <div class="carte carte-kpi">
+                        <span class="discret">{{ $t('statistiques.kpi.co2') }}</span>
+                        <p class="chiffre-finances">≈ {{ formaterKg(stats.recuperations.co2_kg) }}</p>
+                        <span class="discret">{{ $t('statistiques.kpi.co2_detail') }}</span>
+                    </div>
+                    <div class="carte carte-kpi">
+                        <span class="discret">{{ $t('statistiques.kpi.achats') }}</span>
+                        <p class="chiffre-finances">{{ formaterNombre(stats.achats.nombre) }}</p>
+                        <span class="discret">{{ $t('statistiques.kpi.depenses', { montant: formaterMontant(stats.achats.depenses) }) }}</span>
+                    </div>
+                    <div class="carte carte-kpi">
+                        <span class="discret">{{ $t('statistiques.kpi.campagnes') }}</span>
+                        <p class="chiffre-finances">{{ formaterNombre(stats.campagnes_actives) }}</p>
+                        <a class="lien-action" href="contrats.php">{{ $t('statistiques.kpi.voir_campagnes') }}</a>
+                    </div>
+                </div>
+
+                <div class="grille-graphiques">
                     <section class="carte">
-                        <h2>Votre Impact Écologique</h2>
-                        <p>Total de CO2 évité grâce à vos récupérations ce mois-ci : <strong>450 kg</strong></p>
-                        <div class="graph-placeholder">
-                            [Graphique d'évolution des émissions évitées]
-                        </div>
+                        <h3>{{ $t('statistiques.graphique.mois') }}</h3>
+                        <p class="discret">{{ $t('statistiques.graphique.mois_detail') }}</p>
+                        <div class="zone-graphique"><canvas id="graphique-mois" role="img" :aria-label="$t('statistiques.graphique.mois')"></canvas></div>
                     </section>
-
-                    <section class="carte" style="margin-top: 20px;">
-                        <h2>Alertes priorisées de collecte</h2>
-                        <p>Configurez vos critères pour recevoir une notification dès qu'un matériau spécifique est déposé.</p>
-                        
-                        <button class="btn-primary" @click="alerteOuverte = true">Configurer une alerte</button>
-                        <p v-if="messageAlerte" class="succes">{{ messageAlerte }}</p>
+                    <section class="carte">
+                        <h3>{{ $t('statistiques.graphique.materiaux') }}</h3>
+                        <p class="discret">{{ $t('statistiques.graphique.materiaux_detail') }}</p>
+                        <p v-if="stats.recuperations.nombre === 0" class="discret">{{ $t('statistiques.aucune_recuperation') }}</p>
+                        <div v-else class="zone-graphique"><canvas id="graphique-materiaux" role="img" :aria-label="$t('statistiques.graphique.materiaux')"></canvas></div>
                     </section>
                 </div>
 
-            </div>
+                <section class="carte section-categories">
+                    <h2>{{ $t('statistiques.methode.titre') }}</h2>
+                    <p class="discret">{{ $t('statistiques.methode.texte') }}</p>
+                    <p v-if="stats.recuperations.poids_estimes" class="discret">
+                        {{ $t('statistiques.methode.poids_estimes', { nombre: stats.recuperations.poids_estimes }) }}
+                    </p>
+                    <table class="tableau">
+                        <thead>
+                            <tr>
+                                <th>{{ $t('depots.materiau') }}</th>
+                                <th class="montant">{{ $t('statistiques.methode.objets') }}</th>
+                                <th class="montant">{{ $t('statistiques.methode.poids') }}</th>
+                                <th class="montant">{{ $t('statistiques.methode.facteur') }}</th>
+                                <th class="montant">{{ $t('statistiques.methode.co2') }}</th>
+                                <th>{{ $t('statistiques.methode.source') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="m in stats.par_materiau" :key="m.code">
+                                <td>{{ nomMateriau(m) }}</td>
+                                <td class="montant">{{ formaterNombre(m.nombre) }}</td>
+                                <td class="montant">{{ formaterKg(m.poids_kg) }}</td>
+                                <td class="montant">{{ m.facteur !== null ? formaterNombre(m.facteur, 2) : '—' }}</td>
+                                <td class="montant">{{ formaterKg(m.co2_kg) }}</td>
+                                <td class="source-facteur">{{ m.source || $t('statistiques.methode.sans_source') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
 
-            <fenetre-modale :ouverte="alerteOuverte" titre="Alertes priorisées de collecte" @fermer="alerteOuverte = false">
-                        <form @submit.prevent="enregistrerAlerte">
-                            <div class="form-group">
-                                <label for="materiau">Type de matériau recherché</label>
-                                <select id="materiau" v-model="filtreAlerte.materiau" required>
-                                    <option value="">-- Sélectionnez --</option>
-                                    <option value="bois">Bois massif</option>
-                                    <option value="metal">Métal / Acier</option>
-                                    <option value="verre">Verre</option>
-                                    <option value="textile">Textile</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="localisation">Secteur / Agence</label>
-                                <input id="localisation" type="text" v-model="filtreAlerte.localisation" placeholder="Paris 11ème" required>
-                            </div>
-                            <div class="form-buttons">
-                                <button type="submit" class="button-submit">M'avertir</button>
-                                <button type="button" class="button-draft" @click="alerteOuverte = false">{{ $t('commun.annuler') }}</button>
-                            </div>
-                        </form>
+                <section class="carte section-categories">
+                    <h2>{{ $t('statistiques.stocks.titre') }}</h2>
+                    <p class="discret">{{ $t('statistiques.stocks.texte') }}</p>
+                    <p v-if="stocksParSite.length === 0" class="discret">{{ $t('statistiques.stocks.aucun') }}</p>
+                    <div v-else class="grille-stocks">
+                        <div v-for="site in stocksParSite" :key="site.site" class="stock-site">
+                            <h3>{{ site.site }} <span class="nombre-pill">{{ site.total }}</span></h3>
+                            <ul>
+                                <li v-for="m in site.materiaux" :key="m.materiau">{{ m.materiau }} <strong>{{ m.nombre }}</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="carte section-categories">
+                    <div class="entete-carte">
+                        <h2>{{ $t('statistiques.alertes.titre') }}</h2>
+                        <button class="btn-primary" @click="ouvrirAlerte">+ {{ $t('statistiques.alertes.nouvelle') }}</button>
+                    </div>
+                    <p class="discret">{{ $t('statistiques.alertes.texte') }}</p>
+                    <p v-if="messageAlerte" class="succes">{{ messageAlerte }}</p>
+                    <p v-if="alertes.length === 0" class="discret">{{ $t('statistiques.alertes.aucune') }}</p>
+                    <ul v-else class="liste-alertes">
+                        <li v-for="a in alertes" :key="a.id">
+                            <span>{{ descriptionAlerte(a) }}</span>
+                            <button class="lien-action lien-supprimer" @click="supprimerAlerte(a)">{{ $t('commun.supprimer') }}</button>
+                        </li>
+                    </ul>
+                </section>
+            </template>
+
+            <fenetre-modale :ouverte="alerteOuverte" :titre="$t('statistiques.alertes.nouvelle')" @fermer="alerteOuverte = false">
+                <form @submit.prevent="enregistrerAlerte">
+                    <p class="discret">{{ $t('statistiques.alertes.aide') }}</p>
+                    <div class="form-group">
+                        <label for="alerte-materiau">{{ $t('depots.materiau') }}</label>
+                        <select id="alerte-materiau" v-model="formulaireAlerte.categorie_id">
+                            <option :value="null">{{ $t('statistiques.alertes.tous_materiaux') }}</option>
+                            <option v-for="c in categories" :key="c.id" :value="c.id">{{ nomMateriau(c) }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alerte-site">{{ $t('commun.site') }}</label>
+                        <select id="alerte-site" v-model="formulaireAlerte.site">
+                            <option value="">{{ $t('statistiques.alertes.tous_sites') }}</option>
+                            <option v-for="s in sites" :key="s" :value="s">{{ s }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alerte-mot-cle">{{ $t('statistiques.alertes.mot_cle') }}</label>
+                        <input id="alerte-mot-cle" type="text" v-model="formulaireAlerte.mot_cle" maxlength="100"
+                            :placeholder="$t('statistiques.alertes.mot_cle_exemple')">
+                    </div>
+                    <p v-if="erreurAlerte" class="erreur">{{ erreurAlerte }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                        <button type="button" class="button-draft" @click="alerteOuverte = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
             </fenetre-modale>
         </main>
     </div>
+
+    <script src="https://unpkg.com/chart.js@4.4.7/dist/chart.umd.js"></script>
     <script src="<?= ressource("js/statistiques.js") ?>"></script>
 </body>
+
 </html>

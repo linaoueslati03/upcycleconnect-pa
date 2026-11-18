@@ -81,6 +81,47 @@ $titrePage = "nav.categories";
                 </form>
             </fenetre-modale>
 
+            <section class="carte section-categories">
+                <h2>{{ $t('admin.categories.impact.titre') }}</h2>
+                <p class="discret">{{ $t('admin.categories.impact.explication') }}</p>
+                <table class="tableau">
+                    <thead>
+                        <tr>
+                            <th>{{ $t('commun.nom') }}</th>
+                            <th class="montant">{{ $t('admin.categories.impact.facteur') }}</th>
+                            <th>{{ $t('admin.categories.impact.source') }}</th>
+                            <th>{{ $t('commun.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="c in groupes.materiaux.liste" :key="c.id">
+                            <td>{{ c.libelle }}</td>
+                            <td class="montant">{{ c.co2_evite_par_kg !== null ? c.co2_evite_par_kg.toLocaleString(langueCourante()) : '—' }}</td>
+                            <td class="source-facteur">{{ c.source_facteur || $t('admin.categories.impact.sans_source') }}</td>
+                            <td><button class="lien-action" @click="ouvrirImpact(c)">{{ $t('commun.modifier') }}</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <fenetre-modale :ouverte="impact.ouvert" :titre="$t('admin.categories.impact.titre') + (impact.categorie ? ' · ' + impact.categorie.libelle : '')" @fermer="impact.ouvert = false">
+                <form @submit.prevent="enregistrerImpact">
+                    <div class="form-group">
+                        <label for="facteur-co2">{{ $t('admin.categories.impact.facteur') }}</label>
+                        <input id="facteur-co2" type="number" v-model.number="impact.facteur" min="0" max="100" step="0.001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="source-co2">{{ $t('admin.categories.impact.source') }}</label>
+                        <textarea id="source-co2" v-model="impact.source" rows="3" required></textarea>
+                    </div>
+                    <p v-if="impact.erreur" class="erreur">{{ impact.erreur }}</p>
+                    <div class="form-buttons">
+                        <button type="submit" class="button-submit">{{ $t('commun.enregistrer') }}</button>
+                        <button type="button" class="button-draft" @click="impact.ouvert = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </form>
+            </fenetre-modale>
+
         </main>
     </div>
 

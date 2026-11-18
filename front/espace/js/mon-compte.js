@@ -12,9 +12,16 @@ demarrerApp({
             erreurMotDePasse: "",
             messageMotDePasse: "",
             motDePasseObligatoire: doitChangerMotDePasse(),
-            entreprise: { siret: "", adresse: "", abonnement: "Freemium" },
+            entreprise: { siret: "", adresse: "" },
             brouillonEntreprise: { siret: "", adresse: "" },
             entrepriseOuverte: false,
+            erreurEntreprise: "",
+            messageEntreprise: "",
+            abonnement: null,
+            achatEnCours: false,
+            resiliationOuverte: false,
+            messageAbonnement: "",
+            erreurAbonnement: "",
             documents: [],
             erreurDocuments: "",
         };
@@ -37,9 +44,11 @@ demarrerApp({
         };
         this.entreprise = {
             siret: compte.siret || "",
-            adresse: compte.adresse || "",
-            abonnement: compte.abonnement || "Freemium",
+            adresse: compte.adresse_entreprise || "",
         };
+        if (roleConnecte() === "professionnel") {
+            this.chargerAbonnement();
+        }
         this.langues = await reponseLangues.json();
         if (this.motDePasseObligatoire) {
             this.ouvrirMotDePasse();
@@ -137,21 +146,56 @@ demarrerApp({
             localStorage.removeItem("changer_mot_de_passe");
         },
 
+        formaterPrix,
+
         ouvrirEntreprise() {
             this.brouillonEntreprise = { siret: this.entreprise.siret, adresse: this.entreprise.adresse };
+            this.erreurEntreprise = "";
+            this.messageEntreprise = "";
             this.entrepriseOuverte = true;
         },
 
-        // Comme avant : ces deux champs ne sont pas encore enregistrés par l'API, seul l'affichage change.
-        validerEntreprise() {
-            this.entreprise.siret = this.brouillonEntreprise.siret;
-            this.entreprise.adresse = this.brouillonEntreprise.adresse;
+        async enregistrerEntreprise() {
+            this.erreurEntreprise = "";
+            const reponse = await appelerApi("/pro/entreprise", { method: "PUT", body: JSON.stringify(this.brouillonEntreprise) });
+            if (!reponse.ok) {
+                this.erreurEntreprise = await messageErreur(reponse);
+                return;
+            }
+            const donnees = await reponse.json();
+            this.entreprise = { siret: donnees.siret, adresse: donnees.adresse_entreprise };
             this.entrepriseOuverte = false;
+            this.messageEntreprise = t("compte.entreprise.enregistree");
         },
 
-        passerPremium() {
-            alert("Redirection vers la passerelle de paiement Stripe...");
-            this.entreprise.abonnement = "Premium";
+        async chargerAbonnement() {
+            const reponse = await appelerApi("/pro/abonnement");
+            if (reponse.ok) {
+                this.abonnement = await reponse.json();
+            }
+        },
+
+        // Paiement par la page de paiement (simulée tant que Stripe n'est pas branché)
+        async passerPremium() {
+            this.erreurAbonnement = "";
+            this.achatEnCours = true;
+            const erreur = await demarrerAchat("abonnement", 0);
+            if (erreur) {
+                this.erreurAbonnement = erreur;
+                this.achatEnCours = false;
+            }
+        },
+
+        async resilier() {
+            this.resiliationOuverte = false;
+            this.erreurAbonnement = "";
+            const reponse = await appelerApi("/pro/abonnement/resilier", { method: "POST" });
+            if (!reponse.ok) {
+                this.erreurAbonnement = await messageErreur(reponse);
+                return;
+            }
+            this.messageAbonnement = t("compte.abonnement.resilie");
+            this.chargerAbonnement();
         },
     },
 });

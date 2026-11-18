@@ -1764,3 +1764,378 @@ a.carte:hover,
         animation: none;
     }
 }
+
+/* Cloche et panneau des notifications (menu de l'espace) */
+#cloche-notifications {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#cloche-notifications[hidden] {
+    display: none;
+}
+
+#cloche-notifications:hover,
+#cloche-notifications[aria-expanded="true"] {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+#cloche-notifications:focus-visible {
+    outline: 2px solid #81C784;
+    outline-offset: 2px;
+}
+
+.compteur-notifications {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #e53935;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+}
+
+.panneau-notifications {
+    position: fixed;
+    bottom: 16px;
+    left: calc(var(--largeur-menu) + 12px);
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    width: 370px;
+    max-height: min(70vh, 560px);
+    border-radius: 10px;
+    background: var(--fond);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+    color: var(--texte);
+    text-align: left;
+    animation: apparition-panneau 0.18s ease-out;
+}
+
+.panneau-notifications[hidden] {
+    display: none;
+}
+
+@keyframes apparition-panneau {
+    from {
+        transform: translateY(8px);
+        opacity: 0;
+    }
+}
+
+.panneau-notifications header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--bordure);
+}
+
+.panneau-notifications h2 {
+    margin: 0;
+    font-family: var(--police-titres);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.panneau-notifications ul {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.panneau-notifications li + li {
+    border-top: 1px solid var(--bordure);
+}
+
+.panneau-notifications .notification {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 12px 18px;
+    color: var(--texte);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.panneau-notifications a.notification:hover {
+    background: var(--fond-clair);
+}
+
+.panneau-notifications .non-lue .notification {
+    border-left: 3px solid var(--vert);
+    background: var(--vert-clair);
+}
+
+.panneau-notifications time,
+.notification-vide {
+    color: var(--texte-doux);
+    font-size: 12px;
+}
+
+.notification-vide {
+    padding: 22px 18px;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .panneau-notifications {
+        top: 76px;
+        right: 8px;
+        bottom: auto;
+        left: 8px;
+        width: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panneau-notifications {
+        animation: none;
+    }
+}
+
+/* Dépôts : matériau et poids */
+.deux-champs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+}
+
+.aide-champ {
+    margin: -8px 0 14px;
+    font-size: 12.5px;
+}
+
+.poids-validation {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--texte-doux);
+}
+
+.poids-validation input {
+    width: 80px;
+    padding: 4px 8px;
+}
+
+@media (max-width: 600px) {
+    .deux-champs {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Cartes de chiffres, tableaux de montants et graphiques (partagés par l'admin et l'espace) */
+.grille-finances {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.chiffre-finances {
+    margin: 8px 0 4px;
+    color: var(--vert);
+    font-family: var(--police-titres);
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.negatif,
+.chiffre-finances.negatif {
+    color: #c62828;
+}
+
+.tableau .montant {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.tableau .date {
+    white-space: nowrap;
+}
+
+.grille-graphiques {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.grille-graphiques-larges {
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+}
+
+.grille-graphiques .carte h3 {
+    margin: 0 0 4px;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.zone-graphique {
+    position: relative;
+    height: 260px;
+    margin-top: 12px;
+}
+
+.grille-kpi {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    margin-top: 14px;
+}
+
+.carte-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-top: 3px solid var(--vert);
+}
+
+.section-categories {
+    margin-bottom: 24px;
+}
+
+/* Offre Premium et statistiques de l'espace professionnel */
+.badge-premium {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #F9A825, #f57f17);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.offre-premium {
+    max-width: 720px;
+    border-top: 3px solid #F9A825;
+}
+
+.avantages-premium {
+    margin: 10px 0 18px;
+    padding-left: 20px;
+}
+
+.avantages-premium li {
+    margin-bottom: 6px;
+}
+
+.carte-abonnement.premium {
+    border-top: 3px solid #F9A825;
+}
+
+.source-facteur {
+    max-width: 380px;
+    color: var(--texte-doux);
+    font-size: 12.5px;
+}
+
+.grille-stocks {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.stock-site {
+    padding: 12px 14px;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+.stock-site h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+}
+
+.stock-site ul,
+.liste-alertes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stock-site li {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+    font-size: 14px;
+}
+
+.liste-alertes li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.liste-alertes li + li {
+    border-top: 1px solid var(--bordure);
+}
+
+/* Éléments mis en avant par une campagne publicitaire */
+.badge-a-la-une {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: #fff3cd;
+    color: #7a5a00;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.carte-a-la-une {
+    border-top: 3px solid #F9A825;
+}
+
+.a-la-une {
+    margin-top: 28px;
+}
+
+.bornes-budget {
+    display: flex;
+    justify-content: space-between;
+    color: var(--texte-doux);
+    font-size: 12px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--vert);
+}
+
+.titre-bloc-reporting {
+    margin: 36px 0 4px;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}

@@ -110,13 +110,17 @@ Une clé absente d'une langue s'affiche en français (`fallbackLocale`).
 
 ## Achats et paiement
 
-Deux achats sont possibles : payer une **formation** (Catalogue → « Payer et s'inscrire ») et acheter un **objet en vente** (Annonces → « Acheter »). Le parcours est dans `api/internal/api/commandes.go` :
+Quatre achats passent par le même parcours : payer une **formation** (Catalogue → « Payer et s'inscrire »), acheter un **objet en vente** (Annonces → « Acheter »), et pour les professionnels l'**abonnement Premium** (Mon compte → « Passer Premium ») et une **campagne publicitaire** (Contrats & Facturation → « Nouvelle campagne », 100 à 500 €/mois, l'élément apparaît « À la une »). Chaque achat produit une facture PDF ; l'abonnement et la campagne produisent aussi un contrat PDF. Le parcours est dans `api/internal/api/commandes.go` :
 
 1. `POST /api/commandes` crée une commande en attente : l'objet est réservé, la place de formation est retenue pendant 30 minutes ;
 2. paiement confirmé → `confirmerCommande()` : inscription payée ou objet cédé à l'acheteur, paiement enregistré avec `enregistrerPaiement()` (commission comprise pour les ventes), facture PDF archivée, vendeur ou formateur notifié ;
 3. paiement abandonné ou délai dépassé → `annulerCommande()` : l'objet est remis en vente.
 
 Tant que Stripe n'est pas branché, `PAIEMENT_FOURNISSEUR=simulation` (valeur par défaut) : la page `/espace/paiement.php` affiche un bandeau « Mode démonstration » et un bouton « Payer » qui confirme la commande sans aucun débit.
+
+### Impact CO2 (statistiques des professionnels)
+
+CO2 évité = poids de chaque objet récupéré × facteur de son matériau. Le particulier indique le matériau et un poids approximatif à la demande de dépôt, le salarié peut corriger le poids à la validation. Les facteurs (kg CO2e évités par kg réemployé) sont modifiables par l'admin (page Catégories) et sourcés : ADEME Base Carbone n° 20907 (bois/mobilier), 26729 (acier), 26741 (verre), 20836 (plastique), et Refashion, bilan environnemental 2026 (textile). C'est une estimation, présentée comme telle aux professionnels.
 
 ### Brancher Stripe
 
@@ -130,7 +134,8 @@ Tout le reste est déjà en place, seules ces étapes manquent :
    - `checkout.session.expired` → `s.annulerCommande(commandeID, "expiree")`.
 
    `confirmerCommande` ne crée jamais de second paiement si Stripe renvoie le même événement.
-5. Tester en local avec la Stripe CLI : `stripe listen --forward-to localhost:8081/api/stripe/webhook`, et la carte de test `4242 4242 4242 4242` (date future, CVC au choix).
+5. Abonnement et campagnes : pour un prélèvement **mensuel** automatique, utiliser le mode `subscription` de Checkout et l'événement `invoice.paid` pour enregistrer chaque mois un paiement (`enregistrerPaiement`) ; aujourd'hui seul le premier mois est payé.
+6. Tester en local avec la Stripe CLI : `stripe listen --forward-to localhost:8081/api/stripe/webhook`, et la carte de test `4242 4242 4242 4242` (date future, CVC au choix).
 
 La page `/espace/paiement.php` sert alors de page de retour : elle affiche le résultat de la commande (le bouton de démonstration disparaît, car `payer-simulation` refuse les commandes Stripe).
 
