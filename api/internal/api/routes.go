@@ -56,6 +56,10 @@ func (s *Serveur) Routes() http.Handler {
 
 	mux.HandleFunc("GET /api/catalogue", s.gererCatalogue)
 	mux.HandleFunc("POST /api/inscriptions", s.gererCreationInscription)
+	mux.HandleFunc("POST /api/commandes", s.gererCreationCommande)
+	mux.HandleFunc("GET /api/commandes/{id}", s.gererDetailCommande)
+	mux.HandleFunc("POST /api/commandes/{id}/payer-simulation", s.gererPaiementSimule)
+	mux.HandleFunc("POST /api/commandes/{id}/annuler", s.gererAnnulationCommande)
 
 	mux.HandleFunc("GET /api/moi/score", s.gererMonScore)
 	mux.HandleFunc("GET /api/moi/score/historique", s.gererMonScoreHistorique)

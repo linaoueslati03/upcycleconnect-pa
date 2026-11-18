@@ -6,10 +6,15 @@ demarrerApp({
             filtres: { type: "", localisation: "" },
             selection: null,
             erreur: "",
+            erreurAchat: "",
+            achatEnCours: false,
         };
     },
 
     watch: {
+        selection() {
+            this.erreurAchat = "";
+        },
         "filtres.type"() {
             this.chargerAnnonces();
         },
@@ -33,6 +38,22 @@ demarrerApp({
     methods: {
         formaterDate,
         formaterPrix,
+
+        estMonObjet(annonce) {
+            return annonce.utilisateur_id === Number(localStorage.getItem("user_id"));
+        },
+
+        // L'objet est réservé le temps du paiement, puis cédé à l'acheteur une fois payé
+        async acheter(annonce) {
+            this.erreurAchat = "";
+            this.achatEnCours = true;
+            const erreur = await demarrerAchat("vente", annonce.id);
+            if (erreur) {
+                this.erreurAchat = erreur;
+                this.achatEnCours = false;
+                this.chargerAnnonces();
+            }
+        },
 
         nomCategorie(id) {
             const categorie = this.categories.find((c) => c.id === id);

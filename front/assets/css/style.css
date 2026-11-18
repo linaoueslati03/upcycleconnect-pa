@@ -1675,3 +1675,92 @@ a.carte:hover,
         padding-left: 40px;
     }
 }
+
+/* Achat et paiement (espace > paiement.php) */
+.carte-paiement {
+    max-width: 640px;
+}
+
+.bandeau-demo {
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border-left: 4px solid #F9A825;
+    border-radius: var(--rayon);
+    background: #fff8e1;
+    color: #6d5200;
+    font-size: 14px;
+}
+
+.recapitulatif-paiement {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 10px 24px;
+    margin: 12px 0 16px;
+}
+
+.recapitulatif-paiement dt {
+    color: var(--texte-doux);
+}
+
+.recapitulatif-paiement dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.montant-paiement {
+    color: var(--vert);
+    font-family: var(--police-titres);
+    font-size: 22px;
+}
+
+.resultat-paiement {
+    padding: 12px 0;
+    text-align: center;
+}
+
+.resultat-paiement .form-buttons {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.pastille-resultat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--beige);
+    color: var(--texte-doux);
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.pastille-resultat.succes-paiement {
+    background: var(--vert-clair);
+    color: var(--vert);
+    animation: apparition-resultat 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes apparition-resultat {
+    from {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+}
+
+.bouton-acheter {
+    margin-top: 8px;
+}
+
+.document-facture {
+    background: #e8f0fb;
+    color: #1F3864;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pastille-resultat.succes-paiement {
+        animation: none;
+    }
+}

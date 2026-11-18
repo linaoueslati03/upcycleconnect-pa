@@ -45,6 +45,9 @@ $titrePage = "nav.catalogue";
                         <li v-if="o.places_restantes !== null">{{ $t('catalogue.places_restantes', { nombre: o.places_restantes }) }}</li>
                     </ul>
                     <p v-if="estInscrit(o)" class="succes">{{ $t('catalogue.inscrit') }}</p>
+                    <button v-else-if="o.tarif > 0" class="button-submit" :disabled="achatEnCours === o.type + o.id" @click="payerEtInscrire(o)">
+                        {{ $t('catalogue.payer_inscrire', { prix: formaterPrix(o.tarif) }) }}
+                    </button>
                     <button v-else class="button-submit" @click="inscrire(o)">{{ $t('catalogue.sinscrire') }}</button>
                 </div>
             </div>

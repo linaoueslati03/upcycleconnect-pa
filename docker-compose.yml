@@ -52,6 +52,8 @@ services:
       DB_NAME: ${DB_NAME:-upcycleconnect}
       ONESIGNAL_APP_ID: ${ONESIGNAL_APP_ID:-}
       ONESIGNAL_REST_API_KEY: ${ONESIGNAL_REST_API_KEY:-}
+      # Paiements : « simulation » tant que Stripe n'est pas branché (voir README, « Brancher Stripe »)
+      PAIEMENT_FOURNISSEUR: ${PAIEMENT_FOURNISSEUR:-simulation}
       DOSSIER_TRADUCTIONS: /traductions
     volumes:
       - ./front/assets/locales:/traductions

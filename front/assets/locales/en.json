@@ -103,6 +103,7 @@
                 "bon_depot": "Drop-off slip",
                 "contrat": "Contract",
                 "document_administratif": "Administrative document",
+                "facture": "Invoice",
                 "fiche_atelier": "Workshop sheet",
                 "fiche_evenement": "Event sheet",
                 "fiche_formation": "Training sheet"
@@ -619,6 +620,7 @@
         }
     },
     "annonces": {
+        "acheter": "Buy ({prix})",
         "aucune": "No listing matches your search.",
         "aucune_mienne": "You have not posted any listing yet.",
         "categorie_materiau": "Material category",
@@ -632,13 +634,15 @@
         "modifier": "Edit listing",
         "nouvelle": "New listing",
         "pas_de_description": "No description.",
-        "publiee_le": "Published on"
+        "publiee_le": "Published on",
+        "votre_objet": "This is your item."
     },
     "catalogue": {
         "aucune": "No published offer yet.",
         "erreur_chargement": "Error while loading the catalogue",
         "inscription_confirmee": "Registration confirmed: “{titre}” has been added to your schedule.",
         "inscrit": "You are registered",
+        "payer_inscrire": "Pay and register ({prix})",
         "places_restantes": "{nombre} places left",
         "sinscrire": "Sign up",
         "titre": "Training, workshops and events"
@@ -828,6 +832,34 @@
         "atelier": "Workshop",
         "evenement": "Event",
         "formation": "Training"
+    },
+    "paiement": {
+        "annulee_titre": "Payment cancelled",
+        "article": "Item",
+        "aucun_debit": "No payment was made.",
+        "confirmation_en_cours": "Confirming your payment…",
+        "continuer": "Continue shopping",
+        "demo_texte": "payment is simulated, no card is requested or charged. This step will be replaced by Stripe's secure payment page.",
+        "demo_titre": "Demo mode:",
+        "en_cours": "Processing payment…",
+        "expiree_titre": "Payment time expired",
+        "facture_disponible": "Your invoice has been generated and archived in “My documents”.",
+        "introuvable": "Order not found.",
+        "montant": "Amount due",
+        "payer": "Pay {montant}",
+        "recapitulatif": "Summary",
+        "reserve_objet": "The item is reserved for you for another {temps}.",
+        "reserve_place": "Your seat is held for another {temps}.",
+        "retour": "Back",
+        "reussi_formation": "Your registration is confirmed ({libelle}).",
+        "reussi_objet": "Purchase confirmed ({libelle}). The seller has been notified.",
+        "reussi_titre": "Payment accepted",
+        "titre": "Payment",
+        "type": {
+            "formation": "Training",
+            "vente": "Item"
+        },
+        "voir_facture": "View invoice"
     },
     "planning": {
         "aucune_inscription": "You are not registered for any training, workshop or event.",

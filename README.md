@@ -108,6 +108,32 @@ INSERT INTO langues (code, libelle) VALUES ('es', 'Español');
 
 Une clé absente d'une langue s'affiche en français (`fallbackLocale`).
 
+## Achats et paiement
+
+Deux achats sont possibles : payer une **formation** (Catalogue → « Payer et s'inscrire ») et acheter un **objet en vente** (Annonces → « Acheter »). Le parcours est dans `api/internal/api/commandes.go` :
+
+1. `POST /api/commandes` crée une commande en attente : l'objet est réservé, la place de formation est retenue pendant 30 minutes ;
+2. paiement confirmé → `confirmerCommande()` : inscription payée ou objet cédé à l'acheteur, paiement enregistré avec `enregistrerPaiement()` (commission comprise pour les ventes), facture PDF archivée, vendeur ou formateur notifié ;
+3. paiement abandonné ou délai dépassé → `annulerCommande()` : l'objet est remis en vente.
+
+Tant que Stripe n'est pas branché, `PAIEMENT_FOURNISSEUR=simulation` (valeur par défaut) : la page `/espace/paiement.php` affiche un bandeau « Mode démonstration » et un bouton « Payer » qui confirme la commande sans aucun débit.
+
+### Brancher Stripe
+
+Tout le reste est déjà en place, seules ces étapes manquent :
+
+1. Créer un compte Stripe (mode test) et mettre dans `.env` : `STRIPE_SECRET_KEY=sk_test_…`, `STRIPE_WEBHOOK_SECRET=whsec_…` et `PAIEMENT_FOURNISSEUR=stripe` (déclarer les deux clés dans `docker-compose.yml`, comme OneSignal).
+2. Ajouter la librairie : `go get github.com/stripe/stripe-go/v82` (dans `api/`).
+3. Dans `urlPaiement()` (`commandes.go`), cas `"stripe"` : créer une session **Stripe Checkout** (mode `payment`, montant `c.Montant` en centimes, libellé `c.Libelle`, `metadata.commande_id`, `success_url` et `cancel_url` vers `/espace/paiement.php?commande=ID`, expiration égale à `c.DateExpiration`), enregistrer l'identifiant de session dans `commandes.reference_externe`, renvoyer `session.URL`.
+4. Créer la route `POST /api/stripe/webhook` : vérifier la signature avec `STRIPE_WEBHOOK_SECRET`, puis
+   - `checkout.session.completed` → `s.confirmerCommande(commandeID, idDuPaiementStripe)` ;
+   - `checkout.session.expired` → `s.annulerCommande(commandeID, "expiree")`.
+
+   `confirmerCommande` ne crée jamais de second paiement si Stripe renvoie le même événement.
+5. Tester en local avec la Stripe CLI : `stripe listen --forward-to localhost:8081/api/stripe/webhook`, et la carte de test `4242 4242 4242 4242` (date future, CVC au choix).
+
+La page `/espace/paiement.php` sert alors de page de retour : elle affiche le résultat de la commande (le bouton de démonstration disparaît, car `payer-simulation` refuse les commandes Stripe).
+
 ## Organisation Git
 
 - `main` : version stable, modifiée uniquement par Pull Request

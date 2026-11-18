@@ -103,6 +103,7 @@
                 "bon_depot": "Bon de dépôt",
                 "contrat": "Contrat",
                 "document_administratif": "Document administratif",
+                "facture": "Facture",
                 "fiche_atelier": "Fiche atelier",
                 "fiche_evenement": "Fiche événement",
                 "fiche_formation": "Fiche formation"
@@ -619,6 +620,7 @@
         }
     },
     "annonces": {
+        "acheter": "Acheter ({prix})",
         "aucune": "Aucune annonce ne correspond à votre recherche.",
         "aucune_mienne": "Vous n'avez pas encore publié d'annonce.",
         "categorie_materiau": "Catégorie de matériau",
@@ -632,13 +634,15 @@
         "modifier": "Modifier l'annonce",
         "nouvelle": "Nouvelle annonce",
         "pas_de_description": "Pas de description.",
-        "publiee_le": "Publiée le"
+        "publiee_le": "Publiée le",
+        "votre_objet": "C'est votre objet."
     },
     "catalogue": {
         "aucune": "Aucune offre publiée pour le moment.",
         "erreur_chargement": "Erreur lors du chargement du catalogue",
         "inscription_confirmee": "Inscription confirmée : « {titre} » a été ajouté à votre planning.",
         "inscrit": "Vous êtes inscrit·e",
+        "payer_inscrire": "Payer et s'inscrire ({prix})",
         "places_restantes": "{nombre} places restantes",
         "sinscrire": "S'inscrire",
         "titre": "Formations, ateliers et événements"
@@ -828,6 +832,34 @@
         "atelier": "Atelier",
         "evenement": "Événement",
         "formation": "Formation"
+    },
+    "paiement": {
+        "annulee_titre": "Paiement annulé",
+        "article": "Article",
+        "aucun_debit": "Aucun paiement n'a été effectué.",
+        "confirmation_en_cours": "Paiement en cours de confirmation…",
+        "continuer": "Continuer mes achats",
+        "demo_texte": "le paiement est simulé, aucune carte n'est demandée ni débitée. Cette étape sera remplacée par la page de paiement sécurisée Stripe.",
+        "demo_titre": "Mode démonstration :",
+        "en_cours": "Paiement en cours…",
+        "expiree_titre": "Délai de paiement dépassé",
+        "facture_disponible": "Votre facture a été générée et archivée dans « Mes documents ».",
+        "introuvable": "Commande introuvable.",
+        "montant": "Montant à payer",
+        "payer": "Payer {montant}",
+        "recapitulatif": "Récapitulatif",
+        "reserve_objet": "L'objet vous est réservé pendant encore {temps}.",
+        "reserve_place": "Votre place est retenue pendant encore {temps}.",
+        "retour": "Retour",
+        "reussi_formation": "Votre inscription est confirmée ({libelle}).",
+        "reussi_objet": "Achat confirmé ({libelle}). Le vendeur a été prévenu.",
+        "reussi_titre": "Paiement accepté",
+        "titre": "Paiement",
+        "type": {
+            "formation": "Formation",
+            "vente": "Objet"
+        },
+        "voir_facture": "Voir la facture"
     },
     "planning": {
         "aucune_inscription": "Vous n'êtes inscrit·e à aucune formation, aucun atelier ni aucun événement.",

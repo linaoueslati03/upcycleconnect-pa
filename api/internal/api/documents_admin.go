@@ -17,7 +17,7 @@ const elementsParPageDocuments = 20
 
 var typesDocument = []string{
 	"fiche_atelier", "fiche_evenement", "fiche_formation",
-	"attestation_inscription", "contrat", "document_administratif", "bon_depot",
+	"attestation_inscription", "contrat", "document_administratif", "bon_depot", "facture",
 }
 
 var statutsDepotCodes = []string{"validee", "deposee", "recuperee"}

@@ -55,3 +55,21 @@ function versDateAPI(valeurChamp) {
     }
     return new Date(valeurChamp).toISOString();
 }
+
+// Achat d'une formation payante ou d'un objet : crée la commande puis envoie vers la page de paiement
+// (page de démonstration aujourd'hui, Stripe Checkout une fois branché). Renvoie un message d'erreur sinon.
+async function demarrerAchat(type, referenceId) {
+    try {
+        const reponse = await appelerApi("/commandes", {
+            method: "POST",
+            body: JSON.stringify({ type, reference_id: referenceId }),
+        });
+        if (!reponse.ok) {
+            return await messageErreur(reponse);
+        }
+        window.location.href = (await reponse.json()).url_paiement;
+        return "";
+    } catch (erreur) {
+        return t("commun.serveur_injoignable");
+    }
+}

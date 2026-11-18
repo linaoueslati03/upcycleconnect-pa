@@ -22,7 +22,9 @@ $pages = [
     "mon-compte.php"      => ["nav.mon_compte", "people-svgrepo-com.svg", [PARTICULIER, PROFESSIONNEL, SALARIE]],
 ];
 
-$pagesHorsMenu = [];
+$pagesHorsMenu = [
+    "paiement.php" => [PARTICULIER, PROFESSIONNEL],
+];
 
 $pageCourante = basename($_SERVER["SCRIPT_NAME"]);
 $rolesAutorises = $pages[$pageCourante][2] ?? $pagesHorsMenu[$pageCourante];

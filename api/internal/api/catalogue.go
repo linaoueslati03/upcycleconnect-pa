@@ -155,6 +155,18 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusBadRequest, "cette offre a déjà commencé")
 		return
 	}
+	if entree.TypeOffre == "formation" {
+		// Une formation payante passe par le paiement (POST /api/commandes), jamais par l'inscription directe
+		var tarif sql.NullFloat64
+		if err := tx.QueryRow("SELECT tarif FROM formations WHERE id = $1", entree.OffreID).Scan(&tarif); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		if tarif.Valid && tarif.Float64 > 0 {
+			envoyerErreur(w, http.StatusPaymentRequired, "cette formation est payante : passez par le paiement")
+			return
+		}
+	}
 
 	var createurOffreID int
 	var titreOffre string

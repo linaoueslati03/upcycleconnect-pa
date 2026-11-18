@@ -59,6 +59,13 @@ $titrePage = "nav.annonces";
                         <li v-if="selection.type === 'vente'"><strong>{{ $t('commun.prix') }} :</strong> {{ formaterPrix(selection.prix) }}</li>
                         <li><strong>{{ $t('annonces.publiee_le') }} :</strong> {{ formaterDate(selection.date_creation) }}</li>
                     </ul>
+                    <template v-if="selection.type === 'vente'">
+                        <p v-if="estMonObjet(selection)" class="discret">{{ $t('annonces.votre_objet') }}</p>
+                        <button v-else class="button-submit bouton-acheter" :disabled="achatEnCours" @click="acheter(selection)">
+                            {{ $t('annonces.acheter', { prix: formaterPrix(selection.prix) }) }}
+                        </button>
+                        <p v-if="erreurAchat" class="erreur">{{ erreurAchat }}</p>
+                    </template>
                 </div>
             </div>
 

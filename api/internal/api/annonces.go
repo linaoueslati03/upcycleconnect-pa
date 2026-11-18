@@ -52,6 +52,11 @@ func scannerAnnonce(lignes interface{ Scan(...any) error }, a *Annonce) error {
 }
 
 func (s *Serveur) gererListeAnnonces(w http.ResponseWriter, r *http.Request) {
+	// Les objets réservés dont le paiement n'a pas abouti à temps redeviennent visibles
+	if err := libererCommandesExpirees(s.db); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
 	if r.URL.Query().Get("mine") == "true" {
 		utilisateurID, err := s.utilisateurConnecte(r)
 		if err != nil {
