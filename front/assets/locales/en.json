@@ -1135,9 +1135,11 @@
             "co2": "CO2 saved (estimate)",
             "co2_detail": "weight × material factor",
             "depenses": "{montant} spent",
+            "disponibles": "Items available now",
             "poids": "Weight reused",
             "recuperes": "Items collected",
-            "voir_campagnes": "See my campaigns"
+            "voir_campagnes": "See my campaigns",
+            "voir_disponibles": "See the list"
         },
         "methode": {
             "co2": "CO2 saved",
@@ -1152,7 +1154,10 @@
         },
         "stocks": {
             "aucun": "No items waiting to be collected right now.",
-            "texte": "Items dropped in containers and not collected yet, by site and material.",
+            "depose_le": "Dropped off on",
+            "objet": "Item",
+            "recuperer": "Collect an item",
+            "texte": "Items dropped in containers and not collected yet. To collect one, scan the barcode on its drop-off slip.",
             "titre": "Items available now"
         },
         "titre": "Statistics and impact",

@@ -370,6 +370,17 @@ type DisponibleSite struct {
 	Nombre   int    `json:"nombre"`
 }
 
+// Objet déposé dans un conteneur et pas encore récupéré (le code-barre n'est pas montré :
+// le professionnel le scanne sur place, sur le bon de dépôt).
+type ObjetDisponible struct {
+	ID               int       `json:"id"`
+	DescriptionObjet string    `json:"description_objet"`
+	Site             string    `json:"site"`
+	Materiau         *string   `json:"materiau"`
+	PoidsKg          *float64  `json:"poids_kg"`
+	DateDepot        time.Time `json:"date_depot"`
+}
+
 type StatistiquesPro struct {
 	Recuperations struct {
 		Nombre       int     `json:"nombre"`
@@ -384,8 +395,9 @@ type StatistiquesPro struct {
 		Nombre   int     `json:"nombre"`
 		Depenses float64 `json:"depenses"`
 	} `json:"achats"`
-	Disponibles      []DisponibleSite `json:"disponibles"`
-	CampagnesActives int              `json:"campagnes_actives"`
+	Disponibles       []DisponibleSite  `json:"disponibles"`
+	ObjetsDisponibles []ObjetDisponible `json:"objets_disponibles"`
+	CampagnesActives  int               `json:"campagnes_actives"`
 }
 
 func (s *Serveur) gererStatistiquesPro(w http.ResponseWriter, r *http.Request) {
@@ -397,6 +409,7 @@ func (s *Serveur) gererStatistiquesPro(w http.ResponseWriter, r *http.Request) {
 	st.ParMateriau = make([]ImpactMateriau, 0)
 	st.ParMois = make([]ImpactMois, 0)
 	st.Disponibles = make([]DisponibleSite, 0)
+	st.ObjetsDisponibles = make([]ObjetDisponible, 0)
 
 	err := s.db.QueryRow(`
 		SELECT count(*), COALESCE(sum(d.poids_kg), 0), COALESCE(sum(d.poids_kg * c.co2_evite_par_kg), 0),
@@ -477,14 +490,37 @@ func (s *Serveur) gererStatistiquesPro(w http.ResponseWriter, r *http.Request) {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	defer lignes.Close()
 	for lignes.Next() {
 		var d DisponibleSite
 		if err := lignes.Scan(&d.Site, &d.Materiau, &d.Nombre); err != nil {
+			lignes.Close()
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
 		st.Disponibles = append(st.Disponibles, d)
+	}
+	lignes.Close()
+
+	lignes, err = s.db.Query(`
+		SELECT d.id, d.description_objet, normaliser_site(co.site), c.libelle, d.poids_kg,
+		       COALESCE(d.date_validation, d.date_demande)
+		FROM depots d JOIN conteneurs co ON co.id = d.conteneur_id
+		LEFT JOIN categories_materiaux c ON c.id = d.categorie_id
+		WHERE d.statut = 'deposee'
+		ORDER BY 3, d.id DESC
+		LIMIT 100`)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer lignes.Close()
+	for lignes.Next() {
+		var o ObjetDisponible
+		if err := lignes.Scan(&o.ID, &o.DescriptionObjet, &o.Site, &o.Materiau, &o.PoidsKg, &o.DateDepot); err != nil {
+			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+			return
+		}
+		st.ObjetsDisponibles = append(st.ObjetsDisponibles, o)
 	}
 	envoyerJSON(w, http.StatusOK, st)
 }

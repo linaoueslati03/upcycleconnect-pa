@@ -35,6 +35,11 @@ $titrePage = "nav.statistiques";
 
             <template v-if="stats">
                 <div class="grille-finances grille-kpi">
+                    <div class="carte carte-kpi carte-kpi-disponibles">
+                        <span class="discret">{{ $t('statistiques.kpi.disponibles') }}</span>
+                        <p class="chiffre-finances">{{ formaterNombre(stats.objets_disponibles.length) }}</p>
+                        <a class="lien-action" href="#objets-disponibles">{{ $t('statistiques.kpi.voir_disponibles') }}</a>
+                    </div>
                     <div class="carte carte-kpi">
                         <span class="discret">{{ $t('statistiques.kpi.recuperes') }}</span>
                         <p class="chiffre-finances">{{ formaterNombre(stats.recuperations.nombre) }}</p>
@@ -59,6 +64,40 @@ $titrePage = "nav.statistiques";
                         <a class="lien-action" href="contrats.php">{{ $t('statistiques.kpi.voir_campagnes') }}</a>
                     </div>
                 </div>
+
+                <section id="objets-disponibles" class="carte section-categories">
+                    <div class="entete-carte">
+                        <h2>{{ $t('statistiques.stocks.titre') }}</h2>
+                        <a class="btn-primary" href="depots.php">{{ $t('statistiques.stocks.recuperer') }}</a>
+                    </div>
+                    <p class="discret">{{ $t('statistiques.stocks.texte') }}</p>
+                    <p v-if="stats.objets_disponibles.length === 0" class="discret">{{ $t('statistiques.stocks.aucun') }}</p>
+                    <template v-else>
+                        <div class="filtres">
+                            <span v-for="site in stocksParSite" :key="site.site" class="pill">{{ site.site }} <span class="nombre-pill">{{ site.total }}</span></span>
+                        </div>
+                        <table class="tableau">
+                            <thead>
+                                <tr>
+                                    <th>{{ $t('statistiques.stocks.objet') }}</th>
+                                    <th>{{ $t('commun.site') }}</th>
+                                    <th>{{ $t('depots.materiau') }}</th>
+                                    <th class="montant">{{ $t('statistiques.methode.poids') }}</th>
+                                    <th>{{ $t('statistiques.stocks.depose_le') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="o in stats.objets_disponibles" :key="o.id">
+                                    <td><strong>{{ o.description_objet }}</strong></td>
+                                    <td>{{ o.site }}</td>
+                                    <td>{{ o.materiau || '—' }}</td>
+                                    <td class="montant">{{ o.poids_kg ? formaterKg(o.poids_kg) : '—' }}</td>
+                                    <td class="date">{{ formaterDate(o.date_depot) }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </template>
+                </section>
 
                 <div class="grille-graphiques">
                     <section class="carte">
@@ -104,19 +143,6 @@ $titrePage = "nav.statistiques";
                     </table>
                 </section>
 
-                <section class="carte section-categories">
-                    <h2>{{ $t('statistiques.stocks.titre') }}</h2>
-                    <p class="discret">{{ $t('statistiques.stocks.texte') }}</p>
-                    <p v-if="stocksParSite.length === 0" class="discret">{{ $t('statistiques.stocks.aucun') }}</p>
-                    <div v-else class="grille-stocks">
-                        <div v-for="site in stocksParSite" :key="site.site" class="stock-site">
-                            <h3>{{ site.site }} <span class="nombre-pill">{{ site.total }}</span></h3>
-                            <ul>
-                                <li v-for="m in site.materiaux" :key="m.materiau">{{ m.materiau }} <strong>{{ m.nombre }}</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
 
                 <section class="carte section-categories">
                     <div class="entete-carte">

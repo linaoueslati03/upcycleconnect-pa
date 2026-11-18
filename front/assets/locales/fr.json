@@ -1135,9 +1135,11 @@
             "co2": "CO2 évité (estimation)",
             "co2_detail": "poids × facteur du matériau",
             "depenses": "{montant} dépensés",
+            "disponibles": "Objets disponibles maintenant",
             "poids": "Poids réemployé",
             "recuperes": "Objets récupérés",
-            "voir_campagnes": "Voir mes campagnes"
+            "voir_campagnes": "Voir mes campagnes",
+            "voir_disponibles": "Voir la liste"
         },
         "methode": {
             "co2": "CO2 évité",
@@ -1152,7 +1154,10 @@
         },
         "stocks": {
             "aucun": "Aucun objet en attente de récupération pour le moment.",
-            "texte": "Objets déposés dans les conteneurs et pas encore récupérés, par site et par matériau.",
+            "depose_le": "Déposé le",
+            "objet": "Objet",
+            "recuperer": "Récupérer un objet",
+            "texte": "Objets déposés dans les conteneurs et pas encore récupérés. Pour en récupérer un, scannez le code-barre de son bon de dépôt.",
             "titre": "Objets disponibles maintenant"
         },
         "titre": "Statistiques et impact",

@@ -1945,7 +1945,6 @@ a.carte:hover,
     }
 }
 
-
 /* Cartes de chiffres, tableaux de montants et graphiques (partagés par l'admin et l'espace) */
 .grille-finances {
     display: grid;
@@ -2053,36 +2052,10 @@ a.carte:hover,
     font-size: 12.5px;
 }
 
-.grille-stocks {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 14px;
-    margin-top: 12px;
-}
-
-.stock-site {
-    padding: 12px 14px;
-    border: 1px solid var(--bordure);
-    border-radius: var(--rayon);
-}
-
-.stock-site h3 {
-    margin: 0 0 8px;
-    font-size: 15px;
-}
-
-.stock-site ul,
 .liste-alertes {
     margin: 0;
     padding: 0;
     list-style: none;
-}
-
-.stock-site li {
-    display: flex;
-    justify-content: space-between;
-    padding: 2px 0;
-    font-size: 14px;
 }
 
 .liste-alertes li {
@@ -2158,4 +2131,12 @@ input[type="range"] {
 .code-barre figcaption {
     color: var(--texte-doux);
     font-size: 12.5px;
+}
+
+.carte-kpi-disponibles {
+    border-top-color: #F9A825;
+}
+
+#objets-disponibles {
+    scroll-margin-top: 20px;
 }

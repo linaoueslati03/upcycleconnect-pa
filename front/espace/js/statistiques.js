@@ -70,6 +70,7 @@ demarrerApp({
 
     methods: {
         formaterPrix,
+        formaterDate,
 
         formaterMontant(montant) {
             return Number(montant).toLocaleString(langueCourante(), { style: "currency", currency: "EUR" });
