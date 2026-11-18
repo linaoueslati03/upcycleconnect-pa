@@ -9,6 +9,19 @@ demarrerApp({
         };
     },
 
+    watch: {
+        "filtres.type"() {
+            this.chargerAnnonces();
+        },
+        "filtres.localisation"() {
+            this.rechercherEnDirect();
+        },
+    },
+
+    created() {
+        this.rechercherEnDirect = differer(() => this.chargerAnnonces());
+    },
+
     async mounted() {
         const reponse = await appelerApi("/categories");
         if (reponse.ok) {
@@ -27,6 +40,7 @@ demarrerApp({
         },
 
         async chargerAnnonces() {
+            const numero = (this.numeroRequete = (this.numeroRequete || 0) + 1);
             const parametres = new URLSearchParams();
             if (this.filtres.type) {
                 parametres.set("type", this.filtres.type);
@@ -36,6 +50,9 @@ demarrerApp({
             }
 
             const reponse = await appelerApi(`/annonces?${parametres}`);
+            if (numero !== this.numeroRequete) {
+                return;
+            }
             if (!reponse.ok) {
                 this.erreur = t("annonces.erreur_chargement");
                 return;

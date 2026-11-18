@@ -25,12 +25,23 @@ demarrerApp({
         },
     },
 
+    watch: {
+        "filtres.recherche"() {
+            this.rechercherEnDirect();
+        },
+    },
+
+    created() {
+        this.rechercherEnDirect = differer(() => this.rechercher());
+    },
+
     mounted() {
         this.chargerUtilisateurs();
     },
 
     methods: {
         async chargerUtilisateurs() {
+            const numero = (this.numeroRequete = (this.numeroRequete || 0) + 1);
             const parametres = new URLSearchParams({ page: this.page });
             for (const [nom, valeur] of Object.entries(this.filtres)) {
                 if (valeur !== "") {
@@ -38,6 +49,9 @@ demarrerApp({
                 }
             }
             const reponse = await appelerApi(`/utilisateurs?${parametres}`);
+            if (numero !== this.numeroRequete) {
+                return;
+            }
             if (!reponse.ok) {
                 this.erreurListe = t("admin.utilisateurs.erreur_chargement");
                 return;

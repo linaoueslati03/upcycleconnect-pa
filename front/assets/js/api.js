@@ -178,6 +178,16 @@ async function demarrerApp(options) {
     }
 }
 
+// Recherche au fil de la frappe : n'appelle fonction qu'une fois que l'utilisateur
+// a cessé de taper pendant « delai » millisecondes (évite une requête par touche).
+function differer(fonction, delai = 300) {
+    let minuteur;
+    return (...parametres) => {
+        clearTimeout(minuteur);
+        minuteur = setTimeout(() => fonction(...parametres), delai);
+    };
+}
+
 async function appelerApi(chemin, options = {}) {
     const entetes = { "Content-Type": "application/json" };
     const token = localStorage.getItem("token");

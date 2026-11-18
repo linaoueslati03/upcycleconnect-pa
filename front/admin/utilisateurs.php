@@ -32,7 +32,6 @@ $titrePage = "nav.utilisateurs";
                     <option value="actif">{{ $t('admin.utilisateurs.statut_actif') }}</option>
                     <option value="suspendu">{{ $t('admin.utilisateurs.statut_suspendu') }}</option>
                 </select>
-                <button type="submit" class="button-submit">{{ $t('commun.rechercher') }}</button>
             </form>
 
             <p v-if="erreurListe" class="erreur">{{ erreurListe }}</p>

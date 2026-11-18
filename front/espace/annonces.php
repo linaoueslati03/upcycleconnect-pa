@@ -31,9 +31,8 @@ $titrePage = "nav.annonces";
                 </div>
                 <div class="form-group">
                     <label for="localisation">{{ $t('commun.localisation') }}</label>
-                    <input id="localisation" type="text" v-model="filtres.localisation" :placeholder="$t('annonces.exemple_localisation')">
+                    <input id="localisation" type="search" v-model="filtres.localisation" :placeholder="$t('annonces.exemple_localisation')">
                 </div>
-                <button type="submit" class="button-submit">{{ $t('commun.rechercher') }}</button>
             </form>
 
             <p v-if="erreur" class="erreur">{{ erreur }}</p>
