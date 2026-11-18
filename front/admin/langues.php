@@ -53,7 +53,11 @@ $titrePage = "nav.langues";
                                         <button class="lien-action" @click="basculer(l)">
                                             {{ l.actif ? $t('admin.langues.desactiver') : $t('admin.langues.activer') }}
                                         </button>
+                                        <button class="lien-action lien-supprimer" @click="demanderSuppression(l)">
+                                            {{ $t('commun.supprimer') }}
+                                        </button>
                                     </template>
+                                    <span v-else class="discret">{{ $t('admin.langues.reference') }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -73,6 +77,26 @@ $titrePage = "nav.langues";
                 </div>
 
             </div>
+
+            <fenetre-modale :ouverte="suppression.ouverte" @fermer="suppression.ouverte = false"
+                :titre="$t('admin.langues.supprimer_titre', { langue: suppression.langue ? suppression.langue.libelle : '' })">
+                <template v-if="suppression.langue">
+                    <p>{{ $t('admin.langues.supprimer_intro', { langue: suppression.langue.libelle, code: suppression.langue.code }) }}</p>
+                    <ul class="details-offre">
+                        <li>{{ $t('admin.langues.supprimer_ligne') }}</li>
+                        <li>{{ $t('admin.langues.supprimer_fichier', { fichier: suppression.langue.code + '.json' }) }}</li>
+                        <li>{{ $t('admin.langues.supprimer_utilisateurs', { nombre: suppression.langue.nb_utilisateurs }) }}</li>
+                    </ul>
+                    <p class="erreur">{{ $t('admin.langues.supprimer_irreversible') }}</p>
+                    <p v-if="erreurSuppression" class="erreur">{{ erreurSuppression }}</p>
+                    <div class="form-buttons">
+                        <button type="button" class="button-submit bouton-refus" :disabled="suppression.enCours" @click="supprimer">
+                            {{ $t('admin.langues.supprimer_confirmer') }}
+                        </button>
+                        <button type="button" class="button-draft" @click="suppression.ouverte = false">{{ $t('commun.annuler') }}</button>
+                    </div>
+                </template>
+            </fenetre-modale>
 
             <fenetre-modale :ouverte="ajoutOuvert" :titre="$t('admin.langues.ajouter')" @fermer="ajoutOuvert = false">
                     <form @submit.prevent="ajouter">

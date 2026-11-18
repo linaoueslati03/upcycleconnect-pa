@@ -47,6 +47,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("POST /api/admin/langues", s.gererCreationLangue)
 	mux.HandleFunc("PUT /api/admin/langues/{id}", s.gererModificationLangue)
 	mux.HandleFunc("PUT /api/admin/langues/{id}/traduction", s.gererImportTraduction)
+	mux.HandleFunc("DELETE /api/admin/langues/{id}", s.gererSuppressionLangue)
 
 	mux.HandleFunc("GET /api/conseils", s.gererListeConseils)
 	mux.HandleFunc("GET /api/conseils/{id}", s.gererDetailConseil)

@@ -20,10 +20,11 @@ const langueParDefaut = "fr"
 var formatCodeLangue = regexp.MustCompile(`^[a-z]{2}(-[a-z]{2})?$`)
 
 type LangueAdmin struct {
-	ID      int    `json:"id"`
-	Code    string `json:"code"`
-	Libelle string `json:"libelle"`
-	Actif   bool   `json:"actif"`
+	ID             int    `json:"id"`
+	Code           string `json:"code"`
+	Libelle        string `json:"libelle"`
+	Actif          bool   `json:"actif"`
+	NbUtilisateurs int    `json:"nb_utilisateurs"`
 }
 
 type LangueEntree struct {
@@ -37,7 +38,12 @@ func (s *Serveur) gererListeLanguesAdmin(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	lignes, err := s.db.Query("SELECT id, code, libelle, actif FROM langues ORDER BY libelle")
+	lignes, err := s.db.Query(`
+		SELECT l.id, l.code, l.libelle, l.actif, COUNT(u.id)
+		FROM langues l
+		LEFT JOIN utilisateurs u ON u.langue_preferee_id = l.id
+		GROUP BY l.id
+		ORDER BY l.libelle`)
 	if err != nil {
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
@@ -47,7 +53,7 @@ func (s *Serveur) gererListeLanguesAdmin(w http.ResponseWriter, r *http.Request)
 	langues := make([]LangueAdmin, 0)
 	for lignes.Next() {
 		var l LangueAdmin
-		if err := lignes.Scan(&l.ID, &l.Code, &l.Libelle, &l.Actif); err != nil {
+		if err := lignes.Scan(&l.ID, &l.Code, &l.Libelle, &l.Actif, &l.NbUtilisateurs); err != nil {
 			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 			return
 		}
@@ -142,6 +148,73 @@ func (s *Serveur) gererModificationLangue(w http.ResponseWriter, r *http.Request
 	l.Libelle = entree.Libelle
 	l.Actif = *entree.Actif
 	envoyerJSON(w, http.StatusOK, l)
+}
+
+// Suppression complète d'une langue : les utilisateurs qui l'avaient choisie repassent sur la langue
+// par défaut, la ligne est supprimée, puis le fichier de traduction est effacé du dossier des traductions.
+func (s *Serveur) gererSuppressionLangue(w http.ResponseWriter, r *http.Request) {
+	if _, ok := s.exigerRole(w, r, roleAdministrateur); !ok {
+		return
+	}
+
+	id, err := idDepuisChemin(r)
+	if err != nil {
+		envoyerErreur(w, http.StatusBadRequest, "identifiant invalide")
+		return
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	defer tx.Rollback()
+
+	var code string
+	err = tx.QueryRow("SELECT code FROM langues WHERE id = $1 FOR UPDATE", id).Scan(&code)
+	if errors.Is(err, sql.ErrNoRows) {
+		envoyerErreur(w, http.StatusNotFound, "langue introuvable")
+		return
+	}
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if code == langueParDefaut {
+		envoyerErreur(w, http.StatusBadRequest, "la langue par défaut ne peut pas être supprimée")
+		return
+	}
+
+	resultat, err := tx.Exec(`
+		UPDATE utilisateurs SET langue_preferee_id = (SELECT id FROM langues WHERE code = $1)
+		WHERE langue_preferee_id = $2`,
+		langueParDefaut, id,
+	)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	bascules, _ := resultat.RowsAffected()
+
+	if _, err := tx.Exec("DELETE FROM langues WHERE id = $1", id); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	if err := tx.Commit(); err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+
+	fichierSupprime := true
+	if err := os.Remove(filepath.Join(dossierTraductions(), code+".json")); err != nil && !errors.Is(err, os.ErrNotExist) {
+		fichierSupprime = false
+	}
+
+	envoyerJSON(w, http.StatusOK, map[string]any{
+		"langue":                code,
+		"utilisateurs_bascules": bascules,
+		"fichier_supprime":      fichierSupprime,
+	})
 }
 
 type LanguePrefereeEntree struct {

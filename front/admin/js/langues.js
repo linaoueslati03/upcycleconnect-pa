@@ -6,6 +6,8 @@ demarrerApp({
             langueParDefaut: LANGUE_PAR_DEFAUT,
             formulaire: { code: "", libelle: "" },
             ajoutOuvert: false,
+            suppression: { ouverte: false, langue: null, enCours: false },
+            erreurSuppression: "",
             erreur: "",
             succes: "",
             erreurFormulaire: "",
@@ -78,6 +80,39 @@ demarrerApp({
             }
             this.succes = t("admin.langues.import_reussi", { langue: langue.libelle, nombre: resultat.textes });
             this.verifierFichiers();
+        },
+
+        demanderSuppression(langue) {
+            this.erreurSuppression = "";
+            this.suppression = { ouverte: true, langue, enCours: false };
+        },
+
+        async supprimer() {
+            const langue = this.suppression.langue;
+            this.erreurSuppression = "";
+            this.succes = "";
+            this.suppression.enCours = true;
+            try {
+                const reponse = await appelerApi(`/admin/langues/${langue.id}`, { method: "DELETE" });
+                if (!reponse.ok) {
+                    this.erreurSuppression = (await reponse.json()).erreur;
+                    return;
+                }
+                const resultat = await reponse.json();
+                this.suppression.ouverte = false;
+                this.succes = t("admin.langues.supprimee", { langue: langue.libelle, nombre: resultat.utilisateurs_bascules });
+                try {
+                    localStorage.removeItem(`traductions_${langue.code}`);
+                } catch (erreur) {
+                }
+                if (langueCourante() === langue.code) {
+                    changerLangue(LANGUE_PAR_DEFAUT);
+                    return;
+                }
+                this.chargerLangues();
+            } finally {
+                this.suppression.enCours = false;
+            }
         },
 
         async basculer(langue) {
