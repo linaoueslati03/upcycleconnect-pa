@@ -115,6 +115,7 @@
             "professionnel": "Professionnel",
             "raccourci": {
                 "12_mois": "12 derniers mois",
+                "30_jours": "30 derniers jours",
                 "annee_courante": "Année en cours",
                 "mois_courant": "Mois en cours"
             },
@@ -466,6 +467,50 @@
                 "professionnels": "Professionnels"
             }
         },
+        "tableau_de_bord": {
+            "a_traiter": {
+                "annonces_a_valider": "Annonces à valider",
+                "conteneurs_maintenance": "Conteneurs en maintenance",
+                "offres_a_valider": "Prestations à valider",
+                "rien": "Tout est à jour, rien n'attend de validation.",
+                "signalements": "Messages signalés",
+                "sujets_a_moderer": "Sujets de forum à modérer",
+                "titre": "À traiter"
+            },
+            "aucun_revenu": "Aucun revenu sur cette période.",
+            "bloc_activite": "Activité",
+            "bloc_finances": "Revenus et charges",
+            "comparaison": "Les évolutions sont calculées par rapport à la période précédente de même durée (du {debut} au {fin}).",
+            "graphique": {
+                "activite": {
+                    "titre": "Activité par mois"
+                },
+                "finances": {
+                    "titre": "Revenus, charges et résultat par mois"
+                },
+                "series_detail": "De {debut} à {fin}",
+                "sources": {
+                    "detail": "Sur la période choisie",
+                    "titre": "Origine des revenus"
+                }
+            },
+            "kpi": {
+                "acteurs_actifs": "Acteurs actifs",
+                "annonces": "Annonces publiées",
+                "charges": "Charges",
+                "depots": "Demandes de dépôt",
+                "inscriptions": "Inscriptions aux prestations",
+                "nouveaux_acteurs": "Nouveaux inscrits",
+                "recurrent": "Revenus récurrents par mois",
+                "resultat": "Résultat",
+                "revenus": "Revenus"
+            },
+            "stable": "stable",
+            "titre": "Tableau de bord",
+            "voir_finances": "Voir le détail des finances",
+            "voir_reporting": "Voir le reporting complet",
+            "vs_precedent": "{variation} vs période précédente"
+        },
         "utilisateurs": {
             "confirmer_reinitialisation": "Réinitialiser le mot de passe de ce compte ? La personne sera déconnectée.",
             "confirmer_suppression": "Supprimer cet utilisateur ?",
@@ -720,6 +765,7 @@
         "reporting": "Reporting",
         "score": "Upcycling Score",
         "statistiques": "Statistiques avancées",
+        "tableau_de_bord": "Tableau de bord",
         "utilisateurs": "Utilisateurs",
         "validations": "Validations"
     },
@@ -869,6 +915,10 @@
             "reporting": {
                 "texte": "Graphiques sur les acteurs et les prestations, et prédiction de la prochaine demande de chaque acteur.",
                 "titre": "Le reporting"
+            },
+            "tableau_de_bord": {
+                "texte": "C'est votre page d'arrivée : revenus, charges, résultat et activité de la plateforme sur la période choisie, comparés à la période précédente, avec ce qui attend une action de votre part.",
+                "titre": "Le tableau de bord"
             },
             "utilisateurs": {
                 "texte": "Créez, modifiez ou suspendez les comptes de tous les acteurs de la plateforme.",

@@ -41,6 +41,7 @@ const ETAPES_TUTORIEL = {
     ],
     administrateur: [
         { cle: "bienvenue" },
+        { cle: "tableau_de_bord", cible: lienMenu("tableau-de-bord.php") },
         { cle: "utilisateurs", cible: lienMenu("utilisateurs.php") },
         { cle: "validations", cible: lienMenu("validations.php") },
         { cle: "prestations", cible: lienMenu("prestations.php") },

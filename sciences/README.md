@@ -26,6 +26,8 @@ La base doit avoir toutes les migrations, dont `022_reporting.sql`.
 
 Options : `--acteurs`, `--graine`, `--date-reference AAAA-MM-JJ` (mêmes options = mêmes données), `--reinitialiser`.
 
+Le script génère aussi les charges de la plateforme (loyer, serveurs, licences, salaires, rémunération des animateurs selon le nombre de sessions, marketing, achat de conteneurs) sur toute la période, pour que les pages Finances et Tableau de bord aient un résultat réaliste. Ces charges n'ont pas d'auteur (`auteur_id` vide), contrairement à celles saisies par un administrateur. `--charges-seulement` les régénère seules, sans toucher au reste des données.
+
 Le script écrit tout dans une seule transaction : en cas d'erreur, rien n'est enregistré.
 Les comptes générés ont une adresse en `@example.com`, domaine réservé aux adresses fictives (RFC 2606), avec le même
 mot de passe que les comptes de test des seeds. Rien d'autre ne les distingue dans l'appli.

@@ -430,3 +430,134 @@ label.lien-action {
 .destinataire-choisi {
     margin: 4px 0 0;
 }
+
+/* Tableau de bord (page d'arrivée de l'administrateur) */
+.comparaison-periode {
+    margin: -6px 0 0;
+}
+
+.grille-kpi {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    margin-top: 14px;
+}
+
+.grille-kpi-activite {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+}
+
+.carte-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-top: 3px solid var(--vert);
+}
+
+.grille-kpi-activite .carte-kpi {
+    border-top-color: var(--nuit);
+}
+
+.grille-kpi-activite .chiffre-finances {
+    color: var(--nuit);
+}
+
+.evolution {
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.evolution.positive {
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+}
+
+.evolution.negative {
+    background: #fbe4e4;
+    color: var(--rouge);
+}
+
+.evolution.stable {
+    background: var(--beige);
+    color: var(--texte-doux);
+}
+
+.grille-tableau-de-bord {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 20px;
+    margin-top: 32px;
+}
+
+.grille-tableau-de-bord .carte h3 {
+    margin: 0 0 4px;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.grille-tableau-de-bord .graphique-principal .zone-graphique {
+    height: 320px;
+}
+
+.a-traiter ul {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.a-traiter li + li {
+    border-top: 1px solid var(--bordure);
+}
+
+.a-traiter a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 4px;
+    color: var(--texte);
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.a-traiter a:hover,
+.a-traiter a:focus-visible {
+    padding-left: 10px;
+    color: var(--vert);
+}
+
+.compteur-a-traiter {
+    min-width: 30px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--vert);
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+}
+
+.a-traiter a.vide {
+    color: var(--texte-doux);
+}
+
+.a-traiter a.vide .compteur-a-traiter {
+    background: var(--beige);
+    color: var(--texte-doux);
+}
+
+.liens-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 24px 0 8px;
+}
+
+@media (max-width: 900px) {
+    .grille-tableau-de-bord {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

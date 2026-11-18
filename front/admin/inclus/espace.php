@@ -2,6 +2,7 @@
 $rolesAutorises = ["administrateur"];
 
 $liens = [
+    "tableau-de-bord.php" => ["nav.tableau_de_bord", "tableau-de-bord.svg"],
     "utilisateurs.php" => ["nav.utilisateurs", "people-svgrepo-com.svg"],
     "prestations.php"  => ["nav.prestations", "book-svgrepo-com.svg"],
     "categories.php"   => ["nav.categories", "pencil-square-svgrepo-com.svg"],

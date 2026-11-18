@@ -7,6 +7,7 @@ function dateLocale(date) {
 function periodeRaccourci(raccourci) {
     const aujourdhui = new Date();
     const debuts = {
+        "30_jours": new Date(aujourdhui.getFullYear(), aujourdhui.getMonth(), aujourdhui.getDate() - 29),
         "12_mois": new Date(aujourdhui.getFullYear(), aujourdhui.getMonth() - 11, 1),
         mois_courant: new Date(aujourdhui.getFullYear(), aujourdhui.getMonth(), 1),
         annee_courante: new Date(aujourdhui.getFullYear(), 0, 1),

@@ -191,6 +191,16 @@ func (s *Serveur) gererResumeFinances(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	resume, err := s.resumeFinances(debut, fin)
+	if err != nil {
+		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		return
+	}
+	envoyerJSON(w, http.StatusOK, resume)
+}
+
+// Calcul partagé par la page Finances et le tableau de bord admin.
+func (s *Serveur) resumeFinances(debut, fin string) (ResumeFinances, error) {
 	resume := ResumeFinances{Debut: debut, Fin: fin, RevenusParSource: make([]RevenuSource, 0), ParMois: make([]BilanMois, 0)}
 
 	lignes, err := s.db.Query(`
@@ -200,8 +210,7 @@ func (s *Serveur) gererResumeFinances(w http.ResponseWriter, r *http.Request) {
 		  AND p.date_paiement >= $1::timestamp AND p.date_paiement < $2::timestamp + interval '1 day'
 		GROUP BY p.source`, debut, fin)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-		return
+		return resume, err
 	}
 	defer lignes.Close()
 
@@ -209,8 +218,7 @@ func (s *Serveur) gererResumeFinances(w http.ResponseWriter, r *http.Request) {
 	for lignes.Next() {
 		var rs RevenuSource
 		if err := lignes.Scan(&rs.Source, &rs.NbPaiements, &rs.Revenu, &rs.MontantEncaisse); err != nil {
-			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-			return
+			return resume, err
 		}
 		parSource[rs.Source] = rs
 	}
@@ -231,8 +239,7 @@ func (s *Serveur) gererResumeFinances(w http.ResponseWriter, r *http.Request) {
 		debut, fin,
 	).Scan(&resume.TotalCharges)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-		return
+		return resume, err
 	}
 	resume.TotalRevenus = arrondirCentimes(resume.TotalRevenus)
 	resume.Resultat = arrondirCentimes(resume.TotalRevenus - resume.TotalCharges)
@@ -244,8 +251,7 @@ func (s *Serveur) gererResumeFinances(w http.ResponseWriter, r *http.Request) {
 		     + (SELECT COALESCE(sum(montant_mensuel), 0) FROM campagnes_publicitaires WHERE statut = 'active')`,
 	).Scan(&resume.AbonnesActifs, &resume.CampagnesActives, &resume.RevenuMensuelRecurrent)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-		return
+		return resume, err
 	}
 
 	mois, err := s.db.Query(`
@@ -260,22 +266,19 @@ func (s *Serveur) gererResumeFinances(w http.ResponseWriter, r *http.Request) {
 		FROM generate_series(date_trunc('month', $1::timestamp), $2::timestamp, interval '1 month') AS m(debut)
 		ORDER BY m.debut`, debut, fin)
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-		return
+		return resume, err
 	}
 	defer mois.Close()
 
 	for mois.Next() {
 		var b BilanMois
 		if err := mois.Scan(&b.Mois, &b.Revenus, &b.Charges); err != nil {
-			envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-			return
+			return resume, err
 		}
 		b.Resultat = arrondirCentimes(b.Revenus - b.Charges)
 		resume.ParMois = append(resume.ParMois, b)
 	}
-
-	envoyerJSON(w, http.StatusOK, resume)
+	return resume, mois.Err()
 }
 
 func (s *Serveur) gererListePaiements(w http.ResponseWriter, r *http.Request) {

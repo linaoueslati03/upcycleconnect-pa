@@ -116,6 +116,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux.HandleFunc("GET /api/admin/plannings", s.gererPlanningsAdmin)
 	mux.HandleFunc("GET /api/salaries/conseils", s.gererMesConseils)
 
+	mux.HandleFunc("GET /api/admin/tableau-de-bord", s.gererTableauDeBordAdmin)
 	mux.HandleFunc("GET /api/admin/finances/resume", s.gererResumeFinances)
 	mux.HandleFunc("GET /api/admin/finances/paiements", s.gererListePaiements)
 	mux.HandleFunc("GET /api/admin/finances/parametres", s.gererParametresFinances)

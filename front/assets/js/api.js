@@ -1,7 +1,7 @@
 const PAGE_CONNEXION = "/connexion.php";
 
 const ESPACES = {
-    administrateur: "/admin/utilisateurs.php",
+    administrateur: "/admin/tableau-de-bord.php",
     salarie: "/espace/planning.php",
     particulier: "/espace/tableau-de-bord.php",
     professionnel: "/espace/tableau-de-bord.php",

@@ -423,6 +423,69 @@ class Generateur:
             self.publier_annonces(acteur)
 
 
+# Charges de la plateforme (page Finances et tableau de bord admin).
+# Elles sont enregistrées sans auteur (auteur_id NULL) : c'est ce qui les distingue des charges
+# saisies par un administrateur, et ce qui permet de les remplacer avec --reinitialiser.
+CHARGES_MENSUELLES = [
+    # libellé, catégorie, montant, jour du mois, mois de démarrage après le début de l'historique
+    ("Loyer des locaux", "loyers", 1200, 5, 0),
+    ("Hébergement et serveurs", "infrastructure", 90, 10, 0),
+    ("Licences logicielles", "infrastructure", 45, 10, 0),
+    ("Salaire du coordinateur", "salaires", 2100, 28, 8),
+]
+COUT_ANIMATION_SESSION = 55
+CHARGES_PONCTUELLES = [
+    # libellé, catégorie, montant, mois après le début de l'historique
+    ("Achat de conteneurs", "autre", 2400, 0),
+    ("Campagne réseaux sociaux", "marketing", 350, 3),
+    ("Salon de l'économie circulaire", "marketing", 600, 7),
+    ("Achat de conteneurs", "autre", 1200, 9),
+    ("Campagne réseaux sociaux", "marketing", 450, 11),
+    ("Campagne réseaux sociaux", "marketing", 500, 15),
+]
+
+
+def ecrire_charges(cur, graine, reference):
+    cur.execute("DELETE FROM charges WHERE auteur_id IS NULL")
+    cur.execute(f"SELECT min(date_creation) FROM utilisateurs WHERE id IN ({SOUS_REQUETE_GENERES})")
+    premier = cur.fetchone()[0]
+    if premier is None:
+        return 0
+    debut = premier.date().replace(day=1)
+    fin = reference.date()
+
+    # Rémunération des animateurs : proportionnelle au nombre de sessions passées de chaque mois
+    cur.execute("""
+        SELECT to_char(date_trunc('month', date_debut), 'YYYY-MM'), count(*) FROM (
+            SELECT date_debut FROM formations UNION ALL SELECT date_debut FROM ateliers
+            UNION ALL SELECT date_debut FROM evenements) o
+        WHERE date_debut >= %s AND date_debut <= %s
+        GROUP BY 1""", (debut, reference))
+    sessions = dict(cur.fetchall())
+
+    rng = random.Random(graine + 1)
+    lignes = []
+    mois = debut
+    numero = 0
+    while mois <= fin:
+        for libelle, categorie, montant, jour, depart in CHARGES_MENSUELLES:
+            if numero >= depart:
+                lignes.append((libelle, categorie, argent(montant * rng.uniform(0.97, 1.03)), mois.replace(day=jour)))
+        nb_sessions = sessions.get(mois.strftime("%Y-%m"), 0)
+        if nb_sessions:
+            lignes.append((f"Rémunération des animateurs ({nb_sessions} sessions)", "salaires",
+                           argent(nb_sessions * COUT_ANIMATION_SESSION), mois.replace(day=27)))
+        for libelle, categorie, montant, quand in CHARGES_PONCTUELLES:
+            if quand == numero:
+                lignes.append((libelle, categorie, argent(montant), mois.replace(day=15)))
+        mois = ajouter_mois(mois, 1).replace(day=1)
+        numero += 1
+
+    lignes = [ligne for ligne in lignes if ligne[3] <= fin]
+    copier(cur, "charges", ["libelle", "categorie", "montant", "date_charge"], lignes)
+    return len(lignes)
+
+
 def reserver_identifiants(cur, table, objets):
     if not objets:
         return
@@ -583,6 +646,8 @@ def lire_arguments():
                         help="date de fin de l'historique, AAAA-MM-JJ (défaut : aujourd'hui)")
     parser.add_argument("--reinitialiser", action="store_true",
                         help="supprime d'abord les données déjà générées par ce script")
+    parser.add_argument("--charges-seulement", action="store_true",
+                        help="ne (re)génère que les charges de la plateforme, sans toucher au reste")
     return parser.parse_args()
 
 
@@ -594,6 +659,9 @@ def main():
         if not cur.fetchone()[0]:
             sys.exit("La base n'a pas toutes les migrations (il faut au moins 022_reporting.sql).\n"
                      "Appliquez-les depuis la racine du projet : docker compose exec postgres sh /db/migrer.sh")
+        if args.charges_seulement:
+            print("Charges générées :", ecrire_charges(cur, args.graine, reference))
+            return
         cur.execute(f"SELECT count(*) FROM ({SOUS_REQUETE_GENERES}) g")
         if cur.fetchone()[0] > 0:
             if not args.reinitialiser:
@@ -604,6 +672,7 @@ def main():
                          prix_premium, codes)
         gen.generer()
         ecrire(cur, gen, roles, langue, categories)
+        print("Charges générées :", ecrire_charges(cur, args.graine, reference))
         afficher_resume(cur)
     print("Terminé.")
 

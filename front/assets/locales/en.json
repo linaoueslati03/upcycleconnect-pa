@@ -115,6 +115,7 @@
             "professionnel": "Professional",
             "raccourci": {
                 "12_mois": "Last 12 months",
+                "30_jours": "Last 30 days",
                 "annee_courante": "This year",
                 "mois_courant": "This month"
             },
@@ -466,6 +467,50 @@
                 "professionnels": "Professionals"
             }
         },
+        "tableau_de_bord": {
+            "a_traiter": {
+                "annonces_a_valider": "Listings to approve",
+                "conteneurs_maintenance": "Containers under maintenance",
+                "offres_a_valider": "Services to approve",
+                "rien": "All caught up, nothing is waiting for approval.",
+                "signalements": "Reported messages",
+                "sujets_a_moderer": "Forum topics to moderate",
+                "titre": "To do"
+            },
+            "aucun_revenu": "No revenue over this period.",
+            "bloc_activite": "Activity",
+            "bloc_finances": "Revenue and expenses",
+            "comparaison": "Changes are compared with the previous period of the same length ({debut} to {fin}).",
+            "graphique": {
+                "activite": {
+                    "titre": "Monthly activity"
+                },
+                "finances": {
+                    "titre": "Monthly revenue, expenses and net result"
+                },
+                "series_detail": "From {debut} to {fin}",
+                "sources": {
+                    "detail": "Over the selected period",
+                    "titre": "Revenue sources"
+                }
+            },
+            "kpi": {
+                "acteurs_actifs": "Active members",
+                "annonces": "Listings posted",
+                "charges": "Expenses",
+                "depots": "Drop-off requests",
+                "inscriptions": "Service registrations",
+                "nouveaux_acteurs": "New sign-ups",
+                "recurrent": "Monthly recurring revenue",
+                "resultat": "Net result",
+                "revenus": "Revenue"
+            },
+            "stable": "stable",
+            "titre": "Dashboard",
+            "voir_finances": "See finance details",
+            "voir_reporting": "See full reporting",
+            "vs_precedent": "{variation} vs previous period"
+        },
         "utilisateurs": {
             "confirmer_reinitialisation": "Reset this account's password? The user will be logged out.",
             "confirmer_suppression": "Delete this user?",
@@ -720,6 +765,7 @@
         "reporting": "Reporting",
         "score": "Upcycling Score",
         "statistiques": "Advanced Statistics",
+        "tableau_de_bord": "Dashboard",
         "utilisateurs": "Users",
         "validations": "Approvals"
     },
@@ -869,6 +915,10 @@
             "reporting": {
                 "texte": "Charts on actors and services, and a prediction of each actor's next request.",
                 "titre": "Reporting"
+            },
+            "tableau_de_bord": {
+                "texte": "This is your landing page: revenue, expenses, net result and platform activity over the selected period, compared with the previous one, plus everything waiting for your action.",
+                "titre": "The dashboard"
             },
             "utilisateurs": {
                 "texte": "Create, edit or suspend the accounts of every actor on the platform.",
