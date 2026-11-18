@@ -334,6 +334,12 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	if entree.Statut == "validee" {
+		archiverAutomatiquement(fmt.Sprintf("bon du dépôt %d", d.ID), func() (int, error) {
+			return s.genererBonDepot(d.ID, appelantID)
+		})
+	}
+
 	titresStatut := map[string]string{
 		"validee":   "Dépôt validé",
 		"deposee":   "Objet déposé",

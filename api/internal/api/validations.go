@@ -162,6 +162,7 @@ func (s *Serveur) gererDecisionOffre(w http.ResponseWriter, r *http.Request) {
 	var messageNotification string
 
 	if nouveauStatut == "publie" {
+		s.archiverFicheOffre(r.PathValue("type"), id, validateurID)
 		titreNotification = "Offre publiée !"
 		messageNotification = "Ton offre « " + titre + " » a été validée et publiée."
 	} else {

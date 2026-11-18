@@ -194,6 +194,9 @@ func (s *Serveur) gererModificationAtelier(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
+	if a.Statut == "publie" {
+		s.archiverFicheOffre("atelier", a.ID, salarieID)
+	}
 
 	envoyerJSON(w, http.StatusOK, a)
 }
@@ -259,6 +262,7 @@ func (s *Serveur) gererValidationAtelier(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	s.archiverFicheOffre("atelier", a.ID, responsableID)
 	notifierUtilisateur(a.CreateurID, "Atelier publiée !", "Ton offre « "+a.Titre+" » a été validée et publiée.")
 
 	envoyerJSON(w, http.StatusOK, a)

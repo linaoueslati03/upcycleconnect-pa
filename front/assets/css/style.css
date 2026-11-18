@@ -1559,6 +1559,11 @@ a.carte:hover,
     color: var(--vert-fonce);
 }
 
+.document-bon_depot {
+    background: #f6ead9;
+    color: #7a4f12;
+}
+
 .document-attestation_inscription {
     background: #e3e8f3;
     color: var(--bleu);

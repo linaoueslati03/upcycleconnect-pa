@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -216,6 +217,10 @@ func (s *Serveur) gererCreationInscription(w http.ResponseWriter, r *http.Reques
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
+
+	archiverAutomatiquement(fmt.Sprintf("attestation de l'inscription %d", ins.ID), func() (int, error) {
+		return s.genererAttestation(ins.ID, utilisateurID)
+	})
 
 	if createurOffreID != utilisateurID {
 		notifierUtilisateur(createurOffreID, "Nouvelle inscription", "Une personne vient de s'inscrire à ton offre « "+titreOffre+" ».")

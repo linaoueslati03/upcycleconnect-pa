@@ -116,14 +116,7 @@ func (s *Serveur) gererCreationFicheOffrePDF(
 ) {
 	typeOffre := r.PathValue("type")
 
-	tables := map[string]string{
-		"atelier":   "ateliers",
-		"evenement": "evenements",
-		"formation": "formations",
-	}
-
-	table, ok := tables[typeOffre]
-	if !ok {
+	if _, ok := tableParTypeOffre[typeOffre]; !ok {
 		envoyerErreur(w, http.StatusBadRequest, "type d'offre invalide")
 		return
 	}
@@ -140,22 +133,13 @@ func (s *Serveur) gererCreationFicheOffrePDF(
 		return
 	}
 
-	var titre, description, statut string
-	var dateDebut time.Time
-	var dateFin sql.NullTime
-	var lieu sql.NullString
-
-	err = s.db.QueryRow(
-		"SELECT titre, description, date_debut, date_fin, lieu, statut FROM "+table+" WHERE id = $1",
-		id,
-	).Scan(&titre, &description, &dateDebut, &dateFin, &lieu, &statut)
-
+	titre, statut, contenu, err := s.construireFicheOffre(typeOffre, id)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "offre introuvable")
 		return
 	}
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		envoyerErreur(w, http.StatusInternalServerError, "erreur de génération du PDF")
 		return
 	}
 
@@ -167,46 +151,12 @@ func (s *Serveur) gererCreationFicheOffrePDF(
 		return
 	}
 
-	libelleType := map[string]string{
-		"atelier":   "Atelier",
-		"evenement": "Événement",
-		"formation": "Formation",
-	}[typeOffre]
-
-	lignes := []string{
-		"Type : " + libelleType,
-		"Titre : " + titre,
-		"Description : " + description,
-		"Date de début : " + dateDebut.Format("02/01/2006 15:04"),
-		"Statut : " + statut,
-	}
-
-	if dateFin.Valid {
-		lignes = append(
-			lignes,
-			"Date de fin : "+dateFin.Time.Format("02/01/2006 15:04"),
-		)
-	}
-	if lieu.Valid {
-		lignes = append(lignes, "Lieu : "+lieu.String)
-	}
-
-	contenu, err := genererPDF("Fiche "+libelleType, lignes)
-	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur de génération du PDF")
-		return
-	}
-
-	typeDocument := "fiche_" + typeOffre
-	var typeOffrePtr = &typeOffre
-	var offreID = &id
-
 	documentID, err := s.enregistrerDocument(
-		"Fiche "+libelleType+" : "+titre,
-		typeDocument,
+		"Fiche "+libellesTypeOffre[typeOffre]+" : "+titre,
+		"fiche_"+typeOffre,
 		nil,
-		typeOffrePtr,
-		offreID,
+		&typeOffre,
+		&id,
 		nil,
 		utilisateurID,
 		contenu,
@@ -243,28 +193,13 @@ func (s *Serveur) gererCreationAttestationPDF(
 		return
 	}
 
-	var inscription Inscription
-	err = s.db.QueryRow(`
-		SELECT id, utilisateur_id, type_offre, offre_id,
-		       date_inscription, statut_paiement, montant_paye
-		FROM inscriptions
-		WHERE id = $1
-	`, id).Scan(
-		&inscription.ID,
-		&inscription.UtilisateurID,
-		&inscription.TypeOffre,
-		&inscription.OffreID,
-		&inscription.DateInscription,
-		&inscription.StatutPaiement,
-		&inscription.MontantPaye,
-	)
-
+	inscription, titreOffre, contenu, err := s.construireAttestation(id)
 	if errors.Is(err, sql.ErrNoRows) {
 		envoyerErreur(w, http.StatusNotFound, "inscription introuvable")
 		return
 	}
 	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
+		envoyerErreur(w, http.StatusInternalServerError, "erreur de génération du PDF")
 		return
 	}
 
@@ -277,54 +212,6 @@ func (s *Serveur) gererCreationAttestationPDF(
 		role != roleSalarie &&
 		role != roleAdministrateur {
 		envoyerErreur(w, http.StatusForbidden, "accès refusé")
-		return
-	}
-
-	var nom, prenom string
-	err = s.db.QueryRow(`
-		SELECT nom, prenom
-		FROM utilisateurs
-		WHERE id = $1
-	`, inscription.UtilisateurID).Scan(&nom, &prenom)
-	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-		return
-	}
-
-	var titreOffre string
-	table, ok := tableParTypeOffre[inscription.TypeOffre]
-	if !ok {
-		envoyerErreur(w, http.StatusInternalServerError, "type d'offre invalide en base")
-		return
-	}
-
-	err = s.db.QueryRow(
-		"SELECT titre FROM "+table+" WHERE id = $1",
-		inscription.OffreID,
-	).Scan(&titreOffre)
-
-	if errors.Is(err, sql.ErrNoRows) {
-		envoyerErreur(w, http.StatusNotFound, "offre introuvable")
-		return
-	}
-	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
-		return
-	}
-
-	lignes := []string{
-		"Attestation d'inscription",
-		"Bénéficiaire : " + prenom + " " + nom,
-		"Offre : " + titreOffre,
-		"Type d'offre : " + inscription.TypeOffre,
-		"Date d'inscription : " + inscription.DateInscription.Format("02/01/2006"),
-		"Statut du paiement : " + inscription.StatutPaiement,
-		fmt.Sprintf("Montant enregistré : %.2f €", inscription.MontantPaye),
-	}
-
-	contenu, err := genererPDF("Attestation d'inscription", lignes)
-	if err != nil {
-		envoyerErreur(w, http.StatusInternalServerError, "erreur de génération du PDF")
 		return
 	}
 

@@ -100,6 +100,7 @@
             "titre": "Documents et codes",
             "type": {
                 "attestation_inscription": "Attestation d'inscription",
+                "bon_depot": "Bon de dépôt",
                 "contrat": "Contrat",
                 "document_administratif": "Document administratif",
                 "fiche_atelier": "Fiche atelier",
@@ -708,7 +709,7 @@
         "changer_mot_de_passe": "Changer le mot de passe",
         "documents": {
             "aucun": "Vous n'avez encore aucun document.",
-            "explication": "Vos contrats, attestations et documents administratifs, archivés par UpcycleConnect.",
+            "explication": "Vos attestations d'inscription, bons de dépôt, contrats et documents administratifs, archivés par UpcycleConnect.",
             "titre": "Mes documents"
         },
         "erreur_chargement": "Erreur lors du chargement de votre compte",

@@ -100,6 +100,7 @@
             "titre": "Documents and codes",
             "type": {
                 "attestation_inscription": "Registration certificate",
+                "bon_depot": "Drop-off slip",
                 "contrat": "Contract",
                 "document_administratif": "Administrative document",
                 "fiche_atelier": "Workshop sheet",
@@ -708,7 +709,7 @@
         "changer_mot_de_passe": "Change password",
         "documents": {
             "aucun": "You don't have any documents yet.",
-            "explication": "Your contracts, certificates and administrative documents, archived by UpcycleConnect.",
+            "explication": "Your registration certificates, drop-off slips, contracts and administrative documents, archived by UpcycleConnect.",
             "titre": "My documents"
         },
         "erreur_chargement": "Error while loading your account",

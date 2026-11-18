@@ -209,6 +209,9 @@ func (s *Serveur) gererModificationEvenement(w http.ResponseWriter, r *http.Requ
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
+	if e.Statut == "publie" {
+		s.archiverFicheOffre("evenement", e.ID, salarieID)
+	}
 
 	envoyerJSON(w, http.StatusOK, e)
 }
@@ -274,6 +277,7 @@ func (s *Serveur) gererValidationEvenement(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	s.archiverFicheOffre("evenement", e.ID, responsableID)
 	notifierUtilisateur(e.CreateurID, "Événement publiée !", "Ton offre « "+e.Titre+" » a été validée et publiée.")
 
 	envoyerJSON(w, http.StatusOK, e)

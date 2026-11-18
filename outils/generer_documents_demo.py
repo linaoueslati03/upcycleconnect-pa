@@ -11,6 +11,11 @@ Utilisation (API démarrée) :
     python3 outils/generer_documents_demo.py --email admin@upcycleconnect.fr
 Le mot de passe est demandé au clavier (ou lu dans la variable d'environnement UPC_MOT_DE_PASSE).
 Le script refuse de tourner si des documents existent déjà, sauf avec --forcer.
+
+Rattrapage (une seule fois, après la mise en place de la génération automatique) :
+    python3 outils/generer_documents_demo.py --email admin@upcycleconnect.fr --rattrapage
+génère les PDF manquants pour l'existant : fiches des prestations publiées ou terminées,
+attestations de toutes les inscriptions, bons des dépôts qui ont des codes. Relancé, il ne crée aucun doublon.
 """
 
 import argparse
@@ -137,11 +142,21 @@ def main():
     parser.add_argument("--email", required=True, help="e-mail d'un compte administrateur")
     parser.add_argument("--api", default="http://localhost:8081/api", help="adresse de l'API")
     parser.add_argument("--forcer", action="store_true", help="génère même si des documents existent déjà")
+    parser.add_argument("--rattrapage", action="store_true",
+                        help="génère seulement les PDF manquants de l'existant (fiches, attestations, bons de dépôt)")
     args = parser.parse_args()
 
     api = Api(args.api)
     mot_de_passe = os.environ.get("UPC_MOT_DE_PASSE") or getpass.getpass("Mot de passe administrateur : ")
     api.connecter(args.email, mot_de_passe)
+
+    if args.rattrapage:
+        bilan = api.appeler("POST", "/admin/documents/rattrapage")
+        print(f"Fiches : {bilan['fiches']} | attestations : {bilan['attestations']} | "
+              f"bons de dépôt : {bilan['bons_depot']} | erreurs : {bilan['erreurs']}")
+        print("Total archivé :", api.appeler("GET", "/admin/documents")["total"])
+        api.appeler("POST", "/logout")
+        return
 
     existants = api.appeler("GET", "/admin/documents")["total"]
     if existants and not args.forcer:

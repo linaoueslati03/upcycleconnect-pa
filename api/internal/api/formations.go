@@ -298,6 +298,9 @@ func (s *Serveur) gererModificationFormation(w http.ResponseWriter, r *http.Requ
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
+	if f.Statut == "publie" {
+		s.archiverFicheOffre("formation", f.ID, salarieID)
+	}
 
 	envoyerJSON(w, http.StatusOK, f)
 }
@@ -376,6 +379,7 @@ func (s *Serveur) gererValidationFormation(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
+	s.archiverFicheOffre("formation", f.ID, responsableID)
 	notifierUtilisateur(f.CreateurID, "Formation publiée !", "Ton offre « "+f.Titre+" » a été validée et publiée.")
 
 	envoyerJSON(w, http.StatusOK, f)
