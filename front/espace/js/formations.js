@@ -135,7 +135,7 @@ demarrerApp({
                 this.formation.date_fin &&
                 this.formation.date_fin < this.formation.date_debut
             ) {
-                this.erreurFormulaire = "La date de fin doit être postérieure à la date de début.";
+                this.erreurFormulaire = t("salaries.formations.date_fin_invalide");
                 return;
             }
 
@@ -164,14 +164,14 @@ demarrerApp({
 
                 if (!reponse.ok) {
                     this.erreurFormulaire = (await reponse.json()).erreur
-                        || "Impossible d'enregistrer la formation.";
+                        || t("salaries.formations.erreur_enregistrement");
                     return;
                 }
 
                 this.formulaireOuvert = false;
                 await this.chargerFormations();
             } catch (e) {
-                this.erreurFormulaire = "Une erreur est survenue lors de l'enregistrement.";
+                this.erreurFormulaire = t("commun.erreur");
             } finally {
                 this.enregistrement = false;
             }
