@@ -86,6 +86,12 @@ sh db/creer_base_vide.sh ma_base --remplacer    # recrée une base existante
 
 Elle contient toutes les migrations et les référentiels (rôles, langues, matériaux avec leurs facteurs CO2, paramètres financiers), un conteneur par site de collecte et **un seul compte administrateur**. Le script demande son e-mail, son nom et son mot de passe au clavier (même règle que l'application, jamais écrit dans un fichier). Pour que l'API l'utilise : `DB_NAME=upcycleconnect_vide` dans `.env`, puis `docker compose up -d api`. Retirer la ligne pour revenir à la base de travail.
 
+## Page d'accueil et inscription
+
+`/` (`front/index.php`) est la page d'accueil publique : bandeau plein écran avec le logo et le slogan, le concept en 3 étapes, des chiffres, les 6 dernières annonces en ligne, les 3 prochains rendez-vous publiés, « Pour qui ? » et un appel à l'inscription. Les données viennent d'une seule route publique, `GET /api/accueil` (`api/internal/api/accueil.go`), qui ne renvoie aucune donnée personnelle. Un visiteur connecté voit « Mon espace » à la place des boutons de connexion.
+
+L'inscription (`/inscription`) crée un compte particulier ou professionnel puis connecte directement la personne. Le profil peut être choisi depuis l'accueil (`/inscription?role=professionnel`), le mot de passe est saisi deux fois et le compte garde la langue choisie. L'e-mail est enregistré en minuscules et sans espaces, et la connexion ne tient pas compte des majuscules. La page de connexion propose « Pas encore de compte ? Créer un compte ».
+
 ## Adresses et pages d'erreur
 
 Les adresses s'écrivent sans `.php` : `/connexion`, `/espace/annonces`, `/admin/tableau-de-bord?onglet=…`. Les règles sont dans `front/.htaccess` (Apache, conteneur `web`, avec `mod_rewrite` activé dans `docker-compose.yml`) et reprises dans `front/routeur.php` pour `php -S` ; une modification de l'un doit être reportée dans l'autre.

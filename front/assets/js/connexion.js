@@ -45,14 +45,8 @@ demarrerApp({
                 return;
             }
 
-            localStorage.setItem("token", resultat.token);
-            localStorage.setItem("user_id", resultat.id);
-            localStorage.setItem("role", resultat.role);
-            if (resultat.langue) {
-                localStorage.setItem("langue", resultat.langue);
-            }
+            enregistrerConnexion(resultat);
             if (resultat.doit_changer_mot_de_passe) {
-                localStorage.setItem("changer_mot_de_passe", "1");
                 window.location.href = pageMonCompte();
                 return;
             }

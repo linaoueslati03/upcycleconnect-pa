@@ -799,6 +799,7 @@
         "creer_compte": "Créer un compte",
         "espace_indisponible": "Votre espace n'est pas encore disponible.",
         "mot_de_passe_oublie": "Vous avez oublié votre mot de passe ?",
+        "pas_de_compte": "Pas encore de compte ?",
         "se_connecter": "Se connecter",
         "titre": "Connexion"
     },
@@ -951,9 +952,11 @@
     },
     "inscription": {
         "compte_cree_espace_indisponible": "Votre compte est créé. L'espace professionnel sera bientôt disponible.",
+        "confirmer_mot_de_passe": "Confirmer le mot de passe",
         "creer": "Créer mon compte",
         "deja_compte": "J'ai déjà un compte",
         "je_suis": "Je suis",
+        "mots_de_passe_differents": "Les deux mots de passe ne sont pas identiques.",
         "particulier": "Un particulier",
         "professionnel": "Un professionnel / artisan"
     },
@@ -1368,5 +1371,110 @@
                 "titre": "Votre planning"
             }
         }
+    },
+    "vitrine": {
+        "agenda": {
+            "aucun": "Aucun rendez-vous prévu pour le moment.",
+            "sous_titre": "Formations, ateliers et événements pour apprendre à réparer, transformer et créer.",
+            "titre": "Prochains rendez-vous",
+            "types": {
+                "atelier": "Atelier",
+                "evenement": "Événement",
+                "formation": "Formation"
+            },
+            "voir_tout": "Voir le catalogue"
+        },
+        "annonces": {
+            "aucune": "Aucune annonce pour le moment.",
+            "don": "Don",
+            "publiee_le": "Publiée le {date}",
+            "sous_titre": "Des objets donnés ou vendus par les membres de la communauté.",
+            "titre": "Dernières annonces",
+            "vente": "Vente",
+            "voir_tout": "Voir toutes les annonces"
+        },
+        "chiffres": {
+            "annonces_en_ligne": "annonces en ligne",
+            "membres": "membres",
+            "objets_recuperes": "objets récupérés",
+            "rendez_vous_a_venir": "rendez-vous à venir",
+            "titre": "UpcycleConnect en chiffres"
+        },
+        "concept": {
+            "etapes": {
+                "1": {
+                    "texte": "Je dépose mon objet dans un conteneur UpcycleConnect ou je publie une annonce de don ou de vente.",
+                    "titre": "Je dépose"
+                },
+                "2": {
+                    "texte": "Les professionnels de l'upcycling sont prévenus et viennent chercher les matériaux qui les intéressent.",
+                    "titre": "Un artisan le récupère"
+                },
+                "3": {
+                    "texte": "L'objet est transformé en une nouvelle création, et chaque geste fait grimper mon Upcycling Score.",
+                    "titre": "L'objet revit"
+                }
+            },
+            "texte": "Un objet dont vous n'avez plus besoin peut devenir la matière première d'un artisan. UpcycleConnect organise le trajet, du dépôt à la création.",
+            "titre": "Le concept"
+        },
+        "cta_particulier": "Je suis un particulier",
+        "cta_professionnel": "Je suis un professionnel",
+        "decouvrir": "Découvrir",
+        "erreur_chargement": "Le contenu n'a pas pu être chargé. Réessayez dans quelques instants.",
+        "mon_espace": "Mon espace",
+        "nav": {
+            "agenda": "Agenda",
+            "annonces": "Annonces",
+            "compte": "Compte et langue",
+            "concept": "Le concept",
+            "pour_qui": "Pour qui ?",
+            "rejoindre": "Nous rejoindre",
+            "sections": "Sections de la page"
+        },
+        "pied": {
+            "texte": "La plateforme de l'upcycling qui relie particuliers, artisans et salariés."
+        },
+        "pour_qui": {
+            "particulier": {
+                "action": "Créer mon compte particulier",
+                "points": {
+                    "1": "Donner ou vendre des objets",
+                    "2": "Déposer en conteneur avec un code d'ouverture",
+                    "3": "S'inscrire aux formations, ateliers et événements",
+                    "4": "Suivre son Upcycling Score"
+                },
+                "titre": "Particuliers"
+            },
+            "professionnel": {
+                "action": "Créer mon compte professionnel",
+                "points": {
+                    "1": "Récupérer des matériaux près de chez soi",
+                    "2": "Recevoir des alertes sur les objets recherchés",
+                    "3": "Présenter ses projets d'upcycling",
+                    "4": "Statistiques et mise en avant avec Premium"
+                },
+                "titre": "Professionnels et artisans"
+            },
+            "salarie": {
+                "action": "Les comptes salariés sont créés par l'administration.",
+                "points": {
+                    "1": "Animer les formations et ateliers",
+                    "2": "Consulter son planning",
+                    "3": "Publier des conseils",
+                    "4": "Modérer les forums"
+                },
+                "titre": "Salariés UpcycleConnect"
+            },
+            "titre": "Pour qui ?"
+        },
+        "rejoindre": {
+            "bouton": "Créer mon compte",
+            "texte": "Créez votre compte gratuitement en moins d'une minute.",
+            "titre": "Rejoignez la communauté"
+        },
+        "slogan": "Donnez une seconde vie à vos objets",
+        "sous_titre": "UpcycleConnect relie les particuliers qui se séparent d'objets et les artisans qui les transforment, près de chez vous.",
+        "titre_page": "Accueil"
     }
 }

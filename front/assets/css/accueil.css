@@ -1,0 +1,832 @@
+/* Page d'accueil publique (index.php).
+   Bandeau plein écran sur le modèle de la maquette : paysage en fond, logo en haut à gauche,
+   liens secondaires au-dessus des liens principaux en capitales, logo et slogan au centre.
+   Les sections suivantes reprennent la charte de l'application (vert, bleu nuit, beige). */
+
+.page-accueil main {
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.page-accueil .contenu {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+/* ---------- Bandeau ---------- */
+
+.bandeau {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    background:
+        linear-gradient(180deg, rgba(20, 30, 45, 0.55) 0%, rgba(20, 30, 45, 0.15) 35%, rgba(20, 30, 45, 0.45) 100%),
+        url("../img/fond.png") center / cover no-repeat;
+}
+
+.barre-haut {
+    display: flex;
+    justify-content: flex-end;
+    padding: 22px 48px 0;
+}
+
+.liens-secondaires {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 15px;
+}
+
+/* Choix de la langue : bouton avec le drapeau actuel, liste qui s'ouvre en fondu */
+.choix-langue-vitrine {
+    position: relative;
+}
+
+.langue-actuelle {
+    height: 40px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-family: var(--police-texte);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.langue-actuelle:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.choix-langue-vitrine .fi {
+    width: 22px;
+    height: 16px;
+    flex: 0 0 auto;
+    background-size: cover;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.chevron-langue {
+    width: 7px;
+    height: 7px;
+    margin: -3px 0 0 2px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease, margin 0.25s ease;
+}
+
+.chevron-langue.ouvert {
+    margin-top: 3px;
+    transform: rotate(-135deg);
+}
+
+.liste-langues {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 20;
+    min-width: 170px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(20, 30, 45, 0.25);
+    transform-origin: top right;
+}
+
+.liste-langues button {
+    width: 100%;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--texte);
+    font-family: var(--police-texte);
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.liste-langues button:hover {
+    background: var(--fond-clair);
+}
+
+.liste-langues button.actif {
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+    font-weight: 600;
+}
+
+.code-sans-drapeau {
+    width: 22px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.page-accueil :is(.langue-actuelle, .liste-langues button):focus-visible {
+    outline: 3px solid #8295ae;
+    outline-offset: 2px;
+}
+
+/* Animation d'ouverture et de fermeture de la liste */
+.liste-langues-enter-active,
+.liste-langues-leave-active {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.liste-langues-enter-from,
+.liste-langues-leave-to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+}
+
+/* Changement de langue : les textes s'estompent un court instant au lieu de clignoter */
+.page-accueil main,
+.page-accueil .bandeau-centre,
+.page-accueil .liens-principaux {
+    transition: opacity 0.15s ease;
+}
+
+.page-accueil.changement-langue main,
+.page-accueil.changement-langue .bandeau-centre,
+.page-accueil.changement-langue .liens-principaux {
+    opacity: 0.35;
+}
+
+.barre-principale {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 48px 0;
+}
+
+.marque {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--police-titres);
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.marque-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.liens-principaux {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px 40px;
+}
+
+.page-accueil .liens-principaux a {
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    color: #fff;
+    font-family: var(--police-titres);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.page-accueil .liens-principaux a:hover {
+    border-bottom-color: #fff;
+}
+
+.bandeau-centre {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.bandeau-marque {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-family: var(--police-titres);
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.bandeau-logo {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.page-accueil .bandeau h1 {
+    max-width: 980px;
+    margin: 30px 0 14px;
+    color: #fff;
+    font-family: var(--police-titres);
+    font-size: 46px;
+    font-weight: 600;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.bandeau-texte {
+    max-width: 620px;
+    margin: 0 0 32px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.bandeau-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.page-accueil .defiler {
+    align-self: center;
+    margin-bottom: 26px;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.page-accueil .defiler::after {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    margin: 8px auto 0;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+}
+
+/* ---------- Boutons ---------- */
+
+.page-accueil .bouton-vitrine {
+    min-height: 40px;
+    padding: 9px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-family: var(--police-texte);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    text-shadow: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.page-accueil .bouton-grand {
+    min-height: 50px;
+    padding: 12px 30px;
+    font-size: 16px;
+}
+
+.page-accueil .bouton-plein {
+    border: 1px solid var(--vert);
+    background: var(--vert);
+    color: #fff;
+}
+
+.page-accueil .bouton-plein:hover {
+    border-color: var(--vert-fonce);
+    background: var(--vert-fonce);
+}
+
+.page-accueil .bouton-contour {
+    border: 1px solid #fff;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.page-accueil .bouton-contour:hover {
+    background: #fff;
+    color: var(--nuit);
+}
+
+.page-accueil .bouton-contour-sombre {
+    border: 1px solid var(--nuit);
+    background: transparent;
+    color: var(--nuit);
+}
+
+.page-accueil .bouton-contour-sombre:hover {
+    background: var(--nuit);
+    color: #fff;
+}
+
+.page-accueil :is(.bouton-vitrine, .liens-principaux a, .liens-secondaires a, .defiler):focus-visible {
+    outline: 3px solid #8295ae;
+    outline-offset: 2px;
+}
+
+/* ---------- Sections ---------- */
+
+.bloc-vitrine {
+    padding: 80px 0;
+    scroll-margin-top: 0;
+}
+
+.bloc-clair {
+    background: var(--fond-clair);
+}
+
+.page-accueil .titre-section {
+    margin: 0 0 10px;
+    color: var(--texte);
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sous-titre-section {
+    max-width: 680px;
+    margin: 0 auto 44px;
+    color: var(--texte-doux);
+    font-size: 16px;
+    text-align: center;
+}
+
+.message-vitrine {
+    margin: 0 0 32px;
+    color: var(--texte-doux);
+    text-align: center;
+}
+
+.centre {
+    margin-top: 36px;
+    text-align: center;
+}
+
+/* Étiquettes : petit rectangle avec un trait de couleur à gauche */
+.pastille {
+    display: inline-block;
+    padding: 2px 8px;
+    border-left: 3px solid currentColor;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.pastille-don {
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+}
+
+.pastille-vente,
+.pastille-offre {
+    background: var(--beige);
+    color: var(--brun);
+}
+
+/* Le concept */
+.etapes {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    list-style: none;
+}
+
+/* Étapes sans icône : grand numéro, trait vert, titre et texte alignés à gauche */
+.etape {
+    padding: 30px 28px 32px;
+    border: 1px solid var(--bordure);
+    border-top: 4px solid var(--vert);
+    border-radius: var(--rayon);
+    background: #fff;
+    box-shadow: var(--ombre-carte);
+}
+
+.etape-numero {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--vert);
+    font-family: var(--police-titres);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.etape h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.etape p {
+    margin: 0;
+    color: var(--texte-doux);
+}
+
+/* Chiffres */
+.bande-chiffres {
+    padding: 46px 0;
+    background: radial-gradient(ellipse 120% 100% at 50% 50%, var(--nuit-clair) 0%, var(--nuit) 100%);
+    color: #fff;
+}
+
+.chiffres {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+}
+
+.chiffre strong {
+    display: block;
+    font-family: var(--police-titres);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.chiffre span {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+}
+
+/* Annonces */
+.grille-annonces {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    list-style: none;
+}
+
+.carte-annonce {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: #fff;
+    box-shadow: var(--ombre-carte);
+}
+
+.carte-annonce-haut {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.prix {
+    color: var(--vert);
+    font-family: var(--police-titres);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.carte-annonce h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    overflow-wrap: anywhere;
+}
+
+.carte-annonce .discret {
+    margin: 0;
+}
+
+.date-annonce {
+    margin: auto 0 0;
+    padding-top: 14px;
+    color: #a09a90;
+    font-size: 13px;
+}
+
+/* Agenda */
+.liste-agenda {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    list-style: none;
+}
+
+.rendez-vous {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 24px;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: #fff;
+}
+
+.rendez-vous-date {
+    flex: 0 0 78px;
+    padding: 10px 0;
+    border-radius: var(--rayon);
+    background: var(--vert);
+    color: #fff;
+    text-align: center;
+}
+
+.rendez-vous-date strong {
+    display: block;
+    font-family: var(--police-titres);
+    font-size: 28px;
+    line-height: 1.1;
+}
+
+.rendez-vous-date span {
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.rendez-vous-detail {
+    min-width: 0;
+}
+
+.rendez-vous-detail h3 {
+    margin: 6px 0 4px;
+    font-size: 18px;
+    overflow-wrap: anywhere;
+}
+
+.rendez-vous-detail .discret {
+    margin: 0;
+}
+
+.rendez-vous-detail .discret::first-letter {
+    text-transform: uppercase;
+}
+
+/* Pour qui ? */
+.grille-profils {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.carte-profil {
+    padding: 30px 28px;
+    display: flex;
+    flex-direction: column;
+    border-top: 4px solid var(--vert);
+    border-radius: var(--rayon);
+    background: #fff;
+    box-shadow: var(--ombre-carte);
+}
+
+.carte-profil:nth-child(2) {
+    border-top-color: var(--brun);
+}
+
+.carte-profil:nth-child(3) {
+    border-top-color: var(--nuit);
+}
+
+.carte-profil h3 {
+    margin: 0 0 14px;
+    font-size: 20px;
+}
+
+.carte-profil ul {
+    margin: 0 0 22px;
+    padding-left: 20px;
+    color: var(--texte-doux);
+}
+
+.carte-profil li + li {
+    margin-top: 6px;
+}
+
+.page-accueil .lien-profil {
+    margin-top: auto;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.page-accueil .lien-profil::after {
+    content: " →";
+}
+
+.page-accueil .lien-profil:hover {
+    text-decoration: underline;
+}
+
+.carte-profil > .discret {
+    margin: auto 0 0;
+}
+
+/* Appel final */
+.bande-rejoindre {
+    padding: 90px 0;
+    color: #fff;
+    text-align: center;
+    background:
+        linear-gradient(rgba(20, 30, 45, 0.6), rgba(20, 30, 45, 0.6)),
+        url("../img/fond.png") center / cover no-repeat;
+}
+
+.page-accueil .bande-rejoindre h2 {
+    margin: 0 0 12px;
+    color: #fff;
+    font-size: 34px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.bande-rejoindre p {
+    margin: 0 0 30px;
+    font-size: 17px;
+}
+
+/* Pied de page */
+.pied-vitrine {
+    padding: 40px 0 30px;
+    background: var(--nuit);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pied-contenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.pied-vitrine .marque {
+    color: #fff;
+    font-size: 20px;
+}
+
+.pied-vitrine .marque-logo {
+    width: 44px;
+    height: 44px;
+}
+
+.pied-vitrine p {
+    margin: 6px 0 0;
+}
+
+.pied-vitrine .droits {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- Tablette ---------- */
+
+@media (max-width: 1000px) {
+    .barre-principale {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .liens-principaux {
+        justify-content: flex-start;
+        gap: 8px 26px;
+    }
+
+    .grille-annonces,
+    .grille-profils {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chiffres {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 650px) {
+    .page-accueil .contenu {
+        padding: 0 16px;
+    }
+
+    .barre-haut {
+        padding: 14px 16px 0;
+    }
+
+    .liens-secondaires {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px 14px;
+    }
+
+    /* Sur mobile : la langue et « Se connecter » seulement (l'inscription est dans le bandeau),
+       les sections restent accessibles en défilant */
+    .page-accueil .inscription-haut,
+    .liens-principaux {
+        display: none;
+    }
+
+    .barre-principale {
+        padding: 14px 16px 0;
+    }
+
+    .marque {
+        font-size: 20px;
+    }
+
+    .marque-logo {
+        width: 46px;
+        height: 46px;
+    }
+
+    .bandeau-marque {
+        flex-direction: column;
+        gap: 12px;
+        font-size: 38px;
+    }
+
+    .bandeau-logo {
+        width: 96px;
+        height: 96px;
+    }
+
+    .page-accueil .bandeau h1 {
+        font-size: 28px;
+    }
+
+    .bandeau-texte {
+        font-size: 16px;
+    }
+
+    .bandeau-actions,
+    .bandeau-actions .bouton-vitrine {
+        width: 100%;
+    }
+
+    .bloc-vitrine {
+        padding: 56px 0;
+    }
+
+    .page-accueil .titre-section {
+        font-size: 24px;
+    }
+
+    .etapes,
+    .grille-annonces,
+    .grille-profils {
+        grid-template-columns: 1fr;
+    }
+
+    .chiffre strong {
+        font-size: 30px;
+    }
+
+    .rendez-vous {
+        gap: 16px;
+        padding: 14px 16px;
+    }
+
+    .rendez-vous-date {
+        flex-basis: 62px;
+    }
+
+    .bande-rejoindre {
+        padding: 64px 0;
+    }
+
+    .page-accueil .bande-rejoindre h2 {
+        font-size: 26px;
+    }
+}

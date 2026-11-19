@@ -799,6 +799,7 @@
         "creer_compte": "Create an account",
         "espace_indisponible": "Your area is not available yet.",
         "mot_de_passe_oublie": "Forgot your password?",
+        "pas_de_compte": "No account yet?",
         "se_connecter": "Log in",
         "titre": "Log in"
     },
@@ -951,9 +952,11 @@
     },
     "inscription": {
         "compte_cree_espace_indisponible": "Your account has been created. The professional area will be available soon.",
+        "confirmer_mot_de_passe": "Confirm password",
         "creer": "Create my account",
         "deja_compte": "I already have an account",
         "je_suis": "I am",
+        "mots_de_passe_differents": "The two passwords do not match.",
         "particulier": "An individual",
         "professionnel": "A professional / craftsperson"
     },
@@ -1368,5 +1371,110 @@
                 "titre": "Your schedule"
             }
         }
+    },
+    "vitrine": {
+        "agenda": {
+            "aucun": "No upcoming events yet.",
+            "sous_titre": "Trainings, workshops and events to learn how to repair, transform and create.",
+            "titre": "Upcoming events",
+            "types": {
+                "atelier": "Workshop",
+                "evenement": "Event",
+                "formation": "Training"
+            },
+            "voir_tout": "See the catalogue"
+        },
+        "annonces": {
+            "aucune": "No listings yet.",
+            "don": "Giveaway",
+            "publiee_le": "Posted on {date}",
+            "sous_titre": "Objects given away or sold by community members.",
+            "titre": "Latest listings",
+            "vente": "For sale",
+            "voir_tout": "See all listings"
+        },
+        "chiffres": {
+            "annonces_en_ligne": "active listings",
+            "membres": "members",
+            "objets_recuperes": "objects collected",
+            "rendez_vous_a_venir": "upcoming events",
+            "titre": "UpcycleConnect in numbers"
+        },
+        "concept": {
+            "etapes": {
+                "1": {
+                    "texte": "I drop my object in an UpcycleConnect container or post a listing to give it away or sell it.",
+                    "titre": "I drop it off"
+                },
+                "2": {
+                    "texte": "Upcycling professionals are notified and come to collect the materials they are interested in.",
+                    "titre": "A craftsperson collects it"
+                },
+                "3": {
+                    "texte": "The object becomes a new creation, and every action raises my Upcycling Score.",
+                    "titre": "The object lives again"
+                }
+            },
+            "texte": "An object you no longer need can become a craftsperson's raw material. UpcycleConnect handles the journey, from drop-off to creation.",
+            "titre": "The concept"
+        },
+        "cta_particulier": "I am an individual",
+        "cta_professionnel": "I am a professional",
+        "decouvrir": "Discover",
+        "erreur_chargement": "The content could not be loaded. Please try again in a moment.",
+        "mon_espace": "My space",
+        "nav": {
+            "agenda": "Events",
+            "annonces": "Listings",
+            "compte": "Account and language",
+            "concept": "The concept",
+            "pour_qui": "Who is it for?",
+            "rejoindre": "Join us",
+            "sections": "Page sections"
+        },
+        "pied": {
+            "texte": "The upcycling platform connecting individuals, craftspeople and employees."
+        },
+        "pour_qui": {
+            "particulier": {
+                "action": "Create my individual account",
+                "points": {
+                    "1": "Give away or sell objects",
+                    "2": "Drop off in a container with an opening code",
+                    "3": "Sign up for trainings, workshops and events",
+                    "4": "Track your Upcycling Score"
+                },
+                "titre": "Individuals"
+            },
+            "professionnel": {
+                "action": "Create my professional account",
+                "points": {
+                    "1": "Collect materials near you",
+                    "2": "Get alerts about the objects you are looking for",
+                    "3": "Showcase your upcycling projects",
+                    "4": "Statistics and promotion with Premium"
+                },
+                "titre": "Professionals and craftspeople"
+            },
+            "salarie": {
+                "action": "Employee accounts are created by the administration.",
+                "points": {
+                    "1": "Run trainings and workshops",
+                    "2": "Check your schedule",
+                    "3": "Publish advice",
+                    "4": "Moderate the forums"
+                },
+                "titre": "UpcycleConnect employees"
+            },
+            "titre": "Who is it for?"
+        },
+        "rejoindre": {
+            "bouton": "Create my account",
+            "texte": "Create your free account in less than a minute.",
+            "titre": "Join the community"
+        },
+        "slogan": "Give your objects a second life",
+        "sous_titre": "UpcycleConnect connects people who part with their objects and the craftspeople who transform them, close to home.",
+        "titre_page": "Home"
     }
 }

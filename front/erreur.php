@@ -61,7 +61,7 @@ $version = fn(string $chemin) => $chemin . "?v=" . @filemtime(__DIR__ . $chemin)
             <p class="message-erreur" data-t="message"><?= htmlspecialchars($message) ?></p>
 
             <div class="actions-erreur">
-                <a class="bouton-erreur bouton-accueil" id="retour-accueil" href="/connexion" data-t="accueil">Retour à l'accueil</a>
+                <a class="bouton-erreur bouton-accueil" id="retour-accueil" href="/" data-t="accueil">Retour à l'accueil</a>
                 <button class="bouton-erreur bouton-retour" id="page-precedente" type="button" data-t="precedente" hidden>Page précédente</button>
             </div>
 

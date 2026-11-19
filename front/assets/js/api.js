@@ -33,6 +33,19 @@ function oublierConnexion() {
     localStorage.removeItem("changer_mot_de_passe");
 }
 
+// Après /login (page de connexion ou fin d'inscription) : garde la session dans le navigateur
+function enregistrerConnexion(resultat) {
+    localStorage.setItem("token", resultat.token);
+    localStorage.setItem("user_id", resultat.id);
+    localStorage.setItem("role", resultat.role);
+    if (resultat.langue) {
+        localStorage.setItem("langue", resultat.langue);
+    }
+    if (resultat.doit_changer_mot_de_passe) {
+        localStorage.setItem("changer_mot_de_passe", "1");
+    }
+}
+
 function pageMonCompte() {
     return roleConnecte() === "administrateur" ? "/admin/mon-compte" : "/espace/mon-compte";
 }

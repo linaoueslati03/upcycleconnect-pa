@@ -41,7 +41,7 @@ if (preg_match('#(^|/)inclus(/|$)#', $chemin) || $chemin === "/routeur.php") {
     return pageErreur(404);
 }
 
-// 2. /espace/ et /admin/ seuls : vers l'accueil
+// 2. /espace/ et /admin/ seuls : vers la page d'accueil
 if (preg_match('#^/(espace|admin)/?$#', $chemin)) {
     return rediriger("/", 302, "");
 }

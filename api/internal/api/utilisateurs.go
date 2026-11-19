@@ -435,6 +435,8 @@ func (s *Serveur) gererCreationCompte(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Même adresse quelle que soit la façon de la taper (« Lina@Exemple.fr » = « lina@exemple.fr »)
+	entree.Email = normaliserEmail(entree.Email)
 	if entree.Role == "" {
 		entree.Role = roleParticulier
 	}

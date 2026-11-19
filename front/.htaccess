@@ -19,7 +19,7 @@ ErrorDocument 503 /erreur.php?code=503
     RewriteRule (^|/)inclus(/|$) - [R=404,L]
     RewriteRule ^routeur\.php$ - [R=404,L]
 
-    # 2. /espace/ et /admin/ seuls : vers l'accueil (qui envoie à la connexion ou à son espace)
+    # 2. /espace/ et /admin/ seuls : vers la page d'accueil
     RewriteRule ^(espace|admin)/?$ / [R=302,L]
 
     # 3. Anciennes adresses en .php → nouvelle adresse sans .php (redirection définitive, paramètres conservés).

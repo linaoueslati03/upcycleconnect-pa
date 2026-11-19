@@ -55,10 +55,15 @@
                         minlength="12" maxlength="72" required aria-describedby="regle-mot-de-passe">
                     <small id="regle-mot-de-passe">{{ $t('commun.regle_mot_de_passe') }}</small>
                 </div>
+                <div class="form-group">
+                    <label for="confirmation-mot-de-passe">{{ $t('inscription.confirmer_mot_de_passe') }}</label>
+                    <input id="confirmation-mot-de-passe" type="password" v-model="confirmation" autocomplete="new-password"
+                        minlength="12" maxlength="72" required>
+                </div>
 
-                <p v-if="erreur" class="erreur">{{ erreur }}</p>
+                <p v-if="erreur" class="erreur" role="alert">{{ erreur }}</p>
 
-                <button type="submit" class="button-submit">{{ $t('inscription.creer') }}</button>
+                <button type="submit" class="button-submit" :disabled="envoi">{{ $t('inscription.creer') }}</button>
             </form>
 
             <p class="lien-secondaire"><a href="connexion">{{ $t('inscription.deja_compte') }}</a></p>

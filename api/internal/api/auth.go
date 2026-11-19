@@ -9,6 +9,7 @@ import (
 	"errors"
 	"net/http"
 	"slices"
+	"strings"
 	"time"
 	"unicode"
 	"unicode/utf8"
@@ -63,6 +64,11 @@ func validerMotDePasse(motDePasse string) string {
 	return ""
 }
 
+// Adresse e-mail sans espaces autour et en minuscules : utilisée à l'inscription et à la connexion
+func normaliserEmail(email string) string {
+	return strings.ToLower(strings.TrimSpace(email))
+}
+
 type identifiants struct {
 	Email      string `json:"email"`
 	MotDePasse string `json:"mot_de_passe"`
@@ -96,8 +102,8 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 		FROM utilisateurs u
 		JOIN roles r ON r.id = u.role_id
 		LEFT JOIN langues l ON l.id = u.langue_preferee_id
-		WHERE u.email = $1`,
-		creds.Email,
+		WHERE lower(u.email) = $1`,
+		normaliserEmail(creds.Email),
 	).Scan(&utilisateurID, &hash, &role, &langue, &statut, &doitChangerMotDePasse)
 
 	if errors.Is(err, sql.ErrNoRows) {
@@ -135,10 +141,10 @@ func (s *Serveur) gererLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	envoyerJSON(w, http.StatusOK, map[string]any{
-		"id": utilisateurID,
-		"token": token,
-		"role": role,
-		"langue": langue,
+		"id":                        utilisateurID,
+		"token":                     token,
+		"role":                      role,
+		"langue":                    langue,
 		"doit_changer_mot_de_passe": doitChangerMotDePasse,
 	})
 }

@@ -128,6 +128,17 @@
 
             </p>
 
+
+            <p class="lien-secondaire lien-inscription">
+
+                {{ $t('connexion.pas_de_compte') }}
+
+                <a href="/inscription">
+                    {{ $t('connexion.creer_compte') }}
+                </a>
+
+            </p>
+
         </div>
 
     </div>

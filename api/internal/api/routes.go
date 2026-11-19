@@ -6,6 +6,7 @@ func (s *Serveur) Routes() http.Handler {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /api/sante", s.gererSante)
+	mux.HandleFunc("GET /api/accueil", s.gererAccueil)
 	mux.HandleFunc("POST /api/comptes", s.gererCreationCompte)
 	mux.HandleFunc("POST /api/login", s.gererLogin)
 	mux.HandleFunc("POST /api/logout", s.gererLogout)

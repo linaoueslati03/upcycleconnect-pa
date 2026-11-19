@@ -214,6 +214,16 @@
     text-decoration: underline;
 }
 
+/* « Pas encore de compte ? Créer un compte » sous le formulaire de connexion */
+.lien-inscription {
+    color: #6b7280;
+}
+
+.lien-inscription a {
+    color: #2E7D32;
+    font-weight: 600;
+}
+
 @media (max-width: 650px) {
     .page-connexion {
         padding: 20px;
