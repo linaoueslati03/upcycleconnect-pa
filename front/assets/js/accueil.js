@@ -18,7 +18,7 @@ demarrerApp({
             erreur: false,
             annee: new Date().getFullYear(),
             clesChiffres: ["membres", "objets_recuperes", "annonces_en_ligne", "rendez_vous_a_venir"],
-            profils: ["particulier", "professionnel", "salarie"],
+            profils: ["particulier", "professionnel"],
         };
     },
 

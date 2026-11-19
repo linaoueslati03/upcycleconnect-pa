@@ -189,9 +189,8 @@
                             <ul>
                                 <li v-for="numero in 4" :key="numero">{{ $t('vitrine.pour_qui.' + profil + '.points.' + numero) }}</li>
                             </ul>
-                            <a v-if="profil !== 'salarie' && !espace" class="lien-profil"
+                            <a v-if="!espace" class="lien-profil"
                                 :href="'/inscription?role=' + profil">{{ $t('vitrine.pour_qui.' + profil + '.action') }}</a>
-                            <p v-if="profil === 'salarie'" class="discret">{{ $t('vitrine.pour_qui.salarie.action') }}</p>
                         </article>
                     </div>
                 </div>

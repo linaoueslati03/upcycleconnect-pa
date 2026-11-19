@@ -1433,7 +1433,7 @@
             "sections": "Sections de la page"
         },
         "pied": {
-            "texte": "La plateforme de l'upcycling qui relie particuliers, artisans et salariés."
+            "texte": "La plateforme de l'upcycling qui relie particuliers et artisans."
         },
         "pour_qui": {
             "particulier": {
@@ -1455,16 +1455,6 @@
                     "4": "Statistiques et mise en avant avec Premium"
                 },
                 "titre": "Professionnels et artisans"
-            },
-            "salarie": {
-                "action": "Les comptes salariés sont créés par l'administration.",
-                "points": {
-                    "1": "Animer les formations et ateliers",
-                    "2": "Consulter son planning",
-                    "3": "Publier des conseils",
-                    "4": "Modérer les forums"
-                },
-                "titre": "Salariés UpcycleConnect"
             },
             "titre": "Pour qui ?"
         },

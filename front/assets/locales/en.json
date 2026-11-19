@@ -1433,7 +1433,7 @@
             "sections": "Page sections"
         },
         "pied": {
-            "texte": "The upcycling platform connecting individuals, craftspeople and employees."
+            "texte": "The upcycling platform connecting individuals and craftspeople."
         },
         "pour_qui": {
             "particulier": {
@@ -1455,16 +1455,6 @@
                     "4": "Statistics and promotion with Premium"
                 },
                 "titre": "Professionals and craftspeople"
-            },
-            "salarie": {
-                "action": "Employee accounts are created by the administration.",
-                "points": {
-                    "1": "Run trainings and workshops",
-                    "2": "Check your schedule",
-                    "3": "Publish advice",
-                    "4": "Moderate the forums"
-                },
-                "titre": "UpcycleConnect employees"
             },
             "titre": "Who is it for?"
         },
