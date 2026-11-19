@@ -768,12 +768,14 @@
             "activees_message": "C'est fait : vous recevrez les notifications sur cet appareil.",
             "activer": "Activer les notifications",
             "aide_bloquees": "Pour les débloquer : cliquez sur l'icône à gauche de l'adresse du site, mettez « Notifications » sur « Autoriser », puis rechargez la page.",
+            "aide_erreur": "Vérifiez dans OneSignal que la Site URL est exactement l'adresse du site (par exemple http://localhost:8082) et que « Local testing » est activé, puis rechargez la page. Le détail est dans la console du navigateur.",
             "desactivees_message": "Notifications désactivées : vous ne recevrez plus de notifications push sur cet appareil (elles restent dans la cloche).",
             "desactiver": "Désactiver",
             "etat": {
                 "activees": "Notifications activées sur cet appareil",
                 "bloquees": "Notifications bloquées par le navigateur",
                 "desactivees": "Notifications désactivées sur cet appareil",
+                "erreur": "OneSignal n'a pas pu démarrer",
                 "indisponibles": "Notifications push indisponibles sur ce navigateur",
                 "verification": "Vérification…"
             },

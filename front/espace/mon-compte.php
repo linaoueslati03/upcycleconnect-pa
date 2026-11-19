@@ -52,6 +52,7 @@ $titrePage = "nav.mon_compte";
                             {{ $t('compte.notifications.etat.' + etatPush) }}
                         </p>
                         <p v-if="etatPush === 'bloquees'" class="discret">{{ $t('compte.notifications.aide_bloquees') }}</p>
+                        <p v-if="etatPush === 'erreur'" class="discret">{{ $t('compte.notifications.aide_erreur') }}</p>
                         <p v-if="messagePush" :class="erreurPush ? 'erreur' : 'succes'">{{ messagePush }}</p>
                         <div class="form-buttons">
                             <button v-if="etatPush === 'desactivees'" type="button" class="btn-primary" :disabled="pushEnCours" @click="activerPush">

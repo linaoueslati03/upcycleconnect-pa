@@ -768,12 +768,14 @@
             "activees_message": "Done: you will receive notifications on this device.",
             "activer": "Turn on notifications",
             "aide_bloquees": "To unblock them: click the icon left of the site address, set “Notifications” to “Allow”, then reload the page.",
+            "aide_erreur": "Check in OneSignal that the Site URL is exactly the site address (for example http://localhost:8082) and that “Local testing” is on, then reload the page. Details are in the browser console.",
             "desactivees_message": "Notifications turned off: no more push notifications on this device (they stay in the bell).",
             "desactiver": "Turn off",
             "etat": {
                 "activees": "Notifications turned on for this device",
                 "bloquees": "Notifications blocked by the browser",
                 "desactivees": "Notifications turned off for this device",
+                "erreur": "OneSignal could not start",
                 "indisponibles": "Push notifications are not available in this browser",
                 "verification": "Checking…"
             },

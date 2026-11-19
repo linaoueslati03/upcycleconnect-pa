@@ -2177,3 +2177,12 @@ input[type="range"] {
 .etat-bloquees .pastille-etat {
     background: var(--rouge);
 }
+
+.etat-erreur {
+    background: #fff3cd;
+    color: #7a5a00;
+}
+
+.etat-erreur .pastille-etat {
+    background: #F9A825;
+}

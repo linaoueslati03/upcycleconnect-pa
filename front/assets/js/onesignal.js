@@ -25,6 +25,7 @@ if (!window.ONESIGNAL_APP_ID) {
             resoudreOneSignal(OneSignal);
         } catch (erreur) {
             console.error("OneSignal : initialisation impossible :", erreur);
+            window.oneSignalErreur = String(erreur && erreur.message ? erreur.message : erreur);
             resoudreOneSignal(null);
         }
     });
@@ -36,9 +37,13 @@ const notificationsPush = {
         return Promise.race([window.oneSignalPret, new Promise((resoudre) => setTimeout(() => resoudre(null), delai))]);
     },
 
-    // « activees », « desactivees », « bloquees » (refus du navigateur) ou « indisponibles »
+    // « activees », « desactivees », « bloquees » (refus du navigateur), « erreur » (OneSignal n'a pas démarré)
+    // ou « indisponibles » (navigateur non compatible, OneSignal non configuré)
     async etat() {
         const OneSignal = await this.sdk();
+        if (!OneSignal && window.oneSignalErreur) {
+            return "erreur";
+        }
         if (!OneSignal || !OneSignal.Notifications.isPushSupported()) {
             return "indisponibles";
         }

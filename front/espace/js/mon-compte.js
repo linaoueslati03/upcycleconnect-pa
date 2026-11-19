@@ -69,6 +69,10 @@ demarrerApp({
     methods: {
         // Notifications push : l'état affiché est celui du navigateur et de OneSignal, pas une simple préférence
         async chargerEtatPush() {
+            // Le script OneSignal est chargé en différé : on attend la fin du chargement de la page avant de le lire
+            if (document.readyState === "loading") {
+                await new Promise((resoudre) => document.addEventListener("DOMContentLoaded", resoudre, { once: true }));
+            }
             if (typeof notificationsPush === "undefined") {
                 this.etatPush = "indisponibles";
                 return;
