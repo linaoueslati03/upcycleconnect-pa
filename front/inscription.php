@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . "/inclus/ressource.php"; ?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -8,12 +9,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@400;700&family=Poppins:wght@500;600;700&display=swap">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/connexion.css">
-    <script src="assets/js/config.js"></script>
+    <link rel="stylesheet" href="<?= ressource("assets/css/style.css") ?>">
+    <link rel="stylesheet" href="<?= ressource("assets/css/connexion.css") ?>">
+    <script src="<?= ressource("assets/js/config.js") ?>"></script>
     <script src="https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.prod.js"></script>
-    <script src="assets/js/api.js"></script>
+    <script src="<?= ressource("assets/js/api.js") ?>"></script>
 </head>
 
 <body class="page-connexion">
@@ -65,7 +66,7 @@
 
     </div>
 
-    <script src="assets/js/inscription.js"></script>
+    <script src="<?= ressource("assets/js/inscription.js") ?>"></script>
 </body>
 
 </html>
