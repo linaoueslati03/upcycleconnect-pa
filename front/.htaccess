@@ -1,0 +1,41 @@
+# Pages d'erreur personnalisées et réécriture d'URL (Apache, conteneur « web »).
+# Les mêmes règles existent pour le serveur de développement PHP dans front/routeur.php :
+# toute modification ici doit y être reportée.
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+# Pages d'erreur : une seule page, qui affiche le bon titre selon le code
+ErrorDocument 400 /erreur.php?code=400
+ErrorDocument 403 /erreur.php?code=403
+ErrorDocument 404 /erreur.php?code=404
+ErrorDocument 500 /erreur.php?code=500
+ErrorDocument 503 /erreur.php?code=503
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Morceaux de page (dossiers inclus/) et routeur de développement : jamais accessibles par une adresse
+    RewriteRule (^|/)inclus(/|$) - [R=404,L]
+    RewriteRule ^routeur\.php$ - [R=404,L]
+
+    # 2. /espace/ et /admin/ seuls : vers l'accueil (qui envoie à la connexion ou à son espace)
+    RewriteRule ^(espace|admin)/?$ / [R=302,L]
+
+    # 3. Anciennes adresses en .php → nouvelle adresse sans .php (redirection définitive, paramètres conservés).
+    #    THE_REQUEST est l'adresse tapée par le visiteur : les réécritures internes ci-dessous ne bouclent pas.
+    RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.php[?\s]
+    RewriteRule ^ /%1 [R=301,L,NE]
+    RewriteCond %{REQUEST_URI} !^/erreur\.php$
+    RewriteCond %{THE_REQUEST} \s/+([^?\s]+?)\.php[?\s]
+    RewriteRule ^ /%1 [R=301,L,NE]
+
+    # 4. Barre oblique finale en trop (/espace/annonces/) → /espace/annonces (sinon les chemins relatifs cassent)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)/$ /$1 [R=301,L,NE]
+
+    # 5. Adresse sans .php → fichier .php correspondant (réécriture interne, invisible pour le visiteur)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$ $1.php [L]
+</IfModule>

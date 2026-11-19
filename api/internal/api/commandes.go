@@ -21,7 +21,7 @@ import (
 //  3. ou il est abandonné → annulerCommande() : l'objet redevient disponible.
 //
 // Tant que Stripe n'est pas branché, le paiement est SIMULÉ (variable PAIEMENT_FOURNISSEUR absente ou
-// « simulation ») : la page de paiement est /espace/paiement.php, avec un bouton « Payer » de démonstration.
+// « simulation ») : la page de paiement est /espace/paiement, avec un bouton « Payer » de démonstration.
 // Pour brancher Stripe (voir README, « Brancher Stripe ») :
 //   - urlPaiement() crée une session Stripe Checkout et renvoie son adresse (reference_externe = id de session) ;
 //   - un webhook « checkout.session.completed » appelle confirmerCommande(id, id_du_paiement_stripe) ;
@@ -95,7 +95,7 @@ func fournisseurPaiement() string {
 func urlPaiement(c Commande) (string, error) {
 	switch c.Fournisseur {
 	case "simulation":
-		return fmt.Sprintf("/espace/paiement.php?commande=%d", c.ID), nil
+		return fmt.Sprintf("/espace/paiement?commande=%d", c.ID), nil
 	default:
 		return "", fmt.Errorf("le paiement par %s n'est pas encore branché", c.Fournisseur)
 	}
@@ -435,7 +435,7 @@ func (s *Serveur) confirmerCommande(id int, referenceExterne string) (Commande, 
 		}
 		titreNotification = "Nouvelle inscription"
 		messageNotification = "Une personne vient de s'inscrire et de payer ta formation « " + c.Libelle + " »."
-		lienNotification = "formations.php"
+		lienNotification = "formations"
 	} else if c.Type == "abonnement" {
 		var abonnementID int
 		err = tx.QueryRow(`
@@ -468,7 +468,7 @@ func (s *Serveur) confirmerCommande(id int, referenceExterne string) (Commande, 
 		}
 		titreNotification = "Objet vendu !"
 		messageNotification = "Ton objet « " + c.Libelle + " » a été acheté et payé."
-		lienNotification = "mes-annonces.php"
+		lienNotification = "mes-annonces"
 	}
 	if err != nil {
 		return c, err

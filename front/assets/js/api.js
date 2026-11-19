@@ -1,12 +1,3 @@
-const PAGE_CONNEXION = "/connexion.php";
-
-const ESPACES = {
-    administrateur: "/admin/tableau-de-bord.php",
-    salarie: "/espace/planning.php",
-    particulier: "/espace/tableau-de-bord.php",
-    professionnel: "/espace/tableau-de-bord.php",
-};
-
 function roleConnecte() {
     return localStorage.getItem("role");
 }
@@ -18,9 +9,10 @@ function afficherMenuDuRole() {
         element.hidden = !element.dataset.roles.split(" ").includes(role);
     });
 
-    const pageCourante = location.pathname.split("/").pop();
+    // Adresses sans « .php » (réécriture d'URL) : on compare les noms de page sans l'extension
+    const pageCourante = location.pathname.split("/").pop().replace(/\.php$/, "");
     document.querySelectorAll("aside a.nav-button").forEach((lien) => {
-        const actif = lien.getAttribute("href") === pageCourante;
+        const actif = lien.getAttribute("href").replace(/\.php$/, "") === pageCourante;
         lien.classList.toggle("actif", actif);
         if (actif) {
             lien.setAttribute("aria-current", "page");
@@ -42,7 +34,7 @@ function oublierConnexion() {
 }
 
 function pageMonCompte() {
-    return roleConnecte() === "administrateur" ? "/admin/mon-compte.php" : "/espace/mon-compte.php";
+    return roleConnecte() === "administrateur" ? "/admin/mon-compte" : "/espace/mon-compte";
 }
 
 function doitChangerMotDePasse() {
@@ -239,8 +231,13 @@ async function appelerApi(chemin, options = {}) {
 }
 
 function exigerConnexion(...roles) {
-    if (!localStorage.getItem("token") || !roles.includes(roleConnecte())) {
+    if (!localStorage.getItem("token")) {
         window.location.href = PAGE_CONNEXION;
+        return;
+    }
+    // Connecté, mais la page est réservée à un autre rôle : page « Accès refusé »
+    if (!roles.includes(roleConnecte())) {
+        window.location.replace("/erreur?code=403");
         return;
     }
     if (doitChangerMotDePasse() && window.location.pathname !== pageMonCompte()) {

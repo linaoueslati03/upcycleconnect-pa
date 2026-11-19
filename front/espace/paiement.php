@@ -56,7 +56,7 @@ $titrePage = "paiement.titre";
                         <p class="discret">{{ commande.type === 'abonnement' || commande.type === 'publicite' ? $t('paiement.facture_contrat_disponibles') : $t('paiement.facture_disponible') }}</p>
                         <div class="form-buttons">
                             <button v-if="commande.facture_id" class="btn-primary" @click="ouvrirFacture">{{ $t('paiement.voir_facture') }}</button>
-                            <a class="button-draft" href="mon-compte.php#mes-documents">{{ $t('compte.documents.titre') }}</a>
+                            <a class="button-draft" href="mon-compte#mes-documents">{{ $t('compte.documents.titre') }}</a>
                             <a class="lien-action" :href="pageRetour">{{ $t('paiement.continuer.' + commande.type) }}</a>
                         </div>
                     </div>

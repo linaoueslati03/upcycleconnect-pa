@@ -17,7 +17,7 @@ $titrePage = "nav.mon_planning";
 
             <div class="planning-header">
                 <h1>{{ $t('nav.mon_planning') }}</h1>
-                <a v-if="roleConnecte() === 'particulier'" class="btn-primary" href="catalogue.php">{{ $t('planning.voir_catalogue') }}</a>
+                <a v-if="roleConnecte() === 'particulier'" class="btn-primary" href="catalogue">{{ $t('planning.voir_catalogue') }}</a>
 
                 <div class="planning-filtres">
                     <div>
@@ -55,7 +55,7 @@ $titrePage = "nav.mon_planning";
                     <div class="evenements">
                         <template v-for="e in entreesDuJour(index)" :key="e.type + (e.id || e.inscription_id)">
                             <a v-if="roleConnecte() === 'salarie'" class="evenement"
-                                :href="(e.type === 'atelier' ? 'ateliers.php' : 'evenements.php') + '?modifier=' + e.id">
+                                :href="(e.type === 'atelier' ? 'ateliers' : 'evenements') + '?modifier=' + e.id">
                                 <span class="evenement-titre">{{ e.titre }}</span>
                                 <span class="evenement-heure">{{ formaterHeure(e.date_debut) }} · {{ formaterStatut(e.statut) }}</span>
                             </a>

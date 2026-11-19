@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . "/../../inclus/erreurs.php";
+
 const PARTICULIER = "particulier";
 const PROFESSIONNEL = "professionnel";
 const SALARIE = "salarie";

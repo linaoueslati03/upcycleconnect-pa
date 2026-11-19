@@ -44,7 +44,7 @@ Prérequis : Docker Desktop et PHP 8.
 ```bash
 cp .env.example .env
 docker compose up -d --build
-php -S localhost:8000 -t front
+php -S localhost:8000 -t front front/routeur.php
 ```
 
 | Service | URL |
@@ -85,6 +85,18 @@ sh db/creer_base_vide.sh ma_base --remplacer    # recrée une base existante
 ```
 
 Elle contient toutes les migrations et les référentiels (rôles, langues, matériaux avec leurs facteurs CO2, paramètres financiers), un conteneur par site de collecte et **un seul compte administrateur**. Le script demande son e-mail, son nom et son mot de passe au clavier (même règle que l'application, jamais écrit dans un fichier). Pour que l'API l'utilise : `DB_NAME=upcycleconnect_vide` dans `.env`, puis `docker compose up -d api`. Retirer la ligne pour revenir à la base de travail.
+
+## Adresses et pages d'erreur
+
+Les adresses s'écrivent sans `.php` : `/connexion`, `/espace/annonces`, `/admin/tableau-de-bord?onglet=…`. Les règles sont dans `front/.htaccess` (Apache, conteneur `web`, avec `mod_rewrite` activé dans `docker-compose.yml`) et reprises dans `front/routeur.php` pour `php -S` ; une modification de l'un doit être reportée dans l'autre.
+
+- une ancienne adresse en `.php` redirige définitivement (301) vers la nouvelle, paramètres conservés (anciens liens de notifications, favoris) ;
+- les dossiers `inclus/` (morceaux de page) et `routeur.php` renvoient 404, la liste des fichiers d'un dossier renvoie 403 ;
+- une page d'erreur unique, `front/erreur.php`, avec le fond et la carte de la page de connexion (403, 404, 500, 503, et un message générique pour les autres codes). Elle n'utilise ni Vue ni l'API, pour s'afficher même quand le reste est en panne ; textes dans `erreur.*` des fichiers de langue ;
+- une erreur PHP dans une page affiche la page 500 au lieu d'une page blanche ou d'un message technique (`front/inclus/erreurs.php`, le détail va dans le journal du serveur) ;
+- un utilisateur connecté qui ouvre une page réservée à un autre rôle arrive sur la page 403 (`exigerConnexion` dans `api.js`).
+
+Pour essayer : `/nimporte-quoi` (404), `/assets/` (403), `/erreur?code=500`, ou `/admin/utilisateurs` connecté en particulier (403).
 
 ## Une application, un affichage par rôle
 
@@ -127,7 +139,7 @@ Quatre achats passent par le même parcours : payer une **formation** (Catalogue
 2. paiement confirmé → `confirmerCommande()` : inscription payée ou objet cédé à l'acheteur, paiement enregistré avec `enregistrerPaiement()` (commission comprise pour les ventes), facture PDF archivée, vendeur ou formateur notifié ;
 3. paiement abandonné ou délai dépassé → `annulerCommande()` : l'objet est remis en vente.
 
-Tant que Stripe n'est pas branché, `PAIEMENT_FOURNISSEUR=simulation` (valeur par défaut) : la page `/espace/paiement.php` affiche un bandeau « Mode démonstration » et un bouton « Payer » qui confirme la commande sans aucun débit.
+Tant que Stripe n'est pas branché, `PAIEMENT_FOURNISSEUR=simulation` (valeur par défaut) : la page `/espace/paiement` affiche un bandeau « Mode démonstration » et un bouton « Payer » qui confirme la commande sans aucun débit.
 
 ### Impact CO2 (statistiques des professionnels)
 
@@ -139,7 +151,7 @@ Tout le reste est déjà en place, seules ces étapes manquent :
 
 1. Créer un compte Stripe (mode test) et mettre dans `.env` : `STRIPE_SECRET_KEY=sk_test_…`, `STRIPE_WEBHOOK_SECRET=whsec_…` et `PAIEMENT_FOURNISSEUR=stripe` (déclarer les deux clés dans `docker-compose.yml`, comme OneSignal).
 2. Ajouter la librairie : `go get github.com/stripe/stripe-go/v82` (dans `api/`).
-3. Dans `urlPaiement()` (`commandes.go`), cas `"stripe"` : créer une session **Stripe Checkout** (mode `payment`, montant `c.Montant` en centimes, libellé `c.Libelle`, `metadata.commande_id`, `success_url` et `cancel_url` vers `/espace/paiement.php?commande=ID`, expiration égale à `c.DateExpiration`), enregistrer l'identifiant de session dans `commandes.reference_externe`, renvoyer `session.URL`.
+3. Dans `urlPaiement()` (`commandes.go`), cas `"stripe"` : créer une session **Stripe Checkout** (mode `payment`, montant `c.Montant` en centimes, libellé `c.Libelle`, `metadata.commande_id`, `success_url` et `cancel_url` vers `/espace/paiement?commande=ID`, expiration égale à `c.DateExpiration`), enregistrer l'identifiant de session dans `commandes.reference_externe`, renvoyer `session.URL`.
 4. Créer la route `POST /api/stripe/webhook` : vérifier la signature avec `STRIPE_WEBHOOK_SECRET`, puis
    - `checkout.session.completed` → `s.confirmerCommande(commandeID, idDuPaiementStripe)` ;
    - `checkout.session.expired` → `s.annulerCommande(commandeID, "expiree")`.
@@ -148,7 +160,7 @@ Tout le reste est déjà en place, seules ces étapes manquent :
 5. Abonnement et campagnes : pour un prélèvement **mensuel** automatique, utiliser le mode `subscription` de Checkout et l'événement `invoice.paid` pour enregistrer chaque mois un paiement (`enregistrerPaiement`) ; aujourd'hui seul le premier mois est payé.
 6. Tester en local avec la Stripe CLI : `stripe listen --forward-to localhost:8081/api/stripe/webhook`, et la carte de test `4242 4242 4242 4242` (date future, CVC au choix).
 
-La page `/espace/paiement.php` sert alors de page de retour : elle affiche le résultat de la commande (le bouton de démonstration disparaît, car `payer-simulation` refuse les commandes Stripe).
+La page `/espace/paiement` sert alors de page de retour : elle affiche le résultat de la commande (le bouton de démonstration disparaît, car `payer-simulation` refuse les commandes Stripe).
 
 ## Organisation Git
 

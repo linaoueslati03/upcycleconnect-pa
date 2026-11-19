@@ -121,7 +121,7 @@
 
             <p class="mot-de-passe-oublie">
 
-                <a href="mot-de-passe-oublie.php">
+                <a href="mot-de-passe-oublie">
                     {{ $t('connexion.mot_de_passe_oublie') }}
                 </a>
 

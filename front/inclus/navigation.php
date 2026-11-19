@@ -1,6 +1,7 @@
+<?php $adresse = fn(string $fichier): string => preg_replace('/\.php$/', "", $fichier); /* liens sans « .php » (voir .htaccess) */ ?>
 <aside>
 
-    <a id="toggle-button" href="<?= array_key_first($liens) ?>" aria-label="UpcycleConnect">
+    <a id="toggle-button" href="<?= $adresse(array_key_first($liens)) ?>" aria-label="UpcycleConnect">
         <img src="../assets/img/LOGO-pa.png" alt="Logo">
     </a>
 
@@ -8,7 +9,7 @@
         <?php foreach ($liens as $fichier => $lien): ?>
             <?php $roles = $lien[2] ?? []; ?>
             <li data-roles="<?= implode(" ", $roles) ?>" <?= $roles ? "hidden" : "" ?>>
-                <a class="nav-button" href="<?= $fichier ?>">
+                <a class="nav-button" href="<?= $adresse($fichier) ?>">
                     <img src="../assets/img/<?= $lien[1] ?>" alt="" aria-hidden="true">
                     <span data-t="<?= $lien[0] ?>"></span>
                 </a>

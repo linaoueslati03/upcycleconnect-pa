@@ -100,7 +100,7 @@ $titrePage = "nav.utilisateurs";
                             <strong>{{ $t('admin.reporting.predictions.classe.' + prediction.classe) }}</strong>
                             ({{ (prediction.probabilite).toLocaleString(langueCourante(), { style: 'percent', maximumFractionDigits: 1 }) }})
                         </p>
-                        <a class="lien-action" :href="'reporting.php?onglet=predictions&acteur=' + formulaire.id">{{ $t('admin.utilisateurs.voir_explication') }}</a>
+                        <a class="lien-action" :href="'reporting?onglet=predictions&acteur=' + formulaire.id">{{ $t('admin.utilisateurs.voir_explication') }}</a>
                     </div>
 
                     <form @submit.prevent="enregistrer">

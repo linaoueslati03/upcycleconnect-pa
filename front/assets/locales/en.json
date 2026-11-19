@@ -901,6 +901,37 @@
         "suivi": "My drop-offs",
         "titre": "Container drop-offs"
     },
+    "erreur": {
+        "accueil": "Back to home",
+        "codes": {
+            "400": {
+                "message": "The requested address is not valid.",
+                "titre": "Bad request"
+            },
+            "403": {
+                "message": "This page is not available with your account.",
+                "titre": "Access denied"
+            },
+            "404": {
+                "message": "The page you are looking for does not exist or has been moved.",
+                "titre": "Page not found"
+            },
+            "500": {
+                "message": "An unexpected error occurred. Please try again in a few moments.",
+                "titre": "Internal error"
+            },
+            "503": {
+                "message": "The site is temporarily unavailable. Please try again in a few moments.",
+                "titre": "Service unavailable"
+            },
+            "autre": {
+                "message": "The page could not be displayed.",
+                "titre": "Something went wrong"
+            }
+        },
+        "detail": "Error {code}",
+        "precedente": "Previous page"
+    },
     "forums": {
         "aucun": "No topic yet.",
         "en_attente": "Awaiting moderation",

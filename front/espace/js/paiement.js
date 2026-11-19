@@ -14,7 +14,7 @@ demarrerApp({
 
     computed: {
         pageRetour() {
-            return { formation: "catalogue.php", vente: "annonces.php", abonnement: "statistiques.php", publicite: "contrats.php" }[this.commande.type];
+            return { formation: "catalogue", vente: "annonces", abonnement: "statistiques", publicite: "contrats" }[this.commande.type];
         },
 
         tempsRestant() {

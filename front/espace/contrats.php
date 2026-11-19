@@ -26,7 +26,7 @@ $titrePage = "nav.contrats";
             <section v-if="abonnement" class="carte section-categories carte-abonnement" :class="{ premium: abonnement.abonnement === 'premium' }">
                 <div class="entete-carte">
                     <h2>{{ $t('compte.abonnement.titre') }}</h2>
-                    <a class="lien-action" href="mon-compte.php">{{ $t('contrats.gerer_abonnement') }}</a>
+                    <a class="lien-action" href="mon-compte">{{ $t('contrats.gerer_abonnement') }}</a>
                 </div>
                 <p v-if="abonnement.abonnement === 'premium'">
                     <span class="badge-premium">Premium</span>

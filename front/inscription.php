@@ -60,7 +60,7 @@
                 <button type="submit" class="button-submit">{{ $t('inscription.creer') }}</button>
             </form>
 
-            <p class="lien-secondaire"><a href="connexion.php">{{ $t('inscription.deja_compte') }}</a></p>
+            <p class="lien-secondaire"><a href="connexion">{{ $t('inscription.deja_compte') }}</a></p>
         </div>
 
     </div>

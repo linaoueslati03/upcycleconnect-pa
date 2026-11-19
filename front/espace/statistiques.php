@@ -61,14 +61,14 @@ $titrePage = "nav.statistiques";
                     <div class="carte carte-kpi">
                         <span class="discret">{{ $t('statistiques.kpi.campagnes') }}</span>
                         <p class="chiffre-finances">{{ formaterNombre(stats.campagnes_actives) }}</p>
-                        <a class="lien-action" href="contrats.php">{{ $t('statistiques.kpi.voir_campagnes') }}</a>
+                        <a class="lien-action" href="contrats">{{ $t('statistiques.kpi.voir_campagnes') }}</a>
                     </div>
                 </div>
 
                 <section id="objets-disponibles" class="carte section-categories">
                     <div class="entete-carte">
                         <h2>{{ $t('statistiques.stocks.titre') }}</h2>
-                        <a class="btn-primary" href="depots.php">{{ $t('statistiques.stocks.recuperer') }}</a>
+                        <a class="btn-primary" href="depots">{{ $t('statistiques.stocks.recuperer') }}</a>
                     </div>
                     <p class="discret">{{ $t('statistiques.stocks.texte') }}</p>
                     <p v-if="stats.objets_disponibles.length === 0" class="discret">{{ $t('statistiques.stocks.aucun') }}</p>

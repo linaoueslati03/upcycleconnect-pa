@@ -158,7 +158,7 @@ func (s *Serveur) gererResiliationAbonnement(w http.ResponseWriter, r *http.Requ
 		envoyerErreur(w, http.StatusInternalServerError, "erreur serveur")
 		return
 	}
-	notifierAvecLien(utilisateurID, "Abonnement résilié", "Ton abonnement Premium a été résilié. Tu repasses en Freemium.", "mon-compte.php")
+	notifierAvecLien(utilisateurID, "Abonnement résilié", "Ton abonnement Premium a été résilié. Tu repasses en Freemium.", "mon-compte")
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -676,7 +676,7 @@ func (s *Serveur) declencherAlertesCollecte(d Depot) {
 		if site != "" {
 			message += " vient d'être déposé à " + site + "."
 		}
-		notifierAvecLien(proID, "Objet disponible", message, "depots.php")
+		notifierAvecLien(proID, "Objet disponible", message, "depots")
 	}
 }
 

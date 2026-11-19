@@ -1,0 +1,107 @@
+/* Pages d'erreur (403, 404, 500…) : même fond et même carte que la page de connexion (connexion.css),
+   le panneau de droite affiche le code, le titre, l'explication et les boutons de retour. */
+
+.carte-erreur {
+    min-height: 460px;
+}
+
+.panneau-erreur {
+    align-items: flex-start;
+}
+
+.code-erreur {
+    margin: 0 0 6px;
+    color: var(--vert);
+    font-family: var(--police-titres);
+    font-size: 96px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.panneau-erreur h1 {
+    margin: 0 0 12px;
+    color: var(--texte);
+    font-family: var(--police-titres);
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.message-erreur {
+    margin: 0 0 32px;
+    color: var(--texte-doux);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.actions-erreur {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.bouton-erreur {
+    min-height: 44px;
+    padding: 10px 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-family: var(--police-texte);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bouton-accueil {
+    border: 1px solid var(--vert);
+    background: var(--vert);
+    color: #fff;
+}
+
+.bouton-accueil:hover {
+    border-color: var(--vert-fonce);
+    background: var(--vert-fonce);
+}
+
+.bouton-retour {
+    border: 1px solid var(--nuit);
+    background: transparent;
+    color: var(--nuit);
+}
+
+.bouton-retour:hover {
+    background: var(--nuit);
+    color: #fff;
+}
+
+.bouton-erreur:focus-visible {
+    outline: 3px solid #8295ae;
+    outline-offset: 2px;
+}
+
+.detail-erreur {
+    margin: 28px 0 0;
+    color: #b0aba2;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+    .panneau-erreur {
+        padding: 40px 25px 35px;
+    }
+
+    .code-erreur {
+        font-size: 72px;
+    }
+
+    .panneau-erreur h1 {
+        font-size: 22px;
+    }
+
+    .actions-erreur,
+    .bouton-erreur {
+        width: 100%;
+    }
+}

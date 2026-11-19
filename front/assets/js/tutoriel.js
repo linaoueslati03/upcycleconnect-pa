@@ -7,7 +7,8 @@
 // Une étape = { cle } pour une bulle centrée, ou { cle, cible } pour mettre un élément en lumière.
 // Les textes sont dans les fichiers de langue : tutoriel.<rôle>.<cle>.titre / .texte
 
-const lienMenu = (page) => `aside a.nav-button[href="${page}"]`;
+// Les liens du menu sont écrits sans « .php » (réécriture d'URL)
+const lienMenu = (page) => `aside a.nav-button[href="${page.replace(/\.php$/, "")}"]`;
 
 const ETAPES_TUTORIEL = {
     particulier: [

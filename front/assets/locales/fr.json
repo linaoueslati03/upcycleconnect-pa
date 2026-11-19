@@ -901,6 +901,37 @@
         "suivi": "Suivi de mes dépôts",
         "titre": "Dépôts en conteneur"
     },
+    "erreur": {
+        "accueil": "Retour à l'accueil",
+        "codes": {
+            "400": {
+                "message": "L'adresse demandée n'est pas valide.",
+                "titre": "Requête invalide"
+            },
+            "403": {
+                "message": "Cette page n'est pas accessible avec ton compte.",
+                "titre": "Accès refusé"
+            },
+            "404": {
+                "message": "La page que tu cherches n'existe pas ou a été déplacée.",
+                "titre": "Page introuvable"
+            },
+            "500": {
+                "message": "Une erreur inattendue s'est produite. Réessaie dans quelques instants.",
+                "titre": "Erreur interne"
+            },
+            "503": {
+                "message": "Le site est momentanément indisponible. Réessaie dans quelques instants.",
+                "titre": "Service indisponible"
+            },
+            "autre": {
+                "message": "La page n'a pas pu être affichée.",
+                "titre": "Une erreur est survenue"
+            }
+        },
+        "detail": "Erreur {code}",
+        "precedente": "Page précédente"
+    },
     "forums": {
         "aucun": "Aucun sujet pour le moment.",
         "en_attente": "En attente de modération",

@@ -106,8 +106,8 @@ $titrePage = "nav.tableau_de_bord";
                 </div>
 
                 <p class="liens-detail">
-                    <a href="finances.php" class="lien-action">{{ $t('admin.tableau_de_bord.voir_finances') }}</a>
-                    <a href="reporting.php" class="lien-action">{{ $t('admin.tableau_de_bord.voir_reporting') }}</a>
+                    <a href="finances" class="lien-action">{{ $t('admin.tableau_de_bord.voir_finances') }}</a>
+                    <a href="reporting" class="lien-action">{{ $t('admin.tableau_de_bord.voir_reporting') }}</a>
                 </p>
             </template>
 

@@ -388,7 +388,7 @@ func (s *Serveur) gererChangementStatutDepot(w http.ResponseWriter, r *http.Requ
 		"deposee":   "Ton objet a bien été enregistré comme déposé.",
 		"recuperee": "Ton objet a été récupéré. Tes points ont été ajoutés.",
 	}
-	notifierAvecLien(d.UtilisateurID, titresStatut[entree.Statut], messagesStatut[entree.Statut], "depots.php")
+	notifierAvecLien(d.UtilisateurID, titresStatut[entree.Statut], messagesStatut[entree.Statut], "depots")
 
 	envoyerJSON(w, http.StatusOK, d)
 }

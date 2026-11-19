@@ -24,11 +24,11 @@ const KPI_FINANCES = [
 ];
 const KPI_ACTIVITE = ["nouveaux_acteurs", "acteurs_actifs", "annonces", "depots", "inscriptions"];
 const A_TRAITER = [
-    { cle: "offres_a_valider", lien: "validations.php" },
-    { cle: "annonces_a_valider", lien: "annonces.php" },
-    { cle: "sujets_a_moderer", lien: "moderation.php" },
-    { cle: "signalements", lien: "moderation.php" },
-    { cle: "conteneurs_maintenance", lien: "conteneurs.php" },
+    { cle: "offres_a_valider", lien: "validations" },
+    { cle: "annonces_a_valider", lien: "annonces" },
+    { cle: "sujets_a_moderer", lien: "moderation" },
+    { cle: "signalements", lien: "moderation" },
+    { cle: "conteneurs_maintenance", lien: "conteneurs" },
 ];
 const graphiquesTableau = new Map();
 

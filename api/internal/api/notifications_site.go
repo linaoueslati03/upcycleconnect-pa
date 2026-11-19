@@ -110,7 +110,7 @@ func (s *Serveur) gererNotificationTest(w http.ResponseWriter, r *http.Request) 
 	}
 	const titre = "Notification de test"
 	const message = "Bravo, les notifications UpcycleConnect fonctionnent sur cet appareil."
-	enregistrerNotificationSite(utilisateurID, titre, message, "mon-compte.php")
+	enregistrerNotificationSite(utilisateurID, titre, message, "mon-compte")
 	resultat := map[string]string{"push": "envoyee"}
 	if err := envoyerNotification(utilisateurID, titre, message); err != nil {
 		log.Printf("notification de test OneSignal impossible pour l'utilisateur %d : %v", utilisateurID, err)
